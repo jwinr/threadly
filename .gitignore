@@ -1,0 +1,87 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# TypeScript build output
+dist/
+*.js.map
+*.d.ts
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+.prettierignore
+.prettierrc
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# serverless
+.serverless
+.serverless_nextjs
+
+# local content / private files
+public/
+assets/
+amplify/
+src/
+/pages/api/
+utils/CategoriesConfig.js
+utils/CategoriesList.json
+utils/LocationProvider.js
+utils/AuthHelpers.js
+utils/RateLimiter.js
+utils/CognitoErrorMessages.js
+context/CartContext.js
+context/UserContext.js
+context/SignOutContext.js
+middleware.js
+dbinfo.sql
+stripe.js
+
+#amplify-do-not-edit-begin
+amplify/\#current-cloud-backend
+amplify/.config/local-*
+amplify/logs
+amplify/mock-data
+amplify/mock-api-resources
+amplify/backend/amplify-meta.json
+amplify/backend/.temp
+build/
+dist/
+node_modules/
+aws-exports.js
+awsconfiguration.json
+amplifyconfiguration.json
+amplifyconfiguration.dart
+amplify-build-config.json
+amplify-gradle-config.json
+amplifytools.xcconfig
+.secret-*
+**.sample
+#amplify-do-not-edit-end

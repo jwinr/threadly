@@ -1,0 +1,46 @@
+{
+  "name": "technexus",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "analyze": "ANALYZE=true next build",
+    "dev": "next dev",
+    "build": "GENERATE_SOURCEMAP=false next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@aws-amplify/adapter-nextjs": "^1.2.10",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^2.4.0",
+    "@stripe/ui-extension-sdk": "^8.9.0",
+    "@szhsin/react-accordion": "^1.2.4",
+    "autoprefixer": "^10.4.19",
+    "aws-amplify": "^6.4.3",
+    "aws-sdk": "^2.1640.0",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "jwk-to-pem": "^2.0.5",
+    "lru-cache": "^11.0.0",
+    "next": "^14.2.5",
+    "node": "^22.3.0",
+    "npx": "^10.2.2",
+    "pg": "^8.12.0",
+    "postcss": "^8.4.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.11.0",
+    "react-medium-image-zoom": "^5.2.5",
+    "react-responsive-carousel": "^3.2.23",
+    "react-transition-group": "^4.4.5",
+    "stripe": "^16.2.0",
+    "styled-components": "^6.1.11",
+    "swiper": "^11.1.4"
+  },
+  "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.24.7",
+    "@svgr/webpack": "^8.1.0",
+    "babel-plugin-styled-components": "^2.1.4"
+  }
+}
