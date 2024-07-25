@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import PropTypes from "prop-types"
 import { PiCheckCircleFill, PiWarningFill } from "react-icons/pi"
 import { MdPending } from "react-icons/md"
 
-const ToastContainer = styled.div`
+interface ToastProps {
+  message: string
+  type: "success" | "caution" | "pending"
+  action?: string
+  onAction?: () => void
+  onDismiss: () => void
+  timeout?: number
+  index: number
+  id: string
+}
+
+const ToastContainer = styled.div<{ isVisible: boolean }>`
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -53,14 +63,14 @@ const ActionButton = styled.button`
  * Toast component to display messages at the bottom of the view.
  * @param {string} message - The message to display in the toast.
  * @param {string} type - The type of the toast (e.g., 'success', 'caution', 'pending').
- * @param {string} action - The action label for the button (optional).
- * @param {Function} onAction - The function to call when the action button is clicked (optional).
+ * @param {string} [action] - The action label for the button (optional).
+ * @param {Function} [onAction] - The function to call when the action button is clicked (optional).
  * @param {Function} onDismiss - The function to call when the toast is dismissed.
- * @param {number} timeout - The timeout in milliseconds for the toast to disappear (optional).
+ * @param {number} [timeout] - The timeout in milliseconds for the toast to disappear (optional).
  * @param {number} index - The index of the toast to adjust its position.
  * @returns {JSX.Element|null} The rendered Toast component.
  */
-const Toast = ({
+const Toast: React.FC<ToastProps> = ({
   message,
   type,
   action,
@@ -76,7 +86,7 @@ const Toast = ({
       setIsVisible(true)
     }, 100)
 
-    let fadeOutTimeout
+    let fadeOutTimeout: NodeJS.Timeout | undefined
     if (timeout && !action) {
       fadeOutTimeout = setTimeout(() => {
         setIsVisible(false)
@@ -93,7 +103,7 @@ const Toast = ({
   }, [timeout, action, onDismiss])
 
   const handleActionClick = () => {
-    onAction()
+    if (onAction) onAction()
     setIsVisible(false)
     setTimeout(() => {
       onDismiss()
@@ -115,7 +125,6 @@ const Toast = ({
 
   return (
     <ToastContainer
-      type={type}
       isVisible={isVisible}
       style={{ bottom: `${20 + index * 60}px` }}
     >
@@ -128,14 +137,8 @@ const Toast = ({
   )
 }
 
-Toast.propTypes = {
-  message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["success", "caution", "pending"]).isRequired,
-  action: PropTypes.string,
-  onAction: PropTypes.func,
-  onDismiss: PropTypes.func.isRequired,
-  timeout: PropTypes.number,
-  index: PropTypes.number.isRequired,
+interface ToastManagerProps {
+  toasts: ToastProps[]
 }
 
 /**
@@ -143,7 +146,7 @@ Toast.propTypes = {
  * @param {Array} toasts - The array of toasts to render.
  * @returns {JSX.Element} The rendered ToastManager component.
  */
-const ToastManager = ({ toasts }) => {
+const ToastManager: React.FC<ToastManagerProps> = ({ toasts }) => {
   return (
     <>
       {toasts.map((toast, index) => (
@@ -151,20 +154,6 @@ const ToastManager = ({ toasts }) => {
       ))}
     </>
   )
-}
-
-ToastManager.propTypes = {
-  toasts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      message: PropTypes.string.isRequired,
-      type: PropTypes.oneOf(["success", "caution", "pending"]).isRequired,
-      action: PropTypes.string,
-      onAction: PropTypes.func,
-      onDismiss: PropTypes.func.isRequired,
-      timeout: PropTypes.number,
-    })
-  ).isRequired,
 }
 
 export default ToastManager

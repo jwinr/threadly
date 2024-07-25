@@ -55,10 +55,10 @@ const ButtonContainer = styled.div`
   gap: 20px;
 `
 
-const Careers = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL
-  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN
-  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB
+const Careers: React.FC = () => {
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ""
+  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN || ""
+  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB || ""
 
   const { showToast } = useToast()
 
