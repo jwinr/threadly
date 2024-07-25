@@ -1,6 +1,5 @@
-import React from "react"
+import React, { MouseEvent } from "react"
 import styled, { css } from "styled-components"
-import PropTypes from "prop-types"
 
 const sizes = {
   small: "24px",
@@ -67,7 +66,7 @@ const types = {
   `,
 }
 
-const ButtonWrapper = styled.button`
+const ButtonWrapper = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
   align-content: center;
@@ -83,7 +82,7 @@ const ButtonWrapper = styled.button`
   transition-property: background-color, box-shadow;
   transition-timing-function: cubic-bezier(0, 0.09, 0.4, 1);
   transition-duration: 150ms;
-  height: ${(props) => sizes[props.size || "medium"]};
+  height: ${(props) => sizes[props.size!]};
   font-size: ${(props) =>
     props.size === "small" ? "12px" : props.size === "large" ? "16px" : "14px"};
   border-radius: 6px;
@@ -91,7 +90,7 @@ const ButtonWrapper = styled.button`
   outline: none;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
-  ${(props) => props.type && types[props.type]};
+  ${(props) => props.type && types[props.type!]};
   ${(props) => props.disabled && "pointer-events: none;"};
   ${(props) =>
     props.href &&
@@ -109,6 +108,16 @@ const ButtonWrapper = styled.button`
   }
 `
 
+interface ButtonProps {
+  children: React.ReactNode
+  disabled?: boolean
+  href?: string
+  onPress?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void
+  size?: "small" | "medium" | "large"
+  target?: "_self" | "_blank" | "_top" | "_parent"
+  type?: "primary" | "secondary" | "destructive"
+}
+
 /**
  * Button component for triggering actions or navigating to links.
  *
@@ -121,7 +130,15 @@ const ButtonWrapper = styled.button`
  * @param {'_self'|'_blank'|'_top'|'_parent'} [props.target='_self'] - The target for the link if href is provided.
  * @param {'primary'|'secondary'|'destructive'} [props.type='secondary'] - The type of the button, affecting its styling.
  */
-const Button = ({ children, disabled, href, onPress, size, target, type }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  disabled = false,
+  href,
+  onPress,
+  size = "medium",
+  target = "_self",
+  type = "secondary",
+}) => {
   if (href) {
     return (
       <ButtonWrapper
@@ -158,25 +175,6 @@ const Button = ({ children, disabled, href, onPress, size, target, type }) => {
       {children}
     </ButtonWrapper>
   )
-}
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  disabled: PropTypes.bool,
-  href: PropTypes.string,
-  onPress: PropTypes.func,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-  target: PropTypes.oneOf(["_self", "_blank", "_top", "_parent"]),
-  type: PropTypes.oneOf(["primary", "secondary", "destructive"]),
-}
-
-Button.defaultProps = {
-  disabled: false,
-  href: undefined,
-  onPress: undefined,
-  size: "medium",
-  target: "_self",
-  type: "secondary",
 }
 
 export default Button

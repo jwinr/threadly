@@ -22,6 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "jwk-to-pem": "^2.0.5",
     "lru-cache": "^11.0.0",
+    "micro": "^10.0.1",
+    "micro-cors": "^0.1.1",
     "next": "^14.2.5",
     "node": "^22.3.0",
     "npx": "^10.2.2",
@@ -34,6 +36,7 @@
     "react-medium-image-zoom": "^5.2.5",
     "react-responsive-carousel": "^3.2.23",
     "react-transition-group": "^4.4.5",
+    "sharp": "^0.33.4",
     "stripe": "^16.2.0",
     "styled-components": "^6.1.11",
     "swiper": "^11.1.4"
@@ -41,6 +44,10 @@
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.24.7",
     "@svgr/webpack": "^8.1.0",
-    "babel-plugin-styled-components": "^2.1.4"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/styled-components": "^5.1.34",
+    "babel-plugin-styled-components": "^2.1.4",
+    "typescript": "^5.5.4"
   }
 }

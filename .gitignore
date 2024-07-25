@@ -71,7 +71,7 @@ utils/CognitoErrorMessages.js
 context/CartContext.js
 context/UserContext.js
 context/SignOutContext.js
-middleware.js
+middleware.ts
 dbinfo.sql
 stripe.js
 

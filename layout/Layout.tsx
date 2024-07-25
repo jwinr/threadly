@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, ReactNode, FC } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import ToastConfig from "../utils/ToastConfig"
 import Footer from "./Footer"
@@ -20,24 +20,30 @@ const ContentWrapper = styled.div`
   background-color: var(--sc-color-background);
 `
 
-export default function Layout({ children }) {
-  const [openDropdown, setOpenDropdown] = useState(null)
-  const [mounted, setMounted] = useState(false)
+interface LayoutProps {
+  children: ReactNode
+  categories: any
+}
+
+const Layout: FC<LayoutProps> = ({ children, categories }) => {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [mounted, setMounted] = useState<boolean>(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  const handleToggle = (dropdown) => {
-    setOpenDropdown((prevState) => {
-      const newState = prevState === dropdown ? null : dropdown
-      return newState
-    })
+  const handleToggle = (dropdown: string) => {
+    setOpenDropdown((prevState) => (prevState === dropdown ? null : dropdown))
   }
 
   return (
     <>
-      <Navbar openDropdown={openDropdown} handleToggle={handleToggle} />
+      <Navbar
+        openDropdown={openDropdown}
+        handleToggle={handleToggle}
+        categories={categories}
+      />
       <SiteWrapper>
         <ContentWrapper>{children}</ContentWrapper>
       </SiteWrapper>
@@ -46,3 +52,5 @@ export default function Layout({ children }) {
     </>
   )
 }
+
+export default Layout

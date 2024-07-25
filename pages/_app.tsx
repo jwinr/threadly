@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 import Layout from "../layout/Layout"
 import "../assets/main.css"
 import { Amplify } from "aws-amplify"
@@ -11,7 +11,13 @@ import { CartProvider } from "../context/CartContext"
 import { ToastProvider } from "../context/ToastContext"
 import ErrorBoundary from "../components/common/ErrorBoundary"
 
-function Nexari({ Component, pageProps, categories }) {
+interface NexariProps {
+  Component: FC<any>
+  pageProps: any
+  categories: any
+}
+
+const Nexari: FC<NexariProps> = ({ Component, pageProps, categories }) => {
   return (
     <>
       <React.StrictMode>

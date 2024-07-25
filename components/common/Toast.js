@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
+import PropTypes from "prop-types"
 import { PiCheckCircleFill, PiWarningFill } from "react-icons/pi"
 import { MdPending } from "react-icons/md"
 
@@ -127,6 +128,16 @@ const Toast = ({
   )
 }
 
+Toast.propTypes = {
+  message: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(["success", "caution", "pending"]).isRequired,
+  action: PropTypes.string,
+  onAction: PropTypes.func,
+  onDismiss: PropTypes.func.isRequired,
+  timeout: PropTypes.number,
+  index: PropTypes.number.isRequired,
+}
+
 /**
  * Manages and renders active toasts.
  * @param {Array} toasts - The array of toasts to render.
@@ -140,6 +151,20 @@ const ToastManager = ({ toasts }) => {
       ))}
     </>
   )
+}
+
+ToastManager.propTypes = {
+  toasts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(["success", "caution", "pending"]).isRequired,
+      action: PropTypes.string,
+      onAction: PropTypes.func,
+      onDismiss: PropTypes.func.isRequired,
+      timeout: PropTypes.number,
+    })
+  ).isRequired,
 }
 
 export default ToastManager

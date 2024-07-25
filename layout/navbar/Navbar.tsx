@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { FC } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
 import BannerLogo from "../../public/images/logo.svg"
@@ -63,7 +63,17 @@ const Logo = styled.a`
   }
 `
 
-const Navbar = ({ openDropdown, handleToggle }) => {
+interface NavbarProps {
+  openDropdown: string | null
+  handleToggle: (dropdown: string) => void
+  categories: any // Replace 'any' with the specific type if you know it
+}
+
+const Navbar: FC<NavbarProps> = ({
+  openDropdown,
+  handleToggle,
+  categories,
+}) => {
   const router = useRouter()
   const isMobileView = useMobileView()
 
