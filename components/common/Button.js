@@ -10,20 +10,20 @@ const sizes = {
 
 const types = {
   primary: css`
-    background-color: #2979ff;
+    background-color: #4164df;
     color: white;
-    --s1-keyline: #2979ff;
+    --s1-keyline: #4164df;
 
     &:hover:not(:active) {
       --s1-keyline: #1c54b2;
-      border-color: #2979ff;
+      border-color: #4164df;
     }
 
     &:active {
-      border-color: #1c54b2;
-      background-color: #1367f6;
+      border-color: #0a3885;
+      background-color: #234bd9;
       color: #d0daff;
-      --s1-keyline: #1c54b2;
+      --s1-keyline: #0a3885;
       --s1-top-shadow: 0px -1px 1px 0px rgba(16, 17, 26, 0.16);
     }
   `,

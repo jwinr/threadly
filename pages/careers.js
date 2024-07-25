@@ -63,13 +63,19 @@ const Careers = () => {
   const { showToast } = useToast()
 
   const handleButtonClick = async () => {
+    if (!emailString) {
+      showToast("Email not available", { type: "caution" })
+      return
+    }
+
     try {
       await navigator.clipboard.writeText(emailString)
-      await showToast("Email copied to clipboard", {
+      showToast("Email copied to clipboard", {
         type: "success",
       })
     } catch (err) {
-      await showToast("Failed to copy email", {
+      console.error("Failed to copy email: ", err)
+      showToast("Failed to copy email", {
         type: "caution",
       })
     }
@@ -93,6 +99,7 @@ const Careers = () => {
           size="large"
           type="primary"
           onPress={handleButtonClick}
+          aria-label="Contact Me"
         >
           Contact Me
         </Button>
@@ -103,6 +110,7 @@ const Careers = () => {
             target="_blank"
             size="large"
             type="secondary"
+            aria-label="LinkedIn"
           >
             <RiLinkedinBoxFill />
             LinkedIn
@@ -112,6 +120,7 @@ const Careers = () => {
             target="_blank"
             size="large"
             type="secondary"
+            aria-label="GitHub"
           >
             <RiGithubFill />
             GitHub

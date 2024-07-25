@@ -238,7 +238,7 @@ export const ResetText = styled.a`
   align-content: baseline;
   font-weight: 500;
   font-size: 14px;
-  color: var(--sc-color-link-blue);
+  color: var(--sc-color-blue);
 
   &:hover {
     color: var(--sc-color-text-hover);
@@ -266,7 +266,7 @@ export const AuthLoginLinkBox = styled.div`
 export const AuthLoginLink = styled.a`
   margin: 4px;
   font-weight: 500;
-  color: var(--sc-color-link-blue);
+  color: var(--sc-color-blue);
 
   &:hover {
     color: var(--sc-color-text-hover);
