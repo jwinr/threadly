@@ -18,6 +18,7 @@ const Dropdown = styled.div`
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0 20px;
+  padding-bottom: 8px;
   overflow: hidden;
   z-index: -100;
   box-sizing: content-box;
@@ -116,11 +117,6 @@ const MenuItem = styled.li`
 
   &:hover {
     text-decoration: underline;
-  }
-
-  &:focus {
-    text-decoration: underline;
-    outline: none;
   }
 `
 
@@ -394,7 +390,7 @@ function DropdownMenu({
         onEnter={calcHeight}
       >
         <Menu>
-          <ListHeader>All Categories</ListHeader>
+          <ListHeader>All categories</ListHeader>
           {CategoriesConfig.map((category) => (
             <DropdownItem
               key={category.id}

@@ -27,6 +27,7 @@ const Dropdown = styled(PropFilter("div")(["isOpen"]))`
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0 20px;
+  padding-bottom: 8px;
   overflow: hidden;
   z-index: -100;
   box-sizing: content-box;
@@ -437,13 +438,6 @@ function DropdownMenu({
               </DropdownItem>
               <DropdownItem href="/favorites" setOpen={setOpen} isOpen={isOpen}>
                 Favorites
-              </DropdownItem>
-              <DropdownItem
-                href="/account-settings"
-                setOpen={setOpen}
-                isOpen={isOpen}
-              >
-                Account Settings
               </DropdownItem>
               <DropdownItem
                 onClick={handleSignOut}

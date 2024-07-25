@@ -50,7 +50,18 @@ public/
 assets/
 amplify/
 src/
-/pages/api/
+pages/api/
+pages/account/
+pages/categories/
+pages/products/
+pages/account.js
+pages/cart.js
+pages/favorites.js
+pages/forgot-password.js
+pages/login.js
+pages/return.js
+pages/search.js
+pages/signup.js
 utils/CategoriesConfig.js
 utils/CategoriesList.json
 utils/LocationProvider.js
@@ -65,7 +76,7 @@ dbinfo.sql
 stripe.js
 
 #amplify-do-not-edit-begin
-amplify/\#current-cloud-backend
+amplify/#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
