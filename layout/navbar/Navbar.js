@@ -45,7 +45,7 @@ const NavbarFlex = styled.div`
 
 const Logo = styled.a`
   display: flex;
-  width: 135px;
+  width: 100px;
   height: 100%;
   align-items: center;
   border: 1px transparent;
@@ -84,7 +84,7 @@ const Navbar = ({ openDropdown, handleToggle }) => {
       <NavbarWrapper>
         <NavbarFlex>
           <Logo href="/" aria-label="Home">
-            <BannerLogo alt="TechNexus Logo" />
+            <BannerLogo alt="Nexari Logo" />
           </Logo>
           <CategoryDropdown
             isOpen={openDropdown === "category"}

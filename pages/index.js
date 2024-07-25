@@ -139,10 +139,10 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>TechNexus</title>
+        <title>Nexari</title>
         <meta
           name="description"
-          content="Shop TechNexus for electronics, computers, laptops & more new tech. Free 2-day shipping on hundreds of items."
+          content="Shop Nexari for electronics, computers, laptops & more new tech. Free 2-day shipping on hundreds of items."
         />
       </Head>
       <HomeContainer>

@@ -35,7 +35,7 @@ const ShippingPolicy = () => {
         <title>Shipping Policy</title>
         <meta
           name="description"
-          content="See the TechNexus shipping and delivery info on laptops, computers and other items."
+          content="See the Nexari shipping and delivery info on laptops, computers and other items."
         />
       </Head>
       <ShipPolicyPageWrapper>
@@ -71,7 +71,7 @@ const ShippingPolicy = () => {
           <li>
             <b>Partial Shipments:</b> If you request to ship available items in
             advance of backordered items, additional shipping fees may apply.
-            Contact customer support at help@jwtechnexus.com to arrange partial
+            Contact customer support at help@shopnexari.com to arrange partial
             shipments.
           </li>
         </ListWrapper>
@@ -95,7 +95,7 @@ const ShippingPolicy = () => {
         <SubheaderText>Free Shipping Eligibility</SubheaderText>
         <p>
           Free shipping offers on cart values above a certain threshold apply to
-          orders simulated as fulfilled and shipped by TechNexus. Free shipping
+          orders simulated as fulfilled and shipped by Nexari. Free shipping
           covers standard shipping fees and does not include handling or tax
           charges where applicable. These offers are for demonstration and are
           subject to change without notice.
@@ -125,7 +125,7 @@ const ShippingPolicy = () => {
         </SubheaderText>
         <p>
           If you need to change your shipping address, please contact customer
-          support at help@jwtechnexus.com as soon as possible. Changes can only
+          support at help@shopnexari.com as soon as possible. Changes can only
           be made before the order has shipped.
         </p>
         <SubheaderText>What shipping methods are available?</SubheaderText>

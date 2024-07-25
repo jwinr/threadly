@@ -1,5 +1,5 @@
-import React from "react"
-import styled, { keyframes, css } from "styled-components"
+import React, { useEffect, useRef } from "react"
+import styled, { css } from "styled-components"
 
 const ToolLabelContainer = styled.div`
   position: absolute;
@@ -32,9 +32,27 @@ const ToolLabelContainer = styled.div`
     `}
 `
 
-const TooltipLabel = ({ style, label, animate, exited }) => {
+const TooltipLabel = ({ label, animate, exited, tooltipRef }) => {
+  const tooltipEl = useRef(null)
+
+  const updateTooltipPosition = () => {
+    if (tooltipRef.current && tooltipEl.current) {
+      const rect = tooltipRef.current.getBoundingClientRect()
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const scrollLeft =
+        window.pageXOffset || document.documentElement.scrollLeft
+
+      tooltipEl.current.style.top = `${rect.top + scrollTop}px`
+      tooltipEl.current.style.left = `${rect.right + scrollLeft}px`
+    }
+  }
+
+  useEffect(() => {
+    updateTooltipPosition()
+  }, [tooltipRef, animate, exited])
+
   return (
-    <ToolLabelContainer style={style} animate={animate} exited={exited}>
+    <ToolLabelContainer ref={tooltipEl} animate={animate} exited={exited}>
       {label}
     </ToolLabelContainer>
   )

@@ -31,17 +31,17 @@ const TermsService = () => {
         <title>Terms of Service</title>
         <meta
           name="description"
-          content="See terms and conditions of using the TechNexus website. By using this web site, you agree to these terms of use."
+          content="See terms and conditions of using the Nexari website. By using this web site, you agree to these terms of use."
         />
       </Head>
       <PrivacyPageWrapper>
         <HeaderText>Terms of Service</HeaderText>
         <p>OVERVIEW</p>
         <p>
-          This website is operated by TechNexus. Throughout the site, the terms
-          “we”, “us” and “our” refer to TechNexus. TechNexus offers this
-          website, including all information and services available from this
-          site to you, the user, conditioned upon your acceptance of all terms,
+          This website is operated by Nexari. Throughout the site, the terms
+          “we”, “us” and “our” refer to Nexari. Nexari offers this website,
+          including all information and services available from this site to
+          you, the user, conditioned upon your acceptance of all terms,
           conditions, policies, and notices stated here. This site is for
           demonstration purposes only and does not facilitate any real
           transactions or sales. It is not affiliated with, endorsed by, or
@@ -321,8 +321,8 @@ const TermsService = () => {
           purpose, durability, title, and non-infringement.
         </p>
         <p>
-          In no case shall TechNexus be liable for any injury, loss, claim, or
-          any direct, indirect, incidental, punitive, special, or consequential
+          In no case shall Nexari be liable for any injury, loss, claim, or any
+          direct, indirect, incidental, punitive, special, or consequential
           damages of any kind, including, without limitation lost profits, lost
           revenue, lost savings, loss of data, replacement costs, or any similar
           damages, whether based in contract, tort (including negligence),
@@ -340,7 +340,7 @@ const TermsService = () => {
         </p>
         <SubheaderText>SECTION 13 - INDEMNIFICATION</SubheaderText>
         <p>
-          You agree to indemnify, defend and hold harmless TechNexus and our
+          You agree to indemnify, defend and hold harmless Nexari and our
           parent, subsidiaries, affiliates, partners, officers, directors,
           agents, contractors, licensors, service providers, subcontractors,
           suppliers, interns and employees, harmless from any claim or demand,
@@ -420,7 +420,7 @@ const TermsService = () => {
         <SubheaderText>SECTION 19 - CONTACT INFORMATION</SubheaderText>
         <p>
           Questions about the Terms of Service should be sent to us at
-          help@jwtechnexus.com
+          help@shopnexari.com
         </p>
       </PrivacyPageWrapper>
     </>

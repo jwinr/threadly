@@ -137,7 +137,7 @@ const LogoBox = styled.div`
   justify-content: center;
 
   svg {
-    width: 140px;
+    width: 125px;
     fill: var(--sc-color-white);
     margin-bottom: 25px;
   }
@@ -181,7 +181,7 @@ const Footer = () => {
                 <FooterColumn>
                   <FooterTitle>About Us</FooterTitle>
                   <a href="/about-us">
-                    <FooterLink>About TechNexus</FooterLink>
+                    <FooterLink>About Nexari</FooterLink>
                   </a>
                   <a href="/careers">
                     <FooterLink>Careers</FooterLink>
@@ -252,9 +252,7 @@ const Footer = () => {
             <LogoBox>
               <LogoSymbol />
             </LogoBox>
-            <CopyrightText>
-              © TechNexus, Inc. All Rights Reserved.
-            </CopyrightText>
+            <CopyrightText>© Nexari, Inc. All Rights Reserved.</CopyrightText>
             <BottomLinksWrapper>
               <a href="/terms-of-service">
                 <FooterLinkBottom>

@@ -100,7 +100,7 @@ const FooterAccordion = () => {
       <Accordion transition transitionTimeout={250}>
         <AccordionItem header="About Us">
           <Link href="/about-us">
-            <FooterLink>About TechNexus</FooterLink>
+            <FooterLink>About Nexari</FooterLink>
           </Link>
           <Link href="/careers">
             <FooterLink>Careers</FooterLink>

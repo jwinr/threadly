@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import Head from "next/head"
 import Image from "next/image"
-import LogoSymbol from "../public/images/logo_n.png"
+import LogoSymbol from "../public/images/logo_n.svg"
 import { useRouter } from "next/router"
 
 const NotFoundWrapper = styled.div`
@@ -98,12 +98,7 @@ const Custom404 = () => {
       <NotFoundWrapper>
         <LogoBox>
           <a href="/" aria-label="Home">
-            <Image
-              src={LogoSymbol}
-              alt="TechNexus Logo"
-              width="500"
-              height="500"
-            />
+            <LogoSymbol alt="Nexari Logo" />
           </a>
         </LogoBox>
         <Message>

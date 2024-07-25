@@ -68,7 +68,7 @@ const Careers = () => {
   return (
     <>
       <Head>
-        <title>Hire Me | TechNexus</title>
+        <title>Hire Me | Nexari</title>
       </Head>
       <CareersContainer>
         <Title>Let's work together.</Title>

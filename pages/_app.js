@@ -10,7 +10,7 @@ import { SignOutProvider } from "../context/SignOutContext"
 import { CartProvider } from "../context/CartContext"
 import ErrorBoundary from "../components/common/ErrorBoundary"
 
-function TechNexus({ Component, pageProps, categories }) {
+function Nexari({ Component, pageProps, categories }) {
   return (
     <>
       <React.StrictMode>
@@ -32,4 +32,4 @@ function TechNexus({ Component, pageProps, categories }) {
   )
 }
 
-export default TechNexus
+export default Nexari

@@ -40,28 +40,28 @@ const PrivacyPolicy = () => {
         <title>Privacy Policy</title>
         <meta
           name="description"
-          content="Your privacy is important to us. This page discloses the privacy policy of TechNexus. We are concerned about your privacy and the security of your important personal information. We want you to be aware of what kind of information we obtain from you, how we use this information, and how you can control its use."
+          content="Your privacy is important to us. This page discloses the privacy policy of Nexari. We are concerned about your privacy and the security of your important personal information. We want you to be aware of what kind of information we obtain from you, how we use this information, and how you can control its use."
         />
       </Head>
       <PrivacyPageWrapper>
         <HeaderText>Privacy Policy</HeaderText>
         <p>
-          TechNexus provides its services globally and the TechNexus entity
+          Nexari provides its services globally and the Nexari entity
           responsible for the collection and use of Personal Information under
           this Privacy Policy differs depending on the service. All entities
-          fall under TechNexus (“TechNexus”, “we”, “our” or “us”).
+          fall under Nexari (“Nexari”, “we”, “our” or “us”).
         </p>
         <p>
           {" "}
           This Privacy Policy describes how your personal information is
           collected, used, and shared when you visit our website (<b>“Site”</b>
-          ), or make an account with TechNexus.
+          ), or make an account with Nexari.
         </p>
         <p>
           {" "}
-          This policy applies to TechNexus’s own Services. Websites, products
-          and services of third-parties and some affiliates of TechNexus are
-          subject to their own separate privacy policies.
+          This policy applies to Nexari’s own Services. Websites, products and
+          services of third-parties and some affiliates of Nexari are subject to
+          their own separate privacy policies.
         </p>
         <SubheaderText>PERSONAL INFORMATION WE COLLECT</SubheaderText>
         <p>
@@ -188,7 +188,7 @@ const PrivacyPolicy = () => {
         <p>
           If you would like to review, correct, or update Personal Information
           that you have previously disclosed to us, you may do so by signing in
-          to your TechNexus account or by contacting us through the contact
+          to your Nexari account or by contacting us through the contact
           information under contact us.
         </p>
         <menu>
@@ -201,21 +201,21 @@ const PrivacyPolicy = () => {
         </p>
         <ListWrapper role="list">
           <li>
-            The right to request confirmation of whether TechNexus processes
+            The right to request confirmation of whether Nexari processes
             Personal Information relating to you, and if so, to request a copy
             of that Personal Information.
           </li>
           <li>
-            The right to request that TechNexus rectifies or updates your
-            Personal Information that is inaccurate, incomplete or outdated.
+            The right to request that Nexari rectifies or updates your Personal
+            Information that is inaccurate, incomplete or outdated.
           </li>
           <li>
-            The right to request that TechNexus erase your Personal Information
-            in certain circumstances provided by law.
+            The right to request that Nexari erase your Personal Information in
+            certain circumstances provided by law.
           </li>
           <li>
-            The right to request that TechNexus restrict the use of your
-            Personal Information.
+            The right to request that Nexari restrict the use of your Personal
+            Information.
           </li>
           <li>
             The right to request that we export your Personal Information that
@@ -235,9 +235,9 @@ const PrivacyPolicy = () => {
           <li>Subject access requests</li>
         </menu>
         <p>
-          You can access your personal information through your TechNexus
-          account. When a manual request is made through contacting us, we will
-          comply within 1 month at no cost.
+          You can access your personal information through your Nexari account.
+          When a manual request is made through contacting us, we will comply
+          within 1 month at no cost.
         </p>
         <SubheaderText>DATA RETENTION AND TRANSFER</SubheaderText>
         <p>
@@ -260,7 +260,7 @@ const PrivacyPolicy = () => {
         <p>
           For more information about our privacy practices, if you have
           questions, or if you would like to make a complaint, please contact us
-          by e‑mail at help@jwtechnexus.com
+          by e‑mail at help@shopnexari.com
         </p>
       </PrivacyPageWrapper>
     </>

@@ -80,7 +80,7 @@ export default function Checkout() {
   return (
     <>
       <Head>
-        <title>Checkout | TechNexus</title>
+        <title>Checkout | Nexari</title>
       </Head>
       <div
         id="checkout"

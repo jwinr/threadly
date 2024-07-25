@@ -13,6 +13,7 @@ const BannerWrapper = styled.div`
   gap: 12px;
   filter: drop-shadow(rgba(0, 0, 0, 0.12) 0px 5px 15px)
     drop-shadow(rgba(60, 66, 87, 0.08) 0px 15px 35px);
+  z-index: 100; // Setting a z-index so that elements can be properly covered by the drop shadow beneath it
   ${(props) => {
     switch (props.type) {
       case "caution":

@@ -66,10 +66,10 @@ const ContactUs = () => {
   return (
     <>
       <Head>
-        <title>Contact Us | TechNexus</title>
+        <title>Contact Us | Nexari</title>
         <meta
           name="description"
-          content="Get in touch with TechNexus. Questions, feedback, press or business proposals."
+          content="Get in touch with Nexari. Questions, feedback, press or business proposals."
         />
       </Head>
       <ContactPageWrapper>
@@ -83,7 +83,7 @@ const ContactUs = () => {
               back to you shortly.
             </p>
             <EmailWrapper>
-              <IoMail size="36" /> <EmailText>help@jwtechnexus.com</EmailText>
+              <IoMail size="36" /> <EmailText>help@shopnexari.com</EmailText>
             </EmailWrapper>
           </CardDetails>
         </ContactCard>

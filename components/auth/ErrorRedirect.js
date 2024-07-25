@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 import Image from "next/image"
-import LogoSymbol from "../../public/images/logo_n.png"
+import LogoSymbol from "../../public/images/logo_n.svg"
 import * as AuthStyles from "./AuthStyles"
 
 const ErrorContainer = styled.div`
@@ -49,12 +49,7 @@ const ErrorRedirect = ({ message }) => {
     <ErrorContainer>
       <AuthStyles.LogoBox>
         <a href="/" aria-label="Home">
-          <Image
-            src={LogoSymbol}
-            alt="TechNexus Logo"
-            width="500"
-            height="500"
-          />
+          <Image src={LogoSymbol} alt="Nexari Logo" width="500" height="500" />
         </a>
       </AuthStyles.LogoBox>
       <ErrorMessage>{message}</ErrorMessage>

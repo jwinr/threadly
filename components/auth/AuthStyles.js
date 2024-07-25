@@ -29,17 +29,76 @@ const shake = keyframes`
   }
 `
 
-export const AuthContainerWrapper = styled.div`
+export const spinnerFadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
+
+const authFadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
+
+const authFadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`
+
+export const AuthPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 500px;
-  height: fit-content;
-  padding: 48px 0;
+  min-height: 100%;
+  height: 100%;
+`
+
+export const AuthContainerWrapper = styled.div`
+  height: 100%;
+  flex-direction: row;
+  width: 100%;
   margin: 0 auto;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  padding: 56px 0;
+  max-height: 100vh;
 
   @media (max-width: 768px) {
-    padding: 30px;
+    width: auto;
+    margin: 0 16px;
   }
+`
+
+// Wrapper for the content inside AuthCard
+export const AuthCardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 1 !important;
+  ${(props) =>
+    props.authFadeOut &&
+    css`
+      justify-content: center;
+      position: relative;
+      opacity: 1 !important; // This brings the spinner into view
+      animation: ${authFadeOut} 0.3s forwards;
+    `}
+  ${(props) =>
+    props.authFadeIn &&
+    css`
+      animation: ${authFadeIn} 0.3s forwards;
+    `}
 `
 
 export const AuthCard = styled(PropFilter("div")(["shake"]))`
@@ -51,9 +110,11 @@ export const AuthCard = styled(PropFilter("div")(["shake"]))`
   border-radius: 8px;
   align-items: center;
   min-height: 275px;
-  padding: 50px 25px 110px 25px;
+  padding: 24px 48px 64px 48px;
   position: relative;
   height: 100%;
+  overflow: hidden;
+  justify-content: center;
 
   ${(props) =>
     props.shake &&
@@ -65,13 +126,25 @@ export const AuthCard = styled(PropFilter("div")(["shake"]))`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
+    padding: 24px 20px 64px 20px;
+  }
+`
+
+export const FormContainerWrapper = styled.div`
+  width: 540px;
+  min-width: 540px;
+  flex-direction: column;
+  display: flex;
+  height: 650px;
+
+  @media (max-width: 768px) {
+    width: 382px;
+    min-width: auto;
   }
 `
 
 export const FormContainer = styled.form`
   display: flex;
-  align-items: center;
   flex-direction: column;
   width: 100%;
 `
@@ -86,6 +159,7 @@ export const EntryWrapper = styled.div`
 `
 
 export const EntryContainer = styled(PropFilter("input")(["loading"]))`
+  position: relative;
   box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
@@ -159,6 +233,8 @@ export const ResetText = styled.a`
   display: inline-block;
   margin-top: 25px;
   margin-bottom: 30px;
+  width: fit-content;
+  align-self: center;
   align-content: baseline;
   font-weight: 500;
   font-size: 14px;
@@ -277,12 +353,7 @@ export const PolicyContainer = styled.div`
 export const LogoBox = styled.div`
   display: flex;
   align-items: center;
-  width: 80px;
-
-  @media (max-width: 768px) {
-    max-width: 75px;
-    width: auto;
-  }
+  width: 50px;
 
   img {
     width: 100%;
@@ -299,13 +370,17 @@ export const invalidStyle = {
 
 export const SpinnerWrapper = styled.div`
   display: flex;
-  height: 50px;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  height: 100%;
+  width: max-content;
   font-size: 14px;
-  color: var(--sc-color-text-loader);
-  justify-content: center;
+  color: var(--sc-color-gray-500);
   transform: translateY(125%);
+  animation: ${spinnerFadeIn} 0.7s ease-in-out;
 
   span {
-    align-self: flex-end;
+    margin-top: 25px;
   }
 `

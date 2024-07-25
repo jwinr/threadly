@@ -42,7 +42,7 @@ const LoaderSpinner = styled(PropFilter("div")(["loading"]))`
       transform: rotate(-120deg);
       transform-origin: 50% 50%;
       stroke-linecap: round;
-      animation: 3500ms linear 0s infinite normal none running ${spinner};
+      animation: 1750ms linear 0s infinite normal none running ${spinner};
     }
   }
 `
