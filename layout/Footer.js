@@ -70,6 +70,7 @@ const FooterTitle = styled.div`
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10px;
+  color: var(--sc-color-title);
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -78,11 +79,14 @@ const FooterTitle = styled.div`
 
 const FooterLink = styled.div`
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
   margin: 3px;
+  transition: var(--hoverTransition);
+  transition-property: color, opacity;
 
   &:hover {
-    text-decoration: underline;
+    opacity: 0.5;
   }
 
   @media (max-width: 768px) {

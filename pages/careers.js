@@ -1,6 +1,8 @@
 import React from "react"
 import styled from "styled-components"
 import Head from "next/head"
+import Button from "../components/common/Button"
+import { useToast } from "../context/ToastContext"
 
 const CareersContainer = styled.div`
   display: flex;
@@ -39,31 +41,22 @@ const Description = styled.p`
   }
 `
 
-const ContactButton = styled.a`
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: var(--sc-color-white);
-  background-color: var(--sc-color-blue);
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: var(--color-main-dark-blue);
-  }
-
-  &:active {
-    background-color: var(--color-main-dark-blue);
-  }
-
-  &:focus-visible {
-    background-color: var(--color-main-dark-blue);
-  }
-`
-
 const Careers = () => {
   const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL
+  const { showToast } = useToast()
+
+  const handleButtonClick = async () => {
+    try {
+      await navigator.clipboard.writeText(emailString)
+      await showToast("Email copied to clipboard", {
+        type: "success",
+      })
+    } catch (err) {
+      await showToast("Failed to copy email", {
+        type: "caution",
+      })
+    }
+  }
 
   return (
     <>
@@ -74,10 +67,18 @@ const Careers = () => {
         <Title>Let's work together.</Title>
         <Description>
           Interested in hiring me to join your team? I'm always looking for
-          opportunities to grow and apply my skills. Feel free to reach out and
-          let's discuss how I can contribute to your success!
+          opportunities to grow and apply my skills. Feel free to reach out via
+          email.
         </Description>
-        <ContactButton href={`mailto:${emailString}`}>Contact Me</ContactButton>
+        <Button
+          href={`mailto:${emailString}`}
+          target="_self"
+          size="large"
+          type="primary"
+          onPress={handleButtonClick}
+        >
+          Contact Me
+        </Button>
       </CareersContainer>
     </>
   )

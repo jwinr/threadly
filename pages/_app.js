@@ -8,6 +8,7 @@ import { MobileViewProvider } from "../context/MobileViewContext"
 import { UserProvider } from "../context/UserContext"
 import { SignOutProvider } from "../context/SignOutContext"
 import { CartProvider } from "../context/CartContext"
+import { ToastProvider } from "../context/ToastContext"
 import ErrorBoundary from "../components/common/ErrorBoundary"
 
 function Nexari({ Component, pageProps, categories }) {
@@ -15,17 +16,19 @@ function Nexari({ Component, pageProps, categories }) {
     <>
       <React.StrictMode>
         <MobileViewProvider>
-          <UserProvider>
-            <SignOutProvider>
-              <CartProvider>
-                <ErrorBoundary>
-                  <Layout categories={categories}>
-                    <Component {...pageProps} />
-                  </Layout>
-                </ErrorBoundary>
-              </CartProvider>
-            </SignOutProvider>
-          </UserProvider>
+          <ToastProvider>
+            <UserProvider>
+              <SignOutProvider>
+                <CartProvider>
+                  <ErrorBoundary>
+                    <Layout categories={categories}>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </ErrorBoundary>
+                </CartProvider>
+              </SignOutProvider>
+            </UserProvider>
+          </ToastProvider>
         </MobileViewProvider>
       </React.StrictMode>
     </>
