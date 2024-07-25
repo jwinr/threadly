@@ -70,8 +70,10 @@ const types = {
 const ButtonWrapper = styled.button`
   display: inline-flex;
   align-items: center;
+  align-content: center;
   justify-content: center;
   font-weight: 600;
+  gap: 6px;
   padding: var(--s1-padding-top) var(--s1-padding-right)
     var(--s1-padding-bottom) var(--s1-padding-left);
   box-shadow: var(--s1-top-shadow),
@@ -95,7 +97,6 @@ const ButtonWrapper = styled.button`
     props.href &&
     css`
       text-decoration: none;
-      display: inline-block;
     `}
 
   &:hover {

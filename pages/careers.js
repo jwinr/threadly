@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Head from "next/head"
 import Button from "../components/common/Button"
 import { useToast } from "../context/ToastContext"
+import { RiLinkedinBoxFill, RiGithubFill } from "react-icons/ri"
 
 const CareersContainer = styled.div`
   display: flex;
@@ -20,29 +21,45 @@ const CareersContainer = styled.div`
 `
 
 const Title = styled.h1`
-  font-size: 2.5rem;
-  color: var(--color-main-dark);
+  font-size: 56px;
+  color: var(--sc-color-title);
   margin-bottom: 20px;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 34px;
   }
 `
 
 const Description = styled.p`
-  font-size: 1.2rem;
-  color: var(--sc-color-neutral-dark);
+  font-size: 18px;
   max-width: 600px;
-  line-height: 1.5;
   margin-bottom: 30px;
 
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 16px;
   }
+`
+
+const Subtitle = styled.h2`
+  font-size: 24px;
+  color: var(--sc-color-title);
+  margin: 50px 0;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 20px;
 `
 
 const Careers = () => {
   const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL
+  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN
+  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB
+
   const { showToast } = useToast()
 
   const handleButtonClick = async () => {
@@ -64,11 +81,11 @@ const Careers = () => {
         <title>Hire Me | Nexari</title>
       </Head>
       <CareersContainer>
-        <Title>Let's work together.</Title>
+        <Title>Let's work together</Title>
         <Description>
           Interested in hiring me to join your team? I'm always looking for
-          opportunities to grow and apply my skills. Feel free to reach out via
-          email.
+          opportunities to grow and apply my skills. Drop me an email if you
+          want to chat!
         </Description>
         <Button
           href={`mailto:${emailString}`}
@@ -79,6 +96,27 @@ const Careers = () => {
         >
           Contact Me
         </Button>
+        <Subtitle>... or feel free to connect with me</Subtitle>
+        <ButtonContainer>
+          <Button
+            href={`https://www.linkedin.com/in/${linkedInString}`}
+            target="_blank"
+            size="large"
+            type="secondary"
+          >
+            <RiLinkedinBoxFill />
+            LinkedIn
+          </Button>
+          <Button
+            href={`https://github.com/${githubString}`}
+            target="_blank"
+            size="large"
+            type="secondary"
+          >
+            <RiGithubFill />
+            GitHub
+          </Button>
+        </ButtonContainer>
       </CareersContainer>
     </>
   )

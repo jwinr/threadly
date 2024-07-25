@@ -239,6 +239,15 @@ export const ResetText = styled.a`
   font-weight: 500;
   font-size: 14px;
   color: var(--sc-color-link-blue);
+
+  &:hover {
+    color: var(--sc-color-text-hover);
+  }
+
+  &:focus {
+    box-shadow: var(--sc-shadow-link-focus);
+    border-radius: 4px;
+  }
 `
 
 export const AuthLoginLinkBox = styled.div`
@@ -258,6 +267,15 @@ export const AuthLoginLink = styled.a`
   margin: 4px;
   font-weight: 500;
   color: var(--sc-color-link-blue);
+
+  &:hover {
+    color: var(--sc-color-text-hover);
+  }
+
+  &:focus {
+    box-shadow: var(--sc-shadow-link-focus);
+    border-radius: 4px;
+  }
 `
 
 export const AuthBtn = styled(PropFilter("button")(["loading", "isInvalid"]))`
