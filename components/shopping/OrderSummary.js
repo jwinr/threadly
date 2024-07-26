@@ -1,6 +1,6 @@
 import React from "react"
 import styled, { css, keyframes } from "styled-components"
-import PropFilter from "../../utils/PropFilter"
+import PropFilter from "@/utils/PropFilter"
 import CheckoutButton from "./CheckoutButton"
 
 const loadingAnimation = keyframes`
@@ -30,6 +30,7 @@ const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
     css`
       animation: ${loadingAnimation} 2s ease-in-out infinite;
     `}
+  opacity: ${({ loadingQuantity }) => (loadingQuantity ? "0.5" : "1")};
 
   h2 {
     color: var(--sc-color-title);
@@ -88,9 +89,10 @@ const OrderSummary = ({
   totalQuantity,
   zipCode,
   loading,
+  loadingQuantity,
 }) => {
   return (
-    <OrderSummaryContainer loading={loading}>
+    <OrderSummaryContainer loading={loading} loadingQuantity={loadingQuantity}>
       {loading ? null : (
         <>
           <h2>Order summary</h2>
