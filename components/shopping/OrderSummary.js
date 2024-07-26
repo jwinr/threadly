@@ -32,6 +32,7 @@ const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
     `}
 
   h2 {
+    color: var(--sc-color-title);
     margin-bottom: 8px;
   }
 
@@ -77,7 +78,8 @@ const EmptyMessage = styled.p`
   font-size: 16px;
   color: var(--sc-color-text-light-gray);
   text-align: center;
-  margin-top: 24px;
+  margin-top: 20px;
+  margin-bottom: 24px;
 `
 
 const OrderSummary = ({
