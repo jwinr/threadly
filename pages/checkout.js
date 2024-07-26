@@ -5,15 +5,13 @@ import React, {
   useCallback,
   useMemo,
 } from "react"
-import { loadStripe } from "@stripe/stripe-js"
+import getStripe from "../utils/get-stripejs"
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
 import { CartContext } from "../context/CartContext"
 import Head from "next/head"
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 export default function Checkout() {
   const { cart } = useContext(CartContext)
@@ -55,7 +53,7 @@ export default function Checkout() {
         return null
       }
 
-      const response = await fetch("/api/checkout-sessions", {
+      const response = await fetch("/api/checkout_sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +78,7 @@ export default function Checkout() {
   return (
     <>
       <Head>
-        <title>Checkout | Nexari</title>
+        <title>Checkout | TechNexus</title>
       </Head>
       <div
         id="checkout"
@@ -97,10 +95,7 @@ export default function Checkout() {
         ) : (
           isCartReady && (
             <>
-              <EmbeddedCheckoutProvider
-                stripe={stripePromise}
-                options={options}
-              >
+              <EmbeddedCheckoutProvider stripe={getStripe()} options={options}>
                 <EmbeddedCheckout />
               </EmbeddedCheckoutProvider>
             </>

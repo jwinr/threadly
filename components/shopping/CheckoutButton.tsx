@@ -1,10 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
 import LoaderSpin from "../loaders/LoaderSpin"
-import PropFilter from "../../utils/PropFilter"
+import { useToast } from "../../context/ToastContext"
 
-const Button = styled(PropFilter("button")(["loading"]))`
+interface ButtonProps {
+  loading?: boolean
+  disabled?: boolean
+}
+
+const Button = styled.button<ButtonProps>`
   position: relative;
   justify-content: center;
   background-color: var(--sc-color-button-blue);
@@ -21,9 +26,11 @@ const Button = styled(PropFilter("button")(["loading"]))`
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   transition: all 240ms;
-  cursor: ${({ loading }) => (loading ? "default" : "pointer")};
-  opacity: ${({ loading }) => (loading ? "0.5" : "1")};
-  pointer-events: ${({ loading }) => (loading ? "none" : "auto")};
+  cursor: ${({ loading, disabled }) =>
+    loading || disabled ? "not-allowed" : "pointer"};
+  opacity: ${({ loading, disabled }) => (loading || disabled ? 0.6 : 1)};
+  pointer-events: ${({ loading, disabled }) =>
+    loading || disabled ? "none" : "auto"};
 
   &:focus {
     box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
@@ -34,34 +41,44 @@ const Button = styled(PropFilter("button")(["loading"]))`
   }
 `
 
-const ButtonText = styled(PropFilter("span")(["loading"]))`
+const ButtonText = styled.span<ButtonProps>`
   opacity: ${({ loading }) => (loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
 `
 
-const CheckoutButton = () => {
+interface CheckoutButtonProps {
+  disabled?: boolean
+}
+
+const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { showToast } = useToast()
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
-  const handleCheckout = async () => {
+  const handleCheckout = useCallback(async () => {
+    if (disabled) return
     setLoading(true)
     try {
       await delay(1000) // Simulate loading delay
       router.push("/checkout")
     } catch (error) {
       console.error("Failed to proceed to checkout", error)
+      showToast("Failed to proceed to checkout", { type: "caution" })
     } finally {
       setLoading(false)
     }
-  }
+  }, [disabled, router])
 
   return (
     <Button
       onClick={handleCheckout}
       loading={loading}
+      disabled={disabled}
       aria-label="Proceed to checkout"
+      aria-disabled={disabled}
     >
       <ButtonText loading={loading}>Checkout</ButtonText>
       <LoaderSpin loading={loading} />

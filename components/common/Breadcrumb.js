@@ -6,7 +6,7 @@ import PropTypes from "prop-types"
 
 const BreadWrapper = styled.nav`
   font-size: 14px;
-  margin: 10px;
+  margin: 10px 16px;
   display: inline-flex;
   align-items: center;
 `

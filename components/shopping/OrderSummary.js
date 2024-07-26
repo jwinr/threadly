@@ -73,6 +73,13 @@ const TaxRate = styled.span`
   color: var(--sc-color-text-light-gray);
 `
 
+const EmptyMessage = styled.p`
+  font-size: 16px;
+  color: var(--sc-color-text-light-gray);
+  text-align: center;
+  margin-top: 24px;
+`
+
 const OrderSummary = ({
   subtotal,
   estimatedTaxes,
@@ -86,31 +93,40 @@ const OrderSummary = ({
       {loading ? null : (
         <>
           <h2>Order summary</h2>
-          <SummaryItem>
-            <SubWrapper>
-              Subtotal{" "}
-              <SubItemCount>
-                ({totalQuantity} {totalQuantity === 1 ? "item" : "items"})
-              </SubItemCount>
-            </SubWrapper>
-            <span>${subtotal}</span>
-          </SummaryItem>
-          <SummaryItem>
-            <span>Shipping</span>
-            <span>Free</span>
-          </SummaryItem>
-          <SummaryItem>
-            <span>Estimated taxes</span>
-            <span>${estimatedTaxes}</span>
-          </SummaryItem>
-          <SummaryItem>
-            <TaxRate>Based on {zipCode}</TaxRate>
-          </SummaryItem>
-          <SummaryItem>
-            <TotalText>Total</TotalText>
-            <TotalText>${total}</TotalText>
-          </SummaryItem>
-          <CheckoutButton />
+          {totalQuantity > 0 ? (
+            <>
+              <SummaryItem>
+                <SubWrapper>
+                  Subtotal{" "}
+                  <SubItemCount>
+                    ({totalQuantity} {totalQuantity === 1 ? "item" : "items"})
+                  </SubItemCount>
+                </SubWrapper>
+                <span>${subtotal}</span>
+              </SummaryItem>
+              <SummaryItem>
+                <span>Shipping</span>
+                <span>Free</span>
+              </SummaryItem>
+              <SummaryItem>
+                <span>Estimated taxes</span>
+                <span>${estimatedTaxes}</span>
+              </SummaryItem>
+              <SummaryItem>
+                <TaxRate>Based on {zipCode}</TaxRate>
+              </SummaryItem>
+              <SummaryItem>
+                <TotalText>Total</TotalText>
+                <TotalText>${total}</TotalText>
+              </SummaryItem>
+            </>
+          ) : (
+            <EmptyMessage>
+              When you have items in your cart, you'll see the pricing
+              information here.
+            </EmptyMessage>
+          )}
+          <CheckoutButton disabled={totalQuantity === 0} />
         </>
       )}
     </OrderSummaryContainer>
