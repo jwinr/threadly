@@ -16,7 +16,7 @@ const loadingAnimation = keyframes`
 `
 
 const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
-  margin: 24px 16px;
+  margin: 40px 16px;
   flex: 1 1 auto;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   height: ${({ loading }) => (loading ? "300px" : "initial")};
@@ -77,7 +77,6 @@ const TaxRate = styled.span`
 const EmptyMessage = styled.p`
   font-size: 16px;
   color: var(--sc-color-text-light-gray);
-  text-align: center;
   margin-top: 20px;
   margin-bottom: 24px;
 `

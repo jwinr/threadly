@@ -88,7 +88,7 @@ const ButtonWrapper = styled.button<ButtonProps>`
   border-radius: 6px;
   --s1-focus-ring: 0 0 0 0 transparent;
   outline: none;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
   ${(props) => props.type && types[props.type!]};
   ${(props) => props.disabled && "pointer-events: none;"};

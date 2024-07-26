@@ -209,7 +209,6 @@ const CartProductCard = ({
   removeFromCart,
   index,
 }) => {
-  console.log(item)
   return (
     <ProductCard>
       <ImageWrapper

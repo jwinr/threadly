@@ -47,6 +47,7 @@ export const TitleWrapper = styled.div`
   display: flex;
   min-height: 49px;
   width: 100%;
+  margin-top: 24px;
 `
 
 export const Header = styled.h1`

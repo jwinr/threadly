@@ -33,6 +33,12 @@ const PriceWrapper = styled.div`
   }
 `
 
+const OriginalPrice = styled.span`
+  display: inline-block;
+  font-size: 14px;
+  text-decoration: line-through;
+`
+
 const Price = styled.h1`
   font-size: 19px;
   font-weight: bold;
@@ -45,8 +51,9 @@ const TitleWrapper = styled.div`
   -webkit-box-align: center;
   align-items: center;
   display: flex;
-  min-height: 49px;
+  min-height: 100%;
   width: 100%;
+  padding-bottom: 8px;
 `
 
 const TitleSection = styled.div`
@@ -84,7 +91,6 @@ const Title = styled(Link)`
 const Header = styled.h1`
   font-size: 29px;
   font-weight: bold;
-  margin-bottom: 20px;
   color: var(--sc-color-title);
 `
 
