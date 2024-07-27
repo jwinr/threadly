@@ -24,7 +24,7 @@ const Spin = styled(PropFilter("div")(["loading"]))`
   position: absolute;
   justify-content: center;
   align-items: center;
-  top: 50%;
+  top: 20%;
   left: 50%;
   transform: scale(2.5);
   padding-right: 16px;

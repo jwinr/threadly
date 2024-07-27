@@ -31,6 +31,11 @@ export const ContentWrapper = styled.div`
   flex-direction: column;
   flex-basis: 75%;
   max-width: 75%;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    flex-basis: 100%;
+  }
 `
 
 export const OrderSummaryWrapper = styled.div`
@@ -39,14 +44,17 @@ export const OrderSummaryWrapper = styled.div`
   flex-basis: 25%;
   max-width: 25%;
   margin-left: 16px;
-  height: fit-content;
+  height: auto;
   position: relative;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin-left: 0;
+    border-bottom: 1px solid #d8dee4;
+  }
 `
 
 export const TitleWrapper = styled.div`
-  -webkit-box-align: center;
-  align-items: center;
-  display: flex;
   min-height: 49px;
   width: 100%;
   margin-top: 24px;
@@ -59,12 +67,26 @@ export const Header = styled.h1`
   color: var(--sc-color-title);
 `
 
+export const Subtitle = styled.div`
+  background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
+  border-radius: 6px;
+  min-height: 20px;
+  width: ${({ loading }) => (loading ? "200px" : "fit-content")};
+  ${({ loading }) =>
+    loading &&
+    css`
+      animation: ${loadingAnimation} 2s ease-in-out infinite;
+    `}
+
+  h1 {
+    display: ${({ loading }) => (loading ? "none" : "initial")};
+    font-size: 19px;
+    font-weight: 700;
+  }
+`
+
 export const CartContainer = styled(PropFilter("div")(["loading"]))`
-  border-radius: 4px;
-  box-shadow: ${({ loading }) =>
-    loading
-      ? "rgba(0, 0, 0, 0.04) 0px 6px 12px 4px, rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px, rgba(0, 0, 0, 0.04) 0px 2px 4px"
-      : "initial"};
+  border-radius: 6px;
   margin-top: 16px;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   height: ${({ loading }) => (loading ? "300px" : "initial")};
@@ -73,10 +95,6 @@ export const CartContainer = styled(PropFilter("div")(["loading"]))`
     css`
       animation: ${loadingAnimation} 2s ease-in-out infinite;
     `}
-
-  @media (max-width: 768px) {
-    margin: 10px;
-  }
 `
 
 export const CartWrapper = styled.div`

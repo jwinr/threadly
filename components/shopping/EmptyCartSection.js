@@ -6,7 +6,7 @@ import Button from "../common/Button"
 const EmptyCartContainer = styled.div`
   display: flex;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
     rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;

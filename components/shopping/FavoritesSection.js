@@ -29,7 +29,12 @@ const PriceWrapper = styled.div`
     flex-direction: row;
     align-items: baseline;
     gap: 5px;
+    max-width: initial;
     order: 0;
+
+    span {
+      font-size: 14px;
+    }
   }
 `
 
@@ -37,6 +42,10 @@ const OriginalPrice = styled.span`
   display: inline-block;
   font-size: 14px;
   text-decoration: line-through;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `
 
 const Price = styled.h1`
@@ -44,6 +53,7 @@ const Price = styled.h1`
   font-weight: bold;
 
   @media (max-width: 768px) {
+    font-size: 14px;
   }
 `
 
@@ -66,7 +76,7 @@ const TitleSection = styled.div`
   @media (max-width: 768px) {
     flex-basis: initial;
     max-width: initial;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
   }
 `
 
@@ -92,6 +102,10 @@ const Header = styled.h1`
   font-size: 29px;
   font-weight: bold;
   color: var(--sc-color-title);
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `
 
 const FavoriteDetails = styled.div`
@@ -133,12 +147,23 @@ const ImageWrapper = styled(Link)`
   }
 `
 
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 15px;
+`
+
 const FavButtonWrapper = styled.div`
   display: flex;
   order: 2;
   gap: 15px;
   margin-left: 12px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `
 
 const ShowMoreButton = styled.button`
@@ -154,7 +179,7 @@ const ShowMoreButton = styled.button`
   }
 `
 
-const FavoritesSection = ({ favorites, loadMoreFavorites }) => {
+const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
   const [showAll, setShowAll] = useState(false)
 
   const handleShowAll = async () => {
@@ -185,38 +210,77 @@ const FavoritesSection = ({ favorites, loadMoreFavorites }) => {
                   height={80}
                 />
               </ImageWrapper>
-              <FavoriteDetails>
-                <TitleSection>
-                  <Title
-                    prefetch={false}
-                    href={`/products/${item.product_slug}`}
-                  >
-                    {item.product_name}
-                  </Title>
-                </TitleSection>
-                <FavButtonWrapper>
-                  <AddToCartButton
-                    productId={item.product_id}
-                    quantity={1}
-                    productName={item.product_name}
-                  />
-                  <AddToFavoritesButton
-                    productId={item.product_id}
-                    productName={item.product_name}
-                  />
-                </FavButtonWrapper>
-              </FavoriteDetails>
-              <PriceWrapper>
-                <Price>{`$${
-                  item.product_sale_price || item.product_price
-                }`}</Price>
-                {item.product_sale_price && (
-                  <span>
-                    reg{" "}
-                    <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
-                  </span>
-                )}
-              </PriceWrapper>
+              {isMobileView ? (
+                <InfoContainer>
+                  <FavoriteDetails>
+                    <PriceWrapper>
+                      <Price>{`$${
+                        item.product_sale_price || item.product_price
+                      }`}</Price>
+                      {item.product_sale_price && (
+                        <span>
+                          reg{" "}
+                          <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                        </span>
+                      )}
+                    </PriceWrapper>
+                    <TitleSection>
+                      <Title
+                        prefetch={false}
+                        href={`/products/${item.product_slug}`}
+                      >
+                        {item.product_name}
+                      </Title>
+                    </TitleSection>
+                  </FavoriteDetails>
+                  <FavButtonWrapper>
+                    <AddToCartButton
+                      productId={item.product_id}
+                      quantity={1}
+                      productName={item.product_name}
+                    />
+                    <AddToFavoritesButton
+                      productId={item.product_id}
+                      productName={item.product_name}
+                    />
+                  </FavButtonWrapper>
+                </InfoContainer>
+              ) : (
+                <>
+                  <FavoriteDetails>
+                    <TitleSection>
+                      <Title
+                        prefetch={false}
+                        href={`/products/${item.product_slug}`}
+                      >
+                        {item.product_name}
+                      </Title>
+                    </TitleSection>
+                    <FavButtonWrapper>
+                      <AddToCartButton
+                        productId={item.product_id}
+                        quantity={1}
+                        productName={item.product_name}
+                      />
+                      <AddToFavoritesButton
+                        productId={item.product_id}
+                        productName={item.product_name}
+                      />
+                    </FavButtonWrapper>
+                  </FavoriteDetails>
+                  <PriceWrapper>
+                    <Price>{`$${
+                      item.product_sale_price || item.product_price
+                    }`}</Price>
+                    {item.product_sale_price && (
+                      <span>
+                        reg{" "}
+                        <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                      </span>
+                    )}
+                  </PriceWrapper>
+                </>
+              )}
             </ProductCard>
           ))}
           {!showAll && remainingFavoritesCount > 0 && (

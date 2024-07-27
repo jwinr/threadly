@@ -168,6 +168,7 @@ const QuantityWrapper = styled.div`
   max-width: 25%;
   flex-flow: wrap;
   align-items: flex-start;
+  height: min-content;
   order: 3;
 
   @media (max-width: 768px) {
@@ -290,7 +291,7 @@ const CartProductCard = ({
             <ShipIconWrapper>
               <ShipBox />
               <ShippingText>
-                <span>Free Shipping</span>
+                <span style={{ fontWeight: "600" }}>Free Shipping</span>
                 <span>Get it by {deliveryDate}</span>
               </ShippingText>
             </ShipIconWrapper>

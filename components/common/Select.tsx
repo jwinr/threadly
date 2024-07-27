@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `
 
 const Label = styled.label<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? "none" : "inline-block")};
+  display: ${({ hidden }) => (hidden ? "none" : "flex")};
   color: #353a44;
   margin-bottom: 4px;
   font-weight: 600;

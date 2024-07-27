@@ -16,15 +16,11 @@ const loadingAnimation = keyframes`
 `
 
 const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
-  margin: 40px 16px;
+  margin: 30px 16px;
   flex: 1 1 auto;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   height: ${({ loading }) => (loading ? "300px" : "initial")};
-  border-radius: ${({ loading }) => (loading ? "4px" : "initial")};
-  box-shadow: ${({ loading }) =>
-    loading
-      ? "rgba(0, 0, 0, 0.04) 0px 6px 12px 4px, rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px, rgba(0, 0, 0, 0.04) 0px 2px 4px"
-      : "initial"};
+  border-radius: ${({ loading }) => (loading ? "6px" : "initial")};
   ${({ loading }) =>
     loading &&
     css`
@@ -38,14 +34,8 @@ const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
     margin-bottom: 8px;
   }
 
-  @media (min-width: 992px) {
-    margin-left: 16px;
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
-    margin-left: 0;
-    margin-top: 24px;
+  @media (max-width: 768px) {
+    margin: 30px 0;
   }
 `
 

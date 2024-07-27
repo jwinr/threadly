@@ -44,6 +44,10 @@ const ToastContainer = styled.div<{ isVisible: boolean }>`
           opacity: 0;
           transform: translateX(-50%) translateY(20px) scale(0.95);
         `}
+
+  @media (max-width: 768px) {
+    width: max-content;
+  }
 `
 
 const IconContainer = styled.div`
