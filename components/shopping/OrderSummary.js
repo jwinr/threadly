@@ -30,7 +30,8 @@ const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
     css`
       animation: ${loadingAnimation} 2s ease-in-out infinite;
     `}
-  opacity: ${({ loadingQuantity }) => (loadingQuantity ? "0.5" : "1")};
+  opacity: ${({ loadingSummary }) => (loadingSummary ? "0.5" : "1")};
+  transition: opacity 0.3s ease-in-out;
 
   h2 {
     color: var(--sc-color-title);
@@ -89,10 +90,10 @@ const OrderSummary = ({
   totalQuantity,
   zipCode,
   loading,
-  loadingQuantity,
+  loadingSummary,
 }) => {
   return (
-    <OrderSummaryContainer loading={loading} loadingQuantity={loadingQuantity}>
+    <OrderSummaryContainer loading={loading} loadingSummary={loadingSummary}>
       {loading ? null : (
         <>
           <h2>Order summary</h2>

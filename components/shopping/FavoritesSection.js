@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import Image from "next/image"
@@ -141,7 +141,30 @@ const FavButtonWrapper = styled.div`
   align-items: center;
 `
 
-const FavoritesSection = ({ favorites }) => {
+const ShowMoreButton = styled.button`
+  background: none;
+  border: none;
+  color: var(--sc-color-title);
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const FavoritesSection = ({ favorites, loadMoreFavorites }) => {
+  const [showAll, setShowAll] = useState(false)
+
+  const handleShowAll = async () => {
+    await loadMoreFavorites()
+    setShowAll(true)
+  }
+
+  const displayedFavorites = showAll ? favorites : favorites.slice(0, 3)
+  const remainingFavoritesCount = favorites.length - 3
+
   return (
     <>
       {favorites.length > 0 && (
@@ -149,7 +172,7 @@ const FavoritesSection = ({ favorites }) => {
           <TitleWrapper>
             <Header>Favorites</Header>
           </TitleWrapper>
-          {favorites.map((item) => (
+          {displayedFavorites.map((item) => (
             <ProductCard key={item.product_id}>
               <ImageWrapper
                 prefetch={false}
@@ -196,6 +219,11 @@ const FavoritesSection = ({ favorites }) => {
               </PriceWrapper>
             </ProductCard>
           ))}
+          {!showAll && remainingFavoritesCount > 0 && (
+            <ShowMoreButton onClick={handleShowAll}>
+              Show remaining {remainingFavoritesCount} favorites
+            </ShowMoreButton>
+          )}
         </FavoritesWrapper>
       )}
     </>

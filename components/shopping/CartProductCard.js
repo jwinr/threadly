@@ -5,6 +5,7 @@ import Image from "next/image"
 import { VscClose } from "react-icons/vsc"
 import QuantityPicker from "../shopping/QuantityPicker"
 import ShipBox from "../../public/images/icons/shipbox.svg"
+import Select from "../common/Select"
 
 const ProductCard = styled.li`
   display: flex;
@@ -205,8 +206,8 @@ const CartProductCard = ({
   item,
   isMobileView,
   deliveryDate,
-  handleQuantityChange,
   removeFromCart,
+  handleQuantityChange,
   index,
 }) => {
   return (
@@ -259,12 +260,20 @@ const CartProductCard = ({
             )}
           </Details>
           <QuantityWrapper>
-            <QuantityPicker
-              quantity={item.quantity}
-              onQuantityChange={(newQuantity) =>
-                handleQuantityChange(item.product_id, newQuantity)
+            <Select
+              label="Quantity"
+              value={String(item.quantity)}
+              description="Select the quantity you'd like"
+              onChange={(e) =>
+                handleQuantityChange(item.product_id, e.target.value)
               }
-            />
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </Select>
           </QuantityWrapper>
         </InfoContainer>
       ) : (
@@ -303,12 +312,20 @@ const CartProductCard = ({
             )}
           </Details>
           <QuantityWrapper>
-            <QuantityPicker
-              quantity={item.quantity}
-              onQuantityChange={(newQuantity) =>
-                handleQuantityChange(item.product_id, newQuantity)
+            <Select
+              label="Quantity"
+              defaultValue={String(item.quantity)}
+              value={String(item.quantity)}
+              onChange={(e) =>
+                handleQuantityChange(item.product_id, e.target.value)
               }
-            />
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </Select>
           </QuantityWrapper>
         </>
       )}

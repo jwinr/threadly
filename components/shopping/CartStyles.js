@@ -39,6 +39,8 @@ export const OrderSummaryWrapper = styled.div`
   flex-basis: 25%;
   max-width: 25%;
   margin-left: 16px;
+  height: fit-content;
+  position: relative;
 `
 
 export const TitleWrapper = styled.div`

@@ -3,7 +3,6 @@ import { CartContext } from "@/context/CartContext"
 import styled from "styled-components"
 import LoaderSpin from "@/components/loaders/LoaderSpin"
 import PropFilter from "@/utils/PropFilter"
-import { useToast } from "@/context/ToastContext"
 
 const Button = styled.button`
   position: relative; // Allow the loader to be positioned absolutely within the button
@@ -65,7 +64,6 @@ const ButtonText = styled(PropFilter("span")(["loading"]))`
 const AddToCartButton = ({ productId, quantity = 1, productName }) => {
   const { addToCart } = useContext(CartContext)
   const [loading, setLoading] = useState(false)
-  const { showToast } = useToast()
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -75,14 +73,8 @@ const AddToCartButton = ({ productId, quantity = 1, productName }) => {
       await Promise.all([addToCart(productId, quantity), delay(1000)]) // Using a minimum delay to make sure the loading state is temporarily visible even if the API request is quick, since it could result in a rapid UI change
     } catch (error) {
       console.error("Failed to add to cart", error)
-      showToast("Failed to add product", {
-        type: "caution",
-      })
     } finally {
       setLoading(false)
-      showToast("Item added to cart", {
-        type: "success",
-      })
     }
   }
 
