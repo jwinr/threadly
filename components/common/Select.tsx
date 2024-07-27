@@ -206,9 +206,8 @@ const Select: FC<SelectProps> = ({
   value,
 }) => {
   // Extract valid options from children
-  const validOptions = React.Children.map(
-    children,
-    (child: any) => child.props.value
+  const validOptions = React.Children.map(children, (child: any) =>
+    String(child.props.value)
   )
 
   /**

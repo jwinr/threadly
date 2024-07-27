@@ -262,17 +262,17 @@ const CartProductCard = ({
           <QuantityWrapper>
             <Select
               label="Quantity"
-              value={String(item.quantity)}
-              description="Select the quantity you'd like"
+              defaultValue={item.quantity}
+              value={item.quantity}
               onChange={(e) =>
                 handleQuantityChange(item.product_id, e.target.value)
               }
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
+              {Array.from({ length: 10 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
             </Select>
           </QuantityWrapper>
         </InfoContainer>
@@ -314,17 +314,17 @@ const CartProductCard = ({
           <QuantityWrapper>
             <Select
               label="Quantity"
-              defaultValue={String(item.quantity)}
-              value={String(item.quantity)}
+              defaultValue={item.quantity}
+              value={item.quantity}
               onChange={(e) =>
                 handleQuantityChange(item.product_id, e.target.value)
               }
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
+              {Array.from({ length: 10 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
             </Select>
           </QuantityWrapper>
         </>
