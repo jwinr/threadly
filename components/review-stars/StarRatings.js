@@ -3,7 +3,7 @@ import FilledStar from "./FilledStar"
 import HalfFilledStar from "./HalfFilledStar"
 import EmptyStar from "./EmptyStar"
 
-const StarRating = ({ reviews }) => {
+const StarRatings = ({ reviews }) => {
   // Calculate the average rating
   const averageRating = calculateAverageRating(reviews)
   const isReviewsArray = Array.isArray(reviews)
@@ -88,4 +88,4 @@ function calculateAverageRating(reviews) {
   }
 }
 
-export default StarRating
+export default StarRatings

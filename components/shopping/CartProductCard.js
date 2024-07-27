@@ -52,15 +52,13 @@ const TitleSection = styled.div`
 
 const Title = styled(Link)`
   font-size: 16px;
+  font-weight: 600;
+  color: #353a44;
   margin-left: 12px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  &:hover {
-    text-decoration: underline;
-  }
 
   @media (max-width: 768px) {
     -webkit-line-clamp: 4;
@@ -71,15 +69,14 @@ const Title = styled(Link)`
 const Price = styled.h1`
   font-size: 19px;
   font-weight: bold;
+  color: ${(props) => (props.sale ? "var(--sc-color-blue)" : "#353a44;")};
 
   @media (max-width: 768px) {
   }
 `
 
 const SingleItemPrice = styled.span`
-  display: block;
-  font-size: 14px;
-  color: var(--sc-color-gray);
+  color: var(--sc-color-text-light-gray);
 `
 
 const OriginalPrice = styled.span`
@@ -153,12 +150,17 @@ const PriceWrapper = styled.div`
   flex-basis: 20%;
   max-width: 20%;
 
+  span {
+    color: var(--sc-color-text-light-gray);
+  }
+
   @media (max-width: 768px) {
     display: flex;
     flex-direction: row;
     align-items: baseline;
     gap: 5px;
     order: 0;
+    max-width: 100%;
   }
 `
 
@@ -203,6 +205,12 @@ const RemoveButton = styled.button`
   justify-content: center;
 `
 
+const Sale = styled.span`
+  display: flex;
+  font-weight: 600;
+  color: var(--sc-color-blue);
+`
+
 const CartProductCard = ({
   item,
   isMobileView,
@@ -211,6 +219,8 @@ const CartProductCard = ({
   handleQuantityChange,
   index,
 }) => {
+  const isOnSale = !!item.product_sale_price
+
   return (
     <ProductCard>
       <ImageWrapper
@@ -245,20 +255,26 @@ const CartProductCard = ({
             </ShipIconWrapper>
           </ShippingWrapper>
           <Details>
-            <Price>{`$${(
-              (item.product_sale_price || item.product_price) * item.quantity
-            ).toFixed(2)}`}</Price>
+            <PriceWrapper>
+              <Price sale={isOnSale}>{`$${(
+                (item.product_sale_price || item.product_price) * item.quantity
+              ).toFixed(2)}`}</Price>
+              {item.product_sale_price && (
+                <>
+                  <span>
+                    reg{" "}
+                    <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                  </span>
+                </>
+              )}
+            </PriceWrapper>
             {item.quantity > 1 && !item.product_sale_price && (
               <SingleItemPrice>{`$${item.product_price} each`}</SingleItemPrice>
             )}
-            {item.product_sale_price && (
-              <span>
-                reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
-                {item.quantity > 1 && (
-                  <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
-                )}
-              </span>
+            {item.quantity > 1 && item.product_sale_price && (
+              <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
             )}
+            {item.product_sale_price && <Sale>Sale</Sale>}
           </Details>
           <QuantityWrapper>
             <Select
@@ -297,19 +313,22 @@ const CartProductCard = ({
             </ShipIconWrapper>
           </ShippingWrapper>
           <Details>
-            <Price>{`$${(
+            <Price sale={isOnSale}>{`$${(
               (item.product_sale_price || item.product_price) * item.quantity
             ).toFixed(2)}`}</Price>
             {item.quantity > 1 && !item.product_sale_price && (
               <SingleItemPrice>{`$${item.product_price} each`}</SingleItemPrice>
             )}
             {item.product_sale_price && (
-              <span>
-                reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
-                {item.quantity > 1 && (
-                  <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
-                )}
-              </span>
+              <>
+                <span>
+                  reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                  {item.quantity > 1 && (
+                    <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
+                  )}
+                </span>
+                <Sale>Sale</Sale>
+              </>
             )}
           </Details>
           <QuantityWrapper>

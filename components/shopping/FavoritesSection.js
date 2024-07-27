@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import AddToCartButton from "../shopping/AddToCartButton"
 import AddToFavoritesButton from "../shopping/AddToFavoritesButton"
+import StarRatings from "../review-stars/StarRatings"
 
 const FavoritesWrapper = styled.div`
   margin-left: initial;
@@ -34,6 +35,7 @@ const PriceWrapper = styled.div`
 
     span {
       font-size: 14px;
+      color: var(--sc-color-text-light-gray);
     }
   }
 `
@@ -51,6 +53,7 @@ const OriginalPrice = styled.span`
 const Price = styled.h1`
   font-size: 19px;
   font-weight: bold;
+  color: ${(props) => (props.sale ? "var(--sc-color-blue)" : "#353a44;")};
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -68,7 +71,6 @@ const TitleWrapper = styled.div`
 
 const TitleSection = styled.div`
   font-size: 16px;
-  order: 1;
   width: 100%;
   flex-basis: 50%;
   max-width: 50%;
@@ -82,15 +84,14 @@ const TitleSection = styled.div`
 
 const Title = styled(Link)`
   font-size: 16px;
-  margin-left: 12px;
+  font-weight: 600;
+  color: #353a44;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  &:hover {
-    text-decoration: underline;
-  }
+  width: fit-content;
+  margin-bottom: 2px;
 
   @media (max-width: 768px) {
     -webkit-line-clamp: 4;
@@ -139,11 +140,16 @@ const ImageWrapper = styled(Link)`
   width: 80px;
   height: 80px;
   order: 0;
+  margin-right: 12px;
 
   img {
     height: 80px;
     width: 80px;
     object-fit: scale-down; // Retain the aspect ratio without the Next Image size warning
+  }
+
+  @media (max-width: 768px) {
+    margin-right: 0;
   }
 `
 
@@ -158,12 +164,8 @@ const FavButtonWrapper = styled.div`
   display: flex;
   order: 2;
   gap: 15px;
-  margin-left: 12px;
   align-items: center;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
+  margin-top: 8px;
 `
 
 const ShowMoreButton = styled.button`
@@ -177,6 +179,26 @@ const ShowMoreButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
+`
+
+const ReviewWrapper = styled.div`
+  display: flex;
+  font-size: 12px;
+  --size: 12px;
+
+  span {
+    margin: 0 5px;
+  }
+
+  .star-rating {
+    gap: 1px;
+  }
+`
+
+const Sale = styled.span`
+  display: flex;
+  font-weight: 600;
+  color: var(--sc-color-blue);
 `
 
 const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
@@ -197,65 +219,55 @@ const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
           <TitleWrapper>
             <Header>Favorites</Header>
           </TitleWrapper>
-          {displayedFavorites.map((item) => (
-            <ProductCard key={item.product_id}>
-              <ImageWrapper
-                prefetch={false}
-                href={`/products/${item.product_slug}`}
-              >
-                <Image
-                  src={item.product_image_url}
-                  alt={item.product_name}
-                  width={80}
-                  height={80}
-                />
-              </ImageWrapper>
-              {isMobileView ? (
-                <InfoContainer>
-                  <FavoriteDetails>
-                    <PriceWrapper>
-                      <Price>{`$${
-                        item.product_sale_price || item.product_price
-                      }`}</Price>
-                      {item.product_sale_price && (
+          {displayedFavorites.map((item) => {
+            const isOnSale = !!item.product_sale_price
+            return (
+              <ProductCard key={item.product_id}>
+                <ImageWrapper
+                  prefetch={false}
+                  href={`/products/${item.product_slug}`}
+                >
+                  <Image
+                    src={item.product_image_url}
+                    alt={item.product_name}
+                    width={80}
+                    height={80}
+                  />
+                </ImageWrapper>
+                {isMobileView ? (
+                  <InfoContainer>
+                    <FavoriteDetails>
+                      <PriceWrapper>
+                        <Price sale={isOnSale}>{`$${
+                          item.product_sale_price || item.product_price
+                        }`}</Price>
+                        {item.product_sale_price && (
+                          <span>
+                            reg{" "}
+                            <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                          </span>
+                        )}
+                      </PriceWrapper>
+                      {item.product_sale_price && <Sale>Sale</Sale>}
+                      <TitleSection>
+                        <Title
+                          prefetch={false}
+                          href={`/products/${item.product_slug}`}
+                        >
+                          {item.product_name}
+                        </Title>
+                      </TitleSection>
+                      <ReviewWrapper>
+                        <StarRatings reviews={item.reviews} />
                         <span>
-                          reg{" "}
-                          <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                          {item.reviews && item.reviews.length > 0
+                            ? `(${item.reviews.length} review${
+                                item.reviews.length !== 1 ? "s" : ""
+                              })`
+                            : "No reviews yet!"}
                         </span>
-                      )}
-                    </PriceWrapper>
-                    <TitleSection>
-                      <Title
-                        prefetch={false}
-                        href={`/products/${item.product_slug}`}
-                      >
-                        {item.product_name}
-                      </Title>
-                    </TitleSection>
-                  </FavoriteDetails>
-                  <FavButtonWrapper>
-                    <AddToCartButton
-                      productId={item.product_id}
-                      quantity={1}
-                      productName={item.product_name}
-                    />
-                    <AddToFavoritesButton
-                      productId={item.product_id}
-                      productName={item.product_name}
-                    />
-                  </FavButtonWrapper>
-                </InfoContainer>
-              ) : (
-                <>
-                  <FavoriteDetails>
-                    <TitleSection>
-                      <Title
-                        prefetch={false}
-                        href={`/products/${item.product_slug}`}
-                      >
-                        {item.product_name}
-                      </Title>
-                    </TitleSection>
+                      </ReviewWrapper>
+                    </FavoriteDetails>
                     <FavButtonWrapper>
                       <AddToCartButton
                         productId={item.product_id}
@@ -267,22 +279,57 @@ const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
                         productName={item.product_name}
                       />
                     </FavButtonWrapper>
-                  </FavoriteDetails>
-                  <PriceWrapper>
-                    <Price>{`$${
-                      item.product_sale_price || item.product_price
-                    }`}</Price>
-                    {item.product_sale_price && (
-                      <span>
-                        reg{" "}
-                        <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
-                      </span>
-                    )}
-                  </PriceWrapper>
-                </>
-              )}
-            </ProductCard>
-          ))}
+                  </InfoContainer>
+                ) : (
+                  <>
+                    <FavoriteDetails>
+                      <TitleSection>
+                        <Title
+                          prefetch={false}
+                          href={`/products/${item.product_slug}`}
+                        >
+                          {item.product_name}
+                        </Title>
+                      </TitleSection>
+                      <ReviewWrapper>
+                        <StarRatings reviews={item.reviews} />
+                        <span>
+                          {item.reviews && item.reviews.length > 0
+                            ? `(${item.reviews.length} review${
+                                item.reviews.length !== 1 ? "s" : ""
+                              })`
+                            : "No reviews yet. Be the first to write a review!"}
+                        </span>
+                      </ReviewWrapper>
+                      <FavButtonWrapper>
+                        <AddToCartButton
+                          productId={item.product_id}
+                          quantity={1}
+                          productName={item.product_name}
+                        />
+                        <AddToFavoritesButton
+                          productId={item.product_id}
+                          productName={item.product_name}
+                        />
+                      </FavButtonWrapper>
+                    </FavoriteDetails>
+                    <PriceWrapper>
+                      <Price sale={isOnSale}>{`$${
+                        item.product_sale_price || item.product_price
+                      }`}</Price>
+                      {item.product_sale_price && (
+                        <span>
+                          reg{" "}
+                          <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                        </span>
+                      )}
+                      {item.product_sale_price && <Sale>Sale</Sale>}
+                    </PriceWrapper>
+                  </>
+                )}
+              </ProductCard>
+            )
+          })}
           {!showAll && remainingFavoritesCount > 0 && (
             <ShowMoreButton onClick={handleShowAll}>
               Show remaining {remainingFavoritesCount} favorites
