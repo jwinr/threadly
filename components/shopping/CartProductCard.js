@@ -3,7 +3,6 @@ import styled from "styled-components"
 import Link from "next/link"
 import Image from "next/image"
 import { VscClose } from "react-icons/vsc"
-import QuantityPicker from "../shopping/QuantityPicker"
 import ShipBox from "../../public/images/icons/shipbox.svg"
 import Select from "../common/Select"
 

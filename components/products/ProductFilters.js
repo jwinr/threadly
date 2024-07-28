@@ -1,33 +1,57 @@
 import React, { useState, useEffect, useRef } from "react"
 import { RiArrowDownSLine } from "react-icons/ri"
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import Checkbox from "../common/Checkbox"
-import toast from "react-hot-toast"
+import { useToast } from "@/context/ToastContext"
 import { PiSlidersHorizontalLight } from "react-icons/pi"
 import { useMobileView } from "../../context/MobileViewContext"
 import FilterPanel from "./FilterPanel"
 import ActiveFilters from "./ActiveFilters"
+import Button from "../common/Button"
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+`
 
 const Container = styled.div`
   position: relative;
 `
 
 const DropdownButton = styled.button`
-  font-size: 15px;
-  color: var(--sc-color-text);
-  padding: 8px 12px;
-  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #596171;
+  padding: var(--s1-padding-top) var(--s1-padding-right)
+    var(--s1-padding-bottom) var(--s1-padding-left);
+  border-radius: 25px;
   position: relative;
   align-items: center;
   display: flex;
+  height: 42px;
   width: 100%;
   border: 1px solid var(--sc-color-border-gray);
-  transition: background-color 0.2s;
+  transition: all 240ms;
 
-  &:hover,
-  &:active,
-  &:focus-visible {
-    background-color: var(--sc-color-white-highlight);
+  &:hover {
+    background-color: #f5f6f8;
   }
 `
 
@@ -40,60 +64,51 @@ const ArrowIcon = styled.div`
 const DropdownContent = styled.div`
   position: absolute;
   background-color: var(--sc-color-white);
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--sc-color-border-gray);
   border-radius: 8px;
   max-height: 275px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
+  padding: 12px;
   width: max-content;
-  top: 43px;
+  top: 48px;
   z-index: 200;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.12),
+    0px 15px 35px 0px rgba(48, 49, 61, 0.08);
+  animation: ${({ isOpen, isAnimating }) =>
+    isAnimating
+      ? css`
+          ${isOpen ? fadeIn : fadeOut} 240ms ease-in-out forwards
+        `
+      : "none"};
+
+  button {
+    width: 100%;
+  }
 `
 
 const FilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px;
 `
 
 const AllFiltersBtn = styled.button`
-  font-size: 15px;
-  color: var(--sc-color-text);
-  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #596171;
+  padding: var(--s1-padding-top) var(--s1-padding-right)
+    var(--s1-padding-bottom) var(--s1-padding-left);
+  border-radius: 25px;
   gap: 5px;
-  border-radius: 4px;
   position: relative;
   align-items: center;
   display: flex;
   border: 1px solid var(--sc-color-border-gray);
-  transition: background-color 0.2s;
-
-  &:hover,
-  &:active,
-  &:focus-visible {
-    background-color: var(--sc-color-white-highlight);
-  }
-`
-
-const ShowResultsButton = styled.button`
-  background-color: var(--sc-color-blue);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin-top: 10px;
-  width: 100%;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: bold;
+  transition: all 240ms;
 
   &:hover {
-    background-color: var(--sc-color-dark-blue);
-  }
-
-  &:focus-visible {
-    background-color: var(--sc-color-dark-blue);
+    background-color: #f5f6f8;
   }
 `
 
@@ -138,6 +153,7 @@ function ProductFilters({
   filterState,
   onFilteredItemsChange,
 }) {
+  const { showToast } = useToast()
   const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
 
@@ -161,8 +177,7 @@ function ProductFilters({
   const [tempSelectedAttributes, setTempSelectedAttributes] = useState({})
   const [tempSelectedPriceRanges, setTempSelectedPriceRanges] = useState([])
 
-  const [showResultsButtonVisible, setShowResultsButtonVisible] =
-    useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -180,7 +195,6 @@ function ProductFilters({
     onFilterChange(tempSelectedAttributes) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
     setIsPriceDropdownOpen(false)
-    setShowResultsButtonVisible(false) // Prevent the results button from appearing on dropdowns we didn't touch
   }
 
   const handleResetFilters = () => {
@@ -240,7 +254,6 @@ function ProductFilters({
       setIsPriceDropdownOpen(false)
       setIsAttributeDropdownOpen({})
       setTempSelectedAttributes({})
-      setShowResultsButtonVisible(false)
     }
   }
 
@@ -267,7 +280,6 @@ function ProductFilters({
               }))
               // Reset the temporary states when we tab into a new dropdown
               setTempSelectedAttributes({})
-              setShowResultsButtonVisible(false)
             }
           }
         }
@@ -282,11 +294,7 @@ function ProductFilters({
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleTabKey)
     }
-  }, [
-    showResultsButtonVisible,
-    tempSelectedAttributes,
-    tempSelectedPriceRanges,
-  ])
+  }, [tempSelectedAttributes, tempSelectedPriceRanges])
 
   const predefinedPriceRanges = [
     "$25 - $49.99",
@@ -308,11 +316,13 @@ function ProductFilters({
   )
 
   const togglePriceDropdown = () => {
+    setIsAnimating(true)
     setIsPriceDropdownOpen((prevState) => !prevState)
     setIsAttributeDropdownOpen({})
   }
 
   const toggleAttributeDropdown = (attributeType) => {
+    setIsAnimating(true)
     setIsAttributeDropdownOpen((prevState) => {
       const updatedState = { ...prevState }
 
@@ -335,14 +345,6 @@ function ProductFilters({
     })
   }
 
-  const checkFilterVisibility = (priceRanges, attributes) => {
-    const hasPriceFilters = priceRanges.length > 0
-    const hasAttributeFilters = Object.values(attributes).some(
-      (attr) => attr.length > 0
-    )
-    setShowResultsButtonVisible(hasPriceFilters || hasAttributeFilters)
-  }
-
   const toggleSelection = (type, value, isPrice = false) => {
     if (isPrice) {
       setTempSelectedPriceRanges((prevSelected) => {
@@ -350,11 +352,6 @@ function ProductFilters({
           ? prevSelected.filter((item) => item !== value)
           : [...prevSelected, value]
 
-        // Check if there are any filters selected to decide the visibility of the "Show results" button
-        checkFilterVisibility(
-          updatedSelectedPriceRanges,
-          tempSelectedAttributes
-        )
         return updatedSelectedPriceRanges
       })
     } else {
@@ -368,8 +365,6 @@ function ProductFilters({
           updatedAttributes[type] = [value]
         }
 
-        // Check if there are any filters selected to decide the visibility of the "Show results" button
-        checkFilterVisibility(tempSelectedPriceRanges, updatedAttributes)
         return updatedAttributes
       })
     }
@@ -409,25 +404,9 @@ function ProductFilters({
       setTempSelectedAttributes({})
       setTempSelectedPriceRanges([])
       // And show a message to the user
-      toast(
-        "We couldn't find any products with those filters. Your filters have been reset.",
-        {
-          duration: 500,
-          style: { borderLeft: "5px solid #fdc220" },
-          icon: (
-            <FontAwesomeIcon
-              icon={faExclamationCircle}
-              style={{
-                color: "#fdc220",
-                animation:
-                  "toastZoom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
-                animationDelay: "100ms",
-              }}
-            />
-          ),
-          position: isMobileView ? "bottom-center" : "bottom-right", // Use 'bottom-center' for mobile view
-        }
-      )
+      showToast("We couldn't find any products with those filters", {
+        type: "caution",
+      })
     }
     // Update the state with the filtered items
     setFilteredItems(filtered)
@@ -439,6 +418,14 @@ function ProductFilters({
   useEffect(() => {
     filterItems()
   }, [selectedPriceRanges, selectedAttributes, inventoryItems])
+
+  const handleActiveFilterClick = (filter) => {
+    if (filter.isPrice) {
+      togglePriceDropdown()
+    } else {
+      toggleAttributeDropdown(filter.type)
+    }
+  }
 
   const containerClass = `brand-filter-container ${isSticky ? "sticky" : ""}`
 
@@ -467,7 +454,11 @@ function ProductFilters({
                 </ArrowIcon>
               </DropdownButton>
               {isAttributeDropdownOpen[attribute.attribute_type] && (
-                <DropdownContent>
+                <DropdownContent
+                  isOpen={isAttributeDropdownOpen[attribute.attribute_type]}
+                  isAnimating={isAnimating}
+                  onAnimationEnd={() => setIsAnimating(false)}
+                >
                   {attribute.attribute_values.map((value, valueIndex) => (
                     <Checkbox
                       key={valueIndex}
@@ -482,11 +473,13 @@ function ProductFilters({
                       data-type={attribute.attribute_type}
                     />
                   ))}
-                  {showResultsButtonVisible && (
-                    <ShowResultsButton onClick={applyFilters}>
-                      Show results
-                    </ShowResultsButton>
-                  )}
+                  <Button
+                    onPress={applyFilters}
+                    type="primary"
+                    aria-label="Show results"
+                  >
+                    Show results
+                  </Button>
                 </DropdownContent>
               )}
             </Container>
@@ -503,7 +496,11 @@ function ProductFilters({
               </ArrowIcon>
             </DropdownButton>
             {isPriceDropdownOpen && (
-              <DropdownContent>
+              <DropdownContent
+                isOpen={isPriceDropdownOpen}
+                isAnimating={isAnimating}
+                onAnimationEnd={() => setIsAnimating(false)}
+              >
                 {availablePriceRanges.map((priceRange, index) => (
                   <Checkbox
                     key={index}
@@ -516,14 +513,13 @@ function ProductFilters({
                     data-type="price"
                   />
                 ))}
-                {showResultsButtonVisible && (
-                  <ShowResultsButton
-                    onClick={applyFilters}
-                    aria-label="Show results"
-                  >
-                    Show results
-                  </ShowResultsButton>
-                )}
+                <Button
+                  onPress={applyFilters}
+                  type="primary"
+                  aria-label="Show results"
+                >
+                  Show results
+                </Button>
               </DropdownContent>
             )}
           </Container>
@@ -542,6 +538,7 @@ function ProductFilters({
         </FilterWrapper>
         <FilterContainer>
           <ActiveFilters
+            onFilterClick={handleActiveFilterClick}
             selectedAttributes={selectedAttributes}
             selectedPriceRanges={selectedPriceRanges}
             removeFilter={removeFilter}

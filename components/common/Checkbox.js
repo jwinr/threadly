@@ -13,14 +13,21 @@ const CheckboxWrapper = styled.label`
   cursor: pointer;
   user-select: none;
   position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sc-color-blue);
 
   input {
     position: absolute;
     opacity: 0;
     pointer-events: none;
 
-    &:focus + .cbx {
-      outline: -webkit-focus-ring-color auto 1px;
+    &:focus + .cbx span:first-child {
+      --s-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
+      outline: transparent solid 1px;
+      box-shadow: var(--s-top-shadow),
+        var(--s-keyline) 0 0 0 var(--s-keyline-width), var(--s-focus-ring),
+        var(--s-box-shadow);
     }
   }
 
@@ -34,10 +41,12 @@ const CheckboxWrapper = styled.label`
     background: none;
     border: none;
     text-align: left;
+    width: 100%;
     cursor: pointer;
 
     &:hover {
-      background: rgba(0, 119, 255, 0.06);
+      background: #f8fafc;
+      color: var(--sc-color-gray-900);
     }
 
     span {
@@ -79,9 +88,17 @@ const CheckboxWrapper = styled.label`
   }
 
   input:checked + .cbx span:first-child {
-    background: #07f;
-    border-color: #07f;
+    background: var(--sc-color-blue);
+    border-color: var(--sc-color-blue);
     animation: ${waveAnimation} 0.4s ease;
+
+    &:active {
+      --s-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
+      outline: transparent solid 1px;
+      box-shadow: var(--s-top-shadow),
+        var(--s-keyline) 0 0 0 var(--s-keyline-width), var(--s-focus-ring),
+        var(--s-box-shadow);
+    }
 
     svg {
       stroke-dashoffset: 0;
