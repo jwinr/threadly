@@ -4,6 +4,8 @@ import Checkbox from "../common/Checkbox"
 import PropFilter from "../../utils/PropFilter"
 import ChevronDown from "../../public/images/icons/chevron-down.svg"
 import { VscClose } from "react-icons/vsc"
+import Accordion from "../common/Accordion"
+import AccordionItem from "../common/AccordionItem"
 
 const slideIn = keyframes`
   from {
@@ -38,6 +40,10 @@ const PanelContainer = styled(PropFilter("div")(["isOpen"]))`
   display: flex;
   flex-direction: column;
   animation: ${({ isOpen }) => (isOpen ? slideIn : slideOut)} 0.3s ease forwards;
+
+  @media (max-width: 768px) {
+    width: auto;
+  }
 `
 
 const Backdrop = styled(PropFilter("div")(["isOpen"]))`
@@ -127,10 +133,6 @@ const BottomContainer = styled.div`
   box-shadow: rgba(156, 156, 156, 0.7) 0px 0px 6px;
 `
 
-const Accordion = styled.div`
-  border-bottom: 1px solid var(--sc-color-divider);
-`
-
 const AccordionHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -145,7 +147,6 @@ const AccordionHeader = styled.div`
 
 const AccordionContent = styled(PropFilter("div")(["isOpen"]))`
   padding: 5px;
-  max-height: ${({ isOpen }) => (isOpen ? "max-content" : "0")};
   overflow: hidden;
   transition: max-height 0.3s ease;
 
@@ -210,6 +211,10 @@ const FilterPanel = ({
   applyFilters,
   isMounted,
 }) => {
+  console.log(
+    "selectedAttributes received in FilterPanel: ",
+    selectedAttributes
+  )
   const [setIsScrollDisabled] = useScrollControl()
   const [openSections, setOpenSections] = useState({})
   const panelRef = useRef(null)
@@ -298,8 +303,9 @@ const FilterPanel = ({
               <VscClose />
             </CloseButton>
             <Content>
-              <Accordion ref={dropdownPriceRef}>
-                <AccordionHeader
+              <Accordion>
+                <AccordionItem
+                  title="Price"
                   id="header-price"
                   tabIndex={0}
                   role="button"
@@ -311,10 +317,6 @@ const FilterPanel = ({
                   }}
                   onKeyDown={(e) => handleKeyDown(e, "price")}
                 >
-                  <h3>Price</h3>
-                  <StyledChevron isOpen={openSections["price"]} />
-                </AccordionHeader>
-                {openSections["price"] && (
                   <AccordionContent
                     id="content-price"
                     aria-labelledby="header-price"
@@ -333,11 +335,12 @@ const FilterPanel = ({
                       />
                     ))}
                   </AccordionContent>
-                )}
+                </AccordionItem>
               </Accordion>
               {attributes.map((attribute, index) => (
                 <Accordion key={index} ref={dropdownAttributeRef[index]}>
-                  <AccordionHeader
+                  <AccordionItem
+                    title={attribute.attribute_type}
                     id={`header-${attribute.attribute_type}`}
                     tabIndex={0}
                     role="button"
@@ -353,12 +356,6 @@ const FilterPanel = ({
                       handleKeyDown(e, attribute.attribute_type)
                     }
                   >
-                    <h3>{attribute.attribute_type}</h3>
-                    <StyledChevron
-                      isOpen={openSections[attribute.attribute_type]}
-                    />
-                  </AccordionHeader>
-                  {openSections[attribute.attribute_type] && (
                     <AccordionContent
                       id={`content-${attribute.attribute_type}`}
                       aria-labelledby={`header-${attribute.attribute_type}`}
@@ -380,7 +377,7 @@ const FilterPanel = ({
                         />
                       ))}
                     </AccordionContent>
-                  )}
+                  </AccordionItem>
                 </Accordion>
               ))}
             </Content>

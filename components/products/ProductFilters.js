@@ -50,8 +50,14 @@ const DropdownButton = styled.button`
   border: 1px solid var(--sc-color-border-gray);
   transition: all 240ms;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: #f5f6f8;
+  }
+
+  @media (max-width: 768px) {
+    height: 36px;
+    min-width: max-content;
   }
 `
 
@@ -91,6 +97,13 @@ const FilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 16px 0px;
+  }
 `
 
 const AllFiltersBtn = styled.button`
@@ -102,13 +115,24 @@ const AllFiltersBtn = styled.button`
   border-radius: 25px;
   gap: 5px;
   position: relative;
+  min-width: fit-content;
   align-items: center;
   display: flex;
   border: 1px solid var(--sc-color-border-gray);
   transition: all 240ms;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: #f5f6f8;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  @media (max-width: 768px) {
+    height: 36px;
   }
 `
 
@@ -135,7 +159,7 @@ const FilterContainer = styled.div`
 `
 
 const LoadingFilter = styled.div`
-  margin-left: 30px;
+  margin: 0 16px;
   border-radius: 25px;
   background-color: #d6d6d6;
   height: 42px;
@@ -204,6 +228,10 @@ function ProductFilters({
 
   const applyFilters = () => {
     setSelectedAttributes(tempSelectedAttributes)
+    console.log(
+      "tempSelectedAttributes in applyFilters: ",
+      tempSelectedAttributes
+    )
     setSelectedPriceRanges(tempSelectedPriceRanges)
     onFilterChange(tempSelectedAttributes) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
@@ -262,11 +290,19 @@ function ProductFilters({
       (ref) => ref.current
     )
 
+    // Check if any dropdown is open before proceeding
+    const isAnyDropdownOpen =
+      isPriceDropdownOpen ||
+      Object.values(isAttributeDropdownOpen).some((isOpen) => isOpen)
+
+    if (!isAnyDropdownOpen) {
+      return
+    }
+
     if (!allDropdownRefs.some((ref) => ref && ref.contains(event.target))) {
       // Reset certain states when we click outside of an active dropdown
       setIsPriceDropdownOpen(false)
       setIsAttributeDropdownOpen({})
-      setTempSelectedAttributes({})
     }
   }
 
@@ -293,6 +329,7 @@ function ProductFilters({
               }))
               // Reset the temporary states when we tab into a new dropdown
               setTempSelectedAttributes({})
+              console.log("Tabbed over and wiped temp attributes")
             }
           }
         }
@@ -352,6 +389,10 @@ function ProductFilters({
       // Reset tempSelectedAttributes to the current selectedAttributes when opening the dropdown
       if (updatedState[attributeType]) {
         setTempSelectedAttributes(selectedAttributes)
+        console.log(
+          "Reset tempSelectedAttributes in toggleAttributeDropdown: ",
+          selectedAttributes
+        )
       }
 
       return updatedState
@@ -446,6 +487,19 @@ function ProductFilters({
     <>
       <div className={containerClass}>
         <FilterWrapper>
+          <AllFiltersBtn
+            onClick={() => {
+              setIsPanelMounted(true)
+              setTempSelectedAttributes(selectedAttributes)
+              setTimeout(() => {
+                setIsPanelOpen(true)
+              }, 50)
+            }}
+            aria-label="Display all filters"
+          >
+            <PiSlidersHorizontalLight size={28} />
+            All Filters
+          </AllFiltersBtn>
           {attributes.map((attribute, index) => (
             <Container
               key={attribute.attribute_type}
@@ -536,18 +590,6 @@ function ProductFilters({
               </DropdownContent>
             )}
           </Container>
-          <AllFiltersBtn
-            onClick={() => {
-              setIsPanelMounted(true)
-              setTimeout(() => {
-                setIsPanelOpen(true)
-              }, 50)
-            }}
-            aria-label="Display all filters"
-          >
-            <PiSlidersHorizontalLight size={28} />
-            All Filters
-          </AllFiltersBtn>
         </FilterWrapper>
         <FilterContainer>
           <ActiveFilters

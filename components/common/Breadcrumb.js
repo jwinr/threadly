@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { RiArrowDropRightLine } from "react-icons/ri"
 import styled, { css, keyframes } from "styled-components"
 import PropTypes from "prop-types"
+import { useMobileView } from "../../context/MobileViewContext"
 
 const BreadWrapper = styled.nav`
   font-size: 14px;
@@ -78,6 +79,11 @@ const generateBreadcrumbPart = (
 }
 
 function Breadcrumb({ title, categoryName, categorySlug, loading }) {
+  const isMobileView = useMobileView()
+  if (isMobileView) {
+    return
+  }
+
   const router = useRouter()
   const pathnames = router.asPath.split("/").filter((x) => x)
   const productsIndex = pathnames.indexOf("products")
