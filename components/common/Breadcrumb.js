@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { RiArrowDropRightLine } from "react-icons/ri"
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import PropTypes from "prop-types"
 
 const BreadWrapper = styled.nav`
@@ -9,6 +9,16 @@ const BreadWrapper = styled.nav`
   margin: 10px 16px;
   display: inline-flex;
   align-items: center;
+`
+
+const LoadingBreadcrumb = styled.div`
+  display: inline-flex;
+  margin: 10px 16px;
+  width: 25%;
+  height: 21px;
+  background-color: #d6d6d6;
+  border-radius: 6px;
+  animation: loadingAnimation 2s infinite;
 `
 
 // Helper function to capitalize the first letter of a string
@@ -67,10 +77,14 @@ const generateBreadcrumbPart = (
   }
 }
 
-function Breadcrumb({ title, categoryName, categorySlug }) {
+function Breadcrumb({ title, categoryName, categorySlug, loading }) {
   const router = useRouter()
   const pathnames = router.asPath.split("/").filter((x) => x)
   const productsIndex = pathnames.indexOf("products")
+
+  if (loading) {
+    return <LoadingBreadcrumb />
+  }
 
   return (
     <BreadWrapper>

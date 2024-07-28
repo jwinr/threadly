@@ -71,6 +71,9 @@ utils/CognitoErrorMessages.js
 context/CartContext.js
 context/UserContext.js
 context/SignOutContext.js
+hooks/useCategoryData.js
+hooks/useCheckLoggedInUser.js
+hooks/useRedirectIfAuthenticated.js
 middleware.ts
 dbinfo.sql
 stripe.js

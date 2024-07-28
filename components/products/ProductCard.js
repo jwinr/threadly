@@ -154,8 +154,12 @@ const ProductCard = ({
   rating,
   image,
   id,
-  name,
+  loading,
 }) => {
+  if (loading) {
+    return
+  }
+
   const [currentImage, setCurrentImage] = useState(
     image.find((image) => image.is_main)
   )

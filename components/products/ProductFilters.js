@@ -134,6 +134,14 @@ const FilterContainer = styled.div`
   gap: 10px;
 `
 
+const LoadingFilter = styled.div`
+  margin-left: 30px;
+  border-radius: 25px;
+  background-color: #d6d6d6;
+  height: 42px;
+  animation: loadingAnimation 2s ease-in-out infinite;
+`
+
 const isItemInPriceRange = (item, priceRange) => {
   if (!priceRange || typeof priceRange !== "string") {
     return false
@@ -152,7 +160,13 @@ function ProductFilters({
   resetFilters,
   filterState,
   onFilteredItemsChange,
+  setFilteredItems,
+  loading,
 }) {
+  if (loading) {
+    return <LoadingFilter />
+  }
+
   const { showToast } = useToast()
   const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
@@ -163,7 +177,6 @@ function ProductFilters({
   )
 
   const [isPanelOpen, setIsPanelOpen] = useState(false)
-  const [filteredItems, setFilteredItems] = useState(inventoryItems)
   const [isSticky, setIsSticky] = useState(false)
 
   const dropdownAttributeRef = useRef(

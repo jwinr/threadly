@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { VscClose } from "react-icons/vsc"
 
@@ -50,25 +50,35 @@ const ActiveFilters = ({
   removeFilter,
   onFilterClick,
 }) => {
-  const filters = []
+  const [filters, setFilters] = useState([])
 
-  for (const attributeType in selectedAttributes) {
-    selectedAttributes[attributeType].forEach((value) => {
-      filters.push({
-        type: attributeType,
-        value,
-        isPrice: false,
+  useEffect(() => {
+    const newFilters = []
+
+    for (const attributeType in selectedAttributes) {
+      selectedAttributes[attributeType].forEach((value) => {
+        newFilters.push({
+          type: attributeType,
+          value,
+          isPrice: false,
+        })
+      })
+    }
+
+    selectedPriceRanges.forEach((priceRange) => {
+      newFilters.push({
+        type: "Price",
+        value: priceRange,
+        isPrice: true,
       })
     })
-  }
 
-  selectedPriceRanges.forEach((priceRange) => {
-    filters.push({
-      type: "Price",
-      value: priceRange,
-      isPrice: true,
-    })
-  })
+    setFilters(newFilters)
+  }, [selectedAttributes, selectedPriceRanges])
+
+  const handleRemoveFilter = (filter) => {
+    removeFilter(filter.type, filter.value, filter.isPrice)
+  }
 
   return (
     <ActiveFiltersContainer>
@@ -82,7 +92,7 @@ const ActiveFilters = ({
           <CloseIcon
             onClick={(e) => {
               e.stopPropagation() // Prevent triggering the dropdown when closing the filter
-              removeFilter(filter.type, filter.value, filter.isPrice)
+              handleRemoveFilter(filter)
             }}
           />
         </ActiveFilter>
