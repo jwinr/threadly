@@ -12,7 +12,6 @@
     "@aws-amplify/adapter-nextjs": "^1.2.10",
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^2.4.0",
-    "@stripe/ui-extension-sdk": "^8.9.0",
     "@szhsin/react-accordion": "^1.2.4",
     "autoprefixer": "^10.4.19",
     "aws-amplify": "^6.4.3",

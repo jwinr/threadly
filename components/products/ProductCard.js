@@ -156,23 +156,20 @@ const ProductCard = ({
   id,
   loading,
 }) => {
-  if (loading) {
-    return
-  }
+  const [currentImage, setCurrentImage] = useState(null)
 
-  const [currentImage, setCurrentImage] = useState(
-    image.find((image) => image.is_main)
-  )
-
-  // Update the currentImage when the image prop changes
   useEffect(() => {
-    setCurrentImage(image.find((image) => image.is_main))
+    if (image) {
+      const mainImage = image.find((img) => img.is_main) || image[0]
+      setCurrentImage(mainImage)
+    }
   }, [image])
 
-  // Conditional check to ensure currentImage is defined, if not, fallback to a placeholder
-  const imageUrl = currentImage
-    ? currentImage.image_url
-    : "/images/products/placeholder.jpg"
+  if (loading || !currentImage) {
+    return null
+  }
+
+  const imageUrl = currentImage.image_url || "/images/products/placeholder.jpg"
 
   return (
     <CardContainer>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, createRef } from "react"
 import { RiArrowDownSLine } from "react-icons/ri"
 import styled, { css, keyframes } from "styled-components"
 import Checkbox from "../common/Checkbox"
@@ -158,14 +158,6 @@ const FilterContainer = styled.div`
   gap: 10px;
 `
 
-const LoadingFilter = styled.div`
-  margin: 0 16px;
-  border-radius: 25px;
-  background-color: #d6d6d6;
-  height: 42px;
-  animation: loadingAnimation 2s ease-in-out infinite;
-`
-
 const isItemInPriceRange = (item, priceRange) => {
   if (!priceRange || typeof priceRange !== "string") {
     return false
@@ -173,7 +165,6 @@ const isItemInPriceRange = (item, priceRange) => {
   const [minPrice, maxPrice] = priceRange
     .split(" - ")
     .map((value) => parseFloat(value.replace("$", "")))
-
   return item.price >= minPrice && item.price <= maxPrice
 }
 
@@ -185,12 +176,7 @@ function ProductFilters({
   filterState,
   onFilteredItemsChange,
   setFilteredItems,
-  loading,
 }) {
-  if (loading) {
-    return <LoadingFilter />
-  }
-
   const { showToast } = useToast()
   const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
@@ -226,12 +212,21 @@ function ProductFilters({
     }
   }, [])
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleTabKey)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleTabKey)
+    }
+  }, [tempSelectedAttributes, tempSelectedPriceRanges])
+
+  useEffect(() => {
+    filterItems()
+  }, [selectedPriceRanges, selectedAttributes, inventoryItems])
+
   const applyFilters = () => {
     setSelectedAttributes(tempSelectedAttributes)
-    console.log(
-      "tempSelectedAttributes in applyFilters: ",
-      tempSelectedAttributes
-    )
     setSelectedPriceRanges(tempSelectedPriceRanges)
     onFilterChange(tempSelectedAttributes) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
@@ -289,8 +284,6 @@ function ProductFilters({
     const allDropdownRefs = [dropdownPriceRef, ...dropdownAttributeRef].map(
       (ref) => ref.current
     )
-
-    // Check if any dropdown is open before proceeding
     const isAnyDropdownOpen =
       isPriceDropdownOpen ||
       Object.values(isAttributeDropdownOpen).some((isOpen) => isOpen)
@@ -300,7 +293,6 @@ function ProductFilters({
     }
 
     if (!allDropdownRefs.some((ref) => ref && ref.contains(event.target))) {
-      // Reset certain states when we click outside of an active dropdown
       setIsPriceDropdownOpen(false)
       setIsAttributeDropdownOpen({})
     }
@@ -329,22 +321,12 @@ function ProductFilters({
               }))
               // Reset the temporary states when we tab into a new dropdown
               setTempSelectedAttributes({})
-              console.log("Tabbed over and wiped temp attributes")
             }
           }
         }
       })
     }
   }
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside)
-    document.addEventListener("keydown", handleTabKey)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      document.removeEventListener("keydown", handleTabKey)
-    }
-  }, [tempSelectedAttributes, tempSelectedPriceRanges])
 
   const predefinedPriceRanges = [
     "$25 - $49.99",
@@ -389,10 +371,6 @@ function ProductFilters({
       // Reset tempSelectedAttributes to the current selectedAttributes when opening the dropdown
       if (updatedState[attributeType]) {
         setTempSelectedAttributes(selectedAttributes)
-        console.log(
-          "Reset tempSelectedAttributes in toggleAttributeDropdown: ",
-          selectedAttributes
-        )
       }
 
       return updatedState
@@ -467,11 +445,6 @@ function ProductFilters({
     // Pass filtered items to the parent component
     onFilteredItemsChange(filtered)
   }
-
-  // Watch for if we need to call the filter reset..
-  useEffect(() => {
-    filterItems()
-  }, [selectedPriceRanges, selectedAttributes, inventoryItems])
 
   const handleActiveFilterClick = (filter) => {
     if (filter.isPrice) {

@@ -211,10 +211,6 @@ const FilterPanel = ({
   applyFilters,
   isMounted,
 }) => {
-  console.log(
-    "selectedAttributes received in FilterPanel: ",
-    selectedAttributes
-  )
   const [setIsScrollDisabled] = useScrollControl()
   const [openSections, setOpenSections] = useState({})
   const panelRef = useRef(null)
