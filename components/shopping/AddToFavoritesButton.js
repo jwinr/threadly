@@ -3,6 +3,7 @@ import styled, { keyframes, css } from "styled-components"
 import { LiaHeart, LiaHeartSolid } from "react-icons/lia"
 import { useRouter } from "next/router"
 import { UserContext } from "../../context/UserContext"
+import { useFavorites } from "../../context/FavoritesContext"
 import PropFilter from "../../utils/PropFilter"
 import Link from "next/link"
 
@@ -131,6 +132,7 @@ const CloseButton = styled.button`
 
 export default function AddToFavoritesButton({ productId, productName }) {
   const { userAttributes } = useContext(UserContext)
+  const { favorites, addFavorite, removeFavorite } = useFavorites()
   const [loading, setLoading] = useState(false)
   const [added, setAdded] = useState(false)
   const [isAdding, setIsAdding] = useState(true)
@@ -143,25 +145,9 @@ export default function AddToFavoritesButton({ productId, productName }) {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
-    // Check if the product is already in the favorites
     if (userAttributes && userAttributes.sub) {
-      console.log("Running favorites check..")
-      fetch(`/api/favorites?cognitoSub=${userAttributes.sub}`, {
-        headers: {
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (Array.isArray(data) && data.length > 0) {
-            const isAdded = data.some((item) => item.product_id === productId)
-            setAdded(isAdded)
-          } else {
-            // Handle the case where the favorites array is empty
-            setAdded(false)
-          }
-        })
-        .catch((error) => console.error("Error fetching favorites:", error))
+      const isAdded = favorites.some((item) => item.product_id === productId)
+      setAdded(isAdded)
     }
   }, [productId, userAttributes])
 
@@ -171,14 +157,7 @@ export default function AddToFavoritesButton({ productId, productName }) {
       setIsAdding(true)
       setAdded(true)
       await delay(300)
-      await fetch("/api/favorites", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
-        },
-        body: JSON.stringify({ cognitoSub: userAttributes.sub, productId }),
-      })
+      await addFavorite(userAttributes.sub, productId)
       setLoading(false)
       setTooltipContent(
         <>
@@ -195,14 +174,7 @@ export default function AddToFavoritesButton({ productId, productName }) {
       setLoading(true)
       setIsAdding(false)
       await delay(50) // Slight delay to prevent UI flicker
-      await fetch("/api/favorites", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
-        },
-        body: JSON.stringify({ cognitoSub: userAttributes.sub, productId }),
-      })
+      await removeFavorite(userAttributes.sub, productId)
       setLoading(false)
       setAdded(false)
       setTooltipVisible(false)
@@ -211,7 +183,6 @@ export default function AddToFavoritesButton({ productId, productName }) {
 
   const handleClick = () => {
     if (!userAttributes) {
-      console.log("Handling favorites click with no user..")
       router.push("/login")
       return
     }

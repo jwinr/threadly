@@ -71,6 +71,7 @@ utils/CognitoErrorMessages.js
 context/CartContext.js
 context/UserContext.js
 context/SignOutContext.js
+context/FavoritesContext.js
 hooks/useCategoryData.js
 hooks/useCheckLoggedInUser.js
 hooks/useRedirectIfAuthenticated.js

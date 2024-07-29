@@ -9,6 +9,7 @@ import { UserProvider } from "../context/UserContext"
 import { SignOutProvider } from "../context/SignOutContext"
 import { CartProvider } from "../context/CartContext"
 import { ToastProvider } from "../context/ToastContext"
+import { FavoritesProvider } from "../context/FavoritesContext"
 import ErrorBoundary from "../components/common/ErrorBoundary"
 
 interface NexariProps {
@@ -25,13 +26,15 @@ const Nexari: FC<NexariProps> = ({ Component, pageProps, categories }) => {
           <ToastProvider>
             <UserProvider>
               <SignOutProvider>
-                <CartProvider>
-                  <ErrorBoundary>
-                    <Layout categories={categories}>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </ErrorBoundary>
-                </CartProvider>
+                <FavoritesProvider>
+                  <CartProvider>
+                    <ErrorBoundary>
+                      <Layout categories={categories}>
+                        <Component {...pageProps} />
+                      </Layout>
+                    </ErrorBoundary>
+                  </CartProvider>
+                </FavoritesProvider>
               </SignOutProvider>
             </UserProvider>
           </ToastProvider>
