@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { RiArrowDownSLine } from "react-icons/ri"
 import styled, { css, keyframes } from "styled-components"
 import Checkbox from "../common/Checkbox"
@@ -46,7 +46,7 @@ const DropdownButton = styled.button`
   align-items: center;
   display: flex;
   height: 42px;
-  width: 100%;
+  width: max-content;
   border: 1px solid var(--sc-color-border-gray);
   transition: all 240ms;
 
@@ -114,6 +114,7 @@ const AllFiltersBtn = styled.button`
     var(--s1-padding-bottom) var(--s1-padding-left);
   border-radius: 25px;
   gap: 5px;
+  height: 42px;
   position: relative;
   min-width: fit-content;
   align-items: center;
@@ -136,37 +137,10 @@ const AllFiltersBtn = styled.button`
   }
 `
 
-const ResetBtn = styled.button`
-  font-size: 15px;
-  color: var(--sc-color-text);
-  padding: 0 12px;
-  position: relative;
-  align-items: center;
-  text-decoration: underline;
-  display: flex;
-  transition: background-color 0.2s;
-
-  &:hover,
-  &:active,
-  &:focus-visible {
-    text-decoration: none;
-  }
-`
-
 const FilterContainer = styled.div`
   display: flex;
   gap: 10px;
 `
-
-const isItemInPriceRange = (item, priceRange) => {
-  if (!priceRange || typeof priceRange !== "string") {
-    return false
-  }
-  const [minPrice, maxPrice] = priceRange
-    .split(" - ")
-    .map((value) => parseFloat(value.replace("$", "")))
-  return item.price >= minPrice && item.price <= maxPrice
-}
 
 function ProductFilters({
   inventoryItems,
@@ -177,6 +151,7 @@ function ProductFilters({
   onFilteredItemsChange,
   setFilteredItems,
 }) {
+  const maxVisibleFilters = 5
   const { showToast } = useToast()
   const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
@@ -213,15 +188,14 @@ function ProductFilters({
   }, [])
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside)
     document.addEventListener("keydown", handleTabKey)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleTabKey)
     }
   }, [tempSelectedAttributes, tempSelectedPriceRanges])
 
   useEffect(() => {
+    console.log("Running the filterItems() useEffect hook..")
     filterItems()
   }, [selectedPriceRanges, selectedAttributes, inventoryItems])
 
@@ -239,15 +213,6 @@ function ProductFilters({
     setTempSelectedAttributes({})
     setTempSelectedPriceRanges([])
     resetFilters()
-  }
-
-  const getActiveFilterCount = () => {
-    const attributeCount = Object.values(selectedAttributes).reduce(
-      (acc, values) => acc + values.length,
-      0
-    )
-    const priceRangeCount = selectedPriceRanges.length
-    return attributeCount + priceRangeCount
   }
 
   const removeFilter = (type, value, isPrice = false) => {
@@ -277,24 +242,6 @@ function ProductFilters({
         }
         return updated
       })
-    }
-  }
-
-  function handleClickOutside(event) {
-    const allDropdownRefs = [dropdownPriceRef, ...dropdownAttributeRef].map(
-      (ref) => ref.current
-    )
-    const isAnyDropdownOpen =
-      isPriceDropdownOpen ||
-      Object.values(isAttributeDropdownOpen).some((isOpen) => isOpen)
-
-    if (!isAnyDropdownOpen) {
-      return
-    }
-
-    if (!allDropdownRefs.some((ref) => ref && ref.contains(event.target))) {
-      setIsPriceDropdownOpen(false)
-      setIsAttributeDropdownOpen({})
     }
   }
 
@@ -343,9 +290,28 @@ function ProductFilters({
     "$1500 - $1749.99",
   ]
 
-  const availablePriceRanges = predefinedPriceRanges.filter((range) =>
-    inventoryItems.some((item) => isItemInPriceRange(item, range))
-  )
+  const isItemInPriceRange = useMemo(() => {
+    return (item, priceRange) => {
+      if (!priceRange || typeof priceRange !== "string") {
+        return false
+      }
+      const [minPrice, maxPrice] = priceRange
+        .split(" - ")
+        .map((value) => parseFloat(value.replace("$", "")))
+      const isInRange = item.price >= minPrice && item.price <= maxPrice
+      /*console.log(
+        `Checking item price ${item.price} in range ${priceRange}: ${isInRange}`
+      )*/
+      return isInRange
+    }
+  }, [])
+
+  const availablePriceRanges = useMemo(() => {
+    console.log("Running the availablePriceRanges function..")
+    return predefinedPriceRanges.filter((range) =>
+      inventoryItems.some((item) => isItemInPriceRange(item, range))
+    )
+  }, [inventoryItems])
 
   const togglePriceDropdown = () => {
     setIsAnimating(true)
@@ -384,6 +350,7 @@ function ProductFilters({
           ? prevSelected.filter((item) => item !== value)
           : [...prevSelected, value]
 
+        console.log("Selected Price Ranges:", updatedSelectedPriceRanges)
         return updatedSelectedPriceRanges
       })
     } else {
@@ -405,6 +372,9 @@ function ProductFilters({
   const filterItems = () => {
     let filtered = [...inventoryItems]
 
+    console.log("Selected Price Ranges:", selectedPriceRanges)
+    console.log("Inventory Items before filtering:", filtered)
+
     if (selectedPriceRanges.length > 0) {
       filtered = filtered.filter((item) => {
         const isInRange = selectedPriceRanges.some((range) =>
@@ -413,6 +383,8 @@ function ProductFilters({
         return isInRange
       })
     }
+
+    console.log("Inventory Items after price filtering:", filtered)
 
     for (const attributeType in selectedAttributes) {
       const selectedValues = selectedAttributes[attributeType]
@@ -425,10 +397,16 @@ function ProductFilters({
           )
           return hasAttribute
         })
+
+        console.log(
+          `Filtered Items after filtering by ${attributeType}:`,
+          filtered
+        )
       }
     }
 
     if (filtered.length === 0 && inventoryItems.length > 0) {
+      console.log("No items meet the filter criteria, resetting filters.")
       // If no items meet the filter criteria, reset the filters
       resetFilters()
       setSelectedAttributes({})
@@ -444,6 +422,7 @@ function ProductFilters({
     setFilteredItems(filtered)
     // Pass filtered items to the parent component
     onFilteredItemsChange(filtered)
+    console.log("Filtered Items:", filtered)
   }
 
   const handleActiveFilterClick = (filter) => {
@@ -473,7 +452,7 @@ function ProductFilters({
             <PiSlidersHorizontalLight size={28} />
             All Filters
           </AllFiltersBtn>
-          {attributes.map((attribute, index) => (
+          {attributes.slice(0, maxVisibleFilters).map((attribute, index) => (
             <Container
               key={attribute.attribute_type}
               ref={dropdownAttributeRef[index]}
@@ -570,15 +549,8 @@ function ProductFilters({
             selectedAttributes={selectedAttributes}
             selectedPriceRanges={selectedPriceRanges}
             removeFilter={removeFilter}
+            clearFilters={handleResetFilters}
           />
-          {getActiveFilterCount() > 1 && (
-            <ResetBtn
-              onClick={handleResetFilters}
-              aria-label="Clear all filters"
-            >
-              Clear all
-            </ResetBtn>
-          )}
         </FilterContainer>
       </div>
       <FilterPanel

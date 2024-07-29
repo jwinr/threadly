@@ -6,12 +6,20 @@ const ActiveFiltersContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 8px 0px;
+  }
 `
 
 const ActiveFilter = styled.button`
   font-size: 14px;
   font-weight: 600;
   color: #596171;
+  height: 42px;
   padding: var(--s1-padding-top) var(--s1-padding-right)
     var(--s1-padding-bottom) var(--s1-padding-left);
   position: relative;
@@ -24,15 +32,19 @@ const ActiveFilter = styled.button`
   &:hover {
     background-color: #f5f6f8;
   }
+
+  @media (max-width: 768px) {
+    height: 36px;
+  }
 `
 
 const AttributeType = styled.span`
-  color: inherit; /* use default font color */
+  color: inherit;
 `
 
 const AttributeValue = styled.span`
   color: var(--sc-color-blue);
-  margin-left: 4px; /* add some spacing between type and value */
+  margin-left: 4px;
 `
 
 const CloseIcon = styled(VscClose)`
@@ -44,11 +56,29 @@ const CloseIcon = styled(VscClose)`
   }
 `
 
+const ResetBtn = styled.button`
+  font-size: 15px;
+  color: var(--sc-color-text);
+  padding: 0 12px;
+  position: relative;
+  align-items: center;
+  text-decoration: underline;
+  display: flex;
+  transition: background-color 0.2s;
+
+  &:hover,
+  &:active,
+  &:focus-visible {
+    text-decoration: none;
+  }
+`
+
 const ActiveFilters = ({
   selectedAttributes,
   selectedPriceRanges,
   removeFilter,
   onFilterClick,
+  clearFilters,
 }) => {
   const [filters, setFilters] = useState([])
 
@@ -83,20 +113,22 @@ const ActiveFilters = ({
   return (
     <ActiveFiltersContainer>
       {filters.map((filter, index) => (
-        <ActiveFilter
-          key={index}
-          onClick={() => onFilterClick(filter)} // Handle click to open dropdown
-        >
+        <ActiveFilter key={index} onClick={() => onFilterClick(filter)}>
           <AttributeType>{filter.type}</AttributeType>:
           <AttributeValue>{filter.value}</AttributeValue>
           <CloseIcon
             onClick={(e) => {
-              e.stopPropagation() // Prevent triggering the dropdown when closing the filter
+              e.stopPropagation()
               handleRemoveFilter(filter)
             }}
           />
         </ActiveFilter>
       ))}
+      {filters.length > 0 && (
+        <ResetBtn onClick={clearFilters} aria-label="Clear all filters">
+          Clear all
+        </ResetBtn>
+      )}
     </ActiveFiltersContainer>
   )
 }
