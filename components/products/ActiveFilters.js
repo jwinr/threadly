@@ -80,33 +80,28 @@ const ActiveFilters = ({
   onFilterClick,
   clearFilters,
 }) => {
-  const [filters, setFilters] = useState([])
+  const filters = []
 
-  useEffect(() => {
-    const newFilters = []
-
-    for (const attributeType in selectedAttributes) {
-      selectedAttributes[attributeType].forEach((value) => {
-        newFilters.push({
-          type: attributeType,
-          value,
-          isPrice: false,
-        })
-      })
-    }
-
-    selectedPriceRanges.forEach((priceRange) => {
-      newFilters.push({
-        type: "Price",
-        value: priceRange,
-        isPrice: true,
+  for (const attributeType in selectedAttributes) {
+    selectedAttributes[attributeType].forEach((value) => {
+      filters.push({
+        type: attributeType,
+        value,
+        isPrice: false,
       })
     })
+  }
 
-    setFilters(newFilters)
-  }, [selectedAttributes, selectedPriceRanges])
+  selectedPriceRanges.forEach((priceRange) => {
+    filters.push({
+      type: "Price",
+      value: priceRange,
+      isPrice: true,
+    })
+  })
 
-  const handleRemoveFilter = (filter) => {
+  const handleRemoveFilter = (filter, e) => {
+    e.stopPropagation()
     removeFilter(filter.type, filter.value, filter.isPrice)
   }
 
@@ -116,12 +111,7 @@ const ActiveFilters = ({
         <ActiveFilter key={index} onClick={() => onFilterClick(filter)}>
           <AttributeType>{filter.type}</AttributeType>:
           <AttributeValue>{filter.value}</AttributeValue>
-          <CloseIcon
-            onClick={(e) => {
-              e.stopPropagation()
-              handleRemoveFilter(filter)
-            }}
-          />
+          <CloseIcon onClick={(e) => handleRemoveFilter(filter, e)} />
         </ActiveFilter>
       ))}
       {filters.length > 0 && (

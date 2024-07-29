@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { RiArrowDownSLine } from "react-icons/ri"
 import styled, { css, keyframes } from "styled-components"
 import Checkbox from "../common/Checkbox"
@@ -148,15 +148,15 @@ function ProductFilters({
   attributes,
   resetFilters,
   filterState,
-  onFilteredItemsChange,
-  setFilteredItems,
 }) {
   const maxVisibleFilters = 5
   const { showToast } = useToast()
   const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
 
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState([])
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState(
+    filterState.selectedPriceRanges || []
+  )
   const [selectedAttributes, setSelectedAttributes] = useState(
     filterState.selectedAttributes || {}
   )
@@ -192,58 +192,56 @@ function ProductFilters({
     return () => {
       document.removeEventListener("keydown", handleTabKey)
     }
-  }, [tempSelectedAttributes, tempSelectedPriceRanges])
+  }, [])
 
-  useEffect(() => {
-    console.log("Running the filterItems() useEffect hook..")
-    filterItems()
-  }, [selectedPriceRanges, selectedAttributes, inventoryItems])
-
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     setSelectedAttributes(tempSelectedAttributes)
     setSelectedPriceRanges(tempSelectedPriceRanges)
     onFilterChange(tempSelectedAttributes) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
     setIsPriceDropdownOpen(false)
-  }
+  }, [tempSelectedAttributes, tempSelectedPriceRanges, onFilterChange])
 
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setSelectedAttributes({})
     setSelectedPriceRanges([])
     setTempSelectedAttributes({})
     setTempSelectedPriceRanges([])
     resetFilters()
-  }
+  }, [resetFilters])
 
-  const removeFilter = (type, value, isPrice = false) => {
-    if (isPrice) {
-      setSelectedPriceRanges((prev) => {
-        const updatedRanges = prev.filter((range) => range !== value)
-        if (
-          updatedRanges.length === 0 &&
-          Object.keys(selectedAttributes).length === 0
-        ) {
-          applyFilters()
-        }
-        return updatedRanges
-      })
-    } else {
-      setSelectedAttributes((prev) => {
-        const updated = { ...prev }
-        updated[type] = updated[type].filter((val) => val !== value)
-        if (updated[type].length === 0) {
-          delete updated[type]
-        }
-        if (
-          Object.keys(updated).length === 0 &&
-          selectedPriceRanges.length === 0
-        ) {
-          applyFilters()
-        }
-        return updated
-      })
-    }
-  }
+  const removeFilter = useCallback(
+    (type, value, isPrice = false) => {
+      if (isPrice) {
+        setSelectedPriceRanges((prev) => {
+          const updatedRanges = prev.filter((range) => range !== value)
+          if (
+            updatedRanges.length === 0 &&
+            Object.keys(selectedAttributes).length === 0
+          ) {
+            applyFilters()
+          }
+          return updatedRanges
+        })
+      } else {
+        setSelectedAttributes((prev) => {
+          const updated = { ...prev }
+          updated[type] = updated[type].filter((val) => val !== value)
+          if (updated[type].length === 0) {
+            delete updated[type]
+          }
+          if (
+            Object.keys(updated).length === 0 &&
+            selectedPriceRanges.length === 0
+          ) {
+            applyFilters()
+          }
+          return updated
+        })
+      }
+    },
+    [applyFilters, selectedAttributes, selectedPriceRanges]
+  )
 
   const handleTabKey = (event) => {
     if (event.key === "Tab") {
@@ -266,7 +264,6 @@ function ProductFilters({
                 ...prev,
                 [attributeType]: false,
               }))
-              // Reset the temporary states when we tab into a new dropdown
               setTempSelectedAttributes({})
             }
           }
@@ -290,28 +287,21 @@ function ProductFilters({
     "$1500 - $1749.99",
   ]
 
-  const isItemInPriceRange = useMemo(() => {
-    return (item, priceRange) => {
-      if (!priceRange || typeof priceRange !== "string") {
-        return false
-      }
-      const [minPrice, maxPrice] = priceRange
-        .split(" - ")
-        .map((value) => parseFloat(value.replace("$", "")))
-      const isInRange = item.price >= minPrice && item.price <= maxPrice
-      /*console.log(
-        `Checking item price ${item.price} in range ${priceRange}: ${isInRange}`
-      )*/
-      return isInRange
+  const isItemInPriceRange = useCallback((item, priceRange) => {
+    if (!priceRange || typeof priceRange !== "string") {
+      return false
     }
+    const [minPrice, maxPrice] = priceRange
+      .split(" - ")
+      .map((value) => parseFloat(value.replace("$", "")))
+    return item.price >= minPrice && item.price <= maxPrice
   }, [])
 
   const availablePriceRanges = useMemo(() => {
-    console.log("Running the availablePriceRanges function..")
     return predefinedPriceRanges.filter((range) =>
       inventoryItems.some((item) => isItemInPriceRange(item, range))
     )
-  }, [inventoryItems])
+  }, [inventoryItems, isItemInPriceRange])
 
   const togglePriceDropdown = () => {
     setIsAnimating(true)
@@ -349,8 +339,6 @@ function ProductFilters({
         const updatedSelectedPriceRanges = prevSelected.includes(value)
           ? prevSelected.filter((item) => item !== value)
           : [...prevSelected, value]
-
-        console.log("Selected Price Ranges:", updatedSelectedPriceRanges)
         return updatedSelectedPriceRanges
       })
     } else {
@@ -363,66 +351,9 @@ function ProductFilters({
         } else {
           updatedAttributes[type] = [value]
         }
-
         return updatedAttributes
       })
     }
-  }
-
-  const filterItems = () => {
-    let filtered = [...inventoryItems]
-
-    console.log("Selected Price Ranges:", selectedPriceRanges)
-    console.log("Inventory Items before filtering:", filtered)
-
-    if (selectedPriceRanges.length > 0) {
-      filtered = filtered.filter((item) => {
-        const isInRange = selectedPriceRanges.some((range) =>
-          isItemInPriceRange(item, range)
-        )
-        return isInRange
-      })
-    }
-
-    console.log("Inventory Items after price filtering:", filtered)
-
-    for (const attributeType in selectedAttributes) {
-      const selectedValues = selectedAttributes[attributeType]
-      if (selectedValues.length > 0) {
-        filtered = filtered.filter((item) => {
-          const hasAttribute = item.attributes.some(
-            (attribute) =>
-              attribute.attribute_type === attributeType &&
-              selectedValues.includes(attribute.attribute_value)
-          )
-          return hasAttribute
-        })
-
-        console.log(
-          `Filtered Items after filtering by ${attributeType}:`,
-          filtered
-        )
-      }
-    }
-
-    if (filtered.length === 0 && inventoryItems.length > 0) {
-      console.log("No items meet the filter criteria, resetting filters.")
-      // If no items meet the filter criteria, reset the filters
-      resetFilters()
-      setSelectedAttributes({})
-      setSelectedPriceRanges([])
-      setTempSelectedAttributes({})
-      setTempSelectedPriceRanges([])
-      // And show a message to the user
-      showToast("We couldn't find any products with those filters", {
-        type: "caution",
-      })
-    }
-    // Update the state with the filtered items
-    setFilteredItems(filtered)
-    // Pass filtered items to the parent component
-    onFilteredItemsChange(filtered)
-    console.log("Filtered Items:", filtered)
   }
 
   const handleActiveFilterClick = (filter) => {
@@ -442,6 +373,7 @@ function ProductFilters({
           <AllFiltersBtn
             onClick={() => {
               setIsPanelMounted(true)
+              setTempSelectedPriceRanges(selectedPriceRanges)
               setTempSelectedAttributes(selectedAttributes)
               setTimeout(() => {
                 setIsPanelOpen(true)
@@ -559,9 +491,7 @@ function ProductFilters({
         availablePriceRanges={availablePriceRanges}
         selectedPriceRanges={tempSelectedPriceRanges}
         selectedAttributes={tempSelectedAttributes}
-        onClose={() => {
-          setIsPanelOpen(false)
-        }}
+        onClose={() => setIsPanelOpen(false)}
         toggleSelection={toggleSelection}
         resetFilters={handleResetFilters}
         applyFilters={applyFilters}
