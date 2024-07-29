@@ -197,7 +197,11 @@ function ProductFilters({
   const applyFilters = useCallback(() => {
     setSelectedAttributes(tempSelectedAttributes)
     setSelectedPriceRanges(tempSelectedPriceRanges)
-    onFilterChange(tempSelectedAttributes) // Necessary to push the attribute to the URL
+    const allFilters = {
+      ...tempSelectedAttributes,
+      price: tempSelectedPriceRanges,
+    }
+    onFilterChange(allFilters) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
     setIsPriceDropdownOpen(false)
   }, [tempSelectedAttributes, tempSelectedPriceRanges, onFilterChange])
