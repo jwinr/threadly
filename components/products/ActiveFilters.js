@@ -94,7 +94,7 @@ const ActiveFilters = ({
 
   selectedPriceRanges.forEach((priceRange) => {
     filters.push({
-      type: "Price",
+      type: ["Price"],
       value: priceRange,
       isPrice: true,
     })

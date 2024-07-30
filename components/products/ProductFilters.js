@@ -73,24 +73,45 @@ const DropdownContent = styled.div`
   border: 1px solid var(--sc-color-border-gray);
   border-radius: 8px;
   max-height: 275px;
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 12px;
   width: max-content;
   top: 48px;
   z-index: 200;
+
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.12),
     0px 15px 35px 0px rgba(48, 49, 61, 0.08);
-  animation: ${({ isOpen, isAnimating }) =>
-    isAnimating
-      ? css`
-          ${isOpen ? fadeIn : fadeOut} 240ms ease-in-out forwards
-        `
-      : "none"};
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 240ms ease-in-out, transform 240ms ease-in-out,
+    visibility 240ms ease-in-out;
+
+  &.fade-in {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  &.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.85);
+  }
 
   button {
     width: 100%;
   }
+
+  label:last-of-type {
+    margin-bottom: 8px;
+  }
+`
+
+const DropdownScrollWrapper = styled.div`
+  overflow-y: auto;
+  max-height: 275px;
+  padding: 12px;
+  border-radius: 8px;
 `
 
 const FilterWrapper = styled.div`
@@ -175,7 +196,29 @@ function ProductFilters({
   const [tempSelectedAttributes, setTempSelectedAttributes] = useState({})
   const [tempSelectedPriceRanges, setTempSelectedPriceRanges] = useState([])
 
-  const [isAnimating, setIsAnimating] = useState(false)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownPriceRef.current &&
+        !dropdownPriceRef.current.contains(event.target)
+      ) {
+        setIsPriceDropdownOpen(false)
+      }
+      dropdownAttributeRef.forEach((ref, index) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          const attributeType = attributes[index].attribute_type
+          setIsAttributeDropdownOpen((prev) => ({
+            ...prev,
+            [attributeType]: false,
+          }))
+        }
+      })
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [attributes, dropdownAttributeRef, dropdownPriceRef])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -199,7 +242,7 @@ function ProductFilters({
     setSelectedPriceRanges(tempSelectedPriceRanges)
     const allFilters = {
       ...tempSelectedAttributes,
-      price: tempSelectedPriceRanges,
+      price: tempSelectedPriceRanges, // We're destructuring this later in the togglePriceDropdown function
     }
     onFilterChange(allFilters) // Necessary to push the attribute to the URL
     setIsAttributeDropdownOpen({})
@@ -308,13 +351,12 @@ function ProductFilters({
   }, [inventoryItems, isItemInPriceRange])
 
   const togglePriceDropdown = () => {
-    setIsAnimating(true)
     setIsPriceDropdownOpen((prevState) => !prevState)
+    setTempSelectedPriceRanges(selectedAttributes.price || []) // Extract the price from the attribute result
     setIsAttributeDropdownOpen({})
   }
 
   const toggleAttributeDropdown = (attributeType) => {
-    setIsAnimating(true)
     setIsAttributeDropdownOpen((prevState) => {
       const updatedState = { ...prevState }
 
@@ -377,7 +419,7 @@ function ProductFilters({
           <AllFiltersBtn
             onClick={() => {
               setIsPanelMounted(true)
-              setTempSelectedPriceRanges(selectedPriceRanges)
+              setTempSelectedPriceRanges(selectedAttributes.price || [])
               setTempSelectedAttributes(selectedAttributes)
               setTimeout(() => {
                 setIsPanelOpen(true)
@@ -408,12 +450,14 @@ function ProductFilters({
                   )}
                 </ArrowIcon>
               </DropdownButton>
-              {isAttributeDropdownOpen[attribute.attribute_type] && (
-                <DropdownContent
-                  isOpen={isAttributeDropdownOpen[attribute.attribute_type]}
-                  isAnimating={isAnimating}
-                  onAnimationEnd={() => setIsAnimating(false)}
-                >
+              <DropdownContent
+                className={
+                  isAttributeDropdownOpen[attribute.attribute_type]
+                    ? "fade-in"
+                    : "fade-out"
+                }
+              >
+                <DropdownScrollWrapper>
                   {attribute.attribute_values.map((value, valueIndex) => (
                     <Checkbox
                       key={valueIndex}
@@ -435,8 +479,8 @@ function ProductFilters({
                   >
                     Show results
                   </Button>
-                </DropdownContent>
-              )}
+                </DropdownScrollWrapper>
+              </DropdownContent>
             </Container>
           ))}
           <Container ref={dropdownPriceRef}>
@@ -450,21 +494,19 @@ function ProductFilters({
                 )}
               </ArrowIcon>
             </DropdownButton>
-            {isPriceDropdownOpen && (
-              <DropdownContent
-                isOpen={isPriceDropdownOpen}
-                isAnimating={isAnimating}
-                onAnimationEnd={() => setIsAnimating(false)}
-              >
+            <DropdownContent
+              className={isPriceDropdownOpen ? "fade-in" : "fade-out"}
+            >
+              <DropdownScrollWrapper>
                 {availablePriceRanges.map((priceRange, index) => (
                   <Checkbox
                     key={index}
                     id={`price-${priceRange}`}
                     label={priceRange}
                     checked={tempSelectedPriceRanges.includes(priceRange)}
-                    onChange={() =>
+                    onChange={() => {
                       toggleSelection(priceRange, priceRange, true)
-                    }
+                    }}
                     data-type="price"
                   />
                 ))}
@@ -475,8 +517,8 @@ function ProductFilters({
                 >
                   Show results
                 </Button>
-              </DropdownContent>
-            )}
+              </DropdownScrollWrapper>
+            </DropdownContent>
           </Container>
         </FilterWrapper>
         <FilterContainer>
