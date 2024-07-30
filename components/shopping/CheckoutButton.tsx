@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react"
+import React, { useState, useContext, useCallback } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
 import LoaderSpin from "../loaders/LoaderSpin"
 import { useToast } from "../../context/ToastContext"
+import { UserContext } from "@/context/UserContext"
 
 interface ButtonProps {
   loading?: boolean
@@ -54,14 +55,22 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { showToast } = useToast()
+  const { userAttributes } = useContext(UserContext)
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCheckout = useCallback(async () => {
     if (disabled) return
+
     setLoading(true)
     try {
+      if (!userAttributes) {
+        // If the user is not logged in, redirect to the login page
+        router.push("/login")
+        return
+      }
+
       await delay(1000) // Simulate loading delay
       router.push("/checkout")
     } catch (error) {
@@ -70,17 +79,21 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
     } finally {
       setLoading(false)
     }
-  }, [disabled, router])
+  }, [disabled, router, userAttributes, showToast])
 
   return (
     <Button
       onClick={handleCheckout}
       loading={loading}
       disabled={disabled}
-      aria-label="Proceed to checkout"
+      aria-label={
+        userAttributes ? "Proceed to checkout" : "Sign in to check out"
+      }
       aria-disabled={disabled}
     >
-      <ButtonText loading={loading}>Checkout</ButtonText>
+      <ButtonText loading={loading}>
+        {userAttributes ? "Checkout" : "Sign in to check out"}
+      </ButtonText>
       <LoaderSpin loading={loading} />
     </Button>
   )

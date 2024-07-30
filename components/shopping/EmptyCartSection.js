@@ -27,6 +27,10 @@ const EmptyContents = styled.div`
   span {
     margin-bottom: 20px;
   }
+
+  button {
+    width: 250px;
+  }
 `
 
 const EmptyHeader = styled.h1`
@@ -47,7 +51,7 @@ const EmptyWrapper = styled.div`
   }
 `
 
-const EmptyCartSection = ({ userAttributes, handleSignIn }) => {
+const EmptyCartSection = ({ userAttributes }) => {
   return (
     <>
       <EmptyCartContainer>
@@ -69,9 +73,14 @@ const EmptyCartSection = ({ userAttributes, handleSignIn }) => {
           ) : (
             <>
               <span>Have an account? Sign in to see your cart</span>
-              <RedirectButton onClick={handleSignIn} type="button">
+              <Button
+                href="/login"
+                type="primary"
+                size="large"
+                aria-label="Sign in"
+              >
                 Sign in
-              </RedirectButton>
+              </Button>
             </>
           )}
           <EmptyWrapper>

@@ -1,6 +1,4 @@
-import React, { useState, useEffect, ReactNode, FC } from "react"
-import toast, { Toaster } from "react-hot-toast"
-import ToastConfig from "../utils/ToastConfig"
+import React, { useState, ReactNode, FC } from "react"
 import Footer from "./Footer"
 import Navbar from "./navbar/Navbar"
 import styled from "styled-components"
@@ -27,11 +25,6 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children, categories }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [mounted, setMounted] = useState<boolean>(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleToggle = (dropdown: string) => {
     setOpenDropdown((prevState) => (prevState === dropdown ? null : dropdown))
@@ -48,7 +41,6 @@ const Layout: FC<LayoutProps> = ({ children, categories }) => {
         <ContentWrapper>{children}</ContentWrapper>
       </SiteWrapper>
       <Footer />
-      {mounted && <Toaster toastOptions={ToastConfig} aria-live="polite" />}
     </>
   )
 }

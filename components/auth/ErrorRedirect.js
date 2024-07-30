@@ -1,9 +1,9 @@
 import React from "react"
 import styled from "styled-components"
 import { useRouter } from "next/router"
-import Image from "next/image"
 import LogoSymbol from "../../public/images/logo_n.svg"
 import * as AuthStyles from "./AuthStyles"
+import Button from "../common/Button"
 
 const ErrorContainer = styled.div`
   display: flex;
@@ -31,13 +31,6 @@ const ErrorMessage = styled.div`
   }
 `
 
-const HomeButton = styled(AuthStyles.AuthBtn)`
-  @media (min-width: 768px) {
-    width: fit-content;
-    align-self: center;
-  }
-`
-
 const ErrorRedirect = ({ message }) => {
   const router = useRouter()
 
@@ -49,11 +42,13 @@ const ErrorRedirect = ({ message }) => {
     <ErrorContainer>
       <AuthStyles.LogoBox>
         <a href="/" aria-label="Home">
-          <Image src={LogoSymbol} alt="Nexari Logo" width="500" height="500" />
+          <LogoSymbol />
         </a>
       </AuthStyles.LogoBox>
       <ErrorMessage>{message}</ErrorMessage>
-      <HomeButton onClick={handleRedirect}>Return to Home</HomeButton>
+      <Button type="primary" size="large" onPress={handleRedirect}>
+        Return to home
+      </Button>
     </ErrorContainer>
   )
 }

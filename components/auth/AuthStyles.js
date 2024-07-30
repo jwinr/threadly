@@ -71,8 +71,7 @@ export const AuthContainerWrapper = styled.div`
   display: flex;
   position: relative;
   justify-content: center;
-  padding: 56px 0;
-  max-height: 100vh;
+  padding-top: 56px;
 
   @media (max-width: 768px) {
     width: auto;
@@ -85,6 +84,7 @@ export const AuthCardContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   opacity: 1 !important;
   ${(props) =>
     props.authFadeOut &&
@@ -135,7 +135,7 @@ export const FormContainerWrapper = styled.div`
   min-width: 540px;
   flex-direction: column;
   display: flex;
-  height: 650px;
+  max-height: 900px;
 
   @media (max-width: 768px) {
     width: 382px;
@@ -251,12 +251,12 @@ export const ResetText = styled.a`
 `
 
 export const AuthLoginLinkBox = styled.div`
-  position: absolute;
-  bottom: 4px;
   display: flex;
+  bottom: 4px;
+  position: absolute;
   background-color: var(--sc-color-register-background);
-  width: calc(100% - 8px);
-  height: 60px;
+  width: calc(540px - 8px);
+  min-height: 60px;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
@@ -373,7 +373,7 @@ export const LogoBox = styled.div`
   align-items: center;
   width: 50px;
 
-  img {
+  svg {
     width: 100%;
     height: 100%;
   }
