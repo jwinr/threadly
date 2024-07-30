@@ -4,7 +4,7 @@ import Image from "next/image"
 import AddToCartButton from "../shopping/AddToCartButton"
 import styled from "styled-components"
 import StarRatings from "../review-stars/StarRatings"
-import { LiaTruckMovingSolid } from "react-icons/lia"
+import Truck from "../../public/images/icons/truck.svg"
 import AddToFavoritesButton from "../shopping/AddToFavoritesButton"
 
 const CardContainer = styled.div`
@@ -61,6 +61,7 @@ const Title = styled(Link)`
 
 const Brand = styled.span`
   font-size: 14px;
+  margin-bottom: 4px;
 `
 
 const ButtonWrapper = styled.div`
@@ -70,21 +71,8 @@ const ButtonWrapper = styled.div`
   margin-top: auto;
 
   button {
-    font-size: 12px;
-    min-height: auto;
-
-    svg {
-      font-size: 16px;
-    }
+    min-height: 32px;
   }
-`
-
-const Bookmark = styled.button`
-  padding: 10px;
-  border-radius: 50%;
-  color: var(--sc-color-text);
-  display: flex;
-  border: 1px solid var(--sc-color-border-gray);
 `
 
 const Details = styled.div`
@@ -109,10 +97,14 @@ const PriceContainer = styled.div`
   align-items: baseline;
 `
 
-const Price = styled.h1`
-  font-size: 28px;
+const Price = styled.h1<{ sale?: boolean }>`
+  font-size: 24px;
   font-weight: 500;
+  line-height: 1;
+  margin-top: 8px;
+  margin-bottom: 8px;
   margin-right: 5px;
+  color: ${(props) => (props.sale ? "var(--sc-color-blue)" : "#353a44")};
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -124,6 +116,14 @@ const OriginalPrice = styled.span`
   font-weight: 400;
   color: gray;
   text-decoration: line-through;
+`
+
+const Sale = styled.span`
+  display: flex;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 8px;
+  color: var(--sc-color-blue);
 `
 
 const ShippingContainer = styled.div`
@@ -145,7 +145,19 @@ const IconContainer = styled.div`
   font-size: 20px;
 `
 
-const ProductCard = ({
+interface ProductCardProps {
+  link: string
+  title: string
+  price: number
+  discount?: number
+  brand: string
+  rating: number
+  image: { is_main: boolean; image_url: string }[]
+  id: string
+  loading: boolean
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
   link,
   title,
   price,
@@ -156,7 +168,11 @@ const ProductCard = ({
   id,
   loading,
 }) => {
-  const [currentImage, setCurrentImage] = useState(null)
+  const isOnSale = !!discount
+  const [currentImage, setCurrentImage] = useState<{
+    is_main: boolean
+    image_url: string
+  } | null>(null)
 
   useEffect(() => {
     if (image) {
@@ -187,18 +203,19 @@ const ProductCard = ({
           <StarRatings reviews={rating} />
         </Rating>
         <PriceContainer>
-          <Price>{`$${discount || price}`}</Price>
+          <Price sale={isOnSale}>{`$${discount || price}`}</Price>
           {discount && (
             <span>
               reg <OriginalPrice>{`$${price}`}</OriginalPrice>
             </span>
           )}
         </PriceContainer>
+        {discount && <Sale>Sale</Sale>}
         <ShippingContainer>
           <IconContainer>
-            <LiaTruckMovingSolid aria-hidden="true" />
+            <Truck />
           </IconContainer>
-          <p>Free Shipping</p>
+          <p>Free shipping</p>
         </ShippingContainer>
         <ButtonWrapper>
           <AddToCartButton productId={id} quantity={1} productName={title} />

@@ -77,7 +77,7 @@ const Header = styled.div`
   align-items: center;
   text-align: left;
   width: 100%;
-  height: 64px;
+  height: 63px;
   padding: 20px;
   color: var(--sc-color-white);
   background-color: var(--sc-color-blue);

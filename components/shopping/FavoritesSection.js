@@ -13,8 +13,6 @@ const FavoritesWrapper = styled.div`
 
   button {
     min-height: 32px;
-    width: fit-content;
-    font-size: 12px;
     order: 2;
   }
 `

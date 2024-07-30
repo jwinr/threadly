@@ -25,6 +25,10 @@ const AccordionHeader = styled.div`
   &:hover {
     background-color: #f5f6f8;
   }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: none;
+  }
 `
 
 const MediaContainer = styled.div`
