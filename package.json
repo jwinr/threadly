@@ -34,6 +34,7 @@
     "react-icons": "^4.11.0",
     "react-medium-image-zoom": "^5.2.5",
     "react-responsive-carousel": "^3.2.23",
+    "react-spring": "^9.7.4",
     "react-transition-group": "^4.4.5",
     "sharp": "^0.33.4",
     "stripe": "^16.2.0",
