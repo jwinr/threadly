@@ -75,12 +75,16 @@ const Wrapper = styled.div`
   }
 `
 
+type CartItem = {
+  quantity: number | string // Allow for both numbers and strings
+}
+
 const CartIcon: React.FC = () => {
   const { cart } = useContext(CartContext)
 
   // Calculate total quantity
   const totalQuantity = cart.reduce(
-    (sum: number, item: { quantity: number }) => sum + item.quantity,
+    (sum: number, item: CartItem) => sum + Number(item.quantity),
     0
   )
 
