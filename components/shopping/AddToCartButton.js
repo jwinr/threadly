@@ -31,7 +31,7 @@ const AddToCartButton = ({ productId, quantity = 1, productName }) => {
     <Button
       type="primary"
       size="medium"
-      onClick={handleAddToCart}
+      onPress={handleAddToCart}
       disabled={loading}
       aria-label={`Add ${productName} to cart`}
     >

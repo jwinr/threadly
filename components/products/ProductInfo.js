@@ -7,6 +7,7 @@ import { RiArrowDownSLine } from "react-icons/ri"
 import AddToFavoritesButton from "../../components/shopping/AddToFavoritesButton"
 import AddToCartButton from "../../components/shopping/AddToCartButton"
 import { useMobileView } from "../../context/MobileViewContext"
+import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
 
 const ProductNameWrapper = styled.div`
   display: flex;
@@ -210,6 +211,7 @@ const ProductInfo = ({
   setOpenSection,
 }) => {
   const isMobileView = useMobileView()
+  const formatCurrency = useCurrencyFormatter()
 
   const handleReviewCountClick = () => {
     setOpenSection((prevSection) =>
@@ -236,10 +238,11 @@ const ProductInfo = ({
         </ReviewWrapper>
         {!isMobileView && (
           <Product>
-            <Price>{`$${product.sale_price || product.price}`}</Price>
+            <Price>{formatCurrency(product.sale_price || product.price)}</Price>
             {product.sale_price && (
               <span>
-                reg <OriginalPrice>{`$${product.price}`}</OriginalPrice>
+                reg{" "}
+                <OriginalPrice>{formatCurrency(product.price)}</OriginalPrice>
               </span>
             )}
             <ExchangeWrapper>
@@ -318,10 +321,10 @@ const ProductInfo = ({
       </ProductNameWrapper>
       {isMobileView && (
         <Product>
-          <Price>{`$${product.sale_price || product.price}`}</Price>
+          <Price>{formatCurrency(product.sale_price || product.price)}</Price>
           {product.sale_price && (
             <span>
-              reg <OriginalPrice>{`$${product.price}`}</OriginalPrice>
+              reg <OriginalPrice>{formatCurrency(product.price)}</OriginalPrice>
             </span>
           )}
           <ExchangeWrapper>

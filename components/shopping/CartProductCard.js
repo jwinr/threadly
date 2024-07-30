@@ -5,6 +5,7 @@ import Image from "next/image"
 import { VscClose } from "react-icons/vsc"
 import ShipBox from "../../public/images/icons/shipbox.svg"
 import Select from "../common/Select"
+import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
 
 const ProductCard = styled.li`
   display: flex;
@@ -218,6 +219,7 @@ const CartProductCard = ({
   handleQuantityChange,
   index,
 }) => {
+  const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!item.product_sale_price
 
   return (
@@ -255,23 +257,32 @@ const CartProductCard = ({
           </ShippingWrapper>
           <Details>
             <PriceWrapper>
-              <Price sale={isOnSale}>{`$${(
-                (item.product_sale_price || item.product_price) * item.quantity
-              ).toFixed(2)}`}</Price>
+              <Price sale={isOnSale}>
+                {formatCurrency(
+                  (item.product_sale_price || item.product_price) *
+                    item.quantity
+                )}
+              </Price>
               {item.product_sale_price && (
                 <>
                   <span>
                     reg{" "}
-                    <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                    <OriginalPrice>
+                      {formatCurrency(item.product_price)}
+                    </OriginalPrice>
                   </span>
                 </>
               )}
             </PriceWrapper>
             {item.quantity > 1 && !item.product_sale_price && (
-              <SingleItemPrice>{`$${item.product_price} each`}</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_price)} each
+              </SingleItemPrice>
             )}
             {item.quantity > 1 && item.product_sale_price && (
-              <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_sale_price)} each
+              </SingleItemPrice>
             )}
             {item.product_sale_price && <Sale>Sale</Sale>}
           </Details>
@@ -312,18 +323,27 @@ const CartProductCard = ({
             </ShipIconWrapper>
           </ShippingWrapper>
           <Details>
-            <Price sale={isOnSale}>{`$${(
-              (item.product_sale_price || item.product_price) * item.quantity
-            ).toFixed(2)}`}</Price>
+            <Price sale={isOnSale}>
+              {formatCurrency(
+                (item.product_sale_price || item.product_price) * item.quantity
+              )}
+            </Price>
             {item.quantity > 1 && !item.product_sale_price && (
-              <SingleItemPrice>{`$${item.product_price} each`}</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_price)} each
+              </SingleItemPrice>
             )}
             {item.product_sale_price && (
               <>
                 <span>
-                  reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                  reg{" "}
+                  <OriginalPrice>
+                    {formatCurrency(item.product_price)}
+                  </OriginalPrice>
                   {item.quantity > 1 && (
-                    <SingleItemPrice>{`$${item.product_sale_price} each`}</SingleItemPrice>
+                    <SingleItemPrice>
+                      {formatCurrency(item.product_sale_price)} each
+                    </SingleItemPrice>
                   )}
                 </span>
                 <Sale>Sale</Sale>

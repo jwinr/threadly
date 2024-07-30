@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { VscClose } from "react-icons/vsc"
-import { IoIosSearch } from "react-icons/io"
 import { useRouter } from "next/router"
 import styled from "styled-components"
+import Search from "../../public/images/icons/search.svg"
 
 const InputForm = styled.form`
   display: flex;
@@ -111,7 +111,7 @@ const SearchBar = () => {
           aria-label="Search for products"
         />
         <SubmitButton type="submit" aria-label="Submit search">
-          <IoIosSearch />
+          <Search />
         </SubmitButton>
       </InputForm>
       {searchTerm && (

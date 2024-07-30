@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { PiCheckCircleFill, PiWarningFill } from "react-icons/pi"
+import Check from "../../public/images/icons/check.svg"
+import Warning from "../../public/images/icons/warning.svg"
 import { MdPending } from "react-icons/md"
 
 interface ToastProps {
@@ -63,6 +64,18 @@ const ActionButton = styled.button`
   font-size: 14px;
 `
 
+const StyledCheck = styled(Check)`
+  path {
+    fill: var(--sc-color-green-300);
+  }
+`
+
+const StyledWarning = styled(Warning)`
+  path {
+    fill: var(--sc-color-white);
+  }
+`
+
 /**
  * Toast component to display messages at the bottom of the view.
  * @param {string} message - The message to display in the toast.
@@ -117,9 +130,9 @@ const Toast: React.FC<ToastProps> = ({
   const renderIcon = () => {
     switch (type) {
       case "success":
-        return <PiCheckCircleFill size={18} color="var(--sc-color-green-300)" />
+        return <StyledCheck />
       case "caution":
-        return <PiWarningFill size={18} />
+        return <StyledWarning />
       case "pending":
         return <MdPending size={18} />
       default:

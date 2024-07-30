@@ -6,6 +6,7 @@ import styled from "styled-components"
 import StarRatings from "../review-stars/StarRatings"
 import Truck from "../../public/images/icons/truck.svg"
 import AddToFavoritesButton from "../shopping/AddToFavoritesButton"
+import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
 
 const CardContainer = styled.div`
   display: flex;
@@ -168,6 +169,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   id,
   loading,
 }) => {
+  const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!discount
   const [currentImage, setCurrentImage] = useState<{
     is_main: boolean
@@ -203,10 +205,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <StarRatings reviews={rating} />
         </Rating>
         <PriceContainer>
-          <Price sale={isOnSale}>{`$${discount || price}`}</Price>
+          <Price sale={isOnSale}>{formatCurrency(discount || price)}</Price>
           {discount && (
             <span>
-              reg <OriginalPrice>{`$${price}`}</OriginalPrice>
+              reg <OriginalPrice>{formatCurrency(price)}</OriginalPrice>
             </span>
           )}
         </PriceContainer>

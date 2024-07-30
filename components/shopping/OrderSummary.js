@@ -96,7 +96,7 @@ const OrderSummary = ({
                     ({totalQuantity} {totalQuantity === 1 ? "item" : "items"})
                   </SubItemCount>
                 </SubWrapper>
-                <span>${subtotal}</span>
+                <span>{subtotal}</span>
               </SummaryItem>
               <SummaryItem>
                 <span>Shipping</span>
@@ -104,14 +104,14 @@ const OrderSummary = ({
               </SummaryItem>
               <SummaryItem>
                 <span>Estimated taxes</span>
-                <span>${estimatedTaxes}</span>
+                <span>{estimatedTaxes}</span>
               </SummaryItem>
               <SummaryItem>
                 <TaxRate>Based on {zipCode}</TaxRate>
               </SummaryItem>
               <SummaryItem>
                 <TotalText>Total</TotalText>
-                <TotalText>${total}</TotalText>
+                <TotalText>{total}</TotalText>
               </SummaryItem>
             </>
           ) : (
