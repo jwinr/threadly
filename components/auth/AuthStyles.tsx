@@ -1,6 +1,4 @@
 import styled, { keyframes, css } from "styled-components"
-import PropFilter from "../../utils/PropFilter"
-import Link from "next/link"
 
 /* Shared Styles */
 export const fadeIn = keyframes`
@@ -80,7 +78,12 @@ export const AuthContainerWrapper = styled.div`
 `
 
 // Wrapper for the content inside AuthCard
-export const AuthCardContent = styled.div`
+interface AuthCardContentProps {
+  authFadeIn?: boolean
+  authFadeOut?: boolean
+}
+
+export const AuthCardContent = styled.div<AuthCardContentProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,7 +104,11 @@ export const AuthCardContent = styled.div`
     `}
 `
 
-export const AuthCard = styled(PropFilter("div")(["shake"]))`
+interface AuthCardProps {
+  shake?: boolean
+}
+
+export const AuthCard = styled.div<AuthCardProps>`
   display: flex;
   flex-direction: column;
   background-color: var(--sc-color-white);
@@ -158,7 +165,11 @@ export const EntryWrapper = styled.div`
   margin: 10px 0;
 `
 
-export const EntryContainer = styled(PropFilter("input")(["loading"]))`
+interface EntryContainerProps {
+  loading?: boolean
+}
+
+export const EntryContainer = styled.input<EntryContainerProps>`
   position: relative;
   box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
@@ -197,7 +208,11 @@ export const EntryContainer = styled(PropFilter("input")(["loading"]))`
   }
 `
 
-export const Label = styled(PropFilter("label")(["loading"]))`
+interface LabelProps {
+  loading?: boolean
+}
+
+export const Label = styled.label<LabelProps>`
   box-shadow: none !important;
   position: absolute;
   top: 50%;
@@ -278,7 +293,12 @@ export const AuthLoginLink = styled.a`
   }
 `
 
-export const AuthBtn = styled(PropFilter("button")(["loading", "isInvalid"]))`
+interface AuthBtnProps {
+  loading?: boolean
+  isInvalid?: boolean
+}
+
+export const AuthBtn = styled.button<AuthBtnProps>`
   display: flex;
   align-items: center;
   justify-content: center;

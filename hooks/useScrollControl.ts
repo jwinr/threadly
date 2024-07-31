@@ -1,5 +1,13 @@
 import { useState, useCallback, useEffect } from "react"
 
+/**
+ * Provides control over the scrolling behavior of the document body.
+ * It returns a boolean state indicating if scrolling is disabled and a function to toggle this state.
+ *
+ * @returns {[boolean, (state: boolean) => void]} A tuple containing:
+ * - isScrollDisabled: A boolean indicating if scrolling is currently disabled.
+ * - setIsScrollDisabled: A function to set the scroll state (true to disable scrolling, false to enable).
+ */
 const useScrollControl = (): [boolean, (state: boolean) => void] => {
   const [isScrollDisabled, setIsScrollDisabled] = useState(false)
 

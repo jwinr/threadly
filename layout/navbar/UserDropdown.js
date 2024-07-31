@@ -18,6 +18,7 @@ import { useSignOut } from "../../context/SignOutContext"
 import PropFilter from "../../utils/PropFilter"
 import { useRouter } from "next/router"
 import SigningOutOverlay from "../../components/auth/SigningOutOverlay"
+import useScrollControl from "hooks/useScrollControl"
 
 const Dropdown = styled(PropFilter("div")(["isOpen"]))`
   position: absolute;
@@ -233,52 +234,11 @@ const UserDropdown = ({ isOpen: parentIsOpen, onToggle }) => {
   )
 }
 
-const useScrollControl = () => {
-  const [isScrollDisabled, setIsScrollDisabled] = useState(false)
-
-  // Function to disable scrolling and add padding to compensate for scrollbar removal
-  const disableScroll = useCallback(() => {
-    // Calculate the width of the scrollbar
-    const scrollBarWidth =
-      window.innerWidth - document.documentElement.clientWidth
-
-    document.body.style.overflowY = "hidden"
-    // Add padding to the right to compensate for the removed scrollbar
-    document.body.style.paddingRight = `${scrollBarWidth}px`
-    document.body.style.touchAction = "none"
-    document.body.style.overscrollBehavior = "none"
-  }, [])
-
-  // Function to enable scrolling and reset the body styles
-  const enableScroll = useCallback(() => {
-    document.body.style.overflowY = "auto"
-    document.body.style.paddingRight = "inherit"
-    document.body.style.touchAction = "auto"
-    document.body.style.overscrollBehavior = "auto"
-  }, [])
-
-  // Effect to enable/disable scroll based on the isScrollDisabled state
-  useEffect(() => {
-    if (isScrollDisabled) {
-      disableScroll()
-    } else {
-      enableScroll()
-    }
-
-    // Cleanup function to enable scroll when component is unmounted or effect re-runs
-    return () => {
-      enableScroll()
-    }
-  }, [isScrollDisabled, disableScroll, enableScroll])
-
-  return [setIsScrollDisabled]
-}
-
 function NavItem(props) {
   const { isOpen, onToggle, user, isSigningOut } = props
   const userBtnRef = useRef(null)
   const [dropdownRight, setDropdownRight] = useState(0)
-  const [setIsScrollDisabled] = useScrollControl()
+  const [isScrollDisabled, setIsScrollDisabled] = useScrollControl()
   const [isMounted, setIsMounted] = useState(false)
   const [initialLoad, setInitialLoad] = useState(true)
 

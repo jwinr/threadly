@@ -31,7 +31,11 @@ const ErrorMessage = styled.div`
   }
 `
 
-const ErrorRedirect = ({ message }) => {
+interface ErrorRedirectProps {
+  message: string
+}
+
+const ErrorRedirect: React.FC<ErrorRedirectProps> = ({ message }) => {
   const router = useRouter()
 
   const handleRedirect = () => {

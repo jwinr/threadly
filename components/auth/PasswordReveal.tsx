@@ -1,6 +1,14 @@
 import React from "react"
 import styled from "styled-components"
 
+interface PasswordRevealProps {
+  onClick: () => void
+  clicked: boolean
+  ariaLabel: string
+  className?: string
+  [key: string]: any
+}
+
 const Container = styled.button`
   position: absolute;
   right: 5px;
@@ -11,9 +19,14 @@ const Container = styled.button`
   cursor: pointer;
 `
 
-const EyeIcon = styled.svg`
+interface EyeIconProps {
+  "data-clicked": boolean
+}
+
+const EyeIcon = styled.svg<EyeIconProps>`
   width: 24px;
   height: 24px;
+
   .eye-line {
     fill: var(--sc-color-gray-300);
   }
@@ -37,7 +50,7 @@ const EyeIcon = styled.svg`
   }
 `
 
-const PasswordReveal = ({
+const PasswordReveal: React.FC<PasswordRevealProps> = ({
   onClick,
   clicked,
   ariaLabel,

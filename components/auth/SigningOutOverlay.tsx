@@ -34,7 +34,11 @@ const Popup = styled.div`
   }
 `
 
-const SigningOutOverlay = ({ visible }) => {
+interface SigningOutOverlayProps {
+  visible: boolean
+}
+
+const SigningOutOverlay: React.FC<SigningOutOverlayProps> = ({ visible }) => {
   if (!visible) return null
 
   return (

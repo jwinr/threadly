@@ -1,10 +1,18 @@
 import React from "react"
 import styled, { css } from "styled-components"
-import { TiWarningOutline } from "react-icons/ti"
-import { PiWarningCircleBold } from "react-icons/pi"
-import { VscClose } from "react-icons/vsc"
+import Info from "../../public/images/icons/info.svg"
+import Warning from "../../public/images/icons/warning.svg"
+import Close from "../../public/images/icons/cancel.svg"
 
-const BannerWrapper = styled.div`
+interface BannerProps {
+  type?: "default" | "caution" | "critical"
+  onDismiss?: () => void
+  title: string
+  description?: string
+  actions?: React.ReactNode
+}
+
+const BannerWrapper = styled.div<{ type: "default" | "caution" | "critical" }>`
   display: flex;
   align-items: center;
   padding: 16px;
@@ -37,13 +45,35 @@ const BannerWrapper = styled.div`
   }}
 `
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ type: string }>`
   display: flex;
   align-items: center;
   align-self: flex-start;
 
   svg {
-    padding: 4px;
+    margin-top: 6px;
+    width: 12px;
+    height: 12px;
+
+    path {
+      ${(props) => {
+        switch (props.type) {
+          case "caution":
+            return css`
+              fill: #b13600;
+            `
+          case "critical":
+            return css`
+              fill: #c0123c;
+            `
+          case "default":
+          default:
+            return css`
+              fill: #353a44;
+            `
+        }
+      }}
+    }
   }
 `
 
@@ -79,7 +109,19 @@ const DismissButton = styled.button`
   box-shadow: none;
 `
 
-const Banner = ({
+/**
+ * Displays a message with an optional icon, description, and actions.
+ * It can be of type "default", "caution", or "critical".
+ *
+ * @param {BannerProps} props - The properties for the Banner component.
+ * @param {"default" | "caution" | "critical"} [props.type="default"] - The type of the banner.
+ * @param {() => void} [props.onDismiss] - The function to call when the banner is dismissed.
+ * @param {string} props.title - The title of the banner.
+ * @param {string} [props.description] - The description of the banner.
+ * @param {React.ReactNode} [props.actions] - The actions to display in the banner.
+ * @returns {JSX.Element} The Banner component.
+ */
+const Banner: React.FC<BannerProps> = ({
   type = "default",
   onDismiss,
   title,
@@ -88,10 +130,10 @@ const Banner = ({
 }) => {
   return (
     <BannerWrapper type={type}>
-      <IconWrapper>
-        {type === "caution" && <TiWarningOutline size={24} />}
-        {type === "critical" && <TiWarningOutline size={24} />}
-        {type === "default" && <PiWarningCircleBold size={24} />}
+      <IconWrapper type={type}>
+        {type === "caution" && <Warning />}
+        {type === "critical" && <Warning />}
+        {type === "default" && <Info />}
       </IconWrapper>
       <ContentWrapper>
         <Title>{title}</Title>
@@ -100,7 +142,7 @@ const Banner = ({
       </ContentWrapper>
       {type !== "critical" && onDismiss && (
         <DismissButton onClick={onDismiss}>
-          <VscClose size={20} />
+          <Close />
         </DismissButton>
       )}
     </BannerWrapper>
