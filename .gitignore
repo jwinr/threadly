@@ -56,6 +56,7 @@ pages/categories/
 pages/products/
 pages/account.js
 pages/cart.js
+pages/cart.tsx
 pages/favorites.js
 pages/forgot-password.js
 pages/login.js

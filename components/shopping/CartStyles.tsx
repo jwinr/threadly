@@ -1,5 +1,8 @@
 import styled, { keyframes, css } from "styled-components"
-import PropFilter from "../../utils/PropFilter"
+
+interface LoadingProps {
+  loading: boolean
+}
 
 const loadingAnimation = keyframes`
   0% {
@@ -67,7 +70,7 @@ export const Header = styled.h1`
   color: var(--sc-color-title);
 `
 
-export const Subtitle = styled.div`
+export const Subtitle = styled.div<LoadingProps>`
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   border-radius: 6px;
   min-height: 20px;
@@ -85,7 +88,7 @@ export const Subtitle = styled.div`
   }
 `
 
-export const CartContainer = styled(PropFilter("div")(["loading"]))`
+export const CartContainer = styled.div<LoadingProps>`
   border-radius: 6px;
   margin-top: 16px;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};

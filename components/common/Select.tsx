@@ -1,5 +1,6 @@
-import React, { FC, ChangeEvent, useRef } from "react"
+import React, { FC, ChangeEvent } from "react"
 import styled from "styled-components"
+import ArrowUpDown from "../../public/images/icons/arrowUpDown.svg"
 
 /**
  * WrapperProps - Interface for wrapper properties.
@@ -113,12 +114,10 @@ const SelectWrapper = styled.select<SelectWrapperProps>`
   }
 `
 
-const CustomArrow = styled.svg`
+const CustomArrow = styled.div`
   position: absolute;
   margin-right: 8px;
   width: 12px;
-  fill: inherit;
-  color: #353a44;
   --s1-align-self-x: flex-end;
   --s1-flex-x: 0 0 auto;
   align-self: var(--s1-align-self-y);
@@ -190,7 +189,6 @@ const Select: FC<SelectProps> = ({
   autoComplete,
   autoFocus,
   children,
-  defaultValue,
   description,
   disabled,
   error,
@@ -242,7 +240,6 @@ const Select: FC<SelectProps> = ({
           name={name}
           autoComplete={autoComplete}
           autoFocus={autoFocus}
-          defaultValue={defaultValue}
           disabled={disabled}
           form={form}
           multiple={multiple}
@@ -255,19 +252,8 @@ const Select: FC<SelectProps> = ({
         >
           {children}
         </SelectWrapper>
-        <CustomArrow
-          aria-hidden="true"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M2.35 9.915a.875.875 0 0 1 1.235-.065L8 13.823l4.415-3.973a.875.875 0 0 1 1.17 1.3l-5 4.5a.873.873 0 0 1-1.17 0l-5-4.5a.875.875 0 0 1-.065-1.235ZM7.415.35a.873.873 0 0 1 1.17 0l5 4.5a.875.875 0 1 1-1.17 1.3L8 2.177 3.585 6.15a.875.875 0 0 1-1.17-1.3l5-4.5Z"
-          />
+        <CustomArrow>
+          <ArrowUpDown />
         </CustomArrow>
       </GridWrapper>
       {error && !hiddenElements.includes("error") && (
