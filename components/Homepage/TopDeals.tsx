@@ -3,7 +3,7 @@ import styled from "styled-components"
 import Image from "next/image"
 import Link from "next/link"
 import AddToCartButton from "../shopping/AddToCartButton"
-import { Swiper, SwiperSlide } from "swiper/react"
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react"
 import { Scrollbar, FreeMode } from "swiper/modules"
 import "swiper/css"
 import "swiper/css/scrollbar"
@@ -131,25 +131,54 @@ const Title = styled.span`
   }
 `
 
-const TopDeals = forwardRef((props, ref) => {
-  const [deals, setDeals] = useState([])
+interface Deal {
+  category: string
+  slug: string
+  name: string
+  image_url: string
+  price: number
+  discount_amount: number
+  product_id: string
+}
+
+interface TopDealsProps {
+  className?: string
+}
+
+const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
+  const [deals, setDeals] = useState<Deal[]>([])
   const isMobileView = useMobileView()
-  const timeoutRef = useRef(null)
-  const swiperRef = useRef(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const swiperRef = useRef<SwiperRef>(null)
 
   useEffect(() => {
-    fetch(`/api/deals`, {
-      headers: {
-        "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setDeals(data))
-      .catch((error) => console.error("Error fetching deals:", error))
+    const fetchDeals = async () => {
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY
+      if (!apiKey) {
+        console.error("API key is missing")
+        return
+      }
+
+      try {
+        const response = await fetch(`/api/deals`, {
+          headers: {
+            "x-api-key": apiKey,
+          },
+        })
+        const data = await response.json()
+        setDeals(data)
+      } catch (error) {
+        console.error("Error fetching deals:", error)
+      }
+    }
+
+    fetchDeals()
   }, [])
 
   const handleInteraction = () => {
-    const scrollbar = swiperRef.current.querySelector(".swiper-scrollbar")
+    const scrollbar = swiperRef.current?.swiper.scrollbar.el as
+      | HTMLElement
+      | undefined
     if (scrollbar) {
       scrollbar.classList.remove("swiper-scrollbar-hidden")
     }
@@ -275,5 +304,7 @@ const TopDeals = forwardRef((props, ref) => {
     </Container>
   )
 })
+
+TopDeals.displayName = "TopDeals"
 
 export default TopDeals

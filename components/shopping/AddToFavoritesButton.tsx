@@ -4,8 +4,6 @@ import { LiaHeart, LiaHeartSolid } from "react-icons/lia"
 import { useRouter } from "next/router"
 import { UserContext } from "../../context/UserContext"
 import { useFavorites } from "../../context/FavoritesContext"
-import PropFilter from "../../utils/PropFilter"
-import Link from "next/link"
 
 const loadingAnimation = keyframes`
   0% {
@@ -37,7 +35,7 @@ const fadeInUp = keyframes`
 `
 
 const Container = styled.div`
-  position: relative; // Keep the button inside of the product card
+  position: relative;
   order: 2;
 `
 
@@ -61,7 +59,12 @@ const Button = styled.button`
   }
 `
 
-const IconOutline = styled(PropFilter(LiaHeart)(["loading", "isAdding"]))`
+interface IconProps {
+  loading?: boolean
+  isAdding?: boolean
+}
+
+const IconOutline = styled(LiaHeart)<IconProps>`
   ${({ loading, isAdding }) =>
     loading &&
     isAdding &&
@@ -70,7 +73,7 @@ const IconOutline = styled(PropFilter(LiaHeart)(["loading", "isAdding"]))`
     `}
 `
 
-const IconFilled = styled(PropFilter(LiaHeartSolid)(["loading", "isAdding"]))`
+const IconFilled = styled(LiaHeartSolid)<IconProps>`
   ${({ loading, isAdding }) =>
     loading &&
     isAdding &&
@@ -79,7 +82,11 @@ const IconFilled = styled(PropFilter(LiaHeartSolid)(["loading", "isAdding"]))`
     `}
 `
 
-const Tooltip = styled(PropFilter("div")(["visible"]))`
+interface TooltipProps {
+  visible: boolean
+}
+
+const Tooltip = styled.div<TooltipProps>`
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -130,7 +137,19 @@ const CloseButton = styled.button`
   cursor: pointer;
 `
 
-export default function AddToFavoritesButton({ productId, productName }) {
+interface FavoriteItem {
+  product_id: string
+}
+
+interface AddToFavoritesButtonProps {
+  productId: string
+  productName: string
+}
+
+const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
+  productId,
+  productName,
+}) => {
   const { userAttributes } = useContext(UserContext)
   const { favorites, addFavorite, removeFavorite } = useFavorites()
   const [loading, setLoading] = useState(false)
@@ -138,18 +157,21 @@ export default function AddToFavoritesButton({ productId, productName }) {
   const [isAdding, setIsAdding] = useState(true)
   const [tooltipVisible, setTooltipVisible] = useState(false)
   const [hoverTooltipVisible, setHoverTooltipVisible] = useState(false)
-  const [tooltipContent, setTooltipContent] = useState("")
+  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>("")
   const router = useRouter()
-  const tooltipRef = useRef(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
     if (userAttributes && userAttributes.sub) {
-      const isAdded = favorites.some((item) => item.product_id === productId)
+      const isAdded = favorites.some(
+        (item: FavoriteItem) => item.product_id === productId
+      )
       setAdded(isAdded)
     }
-  }, [productId, userAttributes])
+  }, [productId, userAttributes, favorites])
 
   const addToFavorites = async () => {
     if (userAttributes) {
@@ -161,7 +183,7 @@ export default function AddToFavoritesButton({ productId, productName }) {
       setLoading(false)
       setTooltipContent(
         <>
-          Favorited! <Link href="/favorites">See all of your favorites</Link>
+          Favorited! <a href="/favorites">See all of your favorites</a>
           <CloseButton onClick={handleTooltipClose}>X</CloseButton>
         </>
       )
@@ -183,6 +205,8 @@ export default function AddToFavoritesButton({ productId, productName }) {
 
   const handleClick = () => {
     if (!userAttributes) {
+      setTooltipContent("Sign in to favorite this product")
+      setTooltipVisible(true)
       router.push("/login")
       return
     }
@@ -212,8 +236,11 @@ export default function AddToFavoritesButton({ productId, productName }) {
 
   // Close tooltip when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
         setTooltipVisible(false)
         setHoverTooltipVisible(false)
       }
@@ -235,7 +262,10 @@ export default function AddToFavoritesButton({ productId, productName }) {
       <Button
         onClick={handleClick}
         onMouseEnter={() => {
-          if (!added && userAttributes) {
+          if (!userAttributes) {
+            setTooltipContent("Sign in to favorite this product")
+            setHoverTooltipVisible(true)
+          } else if (!added && userAttributes) {
             setTooltipContent("Favorite to keep tabs on it")
             setHoverTooltipVisible(true)
           }
@@ -269,3 +299,5 @@ export default function AddToFavoritesButton({ productId, productName }) {
     </Container>
   )
 }
+
+export default AddToFavoritesButton

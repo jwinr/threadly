@@ -58,6 +58,7 @@ pages/account.js
 pages/cart.js
 pages/cart.tsx
 pages/favorites.js
+pages/checkout.js
 pages/forgot-password.js
 pages/login.js
 pages/return.js
@@ -69,6 +70,8 @@ utils/LocationProvider.js
 utils/AuthHelpers.js
 utils/RateLimiter.js
 utils/CognitoErrorMessages.js
+utils/orderService.ts
+utils/stripeHelpers.ts
 context/CartContext.js
 context/UserContext.js
 context/SignOutContext.js
@@ -79,6 +82,7 @@ hooks/useRedirectIfAuthenticated.js
 middleware.ts
 dbinfo.sql
 stripe.js
+.hintrc
 
 #amplify-do-not-edit-begin
 amplify/#current-cloud-backend

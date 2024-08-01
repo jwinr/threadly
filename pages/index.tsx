@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
 import Head from "next/head"
-import FeatureHighlights from "../components/common/FeatureHighlights"
-import BrandGrid from "../components/common/BrandGrid"
-import HeroBanner from "../components/hero/HeroBanner"
-import FeaturedCategories from "../components/common/FeaturedCategories"
-import TopDeals from "../components/common/TopDeals"
-import NewsletterSignup from "../components/common/NewsletterSignup"
+import FeatureHighlights from "../components/Homepage/FeatureHighlights"
+import BrandGrid from "../components/Homepage/BrandGrid"
+import HeroBanner from "../components/Homepage/HeroBanner"
+import FeaturedCategories from "../components/Homepage/FeaturedCategories"
+import TopDeals from "../components/Homepage/TopDeals"
+import NewsletterSignup from "../components/Homepage/NewsletterSignup"
 import styled from "styled-components"
 
 const HomeContainer = styled.div`
@@ -28,7 +28,7 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `
 
-const AnimatedTitle = styled(Title)`
+const AnimatedTitle = styled(Title)<{ className: string }>`
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -45,11 +45,11 @@ const AnimatedTitle = styled(Title)`
   }
 `
 
-const Home = () => {
-  const dealsTitleRef = useRef(null)
-  const dealsRef = useRef(null)
-  const catTitleRef = useRef(null)
-  const catNavRef = useRef(null)
+const Home: React.FC = () => {
+  const dealsTitleRef = useRef<HTMLHeadingElement>(null)
+  const dealsRef = useRef<HTMLDivElement>(null)
+  const catTitleRef = useRef<HTMLHeadingElement>(null)
+  const catNavRef = useRef<HTMLDivElement>(null)
 
   const [dealsTitleInView, setDealsTitleInView] = useState(false)
   const [dealsInView, setDealsInView] = useState(false)
@@ -140,10 +140,6 @@ const Home = () => {
     <>
       <Head>
         <title>Nexari</title>
-        <meta
-          name="description"
-          content="Shop Nexari for electronics, computers, laptops & more new tech. Free 2-day shipping on hundreds of items."
-        />
       </Head>
       <HomeContainer>
         <Section>
