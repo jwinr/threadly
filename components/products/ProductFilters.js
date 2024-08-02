@@ -1,35 +1,14 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react"
+
 import { RiArrowDownSLine } from "react-icons/ri"
-import styled, { css, keyframes } from "styled-components"
-import Checkbox from "../common/Checkbox"
+import styled, { css } from "styled-components"
+import Checkbox from "@/components/Elements/Checkbox"
 import { useToast } from "@/context/ToastContext"
 import { PiSlidersHorizontalLight } from "react-icons/pi"
 import { useMobileView } from "../../context/MobileViewContext"
 import FilterPanel from "./FilterPanel"
 import ActiveFilters from "./ActiveFilters"
-import Button from "../common/Button"
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-`
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-`
+import Button from "@/components/Elements/Button"
 
 const Container = styled.div`
   position: relative;
@@ -119,6 +98,12 @@ const FilterWrapper = styled.div`
   flex-wrap: wrap;
   gap: 6px;
 
+  ${({ loading }) =>
+    !loading &&
+    css`
+      animation: fadeIn 0.2s ease-in-out forwards;
+    `}
+
   @media (max-width: 768px) {
     flex-wrap: nowrap;
     overflow-x: scroll;
@@ -169,6 +154,7 @@ function ProductFilters({
   attributes,
   resetFilters,
   filterState,
+  loading,
 }) {
   const maxVisibleFilters = 5
   const { showToast } = useToast()
@@ -415,7 +401,7 @@ function ProductFilters({
   return (
     <>
       <div className={containerClass}>
-        <FilterWrapper>
+        <FilterWrapper loading={loading}>
           <AllFiltersBtn
             onClick={() => {
               setIsPanelMounted(true)

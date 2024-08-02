@@ -1,5 +1,7 @@
 import React from "react"
+
 import styled, { css, keyframes } from "styled-components"
+
 import PropFilter from "@/utils/PropFilter"
 import CheckoutButton from "./CheckoutButton"
 
@@ -21,13 +23,28 @@ const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   height: ${({ loading }) => (loading ? "300px" : "initial")};
   border-radius: ${({ loading }) => (loading ? "6px" : "initial")};
+  opacity: ${({ loadingSummary }) => (loadingSummary ? "0.5" : "1")};
+  transition: opacity 0.3s ease-in-out;
+
   ${({ loading }) =>
     loading &&
     css`
-      animation: ${loadingAnimation} 2s ease-in-out infinite;
+      animation: enter-form-desktop 0.3s forwards,
+        ${loadingAnimation} 2s ease-in-out infinite;
+      animation-fill-mode: forwards, infinite;
+
+      @media (max-width: 768px) {
+        animation: enter-form-mobile 0.3s 0.1s forwards,
+          ${loadingAnimation} 2s ease-in-out infinite;
+      }
     `}
-  opacity: ${({ loadingSummary }) => (loadingSummary ? "0.5" : "1")};
-  transition: opacity 0.3s ease-in-out;
+
+  ${({ loading, loadingSummary }) =>
+    !loading &&
+    !loadingSummary &&
+    css`
+      animation: fadeIn 0.2s ease-in-out forwards;
+    `}
 
   h2 {
     color: var(--sc-color-title);

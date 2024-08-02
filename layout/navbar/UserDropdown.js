@@ -17,7 +17,7 @@ import { signOut } from "aws-amplify/auth"
 import { useSignOut } from "../../context/SignOutContext"
 import PropFilter from "../../utils/PropFilter"
 import { useRouter } from "next/router"
-import SigningOutOverlay from "../../components/auth/SigningOutOverlay"
+import SigningOutOverlay from "../../components/Auth/SigningOutOverlay"
 import useScrollControl from "hooks/useScrollControl"
 
 const Dropdown = styled(PropFilter("div")(["isOpen"]))`

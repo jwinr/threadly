@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react"
 import { CartContext } from "@/context/CartContext"
 import styled from "styled-components"
-import LoaderSpin from "@/components/loaders/LoaderSpin"
+import LoaderSpin from "@/components/Loaders/LoaderSpin"
 import PropFilter from "@/utils/PropFilter"
-import Button from "../common/Button"
+import Button from "../Elements/Button"
 
 const ButtonText = styled(PropFilter("span")(["loading"]))`
   opacity: ${({ loading }) => (loading ? 0 : 1)};

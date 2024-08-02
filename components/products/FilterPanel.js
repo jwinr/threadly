@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useCallback } from "react"
+
 import styled, { keyframes } from "styled-components"
-import Checkbox from "../common/Checkbox"
-import PropFilter from "../../utils/PropFilter"
-import Cancel from "../../public/images/icons/cancel.svg"
-import Accordion from "../common/Accordion"
-import AccordionItem from "../common/AccordionItem"
-import Button from "../common/Button"
-import useScrollControl from "../../hooks/useScrollControl"
+
+import Checkbox from "@/components/Elements/Checkbox"
+import PropFilter from "@/utils/PropFilter"
+import Cancel from "@/public/images/icons/cancel.svg"
+import Accordion from "@/components/Elements/Accordion"
+import AccordionItem from "@/components/Elements/AccordionItem"
+import Button from "@/components/Elements/Button"
+import useScrollControl from "@/hooks/useScrollControl"
 
 const slideIn = keyframes`
   from {

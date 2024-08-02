@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import AddToCartButton from "../shopping/AddToCartButton"
-import styled from "styled-components"
-import StarRatings from "../review-stars/StarRatings"
+import AddToCartButton from "../Shopping/AddToCartButton"
+import styled, { css } from "styled-components"
+import StarRatings from "../ReviewStars/StarRatings"
 import Truck from "../../public/images/icons/truck.svg"
-import AddToFavoritesButton from "../shopping/AddToFavoritesButton"
+import AddToFavoritesButton from "../Shopping/AddToFavoritesButton"
 import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
 
 const CardContainer = styled.div`
@@ -18,6 +18,12 @@ const CardContainer = styled.div`
   border-radius: 8px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   height: 100%;
+
+  ${({ loading }) =>
+    !loading &&
+    css`
+      animation: fadeIn 0.2s ease-in-out forwards;
+    `}
 
   @media (max-width: 768px) {
     flex-direction: row;
@@ -190,7 +196,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const imageUrl = currentImage.image_url || "/images/products/placeholder.jpg"
 
   return (
-    <CardContainer>
+    <CardContainer loading={loading}>
       <ImageWrapper>
         <Link href={`${link}`} aria-label={`View details of ${title}`}>
           <Image alt={title} src={imageUrl} width={500} height={500} />

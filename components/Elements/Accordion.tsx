@@ -2,11 +2,10 @@ import React, {
   useState,
   createContext,
   ReactNode,
-  useContext,
   useMemo,
   useCallback,
-  useEffect,
 } from "react"
+
 import styled from "styled-components"
 
 interface AccordionProps {

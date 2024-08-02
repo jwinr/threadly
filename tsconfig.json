@@ -4,7 +4,9 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/context/*": ["context/*"],
-      "@/utils/*": ["utils/*"]
+      "@/utils/*": ["utils/*"],
+      "@/public/*": ["public/*"],
+      "@/hooks/*": ["hooks/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

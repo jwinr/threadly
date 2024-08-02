@@ -1,6 +1,8 @@
 import React from "react"
+
 import styled from "styled-components"
-import LoaderSpin from "../loaders/LoaderSpin"
+
+import LoaderSpin from "../Loaders/LoaderSpin"
 
 const Overlay = styled.div`
   position: fixed;

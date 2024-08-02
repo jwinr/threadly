@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import EmptyCartImg from "../../public/images/icons/EmptyCart.svg"
-import Button from "../common/Button"
+import Button from "../Elements/Button"
 
 const EmptyCartContainer = styled.div`
   display: flex;

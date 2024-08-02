@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import Head from "next/head"
-import Button from "@/components/common/Button"
+import Button from "@/components/Elements/Button"
 import { useToast } from "@/context/ToastContext"
 import { RiLinkedinBoxFill, RiGithubFill } from "react-icons/ri"
 

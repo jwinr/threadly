@@ -1,7 +1,9 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { RiArrowDropRightLine } from "react-icons/ri"
-import styled, { css, keyframes } from "styled-components"
+
+import styled from "styled-components"
+
 import PropTypes from "prop-types"
 import { useMobileView } from "../../context/MobileViewContext"
 

@@ -10,7 +10,7 @@ import { SignOutProvider } from "../context/SignOutContext"
 import { CartProvider } from "../context/CartContext"
 import { ToastProvider } from "../context/ToastContext"
 import { FavoritesProvider } from "../context/FavoritesContext"
-import ErrorBoundary from "../components/common/ErrorBoundary"
+import ErrorBoundary from "../components/Elements/ErrorBoundary"
 
 interface NexariProps {
   Component: FC<any>

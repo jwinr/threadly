@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
-import LoaderSpin from "../loaders/LoaderSpin"
+import LoaderSpin from "../Loaders/LoaderSpin"
 import { useToast } from "../../context/ToastContext"
 import { UserContext } from "@/context/UserContext"
 

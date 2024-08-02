@@ -5,15 +5,18 @@ import React, {
   useCallback,
   useMemo,
 } from "react"
+
+import Head from "next/head"
 import { useRouter } from "next/router"
-import getStripe from "../utils/get-stripejs"
+
+import getStripe from "@/utils/get-stripejs"
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
-import { CartContext } from "../context/CartContext"
-import Head from "next/head"
-import { UserContext } from "../context/UserContext"
+
+import { CartContext } from "@/context/CartContext"
+import { UserContext } from "@/context/UserContext"
 
 export default function Checkout() {
   const { cart } = useContext(CartContext)

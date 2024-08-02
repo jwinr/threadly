@@ -1,8 +1,10 @@
 import React from "react"
+
 import styled, { css } from "styled-components"
-import Info from "../../public/images/icons/info.svg"
-import Warning from "../../public/images/icons/warning.svg"
-import Close from "../../public/images/icons/cancel.svg"
+
+import Info from "@/public/images/icons/info.svg"
+import Warning from "@/public/images/icons/warning.svg"
+import Close from "@/public/images/icons/cancel.svg"
 
 interface BannerProps {
   type?: "default" | "caution" | "critical"

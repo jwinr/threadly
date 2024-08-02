@@ -6,9 +6,12 @@ import React, {
   useRef,
   KeyboardEvent,
 } from "react"
+
 import styled from "styled-components"
+
 import { AccordionContext } from "./Accordion"
-import Chevron from "../../public/images/icons/chevron-down.svg"
+
+import Chevron from "@/public/images/icons/chevron-down.svg"
 
 const AccordionItemContainer = styled.div`
   border-bottom: 1px solid var(--sc-color-divider);

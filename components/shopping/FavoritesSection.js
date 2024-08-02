@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import Image from "next/image"
-import AddToCartButton from "../shopping/AddToCartButton"
-import AddToFavoritesButton from "../shopping/AddToFavoritesButton"
-import StarRatings from "../review-stars/StarRatings"
+import AddToCartButton from "./AddToCartButton"
+import AddToFavoritesButton from "./AddToFavoritesButton"
+import StarRatings from "../ReviewStars/StarRatings"
 
 const FavoritesWrapper = styled.div`
   margin-left: initial;

@@ -70,7 +70,6 @@ utils/LocationProvider.js
 utils/AuthHelpers.js
 utils/RateLimiter.js
 utils/CognitoErrorMessages.js
-utils/orderService.ts
 utils/stripeHelpers.ts
 context/CartContext.js
 context/UserContext.js
@@ -105,3 +104,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+pages/checkout.js

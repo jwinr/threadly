@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react"
+
 import styled, { css } from "styled-components"
-import Check from "../../public/images/icons/check.svg"
-import Warning from "../../public/images/icons/warning.svg"
+
+import Check from "@/public/images/icons/check.svg"
+import Warning from "@/public/images/icons/warning.svg"
 import { MdPending } from "react-icons/md"
 
 interface ToastProps {

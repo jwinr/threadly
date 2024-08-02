@@ -78,7 +78,14 @@ export const Subtitle = styled.div<LoadingProps>`
   ${({ loading }) =>
     loading &&
     css`
-      animation: ${loadingAnimation} 2s ease-in-out infinite;
+      animation: enter 0.3s forwards,
+        ${loadingAnimation} 2s ease-in-out infinite;
+      animation-fill-mode: forwards, infinite;
+
+      @media (max-width: 768px) {
+        animation: enter 0.3s forwards,
+          ${loadingAnimation} 2s ease-in-out infinite;
+      }
     `}
 
   h1 {
@@ -93,10 +100,24 @@ export const CartContainer = styled.div<LoadingProps>`
   margin-top: 16px;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   height: ${({ loading }) => (loading ? "300px" : "initial")};
+
   ${({ loading }) =>
     loading &&
     css`
-      animation: ${loadingAnimation} 2s ease-in-out infinite;
+      animation: enter 0.3s 0s forwards,
+        ${loadingAnimation} 2s ease-in-out infinite;
+      animation-fill-mode: forwards, infinite;
+
+      @media (max-width: 768px) {
+        animation: enter-form-mobile 0.3s 0.1s forwards,
+          ${loadingAnimation} 2s ease-in-out infinite;
+      }
+    `}
+
+  ${({ loading }) =>
+    !loading &&
+    css`
+      animation: fadeIn 0.2s ease-in-out forwards;
     `}
 `
 

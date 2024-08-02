@@ -1,11 +1,14 @@
 import React from "react"
+
 import styled from "styled-components"
+
 import Link from "next/link"
 import Image from "next/image"
+
 import { VscClose } from "react-icons/vsc"
-import ShipBox from "../../public/images/icons/shipbox.svg"
-import Select from "../common/Select"
-import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
+import ShipBox from "@/public/images/icons/shipbox.svg"
+import Select from "@/components/Elements/Select"
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
 const ProductCard = styled.li`
   display: flex;

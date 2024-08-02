@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion"
-import ChevronDown from "../public/images/icons/chevron-down.svg"
+import ChevronDown from "@/public/images/icons/chevron-down.svg"
 import Link from "next/link"
 import {
   RiFacebookFill,
@@ -16,7 +16,7 @@ const ItemWithChevron = ({ header, ...rest }) => (
     header={
       <>
         {header}
-        <ChevronDown className="chevron-down" alt="Chevron Down" />
+        <ChevronDown />
       </>
     }
   />
@@ -29,6 +29,10 @@ const AccordionWrapper = styled.div`
   border-radius: 8px 8px 0px 0px;
   margin-top: 20px;
   background-color: white;
+
+  svg {
+    width: 16px;
+  }
 `
 
 const AccordionItem = styled(ItemWithChevron)`

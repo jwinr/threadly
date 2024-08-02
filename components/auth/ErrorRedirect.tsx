@@ -1,9 +1,12 @@
 import React from "react"
+
 import styled from "styled-components"
+
 import { useRouter } from "next/router"
-import LogoSymbol from "../../public/images/logo_n.svg"
+
+import LogoSymbol from "@/public/images/logo_n.svg"
 import * as AuthStyles from "./AuthStyles"
-import Button from "../common/Button"
+import Button from "@/components/Elements/Button"
 
 const ErrorContainer = styled.div`
   display: flex;

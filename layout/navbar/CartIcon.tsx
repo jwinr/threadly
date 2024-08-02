@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import CartLogo from "../../public/images/icons/cart.svg"
 import styled from "styled-components"
 import { CartContext } from "../../context/CartContext"
@@ -8,6 +8,12 @@ const Container = styled.a`
   display: flex;
   width: fit-content;
   height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+
+  &.fade-in {
+    opacity: 1;
+  }
 
   &:hover,
   &:active {
@@ -81,6 +87,7 @@ type CartItem = {
 
 const CartIcon: React.FC = () => {
   const { cart } = useContext(CartContext)
+  const [fadeIn, setFadeIn] = useState(false)
 
   // Calculate total quantity
   const totalQuantity = cart.reduce(
@@ -93,8 +100,19 @@ const CartIcon: React.FC = () => {
     totalQuantity === 1 ? "item" : "items"
   }`
 
+  useEffect(() => {
+    if (totalQuantity > 0) {
+      setFadeIn(true)
+    }
+  }, [totalQuantity])
+
   return (
-    <Container href="/cart" tabIndex={-1} aria-label={ariaLabel}>
+    <Container
+      href="/cart"
+      tabIndex={-1}
+      aria-label={ariaLabel}
+      className={fadeIn ? "fade-in" : ""}
+    >
       {totalQuantity > 0 && <CartCircle>{totalQuantity}</CartCircle>}
       <Button aria-label={ariaLabel}>
         <Wrapper>
