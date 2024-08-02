@@ -34,6 +34,10 @@ const SearchInput = styled.input`
   width: 100%;
   height: 100%;
   background-color: var(--sc-color-white-highlight);
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
 `
 
 const SubmitButton = styled.button`
@@ -48,6 +52,10 @@ const SubmitButton = styled.button`
   display: flex;
   border-radius: 0 8px 8px 0;
   border: 1px transparent;
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
 
   @media (max-width: 768px) {
     right: 5px;

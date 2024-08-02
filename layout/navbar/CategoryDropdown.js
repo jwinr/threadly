@@ -71,6 +71,10 @@ const CategoryButton = styled(PropFilter("button")(["isOpen"]))`
     opacity: 1;
   }
 
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
+
   &.initial-hidden {
     opacity: 0;
     transform: translateY(20px);
@@ -108,16 +112,24 @@ const MenuItem = styled.li`
   height: 50px;
   display: flex;
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background var(--speed);
+  transition: background-color 0.2s;
   font-size: 16px;
   color: #000;
   width: 100%;
-  text-decoration: none;
   cursor: pointer;
+  border-radius: 8px;
 
   &:hover {
-    text-decoration: underline;
+    background-color: rgb(245, 246, 248);
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+    box-shadow: none;
+  }
+
+  span {
+    margin-left: 5px;
   }
 `
 
@@ -367,7 +379,7 @@ function DropdownMenu({
               setOpen={setOpen} // Pass setOpen to DropdownItem
               isOpen={isOpen}
             >
-              {category.name}
+              <span>{category.name}</span>
               {category.subCategories && category.subCategories.length > 0 && (
                 <RiArrowDownSLine className="arrow-icon" />
               )}

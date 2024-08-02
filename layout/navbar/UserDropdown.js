@@ -84,6 +84,10 @@ const UserButton = styled(PropFilter("button")(["isOpen"]))`
     opacity: 1;
   }
 
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
+
   &.initial-hidden {
     opacity: 0;
     transform: translateY(20px);
@@ -125,21 +129,29 @@ const MenuItem = styled.li`
   height: 50px;
   display: flex;
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  transition: background var(--speed);
+  transition: background-color 0.2s;
   font-size: 16px;
   color: #000;
   width: 100%;
-  text-decoration: none;
   cursor: pointer;
+  border-radius: 8px;
 
-  &:hover {
-    text-decoration: underline;
+  ::after {
+    content: "";
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  &:focus {
-    text-decoration: underline;
-    outline: none;
+  &:hover {
+    background-color: rgb(245, 246, 248);
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+    box-shadow: none;
+  }
+
+  span {
+    margin-left: 5px;
   }
 `
 
@@ -337,7 +349,7 @@ function DropdownItem({ children, href, setOpen, onClick, isOpen }) {
       tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
       onKeyDown={handleKeyDown}
     >
-      {children}
+      <span>{children}</span>
     </MenuItem>
   )
 }

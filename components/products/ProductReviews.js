@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
 import VoteButton from "./VoteButton"
-import StarRating from "../review-stars/StarRatings"
-import { UserContext } from "../../context/UserContext"
+import StarRating from "../ReviewStars/StarRatings"
+import { UserContext } from "@/context/UserContext"
 
 const Container = styled.div`
   text-align: center;

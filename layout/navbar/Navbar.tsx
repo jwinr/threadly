@@ -53,6 +53,10 @@ const Logo = styled.a`
   padding: 2px;
   margin-right: 20px;
 
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
+
   @media (max-width: 768px) {
     flex: 1 1 auto;
     margin: 0;

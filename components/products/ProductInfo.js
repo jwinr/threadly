@@ -1,13 +1,13 @@
 import styled from "styled-components"
-import StarRating from "../../components/review-stars/StarRatings"
+import StarRating from "@/components/ReviewStars/StarRatings"
 import { IoLocationOutline } from "react-icons/io5"
 import { LiaTruckSolid } from "react-icons/lia"
 import { PiKeyReturn } from "react-icons/pi"
 import { RiArrowDownSLine } from "react-icons/ri"
-import AddToFavoritesButton from "../../components/shopping/AddToFavoritesButton"
-import AddToCartButton from "../../components/shopping/AddToCartButton"
-import { useMobileView } from "../../context/MobileViewContext"
-import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
+import AddToFavoritesButton from "@/components/Shopping/AddToFavoritesButton"
+import AddToCartButton from "@/components/Shopping/AddToCartButton"
+import { useMobileView } from "@/context/MobileViewContext"
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
 const ProductNameWrapper = styled.div`
   display: flex;
