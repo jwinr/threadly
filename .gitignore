@@ -64,6 +64,9 @@ pages/login.js
 pages/return.js
 pages/search.js
 pages/signup.js
+pages/orders.js
+pages/test.js
+pages/test.ts
 utils/CategoriesConfig.js
 utils/CategoriesList.json
 utils/LocationProvider.js

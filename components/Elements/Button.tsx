@@ -103,7 +103,8 @@ const ButtonWrapper = styled.button<ButtonProps>`
     transition-duration: 0ms;
   }
 
-  &:focus {
+  &:focus-visible,
+  &:active {
     --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
     outline: 1px solid transparent;
   }

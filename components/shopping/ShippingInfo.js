@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import LocationProvider from "../../utils/LocationProvider"
+import LocationProvider from "@/utils/LocationProvider"
 
 function addBusinessDays(startDate, businessDays) {
   let currentDate = new Date(startDate)
