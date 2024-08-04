@@ -16,6 +16,7 @@ const NavbarContainer = styled.div`
   background-color: var(--sc-color-white);
   box-shadow: 0 8px 21px -12px rgba(0, 0, 0, 0.2);
   top: 0;
+  height: 64px;
   z-index: 300;
 
   @media (max-width: 768px) {

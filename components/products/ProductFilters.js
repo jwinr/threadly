@@ -3,9 +3,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { RiArrowDownSLine } from "react-icons/ri"
 import styled, { css } from "styled-components"
 import Checkbox from "@/components/Elements/Checkbox"
-import { useToast } from "@/context/ToastContext"
 import { PiSlidersHorizontalLight } from "react-icons/pi"
-import { useMobileView } from "../../context/MobileViewContext"
 import FilterPanel from "./FilterPanel"
 import ActiveFilters from "./ActiveFilters"
 import Button from "@/components/Elements/Button"
@@ -148,6 +146,22 @@ const FilterContainer = styled.div`
   gap: 10px;
 `
 
+const ProductFilterContainer = styled.div`
+  background-color: var(--sc-color-white);
+  grid-area: info;
+  display: flex;
+  padding: 8px 16px;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  z-index: 200;
+  transform: translateY(0);
+
+  @media (max-width: 768px) {
+    padding: 0px 16px;
+  }
+`
+
 function ProductFilters({
   inventoryItems,
   onFilterChange,
@@ -157,8 +171,6 @@ function ProductFilters({
   loading,
 }) {
   const maxVisibleFilters = 5
-  const { showToast } = useToast()
-  const isMobileView = useMobileView()
   const [isPanelMounted, setIsPanelMounted] = useState(false)
 
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(
@@ -169,7 +181,6 @@ function ProductFilters({
   )
 
   const [isPanelOpen, setIsPanelOpen] = useState(false)
-  const [isSticky, setIsSticky] = useState(false)
 
   const dropdownAttributeRef = useRef(
     Array(attributes.length).fill(null)
@@ -205,16 +216,6 @@ function ProductFilters({
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [attributes, dropdownAttributeRef, dropdownPriceRef])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 75)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
 
   useEffect(() => {
     document.addEventListener("keydown", handleTabKey)
@@ -396,11 +397,9 @@ function ProductFilters({
     }
   }
 
-  const containerClass = `brand-filter-container ${isSticky ? "sticky" : ""}`
-
   return (
     <>
-      <div className={containerClass}>
+      <ProductFilterContainer>
         <FilterWrapper loading={loading}>
           <AllFiltersBtn
             onClick={() => {
@@ -516,7 +515,7 @@ function ProductFilters({
             clearFilters={handleResetFilters}
           />
         </FilterContainer>
-      </div>
+      </ProductFilterContainer>
       <FilterPanel
         isOpen={isPanelOpen}
         attributes={attributes}
