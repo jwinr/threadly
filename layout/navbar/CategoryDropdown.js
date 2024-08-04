@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
 import { RiArrowDownSLine, RiArrowLeftSLine } from "react-icons/ri"
 import { useMobileView } from "../../context/MobileViewContext"
-import { IoIosMenu } from "react-icons/io"
+import MobileDrawer from "@/public/images/icons/mobileDrawer.svg"
 import Link from "next/link"
 import Backdrop from "../Backdrop"
 import PropFilter from "../../utils/PropFilter"
@@ -61,6 +61,10 @@ const CategoryButton = styled(PropFilter("button")(["isOpen"]))`
   display: flex;
   align-items: center;
   transition: background-color 0.2s;
+
+  svg {
+    fill: var(--sc-color-icon);
+  }
 
   &:hover {
     background-color: var(--sc-color-white-highlight);
@@ -229,7 +233,7 @@ function NavItem(props) {
       />
       {isMobileView ? (
         <CategoryButton isOpen={!isOpen} onClick={onToggle}>
-          <IoIosMenu />
+          <MobileDrawer />
         </CategoryButton>
       ) : (
         <CategoryButton

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react"
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 
-import { RiArrowDownSLine } from "react-icons/ri"
 import styled, { css } from "styled-components"
+import { RiArrowDownSLine } from "react-icons/ri"
 import Checkbox from "@/components/Elements/Checkbox"
 import { PiSlidersHorizontalLight } from "react-icons/pi"
 import FilterPanel from "./FilterPanel"

@@ -31,6 +31,7 @@ const NavIcon = styled.div`
   background-color: var(--sc-color-white);
   border: 1px solid var(--sc-color-divider);
   margin-bottom: 10px;
+  position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   div {
@@ -111,21 +112,12 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
             <NavItem>
               <NavIcon>
                 {category.icon ? (
-                  typeof category.icon === "string" ? (
-                    <Image
-                      src={category.icon}
-                      alt={category.name}
-                      width={500}
-                      height={500}
-                    />
-                  ) : (
-                    <Image
-                      src={category.icon}
-                      alt={category.name}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  )
+                  <Image
+                    src={category.icon}
+                    alt={category.name}
+                    width={200}
+                    height={200}
+                  />
                 ) : (
                   <FallbackIcon>?</FallbackIcon>
                 )}

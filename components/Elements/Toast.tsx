@@ -4,7 +4,6 @@ import styled, { css } from "styled-components"
 
 import Check from "@/public/images/icons/check.svg"
 import Warning from "@/public/images/icons/warning.svg"
-import { MdPending } from "react-icons/md"
 
 interface ToastProps {
   message: string
@@ -136,7 +135,7 @@ const Toast: React.FC<ToastProps> = ({
       case "caution":
         return <StyledWarning />
       case "pending":
-        return <MdPending size={18} />
+        return
       default:
         return null
     }

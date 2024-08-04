@@ -1,12 +1,12 @@
 import React from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
-import {
-  RiFacebookFill,
-  RiTwitterXFill,
-  RiInstagramLine,
-  RiYoutubeFill,
-} from "react-icons/ri"
+
+import Facebook from "@/public/images/icons/facebook.svg"
+import TwitterX from "@/public/images/icons/twitter.svg"
+import Instagram from "@/public/images/icons/instagram.svg"
+import YouTube from "@/public/images/icons/youtube.svg"
+
 import LogoSymbol from "../public/images/logo_dark.svg"
 import { GoChecklist, GoShieldCheck } from "react-icons/go"
 import { useMobileView } from "../context/MobileViewContext"
@@ -221,7 +221,7 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       aria-label="Facebook"
                     >
-                      <RiFacebookFill />
+                      <Facebook />
                     </a>
                     <a
                       href="https://www.x.com"
@@ -229,7 +229,7 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       aria-label="Twitter"
                     >
-                      <RiTwitterXFill />
+                      <TwitterX />
                     </a>
                     <a
                       href="https://www.instagram.com"
@@ -237,7 +237,7 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       aria-label="Instagram"
                     >
-                      <RiInstagramLine />
+                      <Instagram />
                     </a>
                     <a
                       href="https://www.youtube.com"
@@ -245,7 +245,7 @@ const Footer = () => {
                       rel="noopener noreferrer"
                       aria-label="YouTube"
                     >
-                      <RiYoutubeFill />
+                      <YouTube />
                     </a>
                   </SocialMedia>
                 </FooterColumn>

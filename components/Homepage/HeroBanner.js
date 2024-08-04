@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import styled from "styled-components"
+import { useRouter } from "next/router"
 import Image from "next/image"
-import { useMobileView } from "../../context/MobileViewContext"
+import { useMobileView } from "@/context/MobileViewContext"
+
+import BannerDesktop from "@/public/images/herobanner_large.png"
+import BannerMobile from "@/public/images/herobanner_mobile.png"
 
 const HeroBannerContainer = styled.div`
   position: relative;
@@ -109,8 +112,8 @@ const HeroBanner = () => {
   }
 
   const imageProps = isMobileView
-    ? { src: "/images/herobanner_mobile.png", width: 390, height: 390 }
-    : { src: "/images/herobanner_large.png", width: 1140, height: 500 }
+    ? { src: BannerMobile, width: 390, height: 390 }
+    : { src: BannerDesktop, width: 1140, height: 500 }
 
   return (
     <HeroBannerContainer>
