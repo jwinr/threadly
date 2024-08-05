@@ -5,160 +5,13 @@ import { CSSTransition } from "react-transition-group"
 import ChevronDown from "@/public/images/icons/chevron-down.svg"
 import ChevronLeft from "@/public/images/icons/chevronLeft.svg"
 
-import { useMobileView } from "../../context/MobileViewContext"
+import * as DropdownStyles from "./DropdownStyles"
+import { useMobileView } from "@/context/MobileViewContext"
 import MobileDrawer from "@/public/images/icons/mobileDrawer.svg"
 import Backdrop from "../Backdrop"
-import PropFilter from "../../utils/PropFilter"
 import { useRouter } from "next/router.js"
-import CategoriesConfig from "../../utils/CategoriesConfig"
-import useScrollControl from "hooks/useScrollControl"
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: 63px;
-  width: 275px;
-  background-color: var(--sc-color-white);
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
-  padding-bottom: 8px;
-  overflow: hidden;
-  z-index: -100;
-  box-sizing: content-box;
-  transition: visibility 0s, transform 0.3s cubic-bezier(0.3, 0.85, 0, 1),
-    height var(--speed) ease;
-  left: ${(props) => props.left}px;
-  transform: translateY(-1000px); // Initially move it up slightly and hide
-
-  &.visible {
-    visibility: visible;
-    transform: translateY(0); // Slide it into place
-  }
-
-  &.invisible {
-    transform: translateY(-1000px);
-  }
-
-  &.initial-hidden {
-    transform: translateY(-1000px);
-    transition: none;
-  }
-
-  @media (max-width: 768px) {
-    top: 110px;
-  }
-`
-
-const CategoryButton = styled(PropFilter("button")(["isOpen"]))`
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--sc-color-text);
-  padding-left: 16px;
-  padding-right: 8px;
-  height: 100%;
-  border-radius: 10px;
-  align-items: center;
-  background-color: ${({ isOpen }) => (isOpen ? "#f7f7f7" : "#fff")};
-  display: flex;
-  align-items: center;
-  transition: background-color 0.2s;
-
-  svg {
-    fill: var(--sc-color-icon);
-  }
-
-  &:hover {
-    background-color: var(--sc-color-white-highlight);
-
-    svg {
-      opacity: 1;
-    }
-  }
-
-  &:hover .arrow-icon,
-  &.arrow-icon-visible .arrow-icon svg {
-    opacity: 1;
-  }
-
-  &:focus:not(:focus-visible) {
-    --s-focus-ring: 0;
-  }
-
-  &.initial-hidden {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: none;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 30px;
-    height: 44px;
-    width: 44px;
-    padding: 0;
-    justify-content: center;
-    background-color: transparent;
-
-    &:active {
-      background-color: var(--sc-color-white-highlight);
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
-`
-
-const Menu = styled.div`
-  width: 100%;
-
-  & a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-`
-
-const MenuItem = styled.li`
-  height: 50px;
-  display: flex;
-  align-items: center;
-  transition: background-color 0.2s;
-  font-size: 16px;
-  color: #000;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 8px;
-
-  &:hover {
-    background-color: rgb(245, 246, 248);
-  }
-
-  &:focus:not(:focus-visible) {
-    --s-focus-ring: 0;
-    box-shadow: none;
-  }
-
-  span {
-    margin-left: 5px;
-  }
-`
-
-const ListHeader = styled.div`
-  height: 50px;
-  display: flex;
-  align-items: center;
-  transition: background var(--speed);
-  font-size: 18px;
-  font-weight: 600;
-  color: #000;
-  width: 100%;
-  text-decoration: none;
-
-  &:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-`
+import CategoriesConfig from "@/utils/CategoriesConfig"
+import useScrollControl from "@/hooks/useScrollControl"
 
 const ReturnButton = styled.div`
   -webkit-box-align: center;
@@ -176,10 +29,6 @@ const ReturnButton = styled.div`
   svg > path {
     fill: var(--sc-color-icon);
   }
-`
-
-const BtnText = styled.div`
-  padding: 0 5px;
 `
 
 const CategoryDropdown = ({ isOpen: parentIsOpen, onToggle }) => {
@@ -247,11 +96,11 @@ function NavItem(props) {
         onClick={handleToggle}
       />
       {isMobileView ? (
-        <CategoryButton isOpen={!isOpen} onClick={onToggle}>
+        <DropdownStyles.Button isOpen={!isOpen} onClick={onToggle}>
           <MobileDrawer />
-        </CategoryButton>
+        </DropdownStyles.Button>
       ) : (
-        <CategoryButton
+        <DropdownStyles.Button
           onClick={onToggle}
           onKeyDown={handleKeyDown}
           ref={btnRef}
@@ -262,11 +111,11 @@ function NavItem(props) {
             isOpen ? "arrow-icon-visible" : ""
           }`}
         >
-          <BtnText>Categories</BtnText>
+          <DropdownStyles.BtnText>Categories</DropdownStyles.BtnText>
           <div className={`arrow-icon ${isOpen ? "rotate-arrow" : ""}`}>
             <ChevronDown />
           </div>
-        </CategoryButton>
+        </DropdownStyles.Button>
       )}
       {React.cloneElement(props.children, {
         dropdownLeft: isMobileView ? 0 : dropdownLeft,
@@ -310,23 +159,23 @@ function DropdownItem({
   }
 
   return hasSubCategories ? (
-    <MenuItem
+    <DropdownStyles.MenuItem
       onClick={handleClick}
       role="menuitem"
       tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
       onKeyDown={handleKeyDown}
     >
       {children}
-    </MenuItem>
+    </DropdownStyles.MenuItem>
   ) : (
-    <MenuItem
+    <DropdownStyles.MenuItem
       onClick={handleClick}
       role="menuitem"
       tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
       onKeyDown={handleKeyDown}
     >
       {children}
-    </MenuItem>
+    </DropdownStyles.MenuItem>
   )
 }
 
@@ -366,7 +215,7 @@ function DropdownMenu({
   }
 
   return (
-    <Dropdown
+    <DropdownStyles.Dropdown
       style={{ height: menuHeight, left: dropdownLeft }}
       ref={dropdownRef}
       role="menu"
@@ -380,8 +229,8 @@ function DropdownMenu({
         unmountOnExit
         onEnter={calcHeight}
       >
-        <Menu>
-          <ListHeader>All categories</ListHeader>
+        <DropdownStyles.Menu>
+          <DropdownStyles.ListHeader>All categories</DropdownStyles.ListHeader>
           {CategoriesConfig.map((category) => (
             <DropdownItem
               key={category.id}
@@ -401,7 +250,7 @@ function DropdownMenu({
               <span>{category.name}</span>
             </DropdownItem>
           ))}
-        </Menu>
+        </DropdownStyles.Menu>
       </CSSTransition>
 
       {CategoriesConfig.map((category) => (
@@ -413,8 +262,8 @@ function DropdownMenu({
           unmountOnExit
           onEnter={calcHeight}
         >
-          <Menu>
-            <ListHeader>
+          <DropdownStyles.Menu>
+            <DropdownStyles.ListHeader>
               <ReturnButton
                 onClick={() => setActiveMenu("main")}
                 role="button"
@@ -424,7 +273,7 @@ function DropdownMenu({
                 <ChevronLeft />
               </ReturnButton>
               {category.name}
-            </ListHeader>
+            </DropdownStyles.ListHeader>
             {getSubCategories(category.id).map((subCategory) => (
               <DropdownItem
                 key={subCategory.id}
@@ -436,10 +285,10 @@ function DropdownMenu({
                 {subCategory.name}
               </DropdownItem>
             ))}
-          </Menu>
+          </DropdownStyles.Menu>
         </CSSTransition>
       ))}
-    </Dropdown>
+    </DropdownStyles.Dropdown>
   )
 }
 

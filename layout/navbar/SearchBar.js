@@ -8,6 +8,7 @@ const InputForm = styled.form`
   display: flex;
   width: 75%;
   align-items: center;
+  position: relative;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -28,37 +29,45 @@ const SearchContainer = styled.div`
 
 const SearchInput = styled.input`
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
+  border-width: 1px;
+  border-color: var(--sc-color-border-gray);
+  color: #353a44;
   outline: none;
   font-size: 15px;
   width: 100%;
   height: 100%;
-  background-color: var(--sc-color-white-highlight);
+  max-width: 650px;
+  background-color: #f5f6f8;
 
-  &:focus:not(:focus-visible) {
+  &:focus {
     --s-focus-ring: 0;
+    box-shadow: none;
   }
 `
 
 const SubmitButton = styled.button`
-  right: 31px;
+  right: 32px;
   position: relative;
   color: var(--sc-color-text);
-  width: 35px;
-  height: 38px;
-  font-size: 20px;
+  width: 26px;
+  height: 26px;
   align-items: center;
   justify-content: center;
   display: flex;
-  border-radius: 0 8px 8px 0;
+  border-radius: 8px;
   border: 1px transparent;
 
   svg > path {
-    fill: var(--sc-color-icon);
+    fill: #6c7688;
   }
 
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
+  }
+
+  &:hover svg > path {
+    fill: #474e5a;
   }
 
   @media (max-width: 768px) {
@@ -72,15 +81,28 @@ const ClearButton = styled.button`
   position: absolute;
   right: 80px;
   top: 50%;
+  height: 60%;
   transform: translateY(-50%);
   background: none;
-  border: none;
+  border-right: 1px solid #c5cbd1;
+  padding: 0px 14px;
   cursor: pointer;
-  color: #9ca3af;
-  font-size: 18px;
 
-  &:hover {
-    color: #003f66;
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  svg > path {
+    fill: #6c7688;
+  }
+
+  &:hover svg > path {
+    fill: #474e5a;
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
   }
 `
 
@@ -122,15 +144,15 @@ const SearchBar = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           aria-label="Search for products"
         />
+        {searchTerm && (
+          <ClearButton onClick={clearSearch} aria-label="Clear search">
+            <Cancel />
+          </ClearButton>
+        )}
         <SubmitButton type="submit" aria-label="Submit search">
           <Search />
         </SubmitButton>
       </InputForm>
-      {searchTerm && (
-        <ClearButton onClick={clearSearch} aria-label="Clear search">
-          <Cancel />
-        </ClearButton>
-      )}
     </SearchContainer>
   )
 }

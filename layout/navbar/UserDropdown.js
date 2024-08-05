@@ -5,173 +5,32 @@ import React, {
   useCallback,
   useContext,
 } from "react"
-import { UserContext } from "../../context/UserContext"
-import { CartContext } from "../../context/CartContext"
+import { UserContext } from "@/context/UserContext"
+import { CartContext } from "@/context/CartContext"
+import { useSignOut } from "@/context/SignOutContext"
 import styled from "styled-components"
+import * as DropdownStyles from "./DropdownStyles"
 import ChevronDown from "@/public/images/icons/chevron-down.svg"
 import AccountIcon from "@/public/images/icons/account.svg"
 import { CSSTransition } from "react-transition-group"
 import Backdrop from "../Backdrop"
 import { signOut } from "aws-amplify/auth"
-import { useSignOut } from "../../context/SignOutContext"
-import PropFilter from "../../utils/PropFilter"
+import PropFilter from "@/utils/PropFilter"
 import { useRouter } from "next/router"
-import SigningOutOverlay from "../../components/Auth/SigningOutOverlay"
-import useScrollControl from "hooks/useScrollControl"
+import SigningOutOverlay from "@/components/Auth/SigningOutOverlay"
+import useScrollControl from "@/hooks/useScrollControl"
 
-const Dropdown = styled(PropFilter("div")(["isOpen"]))`
-  position: absolute;
-  top: 63px;
-  width: 275px;
-  background-color: var(--sc-color-white);
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
-  padding-bottom: 8px;
-  overflow: hidden;
-  z-index: -100;
-  box-sizing: content-box;
-  transition: visibility 0s, transform 0.3s cubic-bezier(0.3, 0.85, 0, 1),
-    height var(--speed) ease;
+const Dropdown = styled(DropdownStyles.Dropdown)`
   right: ${(props) => props.right}px; // Dynamic right position
-  transform: translateY(-1000px); // Initially move it up slightly and hide
-
-  &.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0); // Slide it into place
-  }
-
-  &.invisible {
-    opacity: 0;
-    transform: translateY(-1000px);
-  }
-
-  &.initial-hidden {
-    transform: translateY(-1000px);
-    transition: none;
-  }
 
   @media (max-width: 768px) {
-    top: 110px;
-    left: 0;
+    right: 0px !important;
   }
 `
 
-const UserButton = styled(PropFilter("button")(["isOpen"]))`
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--sc-color-text);
-  padding-left: 16px;
-  padding-right: 8px;
-  margin-right: 10px;
-  border-radius: 10px;
-  align-items: center;
-  display: flex;
-  width: auto;
-  height: 100%;
-  background-color: ${({ isOpen }) => (isOpen ? "#f7f7f7" : "#fff")};
-  transition: background-color 0.2s;
-  border: 1px transparent;
-
-  &:hover {
-    background-color: var(--sc-color-white-highlight);
-
-    svg {
-      opacity: 1;
-    }
-  }
-
-  &:hover .arrow-icon,
-  &.arrow-icon-visible .arrow-icon svg {
-    opacity: 1;
-  }
-
-  &:focus:not(:focus-visible) {
-    --s-focus-ring: 0;
-  }
-
-  &.initial-hidden {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: none;
-  }
-
+const UserButton = styled(DropdownStyles.Button)`
   @media (max-width: 768px) {
-    height: 44px;
-    width: 44px;
-    padding: 0;
-    justify-content: center;
     order: 2; // Between the logo and cart icon on mobile layouts
-
-    &:active {
-      background-color: var(--sc-color-white-highlight);
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
-
-    .arrow-icon {
-      display: none;
-      width: 0;
-    }
-  }
-`
-
-const Menu = styled.div`
-  width: 100%;
-
-  & a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-`
-
-const MenuItem = styled.li`
-  height: 50px;
-  display: flex;
-  align-items: center;
-  transition: background-color 0.2s;
-  font-size: 16px;
-  color: #000;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 8px;
-
-  ::after {
-    content: "";
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  &:hover {
-    background-color: rgb(245, 246, 248);
-  }
-
-  &:focus:not(:focus-visible) {
-    --s-focus-ring: 0;
-    box-shadow: none;
-  }
-
-  span {
-    margin-left: 5px;
-  }
-`
-
-const ListHeader = styled.div`
-  height: 50px;
-  display: flex;
-  align-items: center;
-  transition: background var(--speed);
-  font-size: 18px;
-  font-weight: 600;
-  color: #000;
-  width: 100%;
-  text-decoration: none;
-
-  &:focus {
-    text-decoration: underline;
-    outline: none;
   }
 `
 
@@ -180,19 +39,19 @@ const IconContainer = styled.div`
   display: flex;
 
   svg {
-    width: 24px;
+    width: 16px;
+    height: 16px;
 
     path {
       fill: var(--sc-color-icon);
     }
   }
-`
-
-const BtnText = styled.div`
-  padding: 0 5px;
 
   @media (max-width: 768px) {
-    display: none;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 `
 
@@ -314,7 +173,9 @@ function NavItem(props) {
         <IconContainer>
           <AccountIcon />
         </IconContainer>
-        <BtnText>{user ? `Hi, ${user}` : "Sign in"}</BtnText>
+        <DropdownStyles.BtnText>
+          {user ? `Hi, ${user}` : "Sign in"}
+        </DropdownStyles.BtnText>
         <div className={`arrow-icon ${isOpen ? "rotate-arrow" : ""}`}>
           <ChevronDown />
         </div>
@@ -350,14 +211,14 @@ function DropdownItem({ children, href, setOpen, onClick, isOpen }) {
   }
 
   return (
-    <MenuItem
+    <DropdownStyles.MenuItem
       onClick={handleClick}
       role="menuitem"
       tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
       onKeyDown={handleKeyDown}
     >
       <span>{children}</span>
-    </MenuItem>
+    </DropdownStyles.MenuItem>
   )
 }
 
@@ -405,10 +266,10 @@ function DropdownMenu({
         unmountOnExit
         onEnter={calcHeight}
       >
-        <Menu>
+        <DropdownStyles.Menu>
           {user ? (
             <>
-              <ListHeader>Account</ListHeader>
+              <DropdownStyles.ListHeader>Account</DropdownStyles.ListHeader>
               <DropdownItem href="/account" setOpen={setOpen} isOpen={isOpen}>
                 Profile
               </DropdownItem>
@@ -428,7 +289,7 @@ function DropdownMenu({
             </>
           ) : (
             <>
-              <ListHeader>Account</ListHeader>
+              <DropdownStyles.ListHeader>Account</DropdownStyles.ListHeader>
               <DropdownItem href="/login" setOpen={setOpen} isOpen={isOpen}>
                 Sign in
               </DropdownItem>
@@ -444,7 +305,7 @@ function DropdownMenu({
               </DropdownItem>
             </>
           )}
-        </Menu>
+        </DropdownStyles.Menu>
       </CSSTransition>
     </Dropdown>
   )

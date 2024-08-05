@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useMemo,
   useCallback,
+  RefObject,
 } from "react"
 
 import styled from "styled-components"
@@ -15,8 +16,10 @@ interface AccordionProps {
 interface AccordionContextProps {
   openIndices: number[]
   setOpenIndex: (index: number) => void
-  registerItem: (index: number) => void
+  registerItem: (index: number, ref: RefObject<HTMLDivElement>) => void
   getItemIndex: (key: number) => number
+  focusNextItem: (currentRef: RefObject<HTMLDivElement>) => void
+  focusPrevItem: (currentRef: RefObject<HTMLDivElement>) => void
 }
 
 export const AccordionContext = createContext<AccordionContextProps>({
@@ -24,24 +27,31 @@ export const AccordionContext = createContext<AccordionContextProps>({
   setOpenIndex: () => {},
   registerItem: () => {},
   getItemIndex: () => -1,
+  focusNextItem: () => {},
+  focusPrevItem: () => {},
 })
 
 const Accordion: React.FC<AccordionProps> = ({ children }) => {
   const [openIndices, setOpenIndices] = useState<number[]>([])
-  const [items, setItems] = useState<number[]>([])
+  const [items, setItems] = useState<
+    { index: number; ref: RefObject<HTMLDivElement> }[]
+  >([])
 
-  const registerItem = useCallback((index: number) => {
-    setItems((prevItems) => {
-      if (!prevItems.includes(index)) {
-        return [...prevItems, index]
-      }
-      return prevItems
-    })
-  }, [])
+  const registerItem = useCallback(
+    (index: number, ref: RefObject<HTMLDivElement>) => {
+      setItems((prevItems) => {
+        if (!prevItems.some((item) => item.index === index)) {
+          return [...prevItems, { index, ref }]
+        }
+        return prevItems
+      })
+    },
+    []
+  )
 
   const getItemIndex = useCallback(
     (key: number) => {
-      return items.indexOf(key)
+      return items.findIndex((item) => item.index === key)
     },
     [items]
   )
@@ -54,14 +64,41 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
     )
   }, [])
 
+  const focusNextItem = useCallback(
+    (currentRef: RefObject<HTMLDivElement>) => {
+      const currentIndex = items.findIndex((item) => item.ref === currentRef)
+      const nextIndex = (currentIndex + 1) % items.length
+      items[nextIndex]?.ref.current?.focus()
+    },
+    [items]
+  )
+
+  const focusPrevItem = useCallback(
+    (currentRef: RefObject<HTMLDivElement>) => {
+      const currentIndex = items.findIndex((item) => item.ref === currentRef)
+      const prevIndex = (currentIndex - 1 + items.length) % items.length
+      items[prevIndex]?.ref.current?.focus()
+    },
+    [items]
+  )
+
   const value = useMemo(
     () => ({
       openIndices,
       setOpenIndex,
       registerItem,
       getItemIndex,
+      focusNextItem,
+      focusPrevItem,
     }),
-    [openIndices, setOpenIndex, registerItem, getItemIndex]
+    [
+      openIndices,
+      setOpenIndex,
+      registerItem,
+      getItemIndex,
+      focusNextItem,
+      focusPrevItem,
+    ]
   )
 
   return (

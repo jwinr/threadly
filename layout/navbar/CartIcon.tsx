@@ -33,6 +33,15 @@ const Button = styled.button`
   align-items: center;
   transition: background-color 0.2s;
 
+  svg {
+    width: 16px;
+    height: 16px;
+
+    path {
+      fill: var(--sc-color-icon);
+    }
+  }
+
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
     box-shadow: none;
@@ -43,6 +52,11 @@ const Button = styled.button`
     width: 44px;
     padding: 0;
     justify-content: center;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 `
 
@@ -50,13 +64,14 @@ const CartCircle = styled.div`
   position: absolute;
   top: 0px;
   right: -1px;
-  background-color: var(--sc-color-text);
+  background-color: var(--sc-color-blue);
   color: var(--sc-color-white);
   border-radius: 50%;
   padding: 3px 6px;
   font-size: 10px;
-  width: 16px;
-  height: 16px;
+  font-weight: 600;
+  width: 17px;
+  height: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +95,13 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 26px;
+    width: fit-content;
+    height: fit-content;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `
 
@@ -106,9 +127,7 @@ const CartIcon: React.FC = () => {
     <Container href="/cart" tabIndex={-1} aria-label={ariaLabel}>
       {totalQuantity > 0 && <CartCircle>{totalQuantity}</CartCircle>}
       <Button aria-label={ariaLabel}>
-        <Wrapper>
-          <CartLogo />
-        </Wrapper>
+        <CartLogo />
       </Button>
     </Container>
   )

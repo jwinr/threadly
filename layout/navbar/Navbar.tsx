@@ -60,7 +60,6 @@ const Logo = styled.a`
 
   @media (max-width: 768px) {
     flex: 1 1 auto;
-    margin: 0;
     padding-left: 77px; // Using an entire button width x 1.75
     padding-right: 23px; // Button width x 0.75 (smaller value since we have two buttons on the right side) - 10px (margin for the user dropdown button)
     padding-top: 0;
