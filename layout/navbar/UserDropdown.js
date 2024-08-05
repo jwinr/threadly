@@ -8,10 +8,9 @@ import React, {
 import { UserContext } from "../../context/UserContext"
 import { CartContext } from "../../context/CartContext"
 import styled from "styled-components"
-import { RiArrowDownSLine, RiArrowLeftSLine } from "react-icons/ri"
-import AccountIcon from "../../public/images/icons/account.svg"
+import ChevronDown from "@/public/images/icons/chevron-down.svg"
+import AccountIcon from "@/public/images/icons/account.svg"
 import { CSSTransition } from "react-transition-group"
-import Link from "next/link"
 import Backdrop from "../Backdrop"
 import { signOut } from "aws-amplify/auth"
 import { useSignOut } from "../../context/SignOutContext"
@@ -77,10 +76,14 @@ const UserButton = styled(PropFilter("button")(["isOpen"]))`
 
   &:hover {
     background-color: var(--sc-color-white-highlight);
+
+    svg {
+      opacity: 1;
+    }
   }
 
   &:hover .arrow-icon,
-  &.arrow-icon-visible .arrow-icon {
+  &.arrow-icon-visible .arrow-icon svg {
     opacity: 1;
   }
 
@@ -178,6 +181,10 @@ const IconContainer = styled.div`
 
   svg {
     width: 24px;
+
+    path {
+      fill: var(--sc-color-icon);
+    }
   }
 `
 
@@ -309,7 +316,7 @@ function NavItem(props) {
         </IconContainer>
         <BtnText>{user ? `Hi, ${user}` : "Sign in"}</BtnText>
         <div className={`arrow-icon ${isOpen ? "rotate-arrow" : ""}`}>
-          <RiArrowDownSLine />
+          <ChevronDown />
         </div>
       </UserButton>
       {React.cloneElement(props.children, {

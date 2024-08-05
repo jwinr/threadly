@@ -1,5 +1,4 @@
 import React from "react"
-import { FaDesktop, FaHeadset, FaTruck } from "react-icons/fa"
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -66,9 +65,7 @@ const FeatureHighlights = () => {
       <Wrapper>
         <Column>
           <Outline>
-            <Logo>
-              <FaDesktop />
-            </Logo>
+            <Logo></Logo>
           </Outline>
           <HeaderText>Wide Selection of Parts</HeaderText>
           <p>
@@ -81,9 +78,7 @@ const FeatureHighlights = () => {
         </Column>
         <Column>
           <Outline>
-            <Logo>
-              <FaHeadset />
-            </Logo>
+            <Logo></Logo>
           </Outline>
           <HeaderText>Expert Advice and Support</HeaderText>
           <p>
@@ -96,9 +91,7 @@ const FeatureHighlights = () => {
         </Column>
         <Column>
           <Outline>
-            <Logo>
-              <FaTruck />
-            </Logo>
+            <Logo></Logo>
           </Outline>
           <HeaderText>Fast and Secure Shipping</HeaderText>
           <p>

@@ -130,6 +130,10 @@ const SocialMedia = styled.div`
   font-size: 24px;
   gap: 5px;
 
+  svg > path {
+    fill: var(--sc-color-icon);
+  }
+
   @media (max-width: 768px) {
     font-size: 20px;
     gap: 10px;

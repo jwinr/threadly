@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
-import { RiArrowDownSLine, RiArrowLeftSLine } from "react-icons/ri"
+
+import ChevronDown from "@/public/images/icons/chevron-down.svg"
+import ChevronLeft from "@/public/images/icons/chevronLeft.svg"
+
 import { useMobileView } from "../../context/MobileViewContext"
 import MobileDrawer from "@/public/images/icons/mobileDrawer.svg"
-import Link from "next/link"
 import Backdrop from "../Backdrop"
 import PropFilter from "../../utils/PropFilter"
 import { useRouter } from "next/router.js"
@@ -68,10 +70,14 @@ const CategoryButton = styled(PropFilter("button")(["isOpen"]))`
 
   &:hover {
     background-color: var(--sc-color-white-highlight);
+
+    svg {
+      opacity: 1;
+    }
   }
 
   &:hover .arrow-icon,
-  &.arrow-icon-visible .arrow-icon {
+  &.arrow-icon-visible .arrow-icon svg {
     opacity: 1;
   }
 
@@ -161,6 +167,15 @@ const ReturnButton = styled.div`
   display: flex;
   margin-right: 8px;
   cursor: pointer;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+
+  svg > path {
+    fill: var(--sc-color-icon);
+  }
 `
 
 const BtnText = styled.div`
@@ -249,7 +264,7 @@ function NavItem(props) {
         >
           <BtnText>Categories</BtnText>
           <div className={`arrow-icon ${isOpen ? "rotate-arrow" : ""}`}>
-            <RiArrowDownSLine />
+            <ChevronDown />
           </div>
         </CategoryButton>
       )}
@@ -379,14 +394,11 @@ function DropdownMenu({
                 category.subCategories && category.subCategories.length > 0
               }
               href={`/categories/${category.slug}`}
-              setActiveMenu={setActiveMenu} // Pass setActiveMenu to DropdownItem
-              setOpen={setOpen} // Pass setOpen to DropdownItem
+              setActiveMenu={setActiveMenu}
+              setOpen={setOpen}
               isOpen={isOpen}
             >
               <span>{category.name}</span>
-              {category.subCategories && category.subCategories.length > 0 && (
-                <RiArrowDownSLine className="arrow-icon" />
-              )}
             </DropdownItem>
           ))}
         </Menu>
@@ -406,10 +418,10 @@ function DropdownMenu({
               <ReturnButton
                 onClick={() => setActiveMenu("main")}
                 role="button"
-                tabIndex={0} // Make it focusable
+                tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && setActiveMenu("main")}
               >
-                <RiArrowLeftSLine size={28} />
+                <ChevronLeft />
               </ReturnButton>
               {category.name}
             </ListHeader>
@@ -419,7 +431,7 @@ function DropdownMenu({
                 href={`/categories/${subCategory.slug}`}
                 setOpen={setOpen}
                 isOpen={isOpen}
-                setActiveMenu={setActiveMenu} // Pass setActiveMenu to DropdownItem
+                setActiveMenu={setActiveMenu}
               >
                 {subCategory.name}
               </DropdownItem>

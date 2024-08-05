@@ -13,21 +13,21 @@ interface AccordionProps {
 }
 
 interface AccordionContextProps {
-  openIndex: number
+  openIndices: number[]
   setOpenIndex: (index: number) => void
   registerItem: (index: number) => void
   getItemIndex: (key: number) => number
 }
 
 export const AccordionContext = createContext<AccordionContextProps>({
-  openIndex: -1,
+  openIndices: [],
   setOpenIndex: () => {},
   registerItem: () => {},
   getItemIndex: () => -1,
 })
 
 const Accordion: React.FC<AccordionProps> = ({ children }) => {
-  const [openIndex, setOpenIndex] = useState<number>(-1)
+  const [openIndices, setOpenIndices] = useState<number[]>([])
   const [items, setItems] = useState<number[]>([])
 
   const registerItem = useCallback((index: number) => {
@@ -46,14 +46,22 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
     [items]
   )
 
+  const setOpenIndex = useCallback((index: number) => {
+    setOpenIndices((prevIndices) =>
+      prevIndices.includes(index)
+        ? prevIndices.filter((i) => i !== index)
+        : [...prevIndices, index]
+    )
+  }, [])
+
   const value = useMemo(
     () => ({
-      openIndex,
+      openIndices,
       setOpenIndex,
       registerItem,
       getItemIndex,
     }),
-    [openIndex, registerItem, getItemIndex]
+    [openIndices, setOpenIndex, registerItem, getItemIndex]
   )
 
   return (

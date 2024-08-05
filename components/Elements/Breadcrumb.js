@@ -1,9 +1,7 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { RiArrowDropRightLine } from "react-icons/ri"
-
 import styled from "styled-components"
-
 import PropTypes from "prop-types"
 import { useMobileView } from "../../context/MobileViewContext"
 
@@ -39,8 +37,8 @@ const generateBreadcrumbPart = (
   categorySlug,
   categoryName
 ) => {
-  const customTitles = {
-    categories: "All categories",
+  if (pathname === "categories") {
+    return null
   }
 
   if (pathname === "products") {
@@ -55,39 +53,41 @@ const generateBreadcrumbPart = (
       </span>
     )
   } else {
-    const currentTitle = customTitles[pathname] || title || pathname
+    const currentTitle = title || pathname
     const capitalizedTitle = capitalizeFirstLetter(currentTitle)
 
-    if (!isLast) {
-      return (
-        <span key={index} className="breadcrumb-part">
-          <Link
-            href={`/${pathnames.slice(0, index + 1).join("/")}`}
-            aria-label={capitalizedTitle}
-          >
-            {capitalizedTitle}
-          </Link>
-          <RiArrowDropRightLine />
-        </span>
-      )
-    } else {
+    if (isLast && pathname !== "product") {
       return (
         <span key={index} className="breadcrumb-part">
           {capitalizedTitle}
         </span>
       )
     }
+
+    return (
+      <span key={index} className="breadcrumb-part">
+        <Link
+          href={`/${pathnames.slice(0, index + 1).join("/")}`}
+          aria-label={capitalizedTitle}
+        >
+          {capitalizedTitle}
+        </Link>
+        {!isLast && <RiArrowDropRightLine />}
+      </span>
+    )
   }
 }
 
 function Breadcrumb({ title, categoryName, categorySlug, loading }) {
   const isMobileView = useMobileView()
   if (isMobileView) {
-    return
+    return null
   }
 
   const router = useRouter()
-  const pathnames = router.asPath.split("/").filter((x) => x)
+  const pathnames = router.asPath
+    .split("/")
+    .filter((x) => x && x !== "categories")
   const productsIndex = pathnames.indexOf("products")
 
   if (loading) {
@@ -97,9 +97,9 @@ function Breadcrumb({ title, categoryName, categorySlug, loading }) {
   return (
     <BreadWrapper>
       <span className="breadcrumb-part">
-        <a href="/" aria-label="Home">
+        <Link href="/" aria-label="Home">
           Home
-        </a>
+        </Link>
       </span>
       <RiArrowDropRightLine />
       {pathnames
@@ -123,6 +123,7 @@ Breadcrumb.propTypes = {
   title: PropTypes.string,
   categoryName: PropTypes.string,
   categorySlug: PropTypes.string,
+  loading: PropTypes.bool,
 }
 
 export default Breadcrumb

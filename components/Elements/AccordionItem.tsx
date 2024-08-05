@@ -6,11 +6,8 @@ import React, {
   useRef,
   KeyboardEvent,
 } from "react"
-
 import styled from "styled-components"
-
 import { AccordionContext } from "./Accordion"
-
 import Chevron from "@/public/images/icons/chevron-down.svg"
 
 const AccordionItemContainer = styled.div`
@@ -58,16 +55,24 @@ const ActionsContainer = styled.div`
   margin-left: 16px;
 `
 
-const AccordionContentWrapper = styled.div<{
-  height: number
-  opacity: number
-  visibility: string
-}>`
+const ClippingDiv = styled.div<{ isOpen: boolean; height: number }>`
+  transition: height 300ms ease, overflow 300ms ease, opacity 300ms ease;
+  overflow: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   height: ${({ height }) => height}px;
-  opacity: ${({ opacity }) => opacity};
-  visibility: ${({ visibility }) => visibility};
-  overflow: hidden;
-  transition: opacity 200ms ease-in-out, height 200ms ease-in-out;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+`
+
+const ContentDiv = styled.div<{ isOpen: boolean }>`
+  transition-property: transform;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+  transform: translateY(0px);
+  transform: ${({ isOpen }) =>
+    isOpen ? "translateY(0px)" : "translateY(-15px)"};
+`
+
+const Content = styled.div`
+  padding: 12px;
 `
 
 const ChevronDiv = styled.div<{ isOpen: boolean }>`
@@ -101,12 +106,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   media,
   onChange,
 }) => {
-  const { openIndex, setOpenIndex, registerItem, getItemIndex } =
+  const { openIndices, setOpenIndex, registerItem, getItemIndex } =
     useContext(AccordionContext)
   const [isOpen, setIsOpen] = useState(defaultOpen)
   const [height, setHeight] = useState(0)
-  const [opacity, setOpacity] = useState(0)
-  const [visibility, setVisibility] = useState("hidden")
+  const [isRendered, setIsRendered] = useState(defaultOpen)
   const itemRef = useRef<number>(Math.random())
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -115,27 +119,29 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   }, [registerItem])
 
   useEffect(() => {
-    setIsOpen(openIndex === getItemIndex(itemRef.current))
-  }, [openIndex, getItemIndex])
+    const index = getItemIndex(itemRef.current)
+    setIsOpen(openIndices.includes(index))
+    if (openIndices.includes(index)) {
+      setIsRendered(true)
+    }
+  }, [openIndices, getItemIndex])
 
   useEffect(() => {
     if (contentRef.current) {
       if (isOpen) {
         setHeight(contentRef.current.scrollHeight)
-        setOpacity(1)
-        setVisibility("visible")
+        setIsRendered(true)
       } else {
         setHeight(0)
-        setOpacity(0)
-        setVisibility("hidden")
+        const timeout = setTimeout(() => setIsRendered(false), 300)
+        return () => clearTimeout(timeout)
       }
     }
   }, [isOpen, children])
 
   const toggleOpen = () => {
-    const newOpenState = isOpen ? -1 : getItemIndex(itemRef.current)
-    setOpenIndex(newOpenState)
-    setIsOpen(newOpenState === getItemIndex(itemRef.current))
+    const index = getItemIndex(itemRef.current)
+    setOpenIndex(index)
   }
 
   useEffect(() => {
@@ -171,23 +177,26 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         </TitleContainer>
         {actions && <ActionsContainer>{actions}</ActionsContainer>}
       </AccordionHeader>
-      <AccordionContentWrapper
+      <ClippingDiv
+        isOpen={isOpen}
         id={`accordion-content-${itemRef.current}`}
         height={height}
-        opacity={opacity}
-        visibility={visibility}
         role="region"
       >
-        <div ref={contentRef}>
-          {React.Children.map(children, (child) =>
-            React.isValidElement(child)
-              ? React.cloneElement(child as React.ReactElement<any>, {
-                  tabIndex: isOpen ? 0 : -1,
-                })
-              : child
-          )}
-        </div>
-      </AccordionContentWrapper>
+        {isRendered && (
+          <ContentDiv isOpen={isOpen}>
+            <Content ref={contentRef}>
+              {React.Children.map(children, (child) =>
+                React.isValidElement(child)
+                  ? React.cloneElement(child as React.ReactElement<any>, {
+                      tabIndex: isOpen ? 0 : -1,
+                    })
+                  : child
+              )}
+            </Content>
+          </ContentDiv>
+        )}
+      </ClippingDiv>
     </AccordionItemContainer>
   )
 }

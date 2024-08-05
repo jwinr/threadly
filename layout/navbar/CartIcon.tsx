@@ -75,6 +75,10 @@ const Wrapper = styled.div`
   justify-content: center;
   display: grid;
 
+  svg > path {
+    fill: var(--sc-color-icon);
+  }
+
   @media (max-width: 768px) {
     width: 26px;
   }

@@ -18,6 +18,10 @@ const Container = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
 `
 
 interface EyeIconProps {
@@ -30,6 +34,7 @@ const EyeIcon = styled.svg<EyeIconProps>`
 
   .eye-line {
     fill: var(--sc-color-gray-300);
+    transition: fill 0.24s ease-in-out;
   }
 
   .eye-line2 {
@@ -39,15 +44,15 @@ const EyeIcon = styled.svg<EyeIconProps>`
     stroke-miterlimit: 10;
     stroke-dasharray: 20px 29px;
     stroke-dashoffset: ${(props) => (props["data-clicked"] ? "0px" : "20px")};
-    transition: stroke-dashoffset 0.3s ease-in-out;
+    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.24s ease-in-out;
   }
 
   &:hover .eye-line {
-    fill: var(--sc-color-text);
+    fill: var(--sc-color-icon);
   }
 
   &:hover .eye-line2 {
-    stroke: var(--sc-color-text);
+    stroke: var(--sc-color-icon);
   }
 `
 

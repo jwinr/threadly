@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { VscClose } from "react-icons/vsc"
 import { useRouter } from "next/router"
 import styled from "styled-components"
-import Search from "../../public/images/icons/search.svg"
+import Search from "@/public/images/icons/search.svg"
+import Cancel from "@/public/images/icons/cancel.svg"
 
 const InputForm = styled.form`
   display: flex;
@@ -52,6 +52,10 @@ const SubmitButton = styled.button`
   display: flex;
   border-radius: 0 8px 8px 0;
   border: 1px transparent;
+
+  svg > path {
+    fill: var(--sc-color-icon);
+  }
 
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
@@ -124,7 +128,7 @@ const SearchBar = () => {
       </InputForm>
       {searchTerm && (
         <ClearButton onClick={clearSearch} aria-label="Clear search">
-          <VscClose />
+          <Cancel />
         </ClearButton>
       )}
     </SearchContainer>

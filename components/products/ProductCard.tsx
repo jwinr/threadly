@@ -8,7 +8,7 @@ import Truck from "../../public/images/icons/truck.svg"
 import AddToFavoritesButton from "../Shopping/AddToFavoritesButton"
 import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
 
-const CardContainer = styled.div`
+const CardContainer = styled.div<{ isLoading: boolean }>`
   display: flex;
   flex-direction: column;
   padding: 15px;
@@ -19,8 +19,8 @@ const CardContainer = styled.div`
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   height: 100%;
 
-  ${({ loading }) =>
-    !loading &&
+  ${({ isLoading }) =>
+    !isLoading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
     `}
@@ -196,7 +196,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const imageUrl = currentImage.image_url || "/images/products/placeholder.jpg"
 
   return (
-    <CardContainer loading={loading}>
+    <CardContainer isLoading={loading}>
       <ImageWrapper>
         <Link href={`${link}`} aria-label={`View details of ${title}`}>
           <Image alt={title} src={imageUrl} width={500} height={500} />
