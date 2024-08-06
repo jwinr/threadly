@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback } from "react"
+import ReactDOM from "react-dom"
 
 import styled, { keyframes } from "styled-components"
 
@@ -55,6 +56,7 @@ const Backdrop = styled(PropFilter("div")(["isOpen"]))`
   background-color: rgba(51, 51, 51, 0.8);
   backdrop-filter: blur(4px);
   z-index: 300;
+  height: 100vh;
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
   transition: opacity 0.3s ease-in-out;
   pointer-events: ${({ isOpen }) => (isOpen ? "auto" : "none")};
@@ -179,84 +181,93 @@ const FilterPanel = ({
 
   return (
     <>
-      {isMounted && (
-        <Backdrop isOpen={isOpen} onClick={onClose}>
-          <PanelContainer
-            ref={panelRef}
-            isOpen={isOpen}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Header>
-              <h2>All filters</h2>
-            </Header>
-            <Content>
-              <Accordion>
-                <AccordionItem title="Price" defaultOpen={false}>
-                  <div>
-                    {availablePriceRanges.map((priceRange, index) => (
-                      <Checkbox
-                        key={index}
-                        id={`price-${priceRange}`}
-                        label={priceRange}
-                        checked={selectedPriceRanges.includes(priceRange)}
-                        onChange={() =>
-                          toggleSelection("price", priceRange, true)
-                        }
-                        data-type="price"
-                      />
-                    ))}
-                  </div>
-                </AccordionItem>
-              </Accordion>
-              {attributes.map((attribute, index) => (
-                <Accordion key={index}>
-                  <AccordionItem
-                    title={attribute.attribute_type}
-                    defaultOpen={false}
-                  >
-                    <div>
-                      {attribute.attribute_values.map((value, valueIndex) => (
-                        <Checkbox
-                          key={valueIndex}
-                          id={`attribute-${attribute.attribute_type}-${value}`}
-                          label={value}
-                          checked={selectedAttributes[
-                            attribute.attribute_type
-                          ]?.includes(value)}
-                          onChange={() =>
-                            toggleSelection(attribute.attribute_type, value)
-                          }
-                          data-type={attribute.attribute_type}
-                        />
-                      ))}
-                    </div>
-                  </AccordionItem>
-                </Accordion>
-              ))}
-            </Content>
-            <BottomContainer>
-              <Button type="secondary" size="large" onClick={resetFilters}>
-                Clear all
-              </Button>
-              <Button
-                type="primary"
-                size="large"
-                ref={applyButtonRef}
-                onClick={applyFilters}
+      {isMounted &&
+        ReactDOM.createPortal(
+          isOpen && (
+            <Backdrop isOpen={isOpen} onClick={onClose}>
+              <PanelContainer
+                ref={panelRef}
+                isOpen={isOpen}
+                onClick={(e) => e.stopPropagation()}
               >
-                See results
-              </Button>
-            </BottomContainer>
-            <CloseButton
-              ref={closeButtonRef}
-              onClick={onClose}
-              aria-label="Close filter panel"
-            >
-              <Cancel />
-            </CloseButton>
-          </PanelContainer>
-        </Backdrop>
-      )}
+                <Header>
+                  <h2>All filters</h2>
+                </Header>
+                <Content>
+                  <Accordion>
+                    <AccordionItem title="Price" defaultOpen={false}>
+                      <div>
+                        {availablePriceRanges.map((priceRange, index) => (
+                          <Checkbox
+                            key={index}
+                            id={`price-${priceRange}`}
+                            label={priceRange}
+                            checked={selectedPriceRanges.includes(priceRange)}
+                            onChange={() =>
+                              toggleSelection("price", priceRange, true)
+                            }
+                            data-type="price"
+                          />
+                        ))}
+                      </div>
+                    </AccordionItem>
+                  </Accordion>
+                  {attributes.map((attribute, index) => (
+                    <Accordion key={index}>
+                      <AccordionItem
+                        title={attribute.attribute_type}
+                        defaultOpen={false}
+                      >
+                        <div>
+                          {attribute.attribute_values.map(
+                            (value, valueIndex) => (
+                              <Checkbox
+                                key={valueIndex}
+                                id={`attribute-${attribute.attribute_type}-${value}`}
+                                label={value}
+                                checked={selectedAttributes[
+                                  attribute.attribute_type
+                                ]?.includes(value)}
+                                onChange={() =>
+                                  toggleSelection(
+                                    attribute.attribute_type,
+                                    value
+                                  )
+                                }
+                                data-type={attribute.attribute_type}
+                              />
+                            )
+                          )}
+                        </div>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
+                </Content>
+                <BottomContainer>
+                  <Button type="secondary" size="large" onClick={resetFilters}>
+                    Clear all
+                  </Button>
+                  <Button
+                    type="primary"
+                    size="large"
+                    ref={applyButtonRef}
+                    onClick={applyFilters}
+                  >
+                    See results
+                  </Button>
+                </BottomContainer>
+                <CloseButton
+                  ref={closeButtonRef}
+                  onClick={onClose}
+                  aria-label="Close filter panel"
+                >
+                  <Cancel />
+                </CloseButton>
+              </PanelContainer>
+            </Backdrop>
+          ),
+          document.body
+        )}
     </>
   )
 }

@@ -102,6 +102,7 @@ const Rating = styled.h1`
 const PriceContainer = styled.div`
   display: flex;
   align-items: baseline;
+  color: var(--sc-color-deal-text);
 `
 
 const Price = styled.h1<{ sale?: boolean }>`
@@ -121,7 +122,7 @@ const Price = styled.h1<{ sale?: boolean }>`
 const OriginalPrice = styled.span`
   font-size: 16px;
   font-weight: 400;
-  color: gray;
+  color: var(--sc-color-deal-text);
   text-decoration: line-through;
 `
 

@@ -41,6 +41,7 @@ const IconContainer = styled.div`
   svg {
     width: 16px;
     height: 16px;
+    margin-right: 5px;
 
     path {
       fill: var(--sc-color-icon);
@@ -164,8 +165,8 @@ function NavItem(props) {
         onKeyDown={handleKeyDown}
         ref={userBtnRef}
         isOpen={isOpen}
-        aria-haspopup="true"
         aria-expanded={isOpen}
+        aria-label={isOpen ? "Close user dropdown" : "Open user dropdown"}
         className={`${initialLoad ? "initial-hidden" : ""} ${
           isOpen ? "arrow-icon-visible" : ""
         }`}

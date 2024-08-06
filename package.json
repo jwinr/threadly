@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.10",
+    "@react-spring/web": "^9.7.4",
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^2.4.0",
     "@szhsin/react-accordion": "^1.2.4",

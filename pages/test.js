@@ -1,32 +1,30 @@
 import React, { useState } from "react"
-import { useGeolocation } from "react-use"
+import { useSpring, animated } from "@react-spring/web"
 
-const LocationCard = () => {
-  const [showLocation, setShowLocation] = useState(false)
-  const state = useGeolocation()
+const Accordion = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(false)
 
-  const handleGetLocationClick = () => {
-    setShowLocation(true)
-  }
+  // Spring animation configuration
+  const springProps = useSpring({
+    height: isOpen ? "auto" : 0, // Animate height based on open/closed
+    overflow: "hidden", // Hide content when closed
+    config: {
+      // Adjust springiness
+      tension: 300,
+      friction: 20,
+    },
+  })
 
   return (
-    <div>
-      <button onClick={handleGetLocationClick}>Get My Location</button>
-
-      {showLocation && (
-        <div
-          style={{
-            boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
-            padding: "20px",
-            margin: "20px",
-          }}
-        >
-          <h3>Your Location:</h3>
-          {JSON.stringify(state, null, 2)}
-        </div>
-      )}
+    <div className="accordion">
+      <div className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
+        <h2>{title}</h2>
+      </div>
+      <animated.div style={springProps} className="accordion-content">
+        {children}
+      </animated.div>
     </div>
   )
 }
 
-export default LocationCard
+export default Accordion

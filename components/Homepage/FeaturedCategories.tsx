@@ -114,7 +114,7 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
                 {category.icon ? (
                   <Image
                     src={category.icon}
-                    alt={category.name}
+                    alt={""}
                     width={200}
                     height={200}
                   />

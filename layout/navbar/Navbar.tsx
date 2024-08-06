@@ -37,6 +37,7 @@ const NavbarFlex = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  gap: 20px;
   padding: 5px 20px;
 
   @media (max-width: 768px) {

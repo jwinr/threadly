@@ -96,7 +96,14 @@ function NavItem(props) {
         onClick={handleToggle}
       />
       {isMobileView ? (
-        <DropdownStyles.Button isOpen={!isOpen} onClick={onToggle}>
+        <DropdownStyles.Button
+          isOpen={!isOpen}
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          aria-label={
+            isOpen ? "Close category dropdown" : "Open category dropdown"
+          }
+        >
           <MobileDrawer />
         </DropdownStyles.Button>
       ) : (
@@ -105,8 +112,10 @@ function NavItem(props) {
           onKeyDown={handleKeyDown}
           ref={btnRef}
           isOpen={isOpen}
-          aria-haspopup="true"
           aria-expanded={isOpen}
+          aria-label={
+            isOpen ? "Close category dropdown" : "Open category dropdown"
+          }
           className={`${initialLoad ? "initial-hidden" : ""} ${
             isOpen ? "arrow-icon-visible" : ""
           }`}

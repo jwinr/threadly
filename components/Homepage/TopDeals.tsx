@@ -89,12 +89,12 @@ const PriceContainer = styled.div`
 
 const PriceText = styled.span`
   font-size: 12px;
-  color: gray;
+  color: var(--sc-color-deal-text);
 `
 
 const OriginalPrice = styled.span`
   font-size: 12px;
-  color: gray;
+  color: var(--sc-color-deal-text);
   text-decoration: line-through;
 `
 

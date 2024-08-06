@@ -4,8 +4,8 @@ import styled, { css } from "styled-components"
 import { RiArrowDownSLine } from "react-icons/ri"
 import Checkbox from "@/components/Elements/Checkbox"
 import { PiSlidersHorizontalLight } from "react-icons/pi"
-import FilterPanel from "./FilterPanel"
-import ActiveFilters from "./ActiveFilters"
+import FilterPanel from "@/components/Products/FilterPanel"
+import ActiveFilters from "@/components/Products/ActiveFilters"
 import Button from "@/components/Elements/Button"
 
 const Container = styled.div`
@@ -169,6 +169,7 @@ function ProductFilters({
   resetFilters,
   filterState,
   loading,
+  filtersVisible,
 }) {
   const maxVisibleFilters = 5
   const [isPanelMounted, setIsPanelMounted] = useState(false)
@@ -192,6 +193,14 @@ function ProductFilters({
 
   const [tempSelectedAttributes, setTempSelectedAttributes] = useState({})
   const [tempSelectedPriceRanges, setTempSelectedPriceRanges] = useState([])
+
+  // Close any open dropdown menus when the fixed filter container state changes (both visible or hidden)
+  useEffect(() => {
+    if (filtersVisible || !filtersVisible) {
+      setIsPriceDropdownOpen(false)
+      setIsAttributeDropdownOpen({})
+    }
+  }, [filtersVisible])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
