@@ -158,7 +158,7 @@ const ProductFilterContainer = styled.div`
   transform: translateY(0);
 
   @media (max-width: 768px) {
-    padding: 0px 16px;
+    top: 108px;
   }
 `
 

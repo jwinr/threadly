@@ -5,6 +5,7 @@ import Image from "next/image"
 import AddToCartButton from "./AddToCartButton"
 import AddToFavoritesButton from "./AddToFavoritesButton"
 import StarRatings from "../ReviewStars/StarRatings"
+import { useFavorites } from "@/context/FavoritesContext"
 
 const FavoritesWrapper = styled.div`
   margin-left: initial;
@@ -199,8 +200,9 @@ const Sale = styled.span`
   color: var(--sc-color-blue);
 `
 
-const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
+const FavoritesSection = ({ loadMoreFavorites, isMobileView }) => {
   const [showAll, setShowAll] = useState(false)
+  const { favorites, removeFavorite } = useFavorites()
 
   const handleShowAll = async () => {
     await loadMoreFavorites()
@@ -275,6 +277,9 @@ const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
                       <AddToFavoritesButton
                         productId={item.product_id}
                         productName={item.product_name}
+                        onRemove={() =>
+                          removeFavorite(userAttributes.sub, item.product_id)
+                        }
                       />
                     </FavButtonWrapper>
                   </InfoContainer>
@@ -308,6 +313,9 @@ const FavoritesSection = ({ favorites, loadMoreFavorites, isMobileView }) => {
                         <AddToFavoritesButton
                           productId={item.product_id}
                           productName={item.product_name}
+                          onRemove={() =>
+                            removeFavorite(userAttributes.sub, item.product_id)
+                          }
                         />
                       </FavButtonWrapper>
                     </FavoriteDetails>
