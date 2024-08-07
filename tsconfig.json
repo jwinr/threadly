@@ -28,7 +28,8 @@
     "**/*.tsx",
     "pages/api/webhooks/route.js",
     "pages/test.js",
-    "pages/test.js"
+    "pages/test.js",
+    "components/Elements/Popover.tsx"
   ],
   "exclude": ["node_modules"]
 }

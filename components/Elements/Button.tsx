@@ -67,12 +67,25 @@ const types = {
   `,
 }
 
+const DisabledOverlay = styled.div`
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  right: -1px;
+  z-index: 10;
+  opacity: 0.5;
+  transition: opacity 240ms;
+  position: absolute;
+  background-color: var(--sc-color-white);
+`
+
 const ButtonWrapper = styled.button<ButtonProps>`
   display: inline-flex;
   align-items: center;
   align-content: center;
   justify-content: center;
   font-weight: 600;
+  position: relative;
   gap: 6px;
   padding: var(--s1-padding-top) var(--s1-padding-right)
     var(--s1-padding-bottom) var(--s1-padding-left);
@@ -80,6 +93,7 @@ const ButtonWrapper = styled.button<ButtonProps>`
     var(--s1-keyline) 0 0 0 var(--s1-keyline-width), var(--s1-focus-ring),
     var(--s1-box-shadow);
   min-height: 28px;
+  user-select: none;
   transition-property: background-color, box-shadow;
   transition-timing-function: cubic-bezier(0, 0.09, 0.4, 1);
   transition-duration: 150ms;
@@ -104,7 +118,7 @@ const ButtonWrapper = styled.button<ButtonProps>`
   }
 
   &:focus-visible,
-  &:active {
+  :focus {
     --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
     outline: 1px solid transparent;
   }
@@ -159,6 +173,7 @@ const Button: React.FC<ButtonProps> = ({
         }}
       >
         {children}
+        {disabled && <DisabledOverlay />}
       </ButtonWrapper>
     )
   }
@@ -168,6 +183,7 @@ const Button: React.FC<ButtonProps> = ({
       size={size}
       type={type}
       disabled={disabled}
+      aria-disabled={disabled}
       onClick={(e) => {
         if (!disabled && onPress) {
           onPress(e)
@@ -175,6 +191,7 @@ const Button: React.FC<ButtonProps> = ({
       }}
     >
       {children}
+      {disabled && <DisabledOverlay />}
     </ButtonWrapper>
   )
 }

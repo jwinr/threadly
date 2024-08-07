@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import ReactDOM from "react-dom"
 
 import styled, { keyframes } from "styled-components"
@@ -69,10 +69,24 @@ const CloseButton = styled.button`
   cursor: pointer;
   position: absolute;
   right: 15px;
-  top: 24px;
+  top: 18px;
+  padding: 5px;
+
+  &:hover svg > path {
+    fill: #474e5a;
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 
   svg > path {
-    fill: var(--sc-color-white);
+    fill: #6c7688;
   }
 `
 
@@ -81,10 +95,11 @@ const Header = styled.div`
   align-items: center;
   text-align: left;
   width: 100%;
-  height: 63px;
+  height: 64px;
   padding: 20px;
-  color: var(--sc-color-white);
-  background-color: var(--sc-color-blue);
+  color: var(--sc-color-title);
+  border-bottom: 1px solid #d8dee4;
+  background-color: var(--sc-color-white);
 `
 
 const Content = styled.div`
@@ -113,6 +128,7 @@ const FilterPanel = ({
   applyFilters,
   isMounted,
 }) => {
+  const [shouldRender, setShouldRender] = useState(isOpen)
   const [isScrollDisabled, setIsScrollDisabled] = useScrollControl()
   const panelRef = useRef(null)
   const closeButtonRef = useRef(null)
@@ -123,6 +139,23 @@ const FilterPanel = ({
 
   const focusableSelectors =
     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+  const hasSelectedFilters = () => {
+    return (
+      selectedPriceRanges.length > 0 ||
+      Object.values(selectedAttributes).some((attr) => attr.length > 0)
+    )
+  }
+
+  // Update shouldRender based on isOpen. If isOpen becomes false, set a timeout to delay the removal of the panel by 300ms.
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true)
+    } else {
+      const timeoutId = setTimeout(() => setShouldRender(false), 300)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     setIsScrollDisabled(isOpen)
@@ -182,90 +215,89 @@ const FilterPanel = ({
   return (
     <>
       {isMounted &&
+        shouldRender &&
         ReactDOM.createPortal(
-          isOpen && (
-            <Backdrop isOpen={isOpen} onClick={onClose}>
-              <PanelContainer
-                ref={panelRef}
-                isOpen={isOpen}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Header>
-                  <h2>All filters</h2>
-                </Header>
-                <Content>
-                  <Accordion>
-                    <AccordionItem title="Price" defaultOpen={false}>
+          <Backdrop isOpen={isOpen} onClick={onClose}>
+            <PanelContainer
+              ref={panelRef}
+              isOpen={isOpen}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Header>
+                <h2>All filters</h2>
+              </Header>
+              <Content>
+                <Accordion>
+                  <AccordionItem title="Price" defaultOpen={false}>
+                    <div>
+                      {availablePriceRanges.map((priceRange, index) => (
+                        <Checkbox
+                          key={index}
+                          id={`price-${priceRange}`}
+                          label={priceRange}
+                          checked={selectedPriceRanges.includes(priceRange)}
+                          onChange={() =>
+                            toggleSelection("price", priceRange, true)
+                          }
+                          data-type="price"
+                        />
+                      ))}
+                    </div>
+                  </AccordionItem>
+                </Accordion>
+                {attributes.map((attribute, index) => (
+                  <Accordion key={index}>
+                    <AccordionItem
+                      title={attribute.attribute_type}
+                      defaultOpen={false}
+                    >
                       <div>
-                        {availablePriceRanges.map((priceRange, index) => (
+                        {attribute.attribute_values.map((value, valueIndex) => (
                           <Checkbox
-                            key={index}
-                            id={`price-${priceRange}`}
-                            label={priceRange}
-                            checked={selectedPriceRanges.includes(priceRange)}
+                            key={valueIndex}
+                            id={`attribute-${attribute.attribute_type}-${value}`}
+                            label={value}
+                            checked={selectedAttributes[
+                              attribute.attribute_type
+                            ]?.includes(value)}
                             onChange={() =>
-                              toggleSelection("price", priceRange, true)
+                              toggleSelection(attribute.attribute_type, value)
                             }
-                            data-type="price"
+                            data-type={attribute.attribute_type}
                           />
                         ))}
                       </div>
                     </AccordionItem>
                   </Accordion>
-                  {attributes.map((attribute, index) => (
-                    <Accordion key={index}>
-                      <AccordionItem
-                        title={attribute.attribute_type}
-                        defaultOpen={false}
-                      >
-                        <div>
-                          {attribute.attribute_values.map(
-                            (value, valueIndex) => (
-                              <Checkbox
-                                key={valueIndex}
-                                id={`attribute-${attribute.attribute_type}-${value}`}
-                                label={value}
-                                checked={selectedAttributes[
-                                  attribute.attribute_type
-                                ]?.includes(value)}
-                                onChange={() =>
-                                  toggleSelection(
-                                    attribute.attribute_type,
-                                    value
-                                  )
-                                }
-                                data-type={attribute.attribute_type}
-                              />
-                            )
-                          )}
-                        </div>
-                      </AccordionItem>
-                    </Accordion>
-                  ))}
-                </Content>
-                <BottomContainer>
-                  <Button type="secondary" size="large" onClick={resetFilters}>
-                    Clear all
-                  </Button>
-                  <Button
-                    type="primary"
-                    size="large"
-                    ref={applyButtonRef}
-                    onClick={applyFilters}
-                  >
-                    See results
-                  </Button>
-                </BottomContainer>
-                <CloseButton
-                  ref={closeButtonRef}
-                  onClick={onClose}
-                  aria-label="Close filter panel"
+                ))}
+              </Content>
+              <BottomContainer>
+                <Button
+                  type="secondary"
+                  size="large"
+                  onClick={resetFilters}
+                  disabled={!hasSelectedFilters()}
                 >
-                  <Cancel />
-                </CloseButton>
-              </PanelContainer>
-            </Backdrop>
-          ),
+                  Clear all
+                </Button>
+                <Button
+                  type="primary"
+                  size="large"
+                  ref={applyButtonRef}
+                  onClick={applyFilters}
+                >
+                  See results
+                </Button>
+              </BottomContainer>
+              <CloseButton
+                ref={closeButtonRef}
+                onClick={onClose}
+                aria-label="Close filter panel"
+              >
+                <Cancel />
+              </CloseButton>
+            </PanelContainer>
+          </Backdrop>,
           document.body
         )}
     </>

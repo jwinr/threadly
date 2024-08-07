@@ -1,30 +1,64 @@
-import React, { useState } from "react"
-import { useSpring, animated } from "@react-spring/web"
+import React from "react"
+import styled from "styled-components"
+import dynamic from "next/dynamic"
+import Popover from "@/components/Elements/Popover"
+import Button from "@/components/Elements/Button"
 
-const Accordion = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(false)
+// Styled-components for the container and buttons
+const Container = styled.div`
+  padding: 0px;
+  padding-top: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 20px; // Space between buttons
+  flex-wrap: wrap; // Allow wrapping to prevent overflow
+`
 
-  // Spring animation configuration
-  const springProps = useSpring({
-    height: isOpen ? "auto" : 0, // Animate height based on open/closed
-    overflow: "hidden", // Hide content when closed
-    config: {
-      // Adjust springiness
-      tension: 300,
-      friction: 20,
-    },
-  })
-
+const Example = () => {
   return (
-    <div className="accordion">
-      <div className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
-        <h2>{title}</h2>
-      </div>
-      <animated.div style={springProps} className="accordion-content">
-        {children}
-      </animated.div>
-    </div>
+    <Container>
+      <Popover
+        trigger="click"
+        position="bottom"
+        content={<div>This is the Popover content</div>}
+        showArrow={true}
+      >
+        <Button>Click me</Button>
+      </Popover>
+
+      <Popover
+        trigger="hover"
+        position="top"
+        content={<div>This is the Popover content</div>}
+        showArrow={true}
+      >
+        <Button>Hover over me</Button>
+      </Popover>
+
+      <Popover
+        trigger="focus"
+        position="right"
+        content={<div>This is the Popover content</div>}
+        showArrow={true}
+      >
+        <Button>Focus on me</Button>
+      </Popover>
+
+      <Popover
+        trigger="none"
+        position="left"
+        content={<div>This is the Popover content</div>}
+        showArrow={false}
+      >
+        <Button onClick={() => console.log("Custom trigger")}>
+          Manual trigger
+        </Button>
+      </Popover>
+    </Container>
   )
 }
 
-export default Accordion
+// Ensure this component is only rendered on the client side
+export default dynamic(() => Promise.resolve(Example), {
+  ssr: false,
+})
