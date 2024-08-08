@@ -7,11 +7,16 @@ import PropFilter from "../../utils/PropFilter"
 
 const PaginationWrapper = styled.div`
   display: flex;
-  grid-area: pagination;
   padding: 30px;
   justify-content: center;
   align-items: center;
+  align-self: center;
   width: fit-content;
+
+  @media (max-width: 768px) {
+    margin-top: 8px;
+    padding: 16px;
+  }
 `
 
 const PaginationButton = styled(PropFilter("button")(["isActive"]))`

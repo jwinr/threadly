@@ -42,7 +42,7 @@ export const Button = styled(PropFilter("button")(["isOpen"]))`
   font-weight: 500;
   cursor: pointer;
   color: var(--sc-color-text);
-  padding-left: 16px;
+  padding-left: 8px;
   padding-right: 8px;
   height: 100%;
   border-radius: 10px;
@@ -54,6 +54,11 @@ export const Button = styled(PropFilter("button")(["isOpen"]))`
 
   svg {
     fill: var(--sc-color-icon);
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &:hover {
@@ -95,10 +100,6 @@ export const Button = styled(PropFilter("button")(["isOpen"]))`
 
     &:active {
       background-color: var(--sc-color-white-highlight);
-    }
-
-    &:hover {
-      background-color: transparent;
     }
   }
 `

@@ -14,21 +14,27 @@ const NavbarContainer = styled.div`
   display: flex;
   position: sticky;
   background-color: var(--sc-color-white);
-  box-shadow: 0 8px 21px -12px rgba(0, 0, 0, 0.2);
   top: 0;
   height: 64px;
   z-index: 300;
 
   @media (max-width: 768px) {
     display: block;
+    height: 125px;
   }
 `
 
 const NavbarWrapper = styled.div`
   background-color: var(--sc-color-white) !important;
-  border-bottom: 1px solid #e4e4e4;
   padding: 7px 0px 7px 0px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px -1px 2px, rgba(0, 0, 0, 0.04) 0px 1px 2px,
+    rgba(0, 0, 0, 0.04) 0px 3px 4px;
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0px 0px 0px 0px;
+    height: 100%;
+  }
 `
 
 const NavbarFlex = styled.div`
@@ -42,6 +48,21 @@ const NavbarFlex = styled.div`
 
   @media (max-width: 768px) {
     flex-wrap: wrap;
+    gap: 0;
+  }
+`
+
+const MobileFlexContainer = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    position: relative;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
   }
 `
 
@@ -60,11 +81,14 @@ const Logo = styled.a`
   }
 
   @media (max-width: 768px) {
-    flex: 1 1 auto;
-    padding-left: 77px; // Using an entire button width x 1.75
-    padding-right: 23px; // Button width x 0.75 (smaller value since we have two buttons on the right side) - 10px (margin for the user dropdown button)
-    padding-top: 0;
-    order: 1; // Center element on mobile layouts
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 44px;
+    width: 75px;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    margin: 0;
   }
 `
 
@@ -97,23 +121,44 @@ const Navbar: FC<NavbarProps> = ({
   return (
     <NavbarContainer>
       <NavbarWrapper>
-        <NavbarFlex>
-          <Logo href="/" aria-label="Home">
-            <BannerLogo alt="Nexari Logo" />
-          </Logo>
-          <CategoryDropdown
-            isOpen={openDropdown === "category"}
-            onToggle={() => handleToggle("category")}
-          />
-          {!isMobileView && <SearchBar />}
-          <UserDropdown
-            isOpen={openDropdown === "user"}
-            onToggle={() => handleToggle("user")}
-            aria-label="User Menu"
-          />
-          <CartIcon aria-label="Shopping Cart" />
-          {isMobileView && <SearchBar />}
-        </NavbarFlex>
+        {!isMobileView && (
+          <>
+            <NavbarFlex>
+              <Logo href="/" aria-label="Home">
+                <BannerLogo alt="Nexari Logo" />
+              </Logo>
+              <CategoryDropdown
+                isOpen={openDropdown === "category"}
+                onToggle={() => handleToggle("category")}
+              />
+              <SearchBar />
+              <UserDropdown
+                isOpen={openDropdown === "user"}
+                onToggle={() => handleToggle("user")}
+                aria-label="User Menu"
+              />
+              <CartIcon aria-label="Shopping Cart" />
+            </NavbarFlex>
+          </>
+        )}
+        {isMobileView && (
+          <MobileFlexContainer>
+            <CategoryDropdown
+              isOpen={openDropdown === "category"}
+              onToggle={() => handleToggle("category")}
+            />
+            <Logo href="/" aria-label="Home">
+              <BannerLogo alt="Nexari Logo" />
+            </Logo>
+            <UserDropdown
+              isOpen={openDropdown === "user"}
+              onToggle={() => handleToggle("user")}
+              aria-label="User Menu"
+            />
+            <CartIcon aria-label="Shopping Cart" />
+          </MobileFlexContainer>
+        )}
+        {isMobileView && <SearchBar />}
       </NavbarWrapper>
     </NavbarContainer>
   )

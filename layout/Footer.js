@@ -20,6 +20,22 @@ const FooterContainer = styled.footer`
   padding: 25px 0px;
   justify-content: space-evenly;
 
+  a {
+    line-height: 24px;
+    color: var(--sc-color-title);
+    transition: var(--hoverTransition);
+    transition-property: color, opacity;
+
+    &:hover {
+      opacity: 0.6;
+    }
+
+    &:focus:not(:focus-visible) {
+      --s-focus-ring: 0;
+      opacity: 1;
+    }
+  }
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -43,9 +59,9 @@ const SlimFooter = styled.div`
 `
 
 const FooterColumnContainer = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly; /* Distribute the columns evenly */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -58,8 +74,8 @@ const FooterColumnContainer = styled.div`
 const FooterColumn = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 30%; /* Ensuring each column has equal width */
+  padding: 0 32px;
+  text-align: left;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -68,7 +84,7 @@ const FooterColumn = styled.div`
 
 const FooterTitle = styled.div`
   font-weight: bold;
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 10px;
   color: var(--sc-color-title);
 
@@ -81,13 +97,7 @@ const FooterLink = styled.div`
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  margin: 3px;
-  transition: var(--hoverTransition);
-  transition-property: color, opacity;
-
-  &:hover {
-    opacity: 0.5;
-  }
+  margin: 4px 0;
 
   @media (max-width: 768px) {
     font-size: 11px;
@@ -188,33 +198,33 @@ const Footer = () => {
               <FooterColumnContainer>
                 <FooterColumn>
                   <FooterTitle>About Us</FooterTitle>
-                  <a href="/about-us">
-                    <FooterLink>About Nexari</FooterLink>
-                  </a>
-                  <a href="/careers">
-                    <FooterLink>Careers</FooterLink>
-                  </a>
-                  <a href="/accessibility">
-                    <FooterLink>Accessibility Commitment</FooterLink>
-                  </a>
+                  <FooterLink>
+                    <a href="/about-us">About Nexari</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/careers">Careers</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/accessibility">Accessibility Commitment</a>
+                  </FooterLink>
                 </FooterColumn>
                 <FooterColumn>
                   <FooterTitle>Customer Service</FooterTitle>
-                  <a href="/hc">
-                    <FooterLink>Help Center</FooterLink>
-                  </a>
-                  <a href="/return-policy">
-                    <FooterLink>Returns</FooterLink>
-                  </a>
-                  <a href="/shipping-policy">
-                    <FooterLink>Shipping</FooterLink>
-                  </a>
-                  <a href="/contact-us">
-                    <FooterLink>Contact Us</FooterLink>
-                  </a>
-                  <a href="/hc">
-                    <FooterLink>Order Status</FooterLink>
-                  </a>
+                  <FooterLink>
+                    <a href="/hc">Help Center</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/return-policy">Returns</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/shipping-policy">Shipping</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/contact-us">Contact Us</a>
+                  </FooterLink>
+                  <FooterLink>
+                    <a href="/hc">Order Status</a>
+                  </FooterLink>
                 </FooterColumn>
                 <FooterColumn>
                   <FooterTitle>Follow Us</FooterTitle>

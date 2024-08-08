@@ -28,6 +28,7 @@ const CardContainer = styled.div<{ isLoading: boolean }>`
     `}
 
   @media (max-width: 768px) {
+    min-height: 100%;
     flex-direction: row;
     flex-wrap: wrap;
   }

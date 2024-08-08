@@ -29,8 +29,11 @@ const Dropdown = styled(DropdownStyles.Dropdown)`
 `
 
 const UserButton = styled(DropdownStyles.Button)`
+  padding-left: 16px;
   @media (max-width: 768px) {
     order: 2; // Between the logo and cart icon on mobile layouts
+    margin-left: auto;
+    margin-right: 8px;
   }
 `
 
@@ -52,6 +55,7 @@ const IconContainer = styled.div`
     svg {
       width: 18px;
       height: 18px;
+      margin-right: 0;
     }
   }
 `

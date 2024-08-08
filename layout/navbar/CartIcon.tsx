@@ -18,6 +18,7 @@ const Container = styled.a`
 
   @media (max-width: 768px) {
     order: 3; // Top-right element on mobile layouts
+    height: auto;
   }
 `
 
@@ -82,25 +83,6 @@ const CartCircle = styled.div`
   &:hover {
     > button {
       background-color: var(--sc-color-white-highlight);
-    }
-  }
-`
-
-const Wrapper = styled.div`
-  justify-content: center;
-  display: grid;
-
-  svg > path {
-    fill: var(--sc-color-icon);
-  }
-
-  @media (max-width: 768px) {
-    width: fit-content;
-    height: fit-content;
-
-    svg {
-      width: 20px;
-      height: 20px;
     }
   }
 `
