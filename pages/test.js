@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import styled from "styled-components"
 import dynamic from "next/dynamic"
 import Popover from "@/components/Elements/Popover"
@@ -15,13 +15,15 @@ const Container = styled.div`
 `
 
 const Example = () => {
+  const elementRef = useRef(null)
   return (
     <Container>
       <Popover
         trigger="click"
         position="bottom"
         content={<div>This is the Popover content</div>}
-        showArrow={true}
+        showArrow={false}
+        ref={elementRef}
       >
         <Button>Click me</Button>
       </Popover>

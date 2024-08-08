@@ -18,6 +18,8 @@ const CardContainer = styled.div<{ isLoading: boolean }>`
   border-radius: 8px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   height: 100%;
+  max-height: 475px;
+  min-height: 475px;
 
   ${({ isLoading }) =>
     !isLoading &&
