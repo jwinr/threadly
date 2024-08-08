@@ -1,16 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from "react"
-import ReactDOM from "react-dom"
 import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
 import PopArrow from "@/public/images/icons/popoverArrow.svg"
-
-let popoverPortal: HTMLDivElement | null = null
-
-if (typeof document !== "undefined") {
-  popoverPortal = document.createElement("div")
-  popoverPortal.id = "popover-portal"
-  document.body.appendChild(popoverPortal)
-}
+import PortalWrapper from "@/components/Elements/PortalWrapper"
 
 const PopoverWrapper = styled.div`
   position: absolute;
@@ -141,9 +133,11 @@ const Popover: React.FC<PopoverProps> = ({
       const scrollX = window.scrollX
       const scrollY = window.scrollY
 
+      const arrowAdjustment = showArrow ? 10 : 5
+
       const positions = {
         top: {
-          top: triggerRect.top + scrollY - scaledHeight - 10,
+          top: triggerRect.top + scrollY - scaledHeight - arrowAdjustment,
           left:
             triggerRect.left +
             scrollX +
@@ -151,7 +145,7 @@ const Popover: React.FC<PopoverProps> = ({
             scaledWidth / 2,
         },
         bottom: {
-          top: triggerRect.bottom + scrollY + 11,
+          top: triggerRect.bottom + scrollY + arrowAdjustment + 1,
           left:
             triggerRect.left +
             scrollX +
@@ -164,7 +158,7 @@ const Popover: React.FC<PopoverProps> = ({
             scrollY +
             triggerRect.height / 2 -
             scaledHeight / 2,
-          left: triggerRect.left + scrollX - scaledWidth - 10,
+          left: triggerRect.left + scrollX - scaledWidth - arrowAdjustment,
         },
         right: {
           top:
@@ -172,7 +166,7 @@ const Popover: React.FC<PopoverProps> = ({
             scrollY +
             triggerRect.height / 2 -
             scaledHeight / 2,
-          left: triggerRect.right + scrollX + 10,
+          left: triggerRect.right + scrollX + arrowAdjustment,
         },
       }
 
@@ -300,10 +294,8 @@ const Popover: React.FC<PopoverProps> = ({
       >
         {children}
       </div>
-      {content &&
-        content !== "" &&
-        popoverPortal &&
-        ReactDOM.createPortal(
+      {content && content !== "" && (
+        <PortalWrapper>
           <PopoverWrapper
             ref={wrapperRef}
             style={{
@@ -327,9 +319,9 @@ const Popover: React.FC<PopoverProps> = ({
                 <PopoverContainer>{content}</PopoverContainer>
               </PopoverTransitionContainer>
             </CSSTransition>
-          </PopoverWrapper>,
-          popoverPortal
-        )}
+          </PopoverWrapper>
+        </PortalWrapper>
+      )}
     </>
   )
 }
