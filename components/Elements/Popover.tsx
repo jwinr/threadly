@@ -4,6 +4,14 @@ import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
 import PopArrow from "@/public/images/icons/popoverArrow.svg"
 
+let popoverPortal: HTMLDivElement | null = null
+
+if (typeof document !== "undefined") {
+  popoverPortal = document.createElement("div")
+  popoverPortal.id = "popover-portal"
+  document.body.appendChild(popoverPortal)
+}
+
 const PopoverWrapper = styled.div`
   position: absolute;
   z-index: 1000;
@@ -52,7 +60,7 @@ const PopoverContainer = styled.div`
   max-width: 300px;
 `
 
-const Arrow = styled(PopArrow)<{ position: string }>`
+const Arrow = styled(PopArrow)<{ position: string; offset: number }>`
   position: absolute;
   width: 21px;
   height: 9px;
@@ -60,36 +68,32 @@ const Arrow = styled(PopArrow)<{ position: string }>`
   & path {
     color: #fff;
   }
-  ${({ position }) =>
+  ${({ position, offset }) =>
     position === "top" &&
     `
     transform: rotate(180deg);
     bottom: -9px;
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg);
+    left: calc(50% - 10.5px + ${offset}px);
   `}
-  ${({ position }) =>
+  ${({ position, offset }) =>
     position === "bottom" &&
     `
     top: -9px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: calc(50% - 10.5px + ${offset}px);
   `}
-  ${({ position }) =>
+  ${({ position, offset }) =>
     position === "left" &&
     `
     transform: rotate(90deg);
     right: -14px;
-    top: 50%;
-    transform: translateY(-50%) rotate(90deg);
+    top: calc(50% - 4.5px + ${offset}px);
   `}
-  ${({ position }) =>
+  ${({ position, offset }) =>
     position === "right" &&
     `
     transform: rotate(-90deg);
     left: -14px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
+    top: calc(50% - 4.5px + ${offset}px);
   `}
 `
 
@@ -120,6 +124,7 @@ const Popover: React.FC<PopoverProps> = ({
 }) => {
   const [visible, setVisible] = useState(false)
   const [coords, setCoords] = useState({ top: 0, left: 0 })
+  const [arrowOffset, setArrowOffset] = useState(0)
   const triggerRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -176,11 +181,28 @@ const Popover: React.FC<PopoverProps> = ({
       if (top < 0) top = 10
       if (left < 0) left = 10
       if (top + wrapperRect.height > viewportHeight + scrollY)
-        top = viewportHeight + scrollY - wrapperRect.height - 10
+        top = viewportHeight + scrollY - wrapperRect.height - 20
       if (left + wrapperRect.width > viewportWidth + scrollX)
-        left = viewportWidth + scrollX - wrapperRect.width - 10
+        left = viewportWidth + scrollX - wrapperRect.width - 20
+
+      // Calculate the arrow offset
+      let offset
+      if (position === "top" || position === "bottom") {
+        offset =
+          triggerRect.left +
+          triggerRect.width / 2 -
+          left -
+          wrapperRect.width / 2
+      } else {
+        offset =
+          triggerRect.top +
+          triggerRect.height / 2 -
+          top -
+          wrapperRect.height / 2
+      }
 
       setCoords({ top, left })
+      setArrowOffset(offset)
     }
   }
 
@@ -208,8 +230,10 @@ const Popover: React.FC<PopoverProps> = ({
     }
 
     window.addEventListener("scroll", handleScroll)
+    window.addEventListener("resize", calculatePosition)
     return () => {
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", calculatePosition)
     }
   }, [])
 
@@ -278,6 +302,7 @@ const Popover: React.FC<PopoverProps> = ({
       </div>
       {content &&
         content !== "" &&
+        popoverPortal &&
         ReactDOM.createPortal(
           <PopoverWrapper
             ref={wrapperRef}
@@ -296,12 +321,14 @@ const Popover: React.FC<PopoverProps> = ({
               onEnter={calculatePosition}
             >
               <PopoverTransitionContainer>
-                {showArrow && <Arrow position={position} />}
+                {showArrow && (
+                  <Arrow position={position} offset={arrowOffset} />
+                )}
                 <PopoverContainer>{content}</PopoverContainer>
               </PopoverTransitionContainer>
             </CSSTransition>
           </PopoverWrapper>,
-          document.body
+          popoverPortal
         )}
     </>
   )
