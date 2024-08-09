@@ -3,12 +3,8 @@ import styled from "styled-components"
 import { IoMail } from "react-icons/io5"
 
 const ContactPageWrapper = styled.div`
-  display: grid;
-  grid-template-areas:
-    "header"
-    "card";
+  display: flex;
   padding: 30px;
-  gap: 20px;
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -16,9 +12,10 @@ const ContactPageWrapper = styled.div`
 `
 
 const HeaderText = styled.h1`
-  font-weight: 800;
-  font-size: 32px;
+  font-weight: 700;
+  font-size: 56px;
   margin-bottom: 10px;
+  color: var(--sc-color-title);
 `
 
 const SubheaderText = styled.h2`
@@ -41,8 +38,8 @@ const ContactCard = styled.div`
   display: flex;
   justify-self: center;
   align-self: center;
-  grid-area: card;
-  box-shadow: 6px 6px 14px 1px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25),
+    0 18px 36px -18px rgba(0, 0, 0, 0.3);
 `
 
 const CardDetails = styled.div`

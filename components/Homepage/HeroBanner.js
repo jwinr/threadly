@@ -15,6 +15,8 @@ const HeroBannerContainer = styled.div`
   overflow: hidden;
   margin: 20px 0;
   height: 500px;
+  box-shadow: 0px 8px 16px -8px rgba(0, 0, 0, 0.1),
+    0px 13px 27px -12px rgba(50, 50, 93, 0.25);
 
   @media (max-width: 768px) {
     height: 390px;

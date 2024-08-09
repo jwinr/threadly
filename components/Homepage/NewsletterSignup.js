@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import styled, { keyframes } from "styled-components"
 import PropFilter from "../../utils/PropFilter"
+import Button from "../Elements/Button"
 
 const formFilter = PropFilter("form")
 
@@ -11,9 +12,10 @@ const NewsletterContainer = styled.div`
 
 const NewsletterTitle = styled.h2`
   text-align: center;
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 600;
   margin-bottom: 25px;
+  color: var(--sc-color-title);
 `
 
 const NewsletterSubtitle = styled.p`
@@ -37,22 +39,6 @@ const NewsletterInput = styled.input`
 
   @media (max-width: 768px) {
     min-width: auto;
-  }
-`
-
-const NewsletterButton = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: var(--sc-color-blue);
-  color: var(--sc-color-white);
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: var(--sc-color-dark-blue);
   }
 `
 
@@ -122,7 +108,9 @@ const NewsletterSignup = () => {
               borderColor: emailValid ? "var(--sc-color-border-gray)" : "red",
             }}
           />
-          <NewsletterButton>Subscribe</NewsletterButton>
+          <Button type="primary" size="large">
+            Subscribe
+          </Button>
         </NewsletterForm>
       )}
     </NewsletterContainer>

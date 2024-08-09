@@ -24,9 +24,10 @@ const Section = styled.section`
 
 const Title = styled.h2`
   text-align: center;
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 600;
   margin-bottom: 20px;
+  color: var(--sc-color-title);
 `
 
 const AnimatedTitle = styled(Title)<{ className: string }>`

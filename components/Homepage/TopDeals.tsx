@@ -52,6 +52,14 @@ const ItemContainer = styled.div`
   flex-direction: column;
   align-items: start;
 
+  a {
+    color: var(--sc-color-text);
+
+    &:focus:not(:focus-visible) {
+      --s-focus-ring: 0;
+    }
+  }
+
   @media (max-width: 768px) {
     width: auto;
   }
@@ -101,6 +109,12 @@ const OriginalPrice = styled.span`
 const Price = styled.h1`
   font-size: 14px;
   font-weight: bold;
+  color: var(--sc-color-blue);
+`
+
+const SaleText = styled.span`
+  font-size: 12px;
+  color: var(--sc-color-blue);
 `
 
 const ButtonWrapper = styled.div`
@@ -250,6 +264,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                       <PriceText>
                         reg <OriginalPrice>${deal.price}</OriginalPrice>
                       </PriceText>
+                      <SaleText>Sale</SaleText>
                     </PriceContainer>
                   </DetailWrapper>
                 </Link>
@@ -288,6 +303,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                   <PriceText>
                     reg <OriginalPrice>${deal.price}</OriginalPrice>
                   </PriceText>
+                  <SaleText>Sale</SaleText>
                 </PriceContainer>
               </DetailWrapper>
             </Link>

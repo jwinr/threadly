@@ -43,11 +43,13 @@ const PopoverTransitionContainer = styled.div`
   }
 `
 
-const PopoverContainer = styled.div`
-  background: white;
+const PopoverContainer = styled.div<{ color: string; padding: string }>`
+  color: ${({ color }) => (color === "dark" ? "white" : "initial")};
+  background: ${({ color }) =>
+    color === "dark" ? "var(--sc-color-gray-700)" : "white"};
   box-shadow: 0 0 0 1px #8898aa1a, 0 15px 35px #31315d1a, 0 5px 15px #00000014;
   border-radius: 6px;
-  padding: 20px;
+  padding: ${({ padding }) => padding};
   font-size: 14px;
   max-width: 300px;
 `
@@ -57,9 +59,11 @@ const Arrow = styled(PopArrow)<{ position: string; offset: number }>`
   width: 21px;
   height: 9px;
 
-  & path {
-    color: #fff;
+  & svg > path {
+    color: ${({ color }) =>
+      color === "dark" ? "var(--sc-color-gray-700)" : "#fff"};
   }
+
   ${({ position, offset }) =>
     position === "top" &&
     `
@@ -95,6 +99,8 @@ interface PopoverProps {
   content: React.ReactNode
   children: React.ReactNode
   showArrow?: boolean
+  color?: "light" | "dark"
+  padding?: string
 }
 
 /**
@@ -105,6 +111,8 @@ interface PopoverProps {
  * @param {React.ReactNode} props.content - The content to be displayed inside the popover.
  * @param {"top" | "bottom" | "left" | "right"} [props.placement="bottom"] - The preferred placement of the popover.
  * @param {boolean} [props.showArrow=true] - Whether to show an arrow pointing to the trigger element.
+ * @param {"light" | "dark"} [props.color="light"] - The color theme of the popover.
+ * @param {string} [props.padding="20px"] - The padding for the content inside the popover.
  * @returns {JSX.Element} The rendered popover component.
  */
 const Popover: React.FC<PopoverProps> = ({
@@ -113,6 +121,8 @@ const Popover: React.FC<PopoverProps> = ({
   content,
   children,
   showArrow = true,
+  color = "light",
+  padding = "20px",
 }) => {
   const [visible, setVisible] = useState(false)
   const [coords, setCoords] = useState({ top: 0, left: 0 })
@@ -316,7 +326,9 @@ const Popover: React.FC<PopoverProps> = ({
                 {showArrow && (
                   <Arrow position={position} offset={arrowOffset} />
                 )}
-                <PopoverContainer>{content}</PopoverContainer>
+                <PopoverContainer color={color} padding={padding}>
+                  {content}
+                </PopoverContainer>
               </PopoverTransitionContainer>
             </CSSTransition>
           </PopoverWrapper>

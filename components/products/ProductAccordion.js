@@ -4,8 +4,8 @@ import ProductSpecifications from "@/components/Products/ProductSpecifications"
 import ProductReviews from "@/components/Products/ProductReviews"
 import ProductHighlights from "@/components/Products/ProductHighlights"
 import ProductIncludes from "@/components/Products/ProductIncludes"
-import Accordion from "@/components/Elements/Accordion" // Adjust the path as necessary
-import AccordionItem from "@/components/Elements/AccordionItem" // Adjust the path as necessary
+import Accordion from "@/components/Elements/Accordion"
+import AccordionItem from "@/components/Elements/AccordionItem"
 
 const AccordionWrapper = styled.div`
   padding: 15px;
@@ -40,9 +40,7 @@ const ProductDescription = styled.div`
   }
 `
 
-const ProductAccordion = ({ product, openSection }) => {
-  const [initialLoad, setInitialLoad] = useState(true)
-
+const ProductAccordion = ({ product }) => {
   return (
     <AccordionWrapper>
       <Accordion>

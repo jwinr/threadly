@@ -57,6 +57,7 @@ const Logo = styled.div`
 const HeaderText = styled.div`
   font-size: 23px;
   font-weight: 600;
+  color: var(--sc-color-title);
 `
 
 const FeatureHighlights = () => {

@@ -73,8 +73,8 @@ export const Header = styled.h1`
 export const Subtitle = styled.div<LoadingProps>`
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};
   border-radius: 6px;
-  min-height: 20px;
-  width: ${({ loading }) => (loading ? "200px" : "fit-content")};
+  min-height: ${({ loading }) => (loading ? "28px" : "20px")};
+  width: ${({ loading }) => (loading ? "300px" : "fit-content")};
   ${({ loading }) =>
     loading &&
     css`
@@ -89,9 +89,10 @@ export const Subtitle = styled.div<LoadingProps>`
     `}
 
   h1 {
-    display: ${({ loading }) => (loading ? "none" : "initial")};
+    display: ${({ loading }) => (loading ? "none" : "flex")};
     font-size: 19px;
     font-weight: 700;
+    align-items: center;
   }
 `
 

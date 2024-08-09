@@ -1,16 +1,6 @@
-import React, { useState } from "react"
-import styled, { keyframes } from "styled-components"
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(10%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0%);
-  }
-`
+import React from "react"
+import styled from "styled-components"
+import Popover from "@/components/Elements/Popover"
 
 const ProductSpecs = styled.div`
   grid-area: specs;
@@ -41,14 +31,15 @@ const SpecsName = styled.span`
   font-size: 14px;
   font-weight: bold;
   position: relative;
+  gap: 10px;
+  display: flex;
+  align-items: center;
 `
 
 const InfoButton = styled.button`
   appearance: none;
   border: 0;
   background-color: transparent;
-  padding-left: 10px;
-  margin: 0;
   font-size: 13px;
   display: inline-flex;
   align-items: center;
@@ -69,85 +60,6 @@ const InfoButton = styled.button`
     justify-content: center;
   }
 `
-
-const InfoTooltip = styled.div`
-  position: absolute;
-  background-color: var(--sc-color-text);
-  color: var(--sc-color-white);
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 13px;
-  font-weight: normal;
-  bottom: calc(100% + 15px);
-  text-align: left;
-  box-shadow: 0 0 10px rgba(black, 0.3);
-  animation: ${fadeIn} 0.2s ease;
-
-  &:after {
-    border-right: solid 10px transparent;
-    border-left: solid 10px transparent;
-    border-top: solid 10px var(--sc-color-text);
-    transform: translateX(-50%);
-    position: absolute;
-    z-index: -1;
-    content: "";
-    top: 100%;
-    left: 50%;
-    height: 0;
-    width: 0;
-  }
-
-  .attribute-name {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-`
-
-const SpecsNameWithIcon = ({ hasAdditionalInfo, attribute_name, children }) => {
-  const [showTooltip, setShowTooltip] = useState(false)
-
-  const handleMouseEnter = () => {
-    setShowTooltip(true)
-  }
-
-  const handleMouseLeave = () => {
-    setShowTooltip(false)
-  }
-
-  return (
-    <SpecsName>
-      {children}
-      {hasAdditionalInfo && (
-        <InfoButton
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <span className="info-icon">i</span>
-          {showTooltip && (
-            <InfoTooltip>
-              <div className="attribute-name">{attribute_name}</div>
-              {hasAdditionalInfo}
-            </InfoTooltip>
-          )}
-        </InfoButton>
-      )}
-    </SpecsName>
-  )
-}
-
-const Tooltip = ({ attribute_name, hasAdditionalInfo }) => {
-  if (!hasAdditionalInfo) {
-    return null // Don't render the InfoTooltip if there's no additional info
-  }
-
-  return (
-    <InfoTooltip>
-      <div className="attribute-name">{attribute_name}</div>
-      {hasAdditionalInfo}
-    </InfoTooltip>
-  )
-}
 
 const SpecsValue = styled.span`
   grid-area: value;
@@ -178,38 +90,46 @@ const ProductSpecifications = ({ attributes }) => {
                 <LineBreak />
                 <SpecsItem key={index}>
                   <SpecsCat>{spec.category_name}</SpecsCat>
-                  <SpecsNameWithIcon
-                    hasAdditionalInfo={spec.additional_info}
-                    attribute_name={spec.attribute_name}
-                  >
+                  <SpecsName>
                     {spec.attribute_name}
-                  </SpecsNameWithIcon>
+                    {spec.additional_info && (
+                      <Popover
+                        trigger="hover"
+                        content={spec.additional_info}
+                        color="dark"
+                        padding="10px"
+                        position="top"
+                      >
+                        <InfoButton>
+                          <span className="info-icon">i</span>
+                        </InfoButton>
+                      </Popover>
+                    )}
+                  </SpecsName>
                   <SpecsValue>{spec.attribute_value}</SpecsValue>
                 </SpecsItem>
-                {spec.additional_info && (
-                  <Tooltip
-                    attribute_name={spec.attribute_name}
-                    hasAdditionalInfo={spec.additional_info}
-                  />
-                )}
               </React.Fragment>
             )
           } else {
             return (
               <SpecsItem key={index}>
-                <SpecsNameWithIcon
-                  hasAdditionalInfo={spec.additional_info}
-                  attribute_name={spec.attribute_name}
-                >
+                <SpecsName>
                   {spec.attribute_name}
-                </SpecsNameWithIcon>
+                  {spec.additional_info && (
+                    <Popover
+                      trigger="hover"
+                      content={spec.additional_info}
+                      color="dark"
+                      padding="10px"
+                      position="top"
+                    >
+                      <InfoButton>
+                        <span className="info-icon">i</span>
+                      </InfoButton>
+                    </Popover>
+                  )}
+                </SpecsName>
                 <SpecsValue>{spec.attribute_value}</SpecsValue>
-                {spec.additional_info && (
-                  <Tooltip
-                    attribute_name={spec.attribute_name}
-                    hasAdditionalInfo={spec.additional_info}
-                  />
-                )}
               </SpecsItem>
             )
           }

@@ -12,6 +12,7 @@ interface PasswordRevealProps {
 
 const Container = styled.button`
   position: absolute;
+  top: 9px;
   right: 5px;
   padding: 2px;
   border-radius: 15px;

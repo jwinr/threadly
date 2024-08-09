@@ -18,8 +18,8 @@ const InputForm = styled.form`
 const SearchContainer = styled.div`
   position: relative;
   display: flex;
-  flex: 1 1 auto;
-  margin: 0 20px;
+  width: 50%;
+  margin-right: auto;
 
   @media (max-width: 768px) {
     padding: 0 20px;

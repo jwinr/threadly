@@ -125,15 +125,27 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const contentRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
 
+  // Register the item when it is mounted
   useEffect(() => {
     registerItem(itemRef.current, headerRef)
   }, [registerItem])
 
+  // Handle the defaultOpen prop on the first render
+  useEffect(() => {
+    if (defaultOpen) {
+      setIsOpen(true)
+      const index = getItemIndex(itemRef.current)
+      setOpenIndex(index)
+    }
+  }, [defaultOpen, getItemIndex, setOpenIndex])
+
+  // Update isOpen based on changes in openIndices
   useEffect(() => {
     const index = getItemIndex(itemRef.current)
     setIsOpen(openIndices.includes(index))
   }, [openIndices, getItemIndex])
 
+  // Set the height of the content based on whether it is open or closed
   useEffect(() => {
     if (contentRef.current) {
       setHeight(isOpen ? contentRef.current.scrollHeight : 0)
@@ -145,6 +157,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     setOpenIndex(index)
   }
 
+  // Notify parent of change in state
   useEffect(() => {
     if (onChange) {
       onChange(isOpen)

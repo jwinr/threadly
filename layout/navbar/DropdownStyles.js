@@ -13,10 +13,9 @@ export const Dropdown = styled.div`
   overflow: hidden;
   z-index: -100;
   box-sizing: content-box;
-  transition: visibility 0s, transform 0.3s cubic-bezier(0.3, 0.85, 0, 1),
-    height var(--speed) ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), height 340ms ease;
   left: ${(props) => props.left}px;
-  transform: translateY(-1000px); // Initially move it up slightly and hide
+  transform: translateY(-800px); // Initially move it up slightly and hide
 
   &.visible {
     visibility: visible;
@@ -24,11 +23,11 @@ export const Dropdown = styled.div`
   }
 
   &.invisible {
-    transform: translateY(-1000px);
+    transform: translateY(-800px);
   }
 
   &.initial-hidden {
-    transform: translateY(-1000px);
+    transform: translateY(-800px);
     transition: none;
   }
 
