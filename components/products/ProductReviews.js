@@ -90,7 +90,7 @@ const WriteReviewButton = styled.button`
   font-size: 12px;
   font-weight: bold;
   border-radius: 4px;
-  background-color: var(--sc-color-blue);
+  background-color: var(--sc-color-carnation);
   height: 32px;
   color: var(--sc-color-white);
   border: none;

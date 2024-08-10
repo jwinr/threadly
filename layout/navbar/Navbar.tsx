@@ -68,13 +68,12 @@ const MobileFlexContainer = styled.div`
 
 const Logo = styled.a`
   display: flex;
-  width: 100px;
+  width: 125px;
   height: 100%;
   align-items: center;
   border: 1px transparent;
   border-radius: 10px;
   padding: 2px;
-  margin-right: 20px;
 
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
@@ -125,7 +124,7 @@ const Navbar: FC<NavbarProps> = ({
           <>
             <NavbarFlex>
               <Logo href="/" aria-label="Home">
-                <BannerLogo alt="Nexari Logo" />
+                <BannerLogo alt="Threadly Logo" />
               </Logo>
               <CategoryDropdown
                 isOpen={openDropdown === "category"}
@@ -148,7 +147,7 @@ const Navbar: FC<NavbarProps> = ({
               onToggle={() => handleToggle("category")}
             />
             <Logo href="/" aria-label="Home">
-              <BannerLogo alt="Nexari Logo" />
+              <BannerLogo alt="Threadly Logo" />
             </Logo>
             <UserDropdown
               isOpen={openDropdown === "user"}

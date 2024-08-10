@@ -43,7 +43,7 @@ const FooterAccordion = () => {
       <Accordion>
         <AccordionItem title="About Us">
           <FooterLink>
-            <a href="/about-us">About Nexari</a>
+            <a href="/about-us">About Threadly</a>
           </FooterLink>
           <FooterLink>
             <a href="/careers">Careers</a>

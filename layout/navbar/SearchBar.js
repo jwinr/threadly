@@ -23,6 +23,7 @@ const SearchContainer = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 20px;
+    width: auto;
     margin: 0; // Match the margin of the other elements
     order: 4; // Beneath the other navbar elements
   }

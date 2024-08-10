@@ -16,7 +16,7 @@ const CheckboxWrapper = styled.label`
   position: relative;
   font-size: 14px;
   font-weight: 500;
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
 
   input {
     position: absolute;
@@ -89,8 +89,8 @@ const CheckboxWrapper = styled.label`
   }
 
   input:checked + .cbx span:first-child {
-    background: var(--sc-color-blue);
-    border-color: var(--sc-color-blue);
+    background: var(--sc-color-carnation);
+    border-color: var(--sc-color-carnation);
     animation: ${waveAnimation} 0.4s ease;
 
     &:active {

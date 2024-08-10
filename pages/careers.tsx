@@ -84,7 +84,7 @@ const Careers: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Hire Me | Nexari</title>
+        <title>Hire Me | Threadly</title>
       </Head>
       <CareersContainer>
         <Title>Let's work together</Title>

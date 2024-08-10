@@ -118,22 +118,22 @@ const ZipSubmitBtn = styled.button`
   min-height: 44px;
   padding: 0px 16px;
   text-align: center;
-  background-color: var(--sc-color-blue);
+  background-color: var(--sc-color-carnation);
   transition: background-color 0.2s;
 
   &:hover {
     background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-blue);
+    color: var(--sc-color-carnation);
   }
 
   &:active {
     background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-blue);
+    color: var(--sc-color-carnation);
   }
 
   &:focus-visible {
     background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-blue);
+    color: var(--sc-color-carnation);
   }
 `
 

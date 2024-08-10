@@ -199,7 +199,7 @@ const Footer = () => {
                 <FooterColumn>
                   <FooterTitle>About Us</FooterTitle>
                   <FooterLink>
-                    <a href="/about-us">About Nexari</a>
+                    <a href="/about-us">About Threadly</a>
                   </FooterLink>
                   <FooterLink>
                     <a href="/careers">Careers</a>
@@ -270,7 +270,7 @@ const Footer = () => {
             <LogoBox>
               <LogoSymbol />
             </LogoBox>
-            <CopyrightText>© Nexari, Inc. All Rights Reserved.</CopyrightText>
+            <CopyrightText>© Threadly, Inc. All Rights Reserved.</CopyrightText>
             <BottomLinksWrapper>
               <a href="/terms-of-service">
                 <FooterLinkBottom>

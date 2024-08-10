@@ -65,7 +65,7 @@ const CartCircle = styled.div`
   position: absolute;
   top: 0px;
   right: -1px;
-  background-color: var(--sc-color-blue);
+  background-color: var(--sc-color-carnation);
   color: var(--sc-color-white);
   border-radius: 50%;
   padding: 3px 6px;

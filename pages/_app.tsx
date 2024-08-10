@@ -12,13 +12,13 @@ import { ToastProvider } from "../context/ToastContext"
 import { FavoritesProvider } from "../context/FavoritesContext"
 import ErrorBoundary from "../components/Elements/ErrorBoundary"
 
-interface NexariProps {
+interface ThreadlyProps {
   Component: FC<any>
   pageProps: any
   categories: any
 }
 
-const Nexari: FC<NexariProps> = ({ Component, pageProps, categories }) => {
+const Threadly: FC<ThreadlyProps> = ({ Component, pageProps, categories }) => {
   return (
     <>
       <React.StrictMode>
@@ -44,4 +44,4 @@ const Nexari: FC<NexariProps> = ({ Component, pageProps, categories }) => {
   )
 }
 
-export default Nexari
+export default Threadly

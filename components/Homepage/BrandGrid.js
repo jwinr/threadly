@@ -24,6 +24,7 @@ const ImageContainer = styled.div`
 
 const Container = styled.div`
   display: flex;
+  justify-content: center;
 `
 
 const Wrapper = styled.div`

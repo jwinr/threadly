@@ -1,13 +1,8 @@
-import React, { useState, useEffect, forwardRef, useRef } from "react"
+import React, { useState, useEffect, forwardRef } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Link from "next/link"
 import AddToCartButton from "../Shopping/AddToCartButton"
-import { Swiper, SwiperRef, SwiperSlide } from "swiper/react"
-import { Scrollbar, FreeMode } from "swiper/modules"
-import "swiper/css"
-import "swiper/css/scrollbar"
-import "swiper/css/free-mode"
 import { useMobileView } from "../../context/MobileViewContext"
 
 const Container = styled.div`
@@ -18,27 +13,11 @@ const Container = styled.div`
   padding: 15px;
   height: 100%;
   justify-content: space-between;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 
-  &.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .swiper {
-    padding-bottom: 13px; // Allow the swiper scrollbar to be positioned beneath the product cards
-    margin-bottom: -13px; // Fix the padding offset
-  }
-
-  .swiper-scrollbar {
-    transition: opacity 0.5s ease-out;
-    opacity: 1;
-  }
-
-  .swiper-scrollbar-hidden {
-    opacity: 0;
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 `
 
@@ -51,6 +30,7 @@ const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+  scroll-snap-align: start;
 
   a {
     color: var(--sc-color-text);
@@ -62,6 +42,8 @@ const ItemContainer = styled.div`
 
   @media (max-width: 768px) {
     width: auto;
+    min-width: 60%;
+    scroll-snap-align: center;
   }
 `
 
@@ -109,12 +91,12 @@ const OriginalPrice = styled.span`
 const Price = styled.h1`
   font-size: 14px;
   font-weight: bold;
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
 `
 
 const SaleText = styled.span`
   font-size: 12px;
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
 `
 
 const ButtonWrapper = styled.div`
@@ -162,8 +144,6 @@ interface TopDealsProps {
 const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
   const [deals, setDeals] = useState<Deal[]>([])
   const isMobileView = useMobileView()
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const swiperRef = useRef<SwiperRef>(null)
 
   useEffect(() => {
     const fetchDeals = async () => {
@@ -189,134 +169,83 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
     fetchDeals()
   }, [])
 
-  const handleInteraction = () => {
-    const scrollbar = swiperRef.current?.swiper.scrollbar.el as
-      | HTMLElement
-      | undefined
-    if (scrollbar) {
-      scrollbar.classList.remove("swiper-scrollbar-hidden")
-    }
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-    timeoutRef.current = setTimeout(() => {
-      if (scrollbar) {
-        scrollbar.classList.add("swiper-scrollbar-hidden")
-      }
-    }, 1000)
-  }
-
-  useEffect(() => {
-    if (isMobileView) {
-      const handleTouchStart = () => handleInteraction()
-      const handleMouseMove = () => handleInteraction()
-
-      window.addEventListener("touchstart", handleTouchStart)
-      window.addEventListener("mousemove", handleMouseMove)
-
-      return () => {
-        window.removeEventListener("touchstart", handleTouchStart)
-        window.removeEventListener("mousemove", handleMouseMove)
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current)
-        }
-      }
-    }
-  }, [isMobileView])
-
   const loveDeals = deals.filter((deal) => deal.category === "deals_love")
 
   return (
     <Container ref={ref} className={props.className}>
-      {isMobileView ? (
-        <Swiper
-          ref={swiperRef}
-          modules={[FreeMode, Scrollbar]}
-          slidesPerView={2}
-          spaceBetween={10}
-          freeMode={true}
-          scrollbar={{ draggable: true }}
-          onTouchStart={handleInteraction}
-          onTouchMove={handleInteraction}
-          onMouseMove={handleInteraction}
-        >
-          {loveDeals.map((deal, index) => (
-            <SwiperSlide key={index}>
-              <ItemContainer>
-                <Link
-                  href={`products/${deal.slug}`}
-                  aria-label={`View details of ${deal.name}`}
-                >
-                  <ImgContainer>
-                    <Image
-                      alt={deal.name}
-                      src={deal.image_url || "/images/products/placeholder.jpg"}
-                      width={1540}
-                      height={649}
-                    />
-                  </ImgContainer>
-                  <DetailWrapper>
-                    <Title>{deal.name}</Title>
-                    <PriceContainer>
-                      <Price>
-                        ${(deal.price - deal.discount_amount).toFixed(2)}
-                      </Price>
-                      <PriceText>
-                        reg <OriginalPrice>${deal.price}</OriginalPrice>
-                      </PriceText>
-                      <SaleText>Sale</SaleText>
-                    </PriceContainer>
-                  </DetailWrapper>
-                </Link>
-                <ButtonWrapper>
-                  <AddToCartButton
-                    productId={deal.product_id}
-                    quantity={1}
-                    productName={deal.name}
+      {isMobileView
+        ? loveDeals.map((deal, index) => (
+            <ItemContainer key={index}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
+                <ImgContainer>
+                  <Image
+                    alt={deal.name}
+                    src={deal.image_url || "/images/products/placeholder.jpg"}
+                    width={1540}
+                    height={649}
                   />
-                </ButtonWrapper>
-              </ItemContainer>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      ) : (
-        loveDeals.map((deal, index) => (
-          <ItemContainer key={index}>
-            <Link
-              href={`products/${deal.slug}`}
-              aria-label={`View details of ${deal.name}`}
-            >
-              <ImgContainer>
-                <Image
-                  alt={deal.name}
-                  src={deal.image_url || "/images/products/placeholder.jpg"}
-                  width={1540}
-                  height={649}
+                </ImgContainer>
+                <DetailWrapper>
+                  <Title>{deal.name}</Title>
+                  <PriceContainer>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
+                    <PriceText>
+                      reg <OriginalPrice>${deal.price}</OriginalPrice>
+                    </PriceText>
+                    <SaleText>Sale</SaleText>
+                  </PriceContainer>
+                </DetailWrapper>
+              </Link>
+              <ButtonWrapper>
+                <AddToCartButton
+                  productId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
                 />
-              </ImgContainer>
-              <DetailWrapper>
-                <Title>{deal.name}</Title>
-                <PriceContainer>
-                  <Price>
-                    ${(deal.price - deal.discount_amount).toFixed(2)}
-                  </Price>
-                  <PriceText>
-                    reg <OriginalPrice>${deal.price}</OriginalPrice>
-                  </PriceText>
-                  <SaleText>Sale</SaleText>
-                </PriceContainer>
-              </DetailWrapper>
-            </Link>
-            <ButtonWrapper>
-              <AddToCartButton
-                productId={deal.product_id}
-                quantity={1}
-                productName={deal.name}
-              />
-            </ButtonWrapper>
-          </ItemContainer>
-        ))
-      )}
+              </ButtonWrapper>
+            </ItemContainer>
+          ))
+        : loveDeals.map((deal, index) => (
+            <ItemContainer key={index}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
+                <ImgContainer>
+                  <Image
+                    alt={deal.name}
+                    src={deal.image_url || "/images/products/placeholder.jpg"}
+                    width={1540}
+                    height={649}
+                  />
+                </ImgContainer>
+                <DetailWrapper>
+                  <Title>{deal.name}</Title>
+                  <PriceContainer>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
+                    <PriceText>
+                      reg <OriginalPrice>${deal.price}</OriginalPrice>
+                    </PriceText>
+                    <SaleText>Sale</SaleText>
+                  </PriceContainer>
+                </DetailWrapper>
+              </Link>
+              <ButtonWrapper>
+                <AddToCartButton
+                  productId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
+                />
+              </ButtonWrapper>
+            </ItemContainer>
+          ))}
     </Container>
   )
 })

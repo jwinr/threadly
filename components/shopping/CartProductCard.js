@@ -72,7 +72,7 @@ const Title = styled(Link)`
 const Price = styled.h1`
   font-size: 19px;
   font-weight: bold;
-  color: ${(props) => (props.sale ? "var(--sc-color-blue)" : "#353a44;")};
+  color: ${(props) => (props.sale ? "var(--sc-color-carnation)" : "#353a44;")};
 
   @media (max-width: 768px) {
   }
@@ -211,7 +211,7 @@ const RemoveButton = styled.button`
 const Sale = styled.span`
   display: flex;
   font-weight: 600;
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
 `
 
 const CartProductCard = ({

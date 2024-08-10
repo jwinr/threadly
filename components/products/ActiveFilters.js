@@ -43,7 +43,7 @@ const AttributeType = styled.span`
 `
 
 const AttributeValue = styled.span`
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
   margin-left: 4px;
 `
 

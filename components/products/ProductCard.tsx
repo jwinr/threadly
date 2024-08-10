@@ -115,7 +115,7 @@ const Price = styled.h1<{ sale?: boolean }>`
   margin-top: 8px;
   margin-bottom: 8px;
   margin-right: 5px;
-  color: ${(props) => (props.sale ? "var(--sc-color-blue)" : "#353a44")};
+  color: ${(props) => (props.sale ? "var(--sc-color-carnation)" : "#353a44")};
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -134,7 +134,7 @@ const Sale = styled.span`
   font-weight: 600;
   line-height: 1;
   margin-bottom: 8px;
-  color: var(--sc-color-blue);
+  color: var(--sc-color-carnation);
 `
 
 const ShippingContainer = styled.div`

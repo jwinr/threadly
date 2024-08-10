@@ -7,6 +7,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   grid-area: about;
+  padding: 50px 20px;
+  background-color: #f6f9fc;
 
   h1 {
     font-size: 34px;
@@ -16,28 +18,44 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  gap: 30px;
 
   @media (max-width: 768px) {
-    display: block; /* Switch to a column stack view */
+    flex-direction: column;
+    gap: 20px;
   }
 `
+
+const SecTitle = styled.h2`
+  font-size: 38px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--sc-color-title);
+  align-self: start;
+`
+
+const Subtitle = styled.p``
 
 const Column = styled.div`
   flex: 1;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 
   p {
-    font-size: 14px;
-    margin: 4px 0;
+    font-size: 16px;
+    margin: 8px 0;
+    color: var(--sc-color-body);
   }
 `
 
 const Outline = styled.div`
-  border: 2px solid var(--sc-color-blue);
+  border: 2px solid var(--sc-color-carnation);
   border-radius: 50%;
   width: 80px;
   height: 80px;
@@ -47,60 +65,79 @@ const Outline = styled.div`
   justify-content: center;
 `
 
-const Logo = styled.div`
-  color: var(--sc-color-blue);
+const Icon = styled.div`
   font-size: 2.5rem;
-  font-weight: normal;
-  letter-spacing: 0.05em;
+  color: var(--sc-color-carnation);
 `
 
 const HeaderText = styled.div`
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--sc-color-title);
+  margin-bottom: 8px;
+`
+
+const Divider = styled.div`
+  border-left: 1px solid var(--sc-color-gray-300);
+  height: 80px;
+  align-self: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const FeatureHighlights = () => {
   return (
     <Container>
+      <SecTitle>Why choose Threadly?</SecTitle>
+      <Subtitle>
+        United in a common goal, everything we do is focused on delivering the
+        best possible service and experience to you. We call this The Threadly
+        Difference – here’s what it looks like in action.
+      </Subtitle>
       <Wrapper>
         <Column>
           <Outline>
-            <Logo></Logo>
+            <Icon>🖥️</Icon>
           </Outline>
-          <HeaderText>Wide Selection of Parts</HeaderText>
+          <HeaderText>Wide Selection of Tech Products</HeaderText>
           <p>
-            Explore our extensive collection of computer components, from
-            powerful processors to high-capacity storage devices. Whether you're
-            building a gaming rig, upgrading your workstation, or looking for
-            your next laptop, we have the latest and greatest hardware to meet
-            your needs.
+            Shop top-tier tech, from powerful components to essential
+            accessories, for your custom builds and upgrades.
           </p>
         </Column>
+        <Divider />
         <Column>
           <Outline>
-            <Logo></Logo>
+            <Icon>🔧</Icon>
           </Outline>
-          <HeaderText>Expert Advice and Support</HeaderText>
+          <HeaderText>Expert Guidance</HeaderText>
           <p>
-            We're more than just a retailer; we're your trusted tech partner.
-            Our team of knowledgeable experts is here to provide you with expert
-            advice, troubleshooting assistance, and personalized
-            recommendations. Count on us to help you make informed decisions for
-            your next tech purchase.
+            Our tech experts provide personalized advice and support to help you
+            choose and use the right gear.
           </p>
         </Column>
+        <Divider />
         <Column>
           <Outline>
-            <Logo></Logo>
+            <Icon>🚚</Icon>
           </Outline>
-          <HeaderText>Fast and Secure Shipping</HeaderText>
+          <HeaderText>Fast, free shipping</HeaderText>
           <p>
-            Your time is valuable, and we understand that. That's why we curate
-            a seamless shopping experience, backed by lightning-fast shipping
-            with trusted delivery partners, ensuring your order not only arrives
-            quickly and in perfect condition but also exceeds your expectations
-            with every unboxing.
+            From mouse pads to full-sized computer cases, nearly everything
+            ships for free — no minimum purchase required.
+          </p>
+        </Column>
+        <Divider />
+        <Column>
+          <Outline>
+            <Icon>💻</Icon>
+          </Outline>
+          <HeaderText>Latest Tech & Innovations</HeaderText>
+          <p>
+            Discover the latest tech trends and innovations, from cutting-edge
+            GPUs to the newest peripherals.
           </p>
         </Column>
       </Wrapper>

@@ -1,6 +1,6 @@
 import Head from "next/head"
 import styled from "styled-components"
-import { IoMail } from "react-icons/io5"
+import Email from "@/public/images/icons/email.svg"
 
 const ContactPageWrapper = styled.div`
   display: flex;
@@ -28,6 +28,11 @@ const SubheaderText = styled.h2`
 const EmailText = styled.h2`
   font-weight: 700;
   font-size: 22px;
+`
+
+const StyledEmail = styled(Email)`
+  width: 36px;
+  height: 36px;
 `
 
 const ContactCard = styled.div`
@@ -63,11 +68,7 @@ const ContactUs = () => {
   return (
     <>
       <Head>
-        <title>Contact Us | Nexari</title>
-        <meta
-          name="description"
-          content="Get in touch with Nexari. Questions, feedback, press or business proposals."
-        />
+        <title>Contact Us | Threadly</title>
       </Head>
       <ContactPageWrapper>
         <HeaderText>Contact us</HeaderText>
@@ -80,7 +81,7 @@ const ContactUs = () => {
               back to you shortly.
             </p>
             <EmailWrapper>
-              <IoMail size="36" /> <EmailText>help@shopnexari.com</EmailText>
+              <StyledEmail /> <EmailText>help@shopthreadly.com</EmailText>
             </EmailWrapper>
           </CardDetails>
         </ContactCard>
