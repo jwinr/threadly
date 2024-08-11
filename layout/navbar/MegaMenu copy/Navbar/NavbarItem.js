@@ -25,7 +25,6 @@ const NavbarItemTitle = styled.button`
 
 const NavbarItemEl = styled.li`
   position: relative;
-  padding: 10px 20px;
 `
 
 const DropdownSlot = styled.div`

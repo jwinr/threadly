@@ -95,7 +95,7 @@ const Logo = styled.a`
 interface NavbarProps {
   openDropdown: string | null
   handleToggle: (dropdown: string) => void
-  categories: any // Replace 'any' with the specific type if you know it
+  categories: any
 }
 
 const Navigation: FC<NavbarProps> = ({
