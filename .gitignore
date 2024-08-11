@@ -83,6 +83,7 @@ hooks/useCheckLoggedInUser.js
 hooks/useRedirectIfAuthenticated.js
 middleware.ts
 dbinfo.sql
+databaseFunctions.sql
 stripe.js
 .hintrc
 

@@ -5,8 +5,8 @@ import Head from "next/head"
 import HeroBanner from "@/components/Homepage/HeroBanner"
 import BrandGrid from "@/components/Homepage/BrandGrid"
 import FeatureHighlights from "@/components/Homepage/FeatureHighlights"
-import TopDeals from "@/components/Homepage/TopDeals"
-import FeaturedCategories from "@/components/Homepage/FeaturedCategories"
+//import TopDeals from "@/components/Homepage/TopDeals"
+//import FeaturedCategories from "@/components/Homepage/FeaturedCategories"
 import NewsletterSignup from "@/components/Homepage/NewsletterSignup"
 
 const HomeContainer = styled.div`
@@ -52,14 +52,12 @@ const Home: React.FC = () => {
         </Section>
         <Section>
           <Title>Deals you'll love</Title>
-          <TopDeals />
         </Section>
         <Section>
           <FeatureHighlights />
         </Section>
         <Categories>
           <Title>Featured categories</Title>
-          <FeaturedCategories />
         </Categories>
         <Section>
           <NewsletterSignup />

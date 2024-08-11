@@ -2,7 +2,6 @@ import React, { forwardRef } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import Image, { StaticImageData } from "next/image"
-import CategoriesConfig from "../../utils/CategoriesConfig"
 
 const NavContainer = styled.div`
   display: flex;

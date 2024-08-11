@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
-
 import ChevronDown from "@/public/images/icons/chevron-down.svg"
 import ChevronLeft from "@/public/images/icons/chevronLeft.svg"
-
 import * as DropdownStyles from "./DropdownStyles"
 import { useMobileView } from "@/context/MobileViewContext"
+import useScrollControl from "@/hooks/useScrollControl"
 import MobileDrawer from "@/public/images/icons/mobileDrawer.svg"
 import Backdrop from "../Backdrop"
 import { useRouter } from "next/router.js"
-import CategoriesConfig from "@/utils/CategoriesConfig"
-import useScrollControl from "@/hooks/useScrollControl"
 
 const ReturnButton = styled.div`
   -webkit-box-align: center;
@@ -33,18 +30,33 @@ const ReturnButton = styled.div`
 
 const CategoryDropdown = ({ isOpen: parentIsOpen, onToggle }) => {
   const [isMounted, setIsMounted] = useState(false)
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  useEffect(() => {}, [parentIsOpen])
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/categories")
+        const data = await response.json()
+        setCategories(data)
+      } catch (error) {
+        console.error("Error fetching categories:", error)
+      }
+    }
+
+    if (parentIsOpen && !categories.length) {
+      fetchCategories()
+    }
+  }, [parentIsOpen, categories.length])
 
   return (
     <NavItem isOpen={isMounted && parentIsOpen} onToggle={onToggle}>
       <DropdownMenu
         isOpen={isMounted && parentIsOpen}
-        categories={CategoriesConfig}
+        categories={categories}
       />
     </NavItem>
   )
@@ -61,7 +73,7 @@ function NavItem(props) {
 
   useEffect(() => {
     setIsMounted(true)
-    setTimeout(() => setInitialLoad(false), 0) // Ensure initialLoad is set to false after the initial render
+    setTimeout(() => setInitialLoad(false), 0)
 
     if (isOpen) {
       setIsScrollDisabled(true)
@@ -78,11 +90,10 @@ function NavItem(props) {
   const handleKeyDown = (e) => {
     if (e.key === "Escape") {
       onToggle()
-      btnRef.current.focus() // Return focus to the button when closed
+      btnRef.current.focus()
     }
   }
 
-  // Prevent the dropdown from being opened by clicking on the backdrop component as it closes
   const handleToggle = useCallback(() => {
     if (isOpen) {
       onToggle()
@@ -131,7 +142,7 @@ function NavItem(props) {
         setOpen: onToggle,
         className: `${
           initialLoad ? "initial-hidden" : isOpen ? "visible" : "invisible"
-        }`, // Add the visibility class only after mounted
+        }`,
       })}
     </>
   )
@@ -171,7 +182,7 @@ function DropdownItem({
     <DropdownStyles.MenuItem
       onClick={handleClick}
       role="menuitem"
-      tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
+      tabIndex={isOpen ? 0 : -1}
       onKeyDown={handleKeyDown}
     >
       {children}
@@ -180,7 +191,7 @@ function DropdownItem({
     <DropdownStyles.MenuItem
       onClick={handleClick}
       role="menuitem"
-      tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
+      tabIndex={isOpen ? 0 : -1}
       onKeyDown={handleKeyDown}
     >
       {children}
@@ -203,7 +214,7 @@ function DropdownMenu({
     if (dropdownRef.current?.firstChild) {
       setMenuHeight(dropdownRef.current.firstChild.offsetHeight)
     }
-  }, [categories]) // Recalculate height when categories changes
+  }, [categories])
 
   function calcHeight(el) {
     const height = el.offsetHeight
@@ -216,20 +227,13 @@ function DropdownMenu({
     }
   }
 
-  const getSubCategories = (parentId) => {
-    const category = CategoriesConfig.find(
-      (category) => category.id === parentId
-    )
-    return category ? category.subCategories || [] : []
-  }
-
   return (
     <DropdownStyles.Dropdown
       style={{ height: menuHeight, left: dropdownLeft }}
       ref={dropdownRef}
       role="menu"
       onKeyDown={handleKeyDown}
-      className={className} // Apply the visibility class
+      className={className}
     >
       <CSSTransition
         in={activeMenu === "main"}
@@ -240,7 +244,7 @@ function DropdownMenu({
       >
         <DropdownStyles.Menu>
           <DropdownStyles.ListHeader>All categories</DropdownStyles.ListHeader>
-          {CategoriesConfig.map((category) => (
+          {categories.map((category) => (
             <DropdownItem
               key={category.id}
               goToMenu={
@@ -262,7 +266,7 @@ function DropdownMenu({
         </DropdownStyles.Menu>
       </CSSTransition>
 
-      {CategoriesConfig.map((category) => (
+      {categories.map((category) => (
         <CSSTransition
           key={category.id}
           in={activeMenu === category.id}
@@ -283,7 +287,7 @@ function DropdownMenu({
               </ReturnButton>
               {category.name}
             </DropdownStyles.ListHeader>
-            {getSubCategories(category.id).map((subCategory) => (
+            {category.subCategories.map((subCategory) => (
               <DropdownItem
                 key={subCategory.id}
                 href={`/categories/${subCategory.slug}`}

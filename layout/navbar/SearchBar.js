@@ -6,7 +6,6 @@ import Cancel from "@/public/images/icons/cancel.svg"
 
 const InputForm = styled.form`
   display: flex;
-  width: 75%;
   align-items: center;
   position: relative;
 
@@ -18,8 +17,7 @@ const InputForm = styled.form`
 const SearchContainer = styled.div`
   position: relative;
   display: flex;
-  width: 50%;
-  margin-right: auto;
+  margin-left: auto;
 
   @media (max-width: 768px) {
     padding: 0 20px;
@@ -37,7 +35,7 @@ const SearchInput = styled.input`
   color: #353a44;
   outline: none;
   font-size: 15px;
-  width: 100%;
+  width: 400px;
   height: 100%;
   max-width: 650px;
   background-color: #f5f6f8;

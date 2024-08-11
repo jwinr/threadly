@@ -1,12 +1,13 @@
-import React, { FC } from "react"
+import React, { useState, FC } from "react"
 import { useRouter } from "next/router"
 import styled from "styled-components"
 import BannerLogo from "../../public/images/logo.svg"
-import CategoryDropdown from "./CategoryDropdown"
 import SearchBar from "./SearchBar"
 import CartIcon from "./CartIcon"
 import UserDropdown from "./UserDropdown"
 import { useMobileView } from "../../context/MobileViewContext"
+import AnimatedNavbar from "./MegaMenu/AnimatedNavbar"
+import DemoControls from "./DemoControls"
 
 const NavbarContainer = styled.div`
   font-size: 16px;
@@ -97,13 +98,18 @@ interface NavbarProps {
   categories: any // Replace 'any' with the specific type if you know it
 }
 
-const Navbar: FC<NavbarProps> = ({
+const Navigation: FC<NavbarProps> = ({
   openDropdown,
   handleToggle,
   categories,
 }) => {
   const router = useRouter()
   const isMobileView = useMobileView()
+  const [duration, setDuration] = useState(300)
+
+  const handleChange = (data: { duration: number }) => {
+    setDuration(data.duration)
+  }
 
   // Check if the current route is /login, /signup, /forgot-password or /404
   const isLoginPage = router.pathname === "/login"
@@ -126,10 +132,8 @@ const Navbar: FC<NavbarProps> = ({
               <Logo href="/" aria-label="Home">
                 <BannerLogo alt="Threadly Logo" />
               </Logo>
-              <CategoryDropdown
-                isOpen={openDropdown === "category"}
-                onToggle={() => handleToggle("category")}
-              />
+              <AnimatedNavbar duration={duration} />
+              <DemoControls duration={duration} onChange={handleChange} />
               <SearchBar />
               <UserDropdown
                 isOpen={openDropdown === "user"}
@@ -142,10 +146,6 @@ const Navbar: FC<NavbarProps> = ({
         )}
         {isMobileView && (
           <MobileFlexContainer>
-            <CategoryDropdown
-              isOpen={openDropdown === "category"}
-              onToggle={() => handleToggle("category")}
-            />
             <Logo href="/" aria-label="Home">
               <BannerLogo alt="Threadly Logo" />
             </Logo>
@@ -163,4 +163,4 @@ const Navbar: FC<NavbarProps> = ({
   )
 }
 
-export default Navbar
+export default Navigation

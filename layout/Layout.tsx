@@ -1,6 +1,6 @@
 import React, { useState, ReactNode, FC, useCallback } from "react"
 import Footer from "./Footer"
-import Navbar from "./navbar/Navbar"
+import Navigation from "./navbar/Navigation"
 import styled from "styled-components"
 
 const SiteWrapper = styled.div`
@@ -35,7 +35,7 @@ const Layout: FC<LayoutProps> = ({ children, categories }) => {
 
   return (
     <>
-      <Navbar
+      <Navigation
         openDropdown={openDropdown}
         handleToggle={handleToggle}
         categories={categories}
