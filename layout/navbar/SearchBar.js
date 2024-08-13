@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import styled from "styled-components"
 import Search from "@/public/images/icons/search.svg"
 import Cancel from "@/public/images/icons/cancel.svg"

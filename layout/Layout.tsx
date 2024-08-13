@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, ReactNode, FC, useCallback } from "react"
 import Footer from "./Footer"
 import Navigation from "./navbar/Navigation"

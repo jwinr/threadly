@@ -1,5 +1,5 @@
 import React from "react"
-import { useRouter } from "next/router"
+import { useRouter, usePathname } from "next/navigation"
 import styled from "styled-components"
 
 import Facebook from "@/public/images/icons/facebook.svg"
@@ -174,14 +174,14 @@ const CopyrightText = styled.p`
 `
 
 const Footer = () => {
-  const router = useRouter()
+  const pathname = usePathname()
   const isMobileView = useMobileView()
 
   // Check if the current route is /login, /signup, /forgot-password or /404
-  const isLoginPage = router.pathname === "/login"
-  const isSignupPage = router.pathname === "/signup"
-  const isForgotPassPage = router.pathname === "/forgot-password"
-  const is404Page = router.pathname === "/404"
+  const isLoginPage = pathname === "/login"
+  const isSignupPage = pathname === "/signup"
+  const isForgotPassPage = pathname === "/forgot-password"
+  const is404Page = pathname === "/404"
 
   // Render the Footer only if the route is not /login, /signup, /forgot-password or /404
   const renderFooter =

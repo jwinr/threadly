@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react"
 import styled, { keyframes } from "styled-components"
 import PropFilter from "../../utils/PropFilter"

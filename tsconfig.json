@@ -2,13 +2,27 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/context/*": ["context/*"],
-      "@/utils/*": ["utils/*"],
-      "@/public/*": ["public/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/context/*": [
+        "context/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ],
+      "@/public/*": [
+        "public/*"
+      ],
+      "@/hooks/*": [
+        "hooks/*"
+      ]
     },
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,7 +34,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -29,7 +48,10 @@
     "pages/api/webhooks/route.js",
     "pages/test.tsx",
     "pages/test.tsx",
-    "components/Elements/Popover.tsx"
+    "components/Elements/Popover.tsx",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

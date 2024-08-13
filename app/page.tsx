@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import Head from "next/head"

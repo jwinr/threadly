@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react"
-import { useRouter } from "next/router"
+import { useRouter, usePathname } from "next/navigation"
 import styled from "styled-components"
 import BannerLogo from "../../public/images/logo.svg"
 import SearchBar from "./SearchBar"
@@ -8,6 +8,7 @@ import UserDropdown from "./UserDropdown"
 import { useMobileView } from "../../context/MobileViewContext"
 import AnimatedNavbar from "./MegaMenu/AnimatedNavbar"
 import DemoControls from "./DemoControls"
+import { Nav } from "./Menu/Nav"
 
 const NavbarContainer = styled.div`
   font-size: 16px;
@@ -104,6 +105,7 @@ const Navigation: FC<NavbarProps> = ({
   categories,
 }) => {
   const router = useRouter()
+  const pathname = usePathname()
   const isMobileView = useMobileView()
   const [duration, setDuration] = useState(300)
 
@@ -112,10 +114,10 @@ const Navigation: FC<NavbarProps> = ({
   }
 
   // Check if the current route is /login, /signup, /forgot-password or /404
-  const isLoginPage = router.pathname === "/login"
-  const isSignupPage = router.pathname === "/signup"
-  const isForgotPassPage = router.pathname === "/forgot-password"
-  const is404Page = router.pathname === "/404"
+  const isLoginPage = pathname === "/login"
+  const isSignupPage = pathname === "/signup"
+  const isForgotPassPage = pathname === "/forgot-password"
+  const is404Page = pathname === "/404"
 
   // Render the Navbar only if the route is not /login, /signup, /forgot-password or /404
   // This also extends to any invalid path routes, i.e. /<any-nonexistent-path>
@@ -132,7 +134,7 @@ const Navigation: FC<NavbarProps> = ({
               <Logo href="/" aria-label="Home">
                 <BannerLogo alt="Threadly Logo" />
               </Logo>
-              <AnimatedNavbar duration={duration} />
+              <Nav />
               <DemoControls duration={duration} onChange={handleChange} />
               <SearchBar />
               <UserDropdown

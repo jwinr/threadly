@@ -34,14 +34,61 @@ class DemoControls extends Component {
     duration: PropTypes.number,
   }
 
+  componentDidMount() {
+    const { duration } = this.props
+    this.updateSiteMenuTransition(duration)
+
+    // Use MutationObserver to watch for changes in the DOM
+    this.observer = new MutationObserver(this.handleDomChanges)
+    this.observer.observe(document.body, { childList: true, subtree: true })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.duration !== this.props.duration) {
+      this.updateSiteMenuTransition(this.props.duration)
+    }
+  }
+
+  componentWillUnmount() {
+    // Disconnect the observer when the component is unmounted
+    if (this.observer) {
+      this.observer.disconnect()
+    }
+  }
+
+  handleDomChanges = (mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        mutation.addedNodes.forEach((node) => {
+          if (
+            node instanceof HTMLElement &&
+            node.classList.contains("SiteHeader")
+          ) {
+            this.updateSiteMenuTransition(this.props.duration)
+          }
+        })
+      }
+    })
+  }
+
+  updateSiteMenuTransition = (duration) => {
+    const siteHeaderElement = document.querySelector(".SiteHeader")
+    if (siteHeaderElement) {
+      siteHeaderElement.style.setProperty(
+        "--siteMenuTransition",
+        `${duration}ms`
+      )
+    }
+  }
+
   render() {
     const { duration } = this.props
     return (
-      <Form ref={(el) => (this.el = el)}>
+      <Form>
         <div>
           <b>Speed</b>
           {[
-            ["normal", 300],
+            ["normal", 240],
             ["slow (for debugging)", 1000],
           ].map(([label, value]) => {
             return (
@@ -51,11 +98,7 @@ class DemoControls extends Component {
                   name="duration"
                   value={value}
                   checked={duration === value}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      this.props.onChange({ duration: value })
-                    }
-                  }}
+                  onChange={() => this.props.onChange({ duration: value })}
                 />
                 {label}
               </label>

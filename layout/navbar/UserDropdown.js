@@ -16,7 +16,7 @@ import { CSSTransition } from "react-transition-group"
 import Backdrop from "../Backdrop"
 import { signOut } from "aws-amplify/auth"
 import PropFilter from "@/utils/PropFilter"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import SigningOutOverlay from "@/components/Auth/SigningOutOverlay"
 import useScrollControl from "@/hooks/useScrollControl"
 
