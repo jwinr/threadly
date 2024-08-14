@@ -88,7 +88,7 @@ class DemoControls extends Component {
         <div>
           <b>Speed</b>
           {[
-            ["normal", 240],
+            ["normal", 250],
             ["slow (for debugging)", 1000],
           ].map(([label, value]) => {
             return (

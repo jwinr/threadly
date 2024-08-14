@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import styled from "styled-components"
 import LoaderSpin from "../Loaders/LoaderSpin"
 import { useToast } from "../../context/ToastContext"

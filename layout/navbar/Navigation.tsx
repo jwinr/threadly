@@ -104,10 +104,9 @@ const Navigation: FC<NavbarProps> = ({
   handleToggle,
   categories,
 }) => {
-  const router = useRouter()
   const pathname = usePathname()
   const isMobileView = useMobileView()
-  const [duration, setDuration] = useState(300)
+  const [duration, setDuration] = useState(250)
 
   const handleChange = (data: { duration: number }) => {
     setDuration(data.duration)
@@ -137,11 +136,11 @@ const Navigation: FC<NavbarProps> = ({
               <Nav />
               <DemoControls duration={duration} onChange={handleChange} />
               <SearchBar />
-              <UserDropdown
+              {/*<UserDropdown
                 isOpen={openDropdown === "user"}
                 onToggle={() => handleToggle("user")}
                 aria-label="User Menu"
-              />
+              />*/}
               <CartIcon aria-label="Shopping Cart" />
             </NavbarFlex>
           </>
@@ -151,11 +150,12 @@ const Navigation: FC<NavbarProps> = ({
             <Logo href="/" aria-label="Home">
               <BannerLogo alt="Threadly Logo" />
             </Logo>
-            <UserDropdown
+            {/* <UserDropdown
               isOpen={openDropdown === "user"}
               onToggle={() => handleToggle("user")}
               aria-label="User Menu"
             />
+            */}
             <CartIcon aria-label="Shopping Cart" />
           </MobileFlexContainer>
         )}

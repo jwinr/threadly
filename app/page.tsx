@@ -5,7 +5,7 @@ import styled from "styled-components"
 import Head from "next/head"
 
 import HeroBanner from "@/components/Homepage/HeroBanner"
-import BrandGrid from "@/components/Homepage/BrandGrid"
+//import BrandGrid from "@/components/Homepage/BrandGrid"
 import FeatureHighlights from "@/components/Homepage/FeatureHighlights"
 //import TopDeals from "@/components/Homepage/TopDeals"
 //import FeaturedCategories from "@/components/Homepage/FeaturedCategories"
@@ -49,9 +49,7 @@ const Home: React.FC = () => {
         <Section>
           <HeroBanner />
         </Section>
-        <Section>
-          <BrandGrid />
-        </Section>
+        <Section></Section>
         <Section>
           <Title>Deals you'll love</Title>
         </Section>

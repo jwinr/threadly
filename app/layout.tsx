@@ -3,13 +3,14 @@ import "../assets/main.css"
 import { Amplify } from "aws-amplify"
 import amplifyconfig from "../src/amplifyconfiguration.json"
 Amplify.configure(amplifyconfig)
-import { MobileViewProvider } from "../context/MobileViewContext"
-import { UserProvider } from "../context/UserContext"
-import { SignOutProvider } from "../context/SignOutContext"
-import { CartProvider } from "../context/CartContext"
-import { ToastProvider } from "../context/ToastContext"
-import { FavoritesProvider } from "../context/FavoritesContext"
+import { MobileViewProvider } from "@/context/MobileViewContext"
+import { UserProvider } from "@/context/UserContext"
+import { SignOutProvider } from "@/context/SignOutContext"
+import { CartProvider } from "@/context/CartContext"
+import { ToastProvider } from "@/context/ToastContext"
+import { FavoritesProvider } from "@/context/FavoritesContext"
 import Layout from "../layout/Layout"
+import StyledComponentsRegistry from "../lib/registry"
 
 const fetchCategories = async () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -33,15 +34,8 @@ const fetchCategories = async () => {
     const data = await res.json()
     return data
   } catch (error) {
-    console.error("Error fetching categories:", error.message)
     throw error
   }
-}
-
-export const metadata = {
-  title: "Threadly",
-  description:
-    "🛍 Full-stack React/Next.js e-commerce storefront with Stripe, PostgreSQL, styled-components, AWS Cognito, CloudFront, and S3.",
 }
 
 const RootLayout: FC<{ children: React.ReactNode }> = async ({ children }) => {
@@ -54,19 +48,21 @@ const RootLayout: FC<{ children: React.ReactNode }> = async ({ children }) => {
       </head>
       <body>
         <React.StrictMode>
-          <MobileViewProvider>
-            <ToastProvider>
-              <UserProvider>
-                <SignOutProvider>
-                  <FavoritesProvider>
-                    <CartProvider>
-                      <Layout categories={categories}>{children}</Layout>
-                    </CartProvider>
-                  </FavoritesProvider>
-                </SignOutProvider>
-              </UserProvider>
-            </ToastProvider>
-          </MobileViewProvider>
+          <StyledComponentsRegistry>
+            <MobileViewProvider>
+              <ToastProvider>
+                <UserProvider>
+                  <SignOutProvider>
+                    <FavoritesProvider>
+                      <CartProvider>
+                        <Layout categories={categories}>{children}</Layout>
+                      </CartProvider>
+                    </FavoritesProvider>
+                  </SignOutProvider>
+                </UserProvider>
+              </ToastProvider>
+            </MobileViewProvider>
+          </StyledComponentsRegistry>
         </React.StrictMode>
         <div id="portal-root"></div>
       </body>

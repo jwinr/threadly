@@ -2,27 +2,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/context/*": [
-        "context/*"
-      ],
-      "@/utils/*": [
-        "utils/*"
-      ],
-      "@/public/*": [
-        "public/*"
-      ],
-      "@/hooks/*": [
-        "hooks/*"
-      ]
+      "@/components/*": ["components/*"],
+      "@/context/*": ["context/*"],
+      "@/utils/*": ["utils/*"],
+      "@/public/*": ["public/*"],
+      "@/hooks/*": ["hooks/*"]
     },
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -49,9 +35,8 @@
     "pages/test.tsx",
     "pages/test.tsx",
     "components/Elements/Popover.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "utils/PropFilter.js"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
