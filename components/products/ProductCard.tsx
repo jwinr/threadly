@@ -4,22 +4,19 @@ import Image from "next/image"
 import AddToCartButton from "../Shopping/AddToCartButton"
 import styled, { css } from "styled-components"
 import StarRatings from "../ReviewStars/StarRatings"
-import Truck from "../../public/images/icons/truck.svg"
 import AddToFavoritesButton from "../Shopping/AddToFavoritesButton"
-import useCurrencyFormatter from "../../hooks/useCurrencyFormatter"
+import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
 const CardContainer = styled.div<{ isLoading: boolean }>`
   display: flex;
   flex-direction: column;
-  padding: 15px;
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--sc-color-white);
   border-radius: 8px;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   height: 100%;
-  max-height: 475px;
-  min-height: 475px;
+  width: 100%;
 
   ${({ isLoading }) =>
     !isLoading &&
@@ -40,7 +37,7 @@ const ImageWrapper = styled.div`
   align-items: center;
   border-radius: 8px;
   padding: 8px;
-  height: 218px;
+  max-height: 624px;
 
   img {
     width: 100%;
@@ -62,6 +59,7 @@ const Title = styled(Link)`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: var(--sc-color-text);
 
   @media (max-width: 768px) {
     order: 1;
@@ -223,12 +221,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </PriceContainer>
         {discount && <Sale>Sale</Sale>}
-        <ShippingContainer>
-          <IconContainer>
-            <Truck />
-          </IconContainer>
-          <p>Free shipping</p>
-        </ShippingContainer>
         <ButtonWrapper>
           <AddToCartButton productId={id} quantity={1} productName={title} />
           <AddToFavoritesButton productId={id} productName={title} />

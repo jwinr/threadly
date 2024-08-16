@@ -2,25 +2,22 @@ import React from "react"
 import styled from "styled-components"
 
 const ProductHighs = styled.div`
-  grid-template-columns: 1fr 3fr;
   display: grid;
+  grid-template-columns: 1fr;
   padding-top: 15px;
-
-  li {
-    margin-bottom: 0.5rem;
-  }
 
   h1 {
     font-weight: bold;
     text-align: left;
     font-size: 16px;
-    padding-top: 15px;
+    margin-bottom: 15px;
   }
 `
 
 const HighlightList = styled.ul`
   list-style-type: none;
-  padding: 1rem 1rem 0rem 0rem;
+  padding: 0;
+  margin: 0;
 `
 
 const SpecsItem = styled.li`
@@ -32,32 +29,46 @@ const SpecsContent = styled.div`
   flex-direction: column;
 `
 
-const Text = styled.span`
-  font-size: 14px;
-`
-
 const Title = styled.div`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
+  margin-bottom: 10px;
 `
 
-const ProductHighlights = ({ highlights }) => {
+const Text = styled.li`
+  font-size: 14px;
+  line-height: 1.5;
+  margin-left: 1.5rem; /* Indent the text content under the title */
+  list-style: disc;
+`
+
+const ProductFeatures = ({ features }) => {
+  // Group features by title
+  const groupedFeatures = features.reduce((acc, feature) => {
+    if (!acc[feature.feature_title]) {
+      acc[feature.feature_title] = []
+    }
+    acc[feature.feature_title].push(feature.feature_content)
+    return acc
+  }, {})
+
   return (
     <ProductHighs>
       <h1>Highlights</h1>
-      <HighlightList>
-        {highlights.map((high, index) => (
-          <SpecsItem key={index}>
-            <SpecsContent>
-              <Title>{high.highlight_title}</Title>
-              <Text>{high.highlight_text}</Text>
-            </SpecsContent>
-            {index < highlights.length - 1}
-          </SpecsItem>
-        ))}
-      </HighlightList>
+      {Object.keys(groupedFeatures).map((title, index) => (
+        <SpecsItem key={index}>
+          <SpecsContent>
+            <Title>{title}</Title>
+            <HighlightList>
+              {groupedFeatures[title].map((content, idx) => (
+                <Text key={idx}>{content}</Text>
+              ))}
+            </HighlightList>
+          </SpecsContent>
+        </SpecsItem>
+      ))}
     </ProductHighs>
   )
 }
 
-export default ProductHighlights
+export default ProductFeatures

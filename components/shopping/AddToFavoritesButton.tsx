@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react"
 import styled, { keyframes, css } from "styled-components"
 import { LiaHeart, LiaHeartSolid } from "react-icons/lia"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { UserContext } from "@/context/UserContext"
 import { useFavorites } from "@/context/FavoritesContext"
 import Popover from "@/components/Elements/Popover"

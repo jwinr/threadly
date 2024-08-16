@@ -3,7 +3,7 @@ import { CartContext } from "@/context/CartContext"
 import styled from "styled-components"
 import LoaderSpin from "@/components/Loaders/LoaderSpin"
 import PropFilter from "@/utils/PropFilter"
-import Button from "../Elements/Button"
+import Button from "@/components/Elements/Button"
 
 const ButtonText = styled(PropFilter("span")(["loading"]))`
   opacity: ${({ loading }) => (loading ? 0 : 1)};

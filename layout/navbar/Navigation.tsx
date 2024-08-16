@@ -10,7 +10,7 @@ import AnimatedNavbar from "./MegaMenu/AnimatedNavbar"
 import DemoControls from "./DemoControls"
 import { Nav } from "./Menu/Nav"
 
-const NavbarContainer = styled.div`
+const HeaderContainer = styled.header`
   font-size: 16px;
   color: #000;
   display: flex;
@@ -18,24 +18,15 @@ const NavbarContainer = styled.div`
   background-color: var(--sc-color-white);
   top: 0;
   height: 64px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px -1px 2px, rgba(0, 0, 0, 0.04) 0px 1px 2px,
+    rgba(0, 0, 0, 0.04) 0px 3px 4px;
+  width: 100%;
   z-index: 300;
 
   @media (max-width: 768px) {
     display: block;
-    height: 125px;
-  }
-`
-
-const NavbarWrapper = styled.div`
-  background-color: var(--sc-color-white) !important;
-  padding: 7px 0px 7px 0px;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px -1px 2px, rgba(0, 0, 0, 0.04) 0px 1px 2px,
-    rgba(0, 0, 0, 0.04) 0px 3px 4px;
-  width: 100%;
-
-  @media (max-width: 768px) {
     padding: 0px 0px 0px 0px;
-    height: 100%;
+    height: 125px;
   }
 `
 
@@ -96,14 +87,9 @@ const Logo = styled.a`
 interface NavbarProps {
   openDropdown: string | null
   handleToggle: (dropdown: string) => void
-  categories: any
 }
 
-const Navigation: FC<NavbarProps> = ({
-  openDropdown,
-  handleToggle,
-  categories,
-}) => {
+const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
   const pathname = usePathname()
   const isMobileView = useMobileView()
   const [duration, setDuration] = useState(250)
@@ -125,44 +111,41 @@ const Navigation: FC<NavbarProps> = ({
   }
 
   return (
-    <NavbarContainer>
-      <NavbarWrapper>
-        {!isMobileView && (
-          <>
-            <NavbarFlex>
-              <Logo href="/" aria-label="Home">
-                <BannerLogo alt="Threadly Logo" />
-              </Logo>
-              <Nav />
-              <DemoControls duration={duration} onChange={handleChange} />
-              <SearchBar />
-              {/*<UserDropdown
+    <HeaderContainer>
+      {!isMobileView && (
+        <>
+          <NavbarFlex>
+            <Logo href="/" aria-label="Home">
+              <BannerLogo alt="Threadly Logo" />
+            </Logo>
+            <Nav />
+            <SearchBar />
+            {/*<UserDropdown
                 isOpen={openDropdown === "user"}
                 onToggle={() => handleToggle("user")}
                 aria-label="User Menu"
               />*/}
-              <CartIcon aria-label="Shopping Cart" />
-            </NavbarFlex>
-          </>
-        )}
-        {isMobileView && (
-          <MobileFlexContainer>
-            <Logo href="/" aria-label="Home">
-              <BannerLogo alt="Threadly Logo" />
-            </Logo>
-            {/* <UserDropdown
+            <CartIcon aria-label="Shopping Cart" />
+          </NavbarFlex>
+        </>
+      )}
+      {isMobileView && (
+        <MobileFlexContainer>
+          <Logo href="/" aria-label="Home">
+            <BannerLogo alt="Threadly Logo" />
+          </Logo>
+          {/* <UserDropdown
               isOpen={openDropdown === "user"}
               onToggle={() => handleToggle("user")}
               aria-label="User Menu"
             />
             */}
-            <CartIcon aria-label="Shopping Cart" />
-          </MobileFlexContainer>
-        )}
-        {isMobileView && <SearchBar />}
-      </NavbarWrapper>
-    </NavbarContainer>
+          <CartIcon aria-label="Shopping Cart" />
+        </MobileFlexContainer>
+      )}
+      {isMobileView && <SearchBar />}
+    </HeaderContainer>
   )
 }
 
-export default Navigation
+export default Header

@@ -21,14 +21,9 @@ const ContentWrapper = styled.div`
 
 interface LayoutProps {
   children: ReactNode
-  categories: Category[]
 }
 
-interface Category {
-  name: string
-}
-
-const Layout: FC<LayoutProps> = ({ children, categories }) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   const handleToggle = useCallback((dropdown: string) => {
@@ -37,11 +32,7 @@ const Layout: FC<LayoutProps> = ({ children, categories }) => {
 
   return (
     <>
-      <Navigation
-        openDropdown={openDropdown}
-        handleToggle={handleToggle}
-        categories={categories}
-      />
+      <Navigation openDropdown={openDropdown} handleToggle={handleToggle} />
       <SiteWrapper>
         <ContentWrapper>{children}</ContentWrapper>
       </SiteWrapper>

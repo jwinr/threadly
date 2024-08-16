@@ -78,6 +78,8 @@ context/FavoritesContext.js
 hooks/useCategoryData.js
 hooks/useCheckLoggedInUser.js
 hooks/useRedirectIfAuthenticated.js
+lib/db.js
+lib/db.ts
 layout/navbar/Menu/
 middleware.ts
 *.sql

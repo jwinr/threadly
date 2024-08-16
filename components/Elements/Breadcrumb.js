@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { useRouter } from "next/router"
 import { RiArrowDropRightLine } from "react-icons/ri"
 import styled from "styled-components"
 import PropTypes from "prop-types"
+import { useRouter } from "next/navigation"
 import { useMobileView } from "../../context/MobileViewContext"
 
 const BreadWrapper = styled.nav`
@@ -22,12 +22,10 @@ const LoadingBreadcrumb = styled.div`
   animation: loadingAnimation 2s infinite;
 `
 
-// Helper function to capitalize the first letter of a string
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-// Helper function to generate breadcrumb part
 const generateBreadcrumbPart = (
   pathname,
   isLast,
@@ -84,10 +82,13 @@ function Breadcrumb({ title, categoryName, categorySlug, loading }) {
     return null
   }
 
-  const router = useRouter()
-  const pathnames = router.asPath
-    .split("/")
-    .filter((x) => x && x !== "categories")
+  const { pathname } = useRouter()
+
+  if (!pathname) {
+    return null // Or a fallback UI if pathname is undefined
+  }
+
+  const pathnames = pathname.split("/").filter((x) => x && x !== "categories")
   const productsIndex = pathnames.indexOf("products")
 
   if (loading) {

@@ -12,35 +12,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext"
 import Layout from "../layout/Layout"
 import StyledComponentsRegistry from "../lib/registry"
 
-const fetchCategories = async () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-  const url = `${baseUrl}/api/categories`
-
-  try {
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
-      },
-    })
-
-    if (!res.ok) {
-      console.error("Fetch failed with status:", res.status, res.statusText)
-      throw new Error(
-        `Failed to fetch categories: ${res.status} ${res.statusText}`
-      )
-    }
-
-    const data = await res.json()
-    return data
-  } catch (error) {
-    throw error
-  }
-}
-
 const RootLayout: FC<{ children: React.ReactNode }> = async ({ children }) => {
-  const categories = await fetchCategories()
-
   return (
     <html lang="en">
       <head>
@@ -55,7 +27,7 @@ const RootLayout: FC<{ children: React.ReactNode }> = async ({ children }) => {
                   <SignOutProvider>
                     <FavoritesProvider>
                       <CartProvider>
-                        <Layout categories={categories}>{children}</Layout>
+                        <Layout>{children}</Layout>
                       </CartProvider>
                     </FavoritesProvider>
                   </SignOutProvider>

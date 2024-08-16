@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { LiaThumbsUpSolid, LiaThumbsDownSolid } from "react-icons/lia"
-import LoaderSpin from "../loaders/LoaderSpin"
+import LoaderSpin from "../Loaders/LoaderSpin"
 import PropFilter from "../../utils/PropFilter"
 
 const Button = styled.button`

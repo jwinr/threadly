@@ -6,7 +6,8 @@
       "@/context/*": ["context/*"],
       "@/utils/*": ["utils/*"],
       "@/public/*": ["public/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/lib/*": ["lib/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -36,7 +37,8 @@
     "pages/test.tsx",
     "components/Elements/Popover.tsx",
     ".next/types/**/*.ts",
-    "utils/PropFilter.js"
+    "utils/PropFilter.js",
+    "app/categories/[slug]/layout.js"
   ],
   "exclude": ["node_modules"]
 }
