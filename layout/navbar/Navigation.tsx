@@ -6,8 +6,6 @@ import SearchBar from "./SearchBar"
 import CartIcon from "./CartIcon"
 import UserDropdown from "./UserDropdown"
 import { useMobileView } from "../../context/MobileViewContext"
-import AnimatedNavbar from "./MegaMenu/AnimatedNavbar"
-import DemoControls from "./DemoControls"
 import { Nav } from "./Menu/Nav"
 
 const HeaderContainer = styled.header`

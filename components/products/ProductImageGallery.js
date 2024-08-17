@@ -5,8 +5,10 @@ import "swiper/css"
 import "swiper/css/pagination"
 import { Pagination } from "swiper/modules"
 import { useState, useEffect, useRef } from "react"
-import PropFilter from "../../utils/PropFilter"
+import PropFilter from "@/utils/PropFilter"
 import VideoIcon from "@/public/images/icons/video.svg"
+
+const FilteredDiv = PropFilter("div")(["mediaType", "zoomed", "slideIndex"])
 
 const AdditionalImageContainer = styled.div`
   display: flex;
@@ -74,8 +76,8 @@ const CarouselContainer = styled.div`
   }
 `
 
-const MainImageContainer = styled.div`
-  max-width: 60%;
+const MainImageContainer = styled(FilteredDiv)`
+  max-width: 50%;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
@@ -91,10 +93,6 @@ const MainImageContainer = styled.div`
         : "zoom-in"
       : "default"};
   outline: none;
-
-  .next-video-container {
-    height: 100%;
-  }
 
   .image-row {
     display: flex;
@@ -129,13 +127,9 @@ const MainImageContainer = styled.div`
   }
 `
 
-const ProductImageGallery = ({
-  product,
-  hoveredImage,
-  setHoveredImage,
-  isMobileView,
-}) => {
+const ProductImageGallery = ({ product, isMobileView }) => {
   const [zoomed, setZoomed] = useState(false)
+  const [hoveredImage, setHoveredImage] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
   const mainImageContainerRef = useRef(null)
   const imageRefs = useRef([])
@@ -166,11 +160,6 @@ const ProductImageGallery = ({
   const handleMouseMove = (e) => {
     if (!zoomed) return
 
-    const mediaItem = media[currentIndex]
-
-    // Disable zoom for video
-    if (mediaItem.type !== "image") return
-
     const imageRef = imageRefs.current[currentIndex]
     if (imageRef) {
       const { left, top, width, height } =
@@ -195,18 +184,6 @@ const ProductImageGallery = ({
         : media[index].thumbnail_url
     )
   }
-
-  useEffect(() => {
-    const videoElement = document.querySelector("video")
-
-    if (videoElement) {
-      videoElement.addEventListener("loadeddata", () => {
-        videoElement.play().catch((error) => {
-          console.error("Autoplay failed:", error)
-        })
-      })
-    }
-  }, [])
 
   return (
     <>
@@ -267,7 +244,10 @@ const ProductImageGallery = ({
                     priority={index === 0}
                   />
                 ) : (
-                  <BackgroundVideo src={item.video_url} muted loop />
+                  <video muted loop autoPlay>
+                    <source src={`${item.video_url}`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 )}
               </SwiperSlide>
             ))}
@@ -308,7 +288,7 @@ const ProductImageGallery = ({
                     }}
                   />
                 ) : (
-                  <video muted loop autoplay>
+                  <video muted loop autoPlay>
                     <source src={`${item.video_url}`} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>

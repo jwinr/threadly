@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation"
 import { UserContext } from "@/context/UserContext"
 import { useFavorites } from "@/context/FavoritesContext"
 import Popover from "@/components/Elements/Popover"
+import PropFilter from "@/utils/PropFilter"
+
+const FilteredLiaHeart = PropFilter(LiaHeart)(["loading", "isAdding"])
+const FilteredLiaHeartSolid = PropFilter(LiaHeartSolid)(["loading", "isAdding"])
 
 const loadingAnimation = keyframes`
   0% {
@@ -42,7 +46,7 @@ interface IconProps {
   isAdding?: boolean
 }
 
-const IconOutline = styled(LiaHeart)<IconProps>`
+const IconOutline = styled(FilteredLiaHeart)<IconProps>`
   ${({ loading, isAdding }) =>
     loading &&
     isAdding &&
@@ -51,7 +55,7 @@ const IconOutline = styled(LiaHeart)<IconProps>`
     `}
 `
 
-const IconFilled = styled(LiaHeartSolid)<IconProps>`
+const IconFilled = styled(FilteredLiaHeartSolid)<IconProps>`
   ${({ loading, isAdding }) =>
     loading &&
     isAdding &&

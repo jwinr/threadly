@@ -201,7 +201,6 @@ const ProductInfo = ({
   enteredZipCode,
   isOpen,
   handleZipCodeChange,
-  invalidStyle,
   handleZipCodeBlur,
   handleZipCodeSubmit,
   zipCodeValid,
@@ -284,15 +283,9 @@ const ProductInfo = ({
                       aria-haspopup="true"
                       aria-expanded={isOpen}
                       onChange={handleZipCodeChange}
-                      style={!zipCodeValid ? invalidStyle : {}}
                       onBlur={handleZipCodeBlur}
                     />
-                    <Label
-                      htmlFor="zip"
-                      style={!zipCodeValid ? invalidStyle : {}}
-                    >
-                      Enter ZIP Code
-                    </Label>
+                    <Label htmlFor="zip">Enter ZIP Code</Label>
                     <ZipSubmitBtn onClick={handleZipCodeSubmit}>
                       Submit
                     </ZipSubmitBtn>
