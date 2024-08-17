@@ -1,3 +1,5 @@
+const { withNextVideo } = require('next-video/process')
+
 // next.config.js
 
 module.exports = {

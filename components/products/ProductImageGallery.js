@@ -4,8 +4,9 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
 import { Pagination } from "swiper/modules"
-import { useState, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import PropFilter from "../../utils/PropFilter"
+import VideoIcon from "@/public/images/icons/video.svg"
 
 const AdditionalImageContainer = styled.div`
   display: flex;
@@ -18,11 +19,29 @@ const AdditionalImageContainer = styled.div`
   }
 `
 
+const VideoPlay = styled(VideoIcon)`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.9;
+
+  > path {
+    fill: white;
+  }
+
+  @media (max-width: 768px) {
+    pointer-events: auto;
+  }
+`
+
 const AdditionalImageThumbnail = styled.div`
-  border: 1px solid var(--sc-color-divider);
+  border: 1px solid var(--sc-color-border-gray);
   border-radius: 6px;
   cursor: pointer;
-  padding: 3px;
   width: 70px;
   height: 70px;
   display: grid;
@@ -36,7 +55,8 @@ const AdditionalImageThumbnail = styled.div`
     padding: 2px; // Retain the image size when the border is present
   }
 
-  img {
+  img,
+  video {
     width: 100%;
     height: 100%;
   }
@@ -44,38 +64,37 @@ const AdditionalImageThumbnail = styled.div`
 
 const CarouselContainer = styled.div`
   display: flex;
-  border-radius: 8px;
   width: 100%;
   background-color: white;
   height: 290px;
   order: 2; // Make sure main image is below the product details in mobile view
 
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-  }
-
-  img {
-    width: 360px;
-    object-fit: contain;
+  .next-video-container {
+    height: 100%;
   }
 `
 
-const MainImageContainer = styled(PropFilter("div")(["zoomed", "slideIndex"]))`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const MainImageContainer = styled.div`
+  max-width: 60%;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
   border-color: ${(props) => (props.zoomed ? "#000" : "transparent")};
-  width: 100%;
+  height: 100%;
   background-color: var(--sc-color-white);
   overflow: hidden;
   position: relative;
-  cursor: ${(props) => (props.zoomed ? "zoom-out" : "zoom-in")};
-  user-select: none;
+  cursor: ${(props) =>
+    props.mediaType === "image"
+      ? props.zoomed
+        ? "zoom-out"
+        : "zoom-in"
+      : "default"};
   outline: none;
+
+  .next-video-container {
+    height: 100%;
+  }
 
   .image-row {
     display: flex;
@@ -85,26 +104,27 @@ const MainImageContainer = styled(PropFilter("div")(["zoomed", "slideIndex"]))`
   }
 
   .image-container {
-    flex: 0 0 100%;
+    width: 100%;
+    flex-basis: 100%;
+    min-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    user-select: none;
     outline: none;
+    user-select: none;
+    position: relative;
 
     @media (max-width: 1024px) {
-      padding: 25px; // Spacing for the image slides on tablet displays
+      padding: 25px;
+      user-select: auto;
     }
 
-    img {
-      width: auto;
-      height: auto;
+    img,
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.3s ease;
-      transform: ${(props) => (props.zoomed ? "scale(3)" : "scale(1)")};
-
-      @media (max-width: 1024px) {
-        width: 100%; // Constrain the image on tablets
-      }
     }
   }
 `
@@ -120,7 +140,18 @@ const ProductImageGallery = ({
   const mainImageContainerRef = useRef(null)
   const imageRefs = useRef([])
 
+  // Combine videos and images into a single array for indexing
+  const media = [
+    ...product.videos.map((video) => ({ type: "video", ...video })),
+    ...product.images.map((image) => ({ type: "image", ...image })),
+  ]
+
   const handleImageClick = (e) => {
+    const mediaItem = media[currentIndex]
+
+    // Disable zoom for video
+    if (mediaItem.type !== "image") return
+
     const imageRef = imageRefs.current[currentIndex]
     if (imageRef) {
       const { left, top, width, height } =
@@ -133,15 +164,20 @@ const ProductImageGallery = ({
   }
 
   const handleMouseMove = (e) => {
-    if (zoomed) {
-      const imageRef = imageRefs.current[currentIndex]
-      if (imageRef) {
-        const { left, top, width, height } =
-          mainImageContainerRef.current.getBoundingClientRect()
-        const x = ((e.clientX - left) / width) * 100
-        const y = ((e.clientY - top) / height) * 100
-        imageRef.style.transformOrigin = `${x}% ${y}%`
-      }
+    if (!zoomed) return
+
+    const mediaItem = media[currentIndex]
+
+    // Disable zoom for video
+    if (mediaItem.type !== "image") return
+
+    const imageRef = imageRefs.current[currentIndex]
+    if (imageRef) {
+      const { left, top, width, height } =
+        mainImageContainerRef.current.getBoundingClientRect()
+      const x = ((e.clientX - left) / width) * 100
+      const y = ((e.clientY - top) / height) * 100
+      imageRef.style.transformOrigin = `${x}% ${y}%`
     }
   }
 
@@ -153,18 +189,35 @@ const ProductImageGallery = ({
 
   const handleThumbnailHover = (index) => {
     setCurrentIndex(index)
-    setHoveredImage(product.images[index].image_url)
+    setHoveredImage(
+      media[index].type === "image"
+        ? media[index].image_url
+        : media[index].thumbnail_url
+    )
   }
+
+  useEffect(() => {
+    const videoElement = document.querySelector("video")
+
+    if (videoElement) {
+      videoElement.addEventListener("loadeddata", () => {
+        videoElement.play().catch((error) => {
+          console.error("Autoplay failed:", error)
+        })
+      })
+    }
+  }, [])
 
   return (
     <>
       {!isMobileView && (
         <AdditionalImageContainer>
-          {product.images.map((image, index) => (
+          {media.map((item, index) => (
             <AdditionalImageThumbnail
               key={index}
               className={
-                hoveredImage === image.image_url
+                hoveredImage ===
+                (item.type === "image" ? item.image_url : item.thumbnail_url)
                   ? "additional-image-hovered"
                   : ""
               }
@@ -174,12 +227,24 @@ const ProductImageGallery = ({
                 handleThumbnailHover(index)
               }}
             >
-              <Image
-                src={image.image_url}
-                width={500}
-                height={500}
-                alt={`Product Thumbnail ${index} - ${product.name}`}
-              />
+              {item.type === "image" ? (
+                <Image
+                  src={item.image_url}
+                  width={100}
+                  height={100}
+                  alt={`Product Thumbnail ${index} - ${product.name}`}
+                />
+              ) : (
+                <>
+                  <Image
+                    src={item.thumbnail_url}
+                    alt={item.alt_text}
+                    width={100}
+                    height={100}
+                  />
+                  <VideoPlay />
+                </>
+              )}
             </AdditionalImageThumbnail>
           ))}
         </AdditionalImageContainer>
@@ -191,15 +256,19 @@ const ProductImageGallery = ({
             modules={[Pagination]}
             spaceBetween={10}
           >
-            {product.images.map((image, index) => (
+            {media.map((item, index) => (
               <SwiperSlide key={index}>
-                <Image
-                  src={image.image_url}
-                  width={250}
-                  height={250}
-                  alt={`Product Image ${index} - ${product.name}`}
-                  priority={index === 0}
-                />
+                {item.type === "image" ? (
+                  <Image
+                    src={item.image_url}
+                    width={250}
+                    height={250}
+                    alt={`Product Image ${index} - ${product.name}`}
+                    priority={index === 0}
+                  />
+                ) : (
+                  <BackgroundVideo src={item.video_url} muted loop />
+                )}
               </SwiperSlide>
             ))}
           </Swiper>
@@ -212,6 +281,7 @@ const ProductImageGallery = ({
           onMouseLeave={handleMouseLeave}
           zoomed={zoomed}
           slideIndex={currentIndex}
+          mediaType={media[currentIndex]?.type}
         >
           <div
             className="image-row"
@@ -219,22 +289,30 @@ const ProductImageGallery = ({
               transform: `translate3d(${-100 * currentIndex}%, 0, 0)`,
             }}
           >
-            {product.images.map((image, index) => (
+            {media.map((item, index) => (
               <div key={index} className="image-container">
-                <Image
-                  ref={(el) => (imageRefs.current[index] = el)}
-                  src={image.image_url}
-                  width={500}
-                  height={500}
-                  alt="Inventory item"
-                  priority={index === 0}
-                  style={{
-                    transform:
-                      zoomed && currentIndex === index
-                        ? "scale(3)"
-                        : "scale(1)",
-                  }}
-                />
+                {item.type === "image" ? (
+                  <Image
+                    ref={(el) => (imageRefs.current[index] = el)}
+                    src={item.image_url}
+                    width={500}
+                    height={500}
+                    quality={90}
+                    alt="Inventory item"
+                    priority={index === 0}
+                    style={{
+                      transform:
+                        zoomed && currentIndex === index
+                          ? "scale(3)"
+                          : "scale(1)",
+                    }}
+                  />
+                ) : (
+                  <video muted loop autoplay>
+                    <source src={`${item.video_url}`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
               </div>
             ))}
           </div>

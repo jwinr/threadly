@@ -10,21 +10,21 @@ const sizes = {
 
 const types = {
   primary: css`
-    background-color: #0073e6;
+    background-color: #f86251;
     color: white;
-    --s1-keyline: #0073e6;
+    --s1-keyline: #f44c3a;
 
     &:hover:not(:active) {
-      --s1-keyline: #1c54b2;
-      border-color: #0073e6;
+      --s1-keyline: #f44c3a;
+      border-color: #f86251;
       color: white;
     }
 
     &:active {
-      border-color: #0a3885;
-      background-color: #234bd9;
-      color: #d0daff;
-      --s1-keyline: #0a3885;
+      border-color: #da3c2b;
+      background-color: #ea4836;
+      color: #ffd7d0;
+      --s1-keyline: #da3c2b;
       --s1-top-shadow: 0px -1px 1px 0px rgba(16, 17, 26, 0.16);
     }
   `,

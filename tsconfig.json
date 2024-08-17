@@ -29,6 +29,7 @@
     ]
   },
   "include": [
+    "video.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
@@ -38,7 +39,8 @@
     "components/Elements/Popover.tsx",
     ".next/types/**/*.ts",
     "utils/PropFilter.js",
-    "app/categories/[slug]/layout.js"
+    "app/categories/[slug]/layout.js",
+    "app/api/video/route.js"
   ],
   "exclude": ["node_modules"]
 }
