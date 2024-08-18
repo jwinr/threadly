@@ -17,18 +17,18 @@ function addBusinessDays(startDate, businessDays) {
 }
 
 function ShippingInfo() {
-  const [zipCode, setZipCode] = useState("")
+  const [zipCode, setZipCode] = useState("12345")
   const [deliveryDate, setDeliveryDate] = useState("")
   const [dayOfWeek, setDayOfWeek] = useState("")
   const [returnDate, setReturnDate] = useState("")
 
   useEffect(() => {
-    const fetchUserLocation = async () => {
+    /*const fetchUserLocation = async () => {
       const userLocation = await LocationProvider()
       if (userLocation && userLocation.postal) {
         setZipCode(userLocation.postal)
       }
-    }
+    }*/
 
     const calculateDeliveryDate = () => {
       const today = new Date()
@@ -64,7 +64,7 @@ function ShippingInfo() {
       setReturnDate(formattedReturnDate)
     }
 
-    fetchUserLocation()
+    //fetchUserLocation()
     calculateDeliveryDate()
   }, [])
 

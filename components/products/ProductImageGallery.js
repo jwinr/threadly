@@ -1,5 +1,5 @@
 import Image from "next/image"
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -7,6 +7,18 @@ import { Pagination } from "swiper/modules"
 import { useState, useEffect, useRef } from "react"
 import PropFilter from "@/utils/PropFilter"
 import VideoIcon from "@/public/images/icons/video.svg"
+
+const loadingAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+`
 
 const FilteredDiv = PropFilter("div")(["mediaType", "zoomed", "slideIndex"])
 
@@ -38,6 +50,29 @@ const VideoPlay = styled(VideoIcon)`
   @media (max-width: 768px) {
     pointer-events: auto;
   }
+`
+
+const LoaderThumbnails = styled.div`
+  border-radius: 6px;
+  width: 70px;
+  height: 70px;
+  display: grid;
+  align-content: center;
+  overflow: hidden;
+  position: relative;
+  background-color: #d6d6d6;
+  animation: enter 0.3s forwards, ${loadingAnimation} 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation: enter 0.3s 0.1s forwards,
+      ${loadingAnimation} 2s ease-in-out infinite;
+  }
+`
+
+const LoaderThumbnailsContainer = styled.div`
+  display: grid;
+  gap: 16px;
 `
 
 const AdditionalImageThumbnail = styled.div`
@@ -76,8 +111,23 @@ const CarouselContainer = styled.div`
   }
 `
 
+const LoaderImageContainer = styled.div`
+  max-width: 50%;
+  min-width: 50%;
+  border-radius: 8px;
+  background-color: #d6d6d6;
+  animation: enter 0.3s forwards, ${loadingAnimation} 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation: enter 0.3s 0.1s forwards,
+      ${loadingAnimation} 2s ease-in-out infinite;
+  }
+`
+
 const MainImageContainer = styled(FilteredDiv)`
   max-width: 50%;
+  min-width: 50%; // Prevent an initial layout shift
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
@@ -127,12 +177,26 @@ const MainImageContainer = styled(FilteredDiv)`
   }
 `
 
-const ProductImageGallery = ({ product, isMobileView }) => {
+const ProductImageGallery = ({ product, isMobileView, loading }) => {
   const [zoomed, setZoomed] = useState(false)
   const [hoveredImage, setHoveredImage] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [videoLoaded, setVideoLoaded] = useState(false)
   const mainImageContainerRef = useRef(null)
   const imageRefs = useRef([])
+
+  if (loading) {
+    return (
+      <>
+        <LoaderThumbnailsContainer>
+          {Array.from({ length: 4 }, (_, index) => (
+            <LoaderThumbnails key={index} />
+          ))}
+        </LoaderThumbnailsContainer>
+        <LoaderImageContainer></LoaderImageContainer>
+      </>
+    )
+  }
 
   // Combine videos and images into a single array for indexing
   const media = [
@@ -183,6 +247,10 @@ const ProductImageGallery = ({ product, isMobileView }) => {
         ? media[index].image_url
         : media[index].thumbnail_url
     )
+  }
+
+  const handleVideoLoaded = () => {
+    setVideoLoaded(true)
   }
 
   return (
@@ -244,10 +312,28 @@ const ProductImageGallery = ({ product, isMobileView }) => {
                     priority={index === 0}
                   />
                 ) : (
-                  <video muted loop autoPlay>
-                    <source src={`${item.video_url}`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <>
+                    <Image
+                      src={item.thumbnail_url}
+                      alt={`Video Thumbnail ${index}`}
+                      fill={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={true}
+                    />
+                    <video
+                      muted
+                      loop
+                      autoPlay
+                      onLoadedData={handleVideoLoaded}
+                      style={{
+                        opacity: videoLoaded ? 1 : 0,
+                        zIndex: 10,
+                      }}
+                    >
+                      <source src={`${item.video_url}`} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </>
                 )}
               </SwiperSlide>
             ))}
@@ -288,10 +374,28 @@ const ProductImageGallery = ({ product, isMobileView }) => {
                     }}
                   />
                 ) : (
-                  <video muted loop autoPlay>
-                    <source src={`${item.video_url}`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <>
+                    <Image
+                      src={item.thumbnail_url}
+                      alt={`Video Thumbnail ${index}`}
+                      fill={true}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={true}
+                    />
+                    <video
+                      muted
+                      loop
+                      autoPlay
+                      onLoadedData={handleVideoLoaded}
+                      style={{
+                        opacity: videoLoaded ? 1 : 0,
+                        zIndex: 10,
+                      }}
+                    >
+                      <source src={`${item.video_url}`} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </>
                 )}
               </div>
             ))}

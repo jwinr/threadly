@@ -70,7 +70,11 @@ const ProductDescription = ({ description }) => (
   </Section>
 )
 
-const ProductOverview = ({ product }) => {
+const ProductOverview = ({ product, loading }) => {
+  if (loading) {
+    return <p>Blahggghh</p>
+  }
+
   // Group features by title
   const groupedFeatures = product.features.reduce((acc, feature) => {
     if (!acc[feature.feature_title]) {

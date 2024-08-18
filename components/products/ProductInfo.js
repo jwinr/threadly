@@ -1,25 +1,50 @@
-import styled from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import StarRating from "@/components/ReviewStars/StarRatings"
-import { IoLocationOutline } from "react-icons/io5"
-import { LiaTruckSolid } from "react-icons/lia"
-import { PiKeyReturn } from "react-icons/pi"
+import Truck from "@/public/images/icons/truck.svg"
+import Subscription from "@/public/images/icons/subscription.svg"
+import Location from "@/public/images/icons/location.svg"
 import { RiArrowDownSLine } from "react-icons/ri"
 import AddToFavoritesButton from "@/components/Shopping/AddToFavoritesButton"
 import AddToCartButton from "@/components/Shopping/AddToCartButton"
 import { useMobileView } from "@/context/MobileViewContext"
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
+const loadingAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+
+const LoadingProduct = styled.div`
+  position: relative;
+  width: 100%;
+  order: 0; // Make sure product details are at the top in mobile view
+  border-radius: 8px;
+  background-color: #d6d6d6;
+  animation: enter-form-desktop 0.3s forwards,
+    ${loadingAnimation} 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation: enter 0.3s 0.1s forwards,
+      ${loadingAnimation} 2s ease-in-out infinite;
+  }
+`
+
 const ProductNameWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   order: 0; // Make sure product details are at the top in mobile view
 
   h1 {
     font-size: 23px;
-  }
-
-  @media (min-width: 768px) {
-    order: 0;
   }
 `
 
@@ -69,17 +94,6 @@ const Price = styled.h1`
 
   @media (max-width: 768px) {
     font-size: 16px;
-  }
-`
-
-const CartBtnWrapper = styled.div`
-  display: flex;
-  padding-top: 5px;
-  gap: 15px;
-
-  > button:first-child {
-    // Target the 'add to cart' button
-    width: 75%;
   }
 `
 
@@ -143,6 +157,11 @@ const ShipWrapper = styled.div`
   font-size: 16px;
   position: relative;
   align-items: center;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `
 
 const DateWrapper = styled.div`
@@ -170,10 +189,14 @@ const ExchangeHeader = styled.p`
 `
 
 const ExchangeBox = styled.div`
-  font-size: 24px;
   display: flex;
   align-items: center;
   margin-right: 8px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `
 
 const ExchangeContent = styled.div`
@@ -193,6 +216,30 @@ const ReviewWrapper = styled.div`
   font-size: 14px;
 `
 
+const AddCartWrapper = styled.div`
+  > button {
+    min-height: 44px;
+    width: 100%;
+    font-size: 16px;
+  }
+`
+
+const AddFavsWrapper = styled.div`
+  position: absolute;
+  right: 0;
+`
+
+const StyledLocation = styled(Location)`
+  width: 20px;
+  height: 20px;
+  fill: #30313d;
+  margin-right: 8px;
+`
+
+const StyledTruck = styled(Truck)`
+  margin-right: 8px;
+`
+
 const ProductInfo = ({
   product,
   zipCode,
@@ -208,6 +255,7 @@ const ProductInfo = ({
   dayOfWeek,
   returnDate,
   setOpenSection,
+  loading,
 }) => {
   const isMobileView = useMobileView()
   const formatCurrency = useCurrencyFormatter()
@@ -218,10 +266,24 @@ const ProductInfo = ({
     )
   }
 
+  if (loading) {
+    return (
+      <>
+        <LoadingProduct />
+      </>
+    )
+  }
+
   return (
     <>
       <ProductNameWrapper>
         <h1>{product.name}</h1>
+        <AddFavsWrapper>
+          <AddToFavoritesButton
+            productId={product.product_id}
+            productName={product.name}
+          />
+        </AddFavsWrapper>
         <ReviewWrapper>
           <StarRating reviews={product.reviews} />
           <button
@@ -246,7 +308,7 @@ const ProductInfo = ({
             )}
             <ExchangeWrapper>
               <ExchangeBox>
-                <PiKeyReturn />
+                <Subscription />
               </ExchangeBox>
               <ExchangeContent>
                 <ExchangeHeader>15-DAY FREE & EASY RETURNS</ExchangeHeader>
@@ -256,19 +318,15 @@ const ProductInfo = ({
                 </p>
               </ExchangeContent>
             </ExchangeWrapper>
-            <CartBtnWrapper>
+            <AddCartWrapper>
               <AddToCartButton
                 productId={product.product_id}
                 quantity={1}
                 productName={product.name}
               />
-              <AddToFavoritesButton
-                productId={product.product_id}
-                productName={product.name}
-              />
-            </CartBtnWrapper>
+            </AddCartWrapper>
             <ZipWrapper>
-              <IoLocationOutline style={{ marginRight: "5px" }} size={24} />
+              <StyledLocation />
               Delivery to{" "}
               <ZipDropdownBtn onClick={toggleZipPopup}>
                 <ZipUnderline>{zipCode}</ZipUnderline>
@@ -306,7 +364,7 @@ const ProductInfo = ({
             </ZipWrapper>
             <DateWrapper>Get it by {deliveryDate}</DateWrapper>
             <ShipWrapper>
-              <LiaTruckSolid style={{ marginRight: "5px" }} size={24} />
+              <StyledTruck />
               <ShippingOffer>Free Shipping</ShippingOffer>
             </ShipWrapper>
           </Product>
@@ -322,7 +380,7 @@ const ProductInfo = ({
           )}
           <ExchangeWrapper>
             <ExchangeBox>
-              <PiKeyReturn />
+              <Subscription />
             </ExchangeBox>
             <ExchangeContent>
               <ExchangeHeader>15-DAY FREE & EASY RETURNS</ExchangeHeader>
@@ -332,19 +390,17 @@ const ProductInfo = ({
               </p>
             </ExchangeContent>
           </ExchangeWrapper>
-          <CartBtnWrapper>
-            <AddToCartButton
-              productId={product.product_id}
-              quantity={1}
-              productName={product.name}
-            />
-            <AddToFavoritesButton
-              productId={product.product_id}
-              productName={product.name}
-            />
-          </CartBtnWrapper>
+          <AddToCartButton
+            productId={product.product_id}
+            quantity={1}
+            productName={product.name}
+          />
+          <AddToFavoritesButton
+            productId={product.product_id}
+            productName={product.name}
+          />
           <ZipWrapper>
-            <IoLocationOutline style={{ marginRight: "5px" }} size={24} />
+            <StyledLocation />
             Delivery to{" "}
             <ZipDropdownBtn onClick={toggleZipPopup}>
               <ZipUnderline>{zipCode}</ZipUnderline>
@@ -388,7 +444,7 @@ const ProductInfo = ({
           </ZipWrapper>
           <DateWrapper>Get it by {deliveryDate}</DateWrapper>
           <ShipWrapper>
-            <LiaTruckSolid style={{ marginRight: "5px" }} size={24} />
+            <StyledTruck />
             <ShippingOffer>Free Shipping</ShippingOffer>
           </ShipWrapper>
         </Product>
