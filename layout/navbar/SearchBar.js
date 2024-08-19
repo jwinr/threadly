@@ -127,12 +127,13 @@ const SearchBar = () => {
     }
   }
 
-  useEffect(() => {
+  const handleFocus = () => {
     document.addEventListener("keydown", handleKeyDown)
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [])
+  }
+
+  const handleBlur = () => {
+    document.removeEventListener("keydown", handleKeyDown)
+  }
 
   return (
     <SearchContainer>
@@ -142,6 +143,8 @@ const SearchBar = () => {
           placeholder="What can we help you find?"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           aria-label="Search for products"
         />
         {searchTerm && (

@@ -5,7 +5,6 @@ import Subscription from "@/public/images/icons/subscription.svg"
 import Location from "@/public/images/icons/location.svg"
 import { RiArrowDownSLine } from "react-icons/ri"
 import AddToFavoritesButton from "@/components/Shopping/AddToFavoritesButton"
-import AddToCartButton from "@/components/Shopping/AddToCartButton"
 import { useMobileView } from "@/context/MobileViewContext"
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
@@ -44,7 +43,8 @@ const ProductNameWrapper = styled.div`
   order: 0; // Make sure product details are at the top in mobile view
 
   h1 {
-    font-size: 23px;
+    font-size: 18px;
+    margin-right: 45px;
   }
 `
 
@@ -216,14 +216,6 @@ const ReviewWrapper = styled.div`
   font-size: 14px;
 `
 
-const AddCartWrapper = styled.div`
-  > button {
-    min-height: 44px;
-    width: 100%;
-    font-size: 16px;
-  }
-`
-
 const AddFavsWrapper = styled.div`
   position: absolute;
   right: 0;
@@ -318,13 +310,6 @@ const ProductInfo = ({
                 </p>
               </ExchangeContent>
             </ExchangeWrapper>
-            <AddCartWrapper>
-              <AddToCartButton
-                productId={product.product_id}
-                quantity={1}
-                productName={product.name}
-              />
-            </AddCartWrapper>
             <ZipWrapper>
               <StyledLocation />
               Delivery to{" "}
@@ -390,11 +375,6 @@ const ProductInfo = ({
               </p>
             </ExchangeContent>
           </ExchangeWrapper>
-          <AddToCartButton
-            productId={product.product_id}
-            quantity={1}
-            productName={product.name}
-          />
           <AddToFavoritesButton
             productId={product.product_id}
             productName={product.name}

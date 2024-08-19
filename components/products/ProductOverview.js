@@ -88,9 +88,9 @@ const ProductOverview = ({ product, loading }) => {
     <ProductSpecifications>
       <ProductOverviewSection>
         <ProductDescription description={product.description} />
-        {groupedFeatures["Feature"] && (
+        {groupedFeatures["Features"] && (
           <ul>
-            {groupedFeatures["Feature"].map((content, idx) => (
+            {groupedFeatures["Features"].map((content, idx) => (
               <li key={idx}>{content}</li>
             ))}
           </ul>

@@ -84,7 +84,9 @@ layout/navbar/Menu/
 middleware.ts
 *.sql
 stripe.js
+stripe_old.js
 .hintrc
+Product_Variants_and_Attributes_Documentation.md
 
 #amplify-do-not-edit-begin
 amplify/#current-cloud-backend
@@ -107,7 +109,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-pages/checkout.js
 
 # next-video
 videos/*

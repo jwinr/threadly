@@ -161,7 +161,7 @@ interface ProductCardProps {
   discount?: number
   brand: string
   rating: number
-  image: { is_main: boolean; image_url: string }[]
+  image: { image_url: string }[] // Remove is_main since it's not used
   id: string
   loading: boolean
 }
@@ -180,14 +180,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!discount
   const [currentImage, setCurrentImage] = useState<{
-    is_main: boolean
     image_url: string
   } | null>(null)
 
   useEffect(() => {
-    if (image) {
-      const mainImage = image.find((img) => img.is_main) || image[0]
-      setCurrentImage(mainImage)
+    if (image && image.length > 0) {
+      setCurrentImage(image[0]) // Assume the first image as main
+    } else {
+      setCurrentImage(null) // No images available
     }
   }, [image])
 

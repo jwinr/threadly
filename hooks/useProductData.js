@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-const useProductData = (slug) => {
+const useProductData = (slug, variantSku) => {
   const [product, setProduct] = useState(null)
   const [categoryName, setCategoryName] = useState(null)
   const [categorySlug, setCategorySlug] = useState(null)
@@ -8,7 +8,7 @@ const useProductData = (slug) => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`/api/products/${slug}`, {
+        const response = await fetch(`/api/products/${slug}/${variantSku}`, {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
           },
@@ -28,7 +28,7 @@ const useProductData = (slug) => {
     if (slug) {
       fetchProductDetails()
     }
-  }, [slug])
+  }, [slug, variantSku])
 
   return { product, categoryName, categorySlug }
 }
