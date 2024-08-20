@@ -1,4 +1,8 @@
 import styled, { keyframes, css } from "styled-components"
+import PropFilter from "@/utils/PropFilter"
+
+const FilteredDiv = PropFilter("div")(["shake"])
+const FilteredButton = PropFilter("button")(["loading", "isInvalid"])
 
 /* Shared Styles */
 export const fadeIn = keyframes`
@@ -107,8 +111,7 @@ export const AuthCardContent = styled.div<AuthCardContentProps>`
 interface AuthCardProps {
   shake?: boolean
 }
-
-export const AuthCard = styled.div<AuthCardProps>`
+export const AuthCard = styled(FilteredDiv)<AuthCardProps>`
   display: flex;
   flex-direction: column;
   background-color: var(--sc-color-white);
@@ -298,7 +301,7 @@ interface AuthBtnProps {
   isInvalid?: boolean
 }
 
-export const AuthBtn = styled.button<AuthBtnProps>`
+export const AuthBtn = styled(FilteredButton)<AuthBtnProps>`
   display: flex;
   align-items: center;
   justify-content: center;

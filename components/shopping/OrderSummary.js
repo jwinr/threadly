@@ -17,7 +17,9 @@ const loadingAnimation = keyframes`
   }
 `
 
-const OrderSummaryContainer = styled(PropFilter("div")(["loading"]))`
+const OrderSummaryContainer = styled(
+  PropFilter("div")(["loading", "loadingSummary"])
+)`
   margin: 30px 16px;
   flex: 1 1 auto;
   background-color: ${({ loading }) => (loading ? "#d6d6d6" : "initial")};

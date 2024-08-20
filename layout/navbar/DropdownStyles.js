@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import PropFilter from "@/utils/PropFilter"
 
+const FilteredButton = PropFilter("button")(["isOpen"])
+
 export const Dropdown = styled.div`
   position: absolute;
   top: 63px;
@@ -35,8 +37,7 @@ export const Dropdown = styled.div`
     top: 106px;
   }
 `
-
-export const Button = styled(PropFilter("button")(["isOpen"]))`
+export const Button = styled(FilteredButton)`
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;

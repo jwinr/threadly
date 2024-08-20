@@ -83,7 +83,7 @@ lib/db.ts
 layout/navbar/Menu/
 middleware.ts
 *.sql
-stripe.js
+stripeProductHandler.js
 stripe_old.js
 .hintrc
 Product_Variants_and_Attributes_Documentation.md

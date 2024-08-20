@@ -2,7 +2,11 @@ import React, { FC, ChangeEvent } from "react"
 
 import styled from "styled-components"
 
+import PropFilter from "@/utils/PropFilter"
+
 import ArrowUpDown from "../../public/images/icons/arrowUpDown.svg"
+
+const FilteredSelect = PropFilter("select")(["invalid"])
 
 /**
  * WrapperProps - Interface for wrapper properties.
@@ -47,7 +51,7 @@ interface SelectWrapperProps {
   invalid: boolean
 }
 
-const SelectWrapper = styled.select<SelectWrapperProps>`
+const SelectWrapper = styled(FilteredSelect)<SelectWrapperProps>`
   display: flex;
   width: 100%;
   padding: var(--s1-padding-top) var(--s1-padding-right)

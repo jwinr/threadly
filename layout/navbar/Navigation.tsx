@@ -118,11 +118,11 @@ const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
             </Logo>
             <Nav />
             <SearchBar />
-            {/*<UserDropdown
-                isOpen={openDropdown === "user"}
-                onToggle={() => handleToggle("user")}
-                aria-label="User Menu"
-              />*/}
+            <UserDropdown
+              isOpen={openDropdown === "user"}
+              onToggle={() => handleToggle("user")}
+              aria-label="User Menu"
+            />
             <CartIcon aria-label="Shopping Cart" />
           </NavbarFlex>
         </>
@@ -132,12 +132,11 @@ const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
           <Logo href="/" aria-label="Home">
             <BannerLogo alt="Threadly Logo" />
           </Logo>
-          {/* <UserDropdown
-              isOpen={openDropdown === "user"}
-              onToggle={() => handleToggle("user")}
-              aria-label="User Menu"
-            />
-            */}
+          <UserDropdown
+            isOpen={openDropdown === "user"}
+            onToggle={() => handleToggle("user")}
+            aria-label="User Menu"
+          />
           <CartIcon aria-label="Shopping Cart" />
         </MobileFlexContainer>
       )}

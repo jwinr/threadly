@@ -186,6 +186,7 @@ function NavItem(props) {
         </div>
       </UserButton>
       {React.cloneElement(props.children, {
+        $isOpen: isOpen,
         dropdownRight: dropdownRight,
         setOpen: onToggle,
         className: `${
@@ -262,7 +263,7 @@ function DropdownMenu({
       role="menu"
       onKeyDown={handleKeyDown}
       className={className} // Apply the visibility class
-      isOpen={isOpen}
+      $isOpen={isOpen}
     >
       <CSSTransition
         in={true}

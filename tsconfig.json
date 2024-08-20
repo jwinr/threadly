@@ -12,6 +12,7 @@
       "@/lib/*": ["lib/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2015",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,

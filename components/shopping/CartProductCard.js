@@ -1,14 +1,14 @@
 import React from "react"
-
 import styled from "styled-components"
-
 import Link from "next/link"
 import Image from "next/image"
-
 import { VscClose } from "react-icons/vsc"
 import ShipBox from "@/public/images/icons/shipbox.svg"
 import Select from "@/components/Elements/Select"
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
+import PropFilter from "@/utils/PropFilter"
+
+const FilteredH1 = PropFilter("h1")(["sale"])
 
 const ProductCard = styled.li`
   display: flex;
@@ -69,13 +69,20 @@ const Title = styled(Link)`
   }
 `
 
-const Price = styled.h1`
+const VariantDetails = styled.div`
+  font-size: 14px;
+  color: var(--sc-color-text-light-gray);
+  margin-left: 12px;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+`
+
+const Price = styled(FilteredH1)`
   font-size: 19px;
   font-weight: bold;
   color: ${(props) => (props.sale ? "var(--sc-color-carnation)" : "#353a44;")};
-
-  @media (max-width: 768px) {
-  }
 `
 
 const SingleItemPrice = styled.span`
@@ -248,6 +255,11 @@ const CartProductCard = ({
             >
               {item.product_name}
             </Title>
+            <VariantDetails>
+              <p>Color: {item.color || "Unknown"}</p>
+              <p>Waist: {item.waist}</p>
+              <p>Length: {item.length}</p>
+            </VariantDetails>
           </TitleSection>
           <ShippingWrapper>
             <ShipIconWrapper>
@@ -295,7 +307,7 @@ const CartProductCard = ({
               defaultValue={item.quantity}
               value={item.quantity}
               onChange={(e) =>
-                handleQuantityChange(item.product_id, e.target.value)
+                handleQuantityChange(item.variant_id, e.target.value)
               }
             >
               {Array.from({ length: 10 }, (_, i) => (
@@ -315,6 +327,11 @@ const CartProductCard = ({
             >
               {item.product_name}
             </Title>
+            <VariantDetails>
+              <p>Color: {item.color || "Unknown"}</p>
+              <p>Waist: {item.waist}</p>
+              <p>Length: {item.length}</p>
+            </VariantDetails>
           </TitleSection>
           <ShippingWrapper>
             <ShipIconWrapper>
@@ -336,22 +353,12 @@ const CartProductCard = ({
                 {formatCurrency(item.product_price)} each
               </SingleItemPrice>
             )}
-            {item.product_sale_price && (
-              <>
-                <span>
-                  reg{" "}
-                  <OriginalPrice>
-                    {formatCurrency(item.product_price)}
-                  </OriginalPrice>
-                  {item.quantity > 1 && (
-                    <SingleItemPrice>
-                      {formatCurrency(item.product_sale_price)} each
-                    </SingleItemPrice>
-                  )}
-                </span>
-                <Sale>Sale</Sale>
-              </>
+            {item.quantity > 1 && item.product_sale_price && (
+              <SingleItemPrice>
+                {formatCurrency(item.product_sale_price)} each
+              </SingleItemPrice>
             )}
+            {item.product_sale_price && <Sale>Sale</Sale>}
           </Details>
           <QuantityWrapper>
             <Select
@@ -359,7 +366,7 @@ const CartProductCard = ({
               defaultValue={item.quantity}
               value={item.quantity}
               onChange={(e) =>
-                handleQuantityChange(item.product_id, e.target.value)
+                handleQuantityChange(item.variant_id, e.target.value)
               }
             >
               {Array.from({ length: 10 }, (_, i) => (
@@ -372,7 +379,7 @@ const CartProductCard = ({
         </>
       )}
       <RemoveButtonWrapper>
-        <RemoveButton onClick={() => removeFromCart(item.product_id)}>
+        <RemoveButton onClick={() => removeFromCart(item.variant_id)}>
           <VscClose size={28} />
         </RemoveButton>
       </RemoveButtonWrapper>

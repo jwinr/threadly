@@ -10,7 +10,7 @@ const ButtonText = styled(PropFilter("span")(["loading"]))`
   transition: opacity 0.24s ease-in-out;
 `
 
-const AddToCartButton = ({ productId, quantity = 1, productName }) => {
+const AddToCartButton = ({ sizeVariantId, quantity = 1, productName }) => {
   const { addToCart } = useContext(CartContext)
   const [loading, setLoading] = useState(false)
 
@@ -19,7 +19,7 @@ const AddToCartButton = ({ productId, quantity = 1, productName }) => {
   const handleAddToCart = async () => {
     setLoading(true)
     try {
-      await Promise.all([addToCart(productId, quantity), delay(750)])
+      await Promise.all([addToCart(sizeVariantId, quantity), delay(750)])
     } catch (error) {
       console.error("Failed to add to cart", error)
     } finally {

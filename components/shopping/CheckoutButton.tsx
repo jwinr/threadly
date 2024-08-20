@@ -4,13 +4,18 @@ import styled from "styled-components"
 import LoaderSpin from "../Loaders/LoaderSpin"
 import { useToast } from "../../context/ToastContext"
 import { UserContext } from "@/context/UserContext"
+import PropFilter from "@/utils/PropFilter"
 
 interface ButtonProps {
   loading?: boolean
   disabled?: boolean
 }
 
-const Button = styled.button<ButtonProps>`
+const FilteredBtn = PropFilter("button")(["loading"])
+
+const FilteredSpan = PropFilter("span")(["loading"])
+
+const Button = styled(FilteredBtn)<ButtonProps>`
   position: relative;
   justify-content: center;
   background-color: var(--sc-color-button-blue);
@@ -42,7 +47,7 @@ const Button = styled.button<ButtonProps>`
   }
 `
 
-const ButtonText = styled.span<ButtonProps>`
+const ButtonText = styled(FilteredSpan)<ButtonProps>`
   opacity: ${({ loading }) => (loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
 `
