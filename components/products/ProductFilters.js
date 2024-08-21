@@ -96,8 +96,8 @@ const FilterWrapper = styled.div`
   flex-wrap: wrap;
   gap: 6px;
 
-  ${({ loading }) =>
-    !loading &&
+  ${({ $loading }) =>
+    !$loading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
     `}
@@ -409,7 +409,7 @@ function ProductFilters({
   return (
     <>
       <ProductFilterContainer>
-        <FilterWrapper loading={loading}>
+        <FilterWrapper $loading={loading}>
           <AllFiltersBtn
             onClick={() => {
               setIsPanelMounted(true)

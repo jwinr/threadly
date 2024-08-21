@@ -16,7 +16,7 @@ interface ToastProps {
   id: string
 }
 
-const ToastContainer = styled.div<{ isVisible: boolean }>`
+const ToastContainer = styled.div<{ $isVisible: boolean }>`
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -35,7 +35,7 @@ const ToastContainer = styled.div<{ isVisible: boolean }>`
   z-index: 1000;
   max-width: 576px;
   ${(props) =>
-    props.isVisible
+    props.$isVisible
       ? css`
           visibility: visible;
           opacity: 1;
@@ -143,7 +143,7 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <ToastContainer
-      isVisible={isVisible}
+      $isVisible={isVisible}
       style={{ bottom: `${20 + index * 60}px` }}
     >
       <IconContainer>{renderIcon()}</IconContainer>

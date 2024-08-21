@@ -235,7 +235,7 @@ const CartProductCard = ({
   return (
     <ProductCard>
       <ImageWrapper
-        href={`/products/${item.product_slug}`}
+        href={`/products/${item.product_slug}/${item.sku}`}
         aria-label={`View details of ${item.product_name}`}
       >
         <Image
@@ -250,7 +250,7 @@ const CartProductCard = ({
         <InfoContainer>
           <TitleSection>
             <Title
-              href={`/products/${item.product_slug}`}
+              href={`/products/${item.product_slug}/${item.sku}`}
               aria-label={`View details of ${item.product_name}`}
             >
               {item.product_name}
@@ -322,7 +322,7 @@ const CartProductCard = ({
         <>
           <TitleSection>
             <Title
-              href={`/products/${item.product_slug}`}
+              href={`/products/${item.product_slug}/${item.sku}`}
               aria-label={`View details of ${item.product_name}`}
             >
               {item.product_name}

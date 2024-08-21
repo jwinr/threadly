@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import AddToCartButton from "../Shopping/AddToCartButton"
+import AddToCartButton from "@/components/Shopping/AddToCartButton"
 import styled, { css } from "styled-components"
-import StarRatings from "../ReviewStars/StarRatings"
-import AddToFavoritesButton from "../Shopping/AddToFavoritesButton"
+import StarRatings from "@/components/ReviewStars/StarRatings"
 import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
 
-const CardContainer = styled.div<{ isLoading: boolean }>`
+const CardContainer = styled.div<{ $isLoading: boolean }>`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -18,8 +17,8 @@ const CardContainer = styled.div<{ isLoading: boolean }>`
   height: 100%;
   width: 100%;
 
-  ${({ isLoading }) =>
-    !isLoading &&
+  ${({ $isLoading }) =>
+    !$isLoading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
     `}
@@ -35,13 +34,13 @@ const ImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
-  padding: 8px;
+  height: 462px;
   max-height: 624px;
 
   img {
     width: 100%;
-    height: 100%;
+    height: 462px;
+    object-fit: cover;
   }
 
   @media (max-width: 768px) {
@@ -52,7 +51,7 @@ const ImageWrapper = styled.div`
 `
 
 const Title = styled(Link)`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
   display: -webkit-box;
@@ -106,14 +105,14 @@ const PriceContainer = styled.div`
   color: var(--sc-color-deal-text);
 `
 
-const Price = styled.h1<{ sale?: boolean }>`
-  font-size: 24px;
+const Price = styled.h1<{ $sale?: boolean }>`
+  font-size: 13px;
   font-weight: 500;
   line-height: 1;
   margin-top: 8px;
   margin-bottom: 8px;
   margin-right: 5px;
-  color: ${(props) => (props.sale ? "var(--sc-color-carnation)" : "#353a44")};
+  color: ${(props) => (props.$sale ? "var(--sc-color-carnation)" : "#353a44")};
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -198,7 +197,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const imageUrl = currentImage.image_url || "/images/products/placeholder.jpg"
 
   return (
-    <CardContainer isLoading={loading}>
+    <CardContainer $isLoading={loading}>
       <ImageWrapper>
         <Link href={`${link}`} aria-label={`View details of ${title}`}>
           <Image alt={title} src={imageUrl} width={500} height={500} />
@@ -213,7 +212,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <StarRatings reviews={rating} />
         </Rating>
         <PriceContainer>
-          <Price sale={isOnSale}>{formatCurrency(discount || price)}</Price>
+          <Price $sale={isOnSale}>{formatCurrency(discount || price)}</Price>
           {discount && (
             <span>
               reg <OriginalPrice>{formatCurrency(price)}</OriginalPrice>
@@ -223,7 +222,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {discount && <Sale>Sale</Sale>}
         <ButtonWrapper>
           <AddToCartButton productId={id} quantity={1} productName={title} />
-          <AddToFavoritesButton productId={id} productName={title} />
         </ButtonWrapper>
       </Details>
     </CardContainer>

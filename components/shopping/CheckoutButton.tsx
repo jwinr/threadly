@@ -1,24 +1,19 @@
 import React, { useState, useContext, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import styled from "styled-components"
-import LoaderSpin from "../Loaders/LoaderSpin"
-import { useToast } from "../../context/ToastContext"
+import LoaderSpin from "@/components/Loaders/LoaderSpin"
+import { useToast } from "@/context/ToastContext"
 import { UserContext } from "@/context/UserContext"
-import PropFilter from "@/utils/PropFilter"
 
 interface ButtonProps {
-  loading?: boolean
+  $loading?: boolean
   disabled?: boolean
 }
 
-const FilteredBtn = PropFilter("button")(["loading"])
-
-const FilteredSpan = PropFilter("span")(["loading"])
-
-const Button = styled(FilteredBtn)<ButtonProps>`
+const Button = styled.button<ButtonProps>`
   position: relative;
   justify-content: center;
-  background-color: var(--sc-color-button-blue);
+  background-color: var(--sc-color-carnation);
   color: white;
   padding: 0px 16px;
   min-height: 44px;
@@ -28,15 +23,15 @@ const Button = styled(FilteredBtn)<ButtonProps>`
   width: 100%;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, rgb(0 116 230 / 80%) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, rgb(230 0 0 / 80%) 0px 0px 0px 1px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   transition: all 240ms;
-  cursor: ${({ loading, disabled }) =>
-    loading || disabled ? "not-allowed" : "pointer"};
-  opacity: ${({ loading, disabled }) => (loading || disabled ? 0.6 : 1)};
-  pointer-events: ${({ loading, disabled }) =>
-    loading || disabled ? "none" : "auto"};
+  cursor: ${({ $loading, disabled }) =>
+    $loading || disabled ? "not-allowed" : "pointer"};
+  opacity: ${({ $loading, disabled }) => ($loading || disabled ? 0.6 : 1)};
+  pointer-events: ${({ $loading, disabled }) =>
+    $loading || disabled ? "none" : "auto"};
 
   &:focus {
     box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
@@ -47,8 +42,8 @@ const Button = styled(FilteredBtn)<ButtonProps>`
   }
 `
 
-const ButtonText = styled(FilteredSpan)<ButtonProps>`
-  opacity: ${({ loading }) => (loading ? 0 : 1)};
+const ButtonText = styled.span<ButtonProps>`
+  opacity: ${({ $loading }) => ($loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
 `
 
@@ -89,14 +84,14 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
   return (
     <Button
       onClick={handleCheckout}
-      loading={loading}
+      $loading={loading}
       disabled={disabled}
       aria-label={
         userAttributes ? "Proceed to checkout" : "Sign in to check out"
       }
       aria-disabled={disabled}
     >
-      <ButtonText loading={loading}>
+      <ButtonText $loading={loading}>
         {userAttributes ? "Checkout" : "Sign in to check out"}
       </ButtonText>
       <LoaderSpin loading={loading} />

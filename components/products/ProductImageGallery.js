@@ -1,10 +1,10 @@
 import Image from "next/image"
-import styled, { css, keyframes } from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/pagination"
 import { Pagination } from "swiper/modules"
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import PropFilter from "@/utils/PropFilter"
 import VideoIcon from "@/public/images/icons/video.svg"
 
@@ -127,7 +127,7 @@ const LoaderImageContainer = styled.div`
 
 const MainImageContainer = styled(FilteredDiv)`
   max-width: 50%;
-  min-width: 50%; // Prevent an initial layout shift
+  min-width: 50%;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
@@ -143,6 +143,19 @@ const MainImageContainer = styled(FilteredDiv)`
         : "zoom-in"
       : "default"};
   outline: none;
+
+  .zoomed-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%; // Double the size for zoom effect
+    height: 200%; // Double the size for zoom effect
+    transform-origin: center center; // Will be updated dynamically
+    transform: scale(2); // Initial zoom
+    pointer-events: none;
+    z-index: 10;
+    transition: transform 0.1s ease, transform-origin 0.1s ease; // Smooth transition
+  }
 
   .image-row {
     display: flex;
@@ -184,6 +197,7 @@ const ProductImageGallery = ({ product, isMobileView, loading }) => {
   const [videoLoaded, setVideoLoaded] = useState(false)
   const mainImageContainerRef = useRef(null)
   const imageRefs = useRef([])
+  const zoomedImageRef = useRef(null)
 
   if (loading) {
     return (
@@ -207,31 +221,41 @@ const ProductImageGallery = ({ product, isMobileView, loading }) => {
   const handleImageClick = (e) => {
     const mediaItem = media[currentIndex]
 
-    // Disable zoom for video
     if (mediaItem.type !== "image") return
 
-    const imageRef = imageRefs.current[currentIndex]
-    if (imageRef) {
-      const { left, top, width, height } =
-        mainImageContainerRef.current.getBoundingClientRect()
-      const x = ((e.clientX - left) / width) * 100
-      const y = ((e.clientY - top) / height) * 100
-      imageRef.style.transformOrigin = `${x}% ${y}%`
-      setZoomed((prevZoomed) => !prevZoomed)
+    const { left, top, width, height } =
+      mainImageContainerRef.current.getBoundingClientRect()
+
+    const x = ((e.clientX - left) / width) * 100
+    const y = ((e.clientY - top) / height) * 100
+
+    if (zoomedImageRef.current) {
+      // Set the transform-origin immediately
+      zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`
+
+      // Trigger the zoom effect immediately after setting the transform-origin
+      if (!zoomed) {
+        zoomedImageRef.current.style.transform = "scale(2)"
+      } else {
+        zoomedImageRef.current.style.transform = "scale(1)"
+      }
     }
+
+    setZoomed((prevZoomed) => !prevZoomed)
   }
 
   const handleMouseMove = (e) => {
-    if (!zoomed) return
-
-    const imageRef = imageRefs.current[currentIndex]
-    if (imageRef) {
-      const { left, top, width, height } =
-        mainImageContainerRef.current.getBoundingClientRect()
-      const x = ((e.clientX - left) / width) * 100
-      const y = ((e.clientY - top) / height) * 100
-      imageRef.style.transformOrigin = `${x}% ${y}%`
+    if (!zoomed || !mainImageContainerRef.current || !zoomedImageRef.current) {
+      return
     }
+
+    const { left, top, width, height } =
+      mainImageContainerRef.current.getBoundingClientRect()
+
+    const x = ((e.clientX - left) / width) * 100
+    const y = ((e.clientY - top) / height) * 100
+
+    zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`
   }
 
   const handleMouseLeave = () => {
@@ -344,7 +368,7 @@ const ProductImageGallery = ({ product, isMobileView, loading }) => {
           ref={mainImageContainerRef}
           onClick={handleImageClick}
           onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          onMouseLeave={() => setZoomed(false)}
           zoomed={zoomed}
           slideIndex={currentIndex}
           mediaType={media[currentIndex]?.type}
@@ -361,17 +385,11 @@ const ProductImageGallery = ({ product, isMobileView, loading }) => {
                   <Image
                     ref={(el) => (imageRefs.current[index] = el)}
                     src={item.image_url}
-                    width={500}
-                    height={500}
+                    width={880}
+                    height={880}
                     quality={90}
                     alt="Inventory item"
                     priority={index === 0}
-                    style={{
-                      transform:
-                        zoomed && currentIndex === index
-                          ? "scale(3)"
-                          : "scale(1)",
-                    }}
                   />
                 ) : (
                   <>
@@ -400,6 +418,17 @@ const ProductImageGallery = ({ product, isMobileView, loading }) => {
               </div>
             ))}
           </div>
+          {zoomed && (
+            <Image
+              className="zoomed-image"
+              ref={zoomedImageRef}
+              src={media[currentIndex].image_url}
+              width={2000}
+              height={2000}
+              quality={100}
+              alt={`Zoomed Image - ${product.name}`}
+            />
+          )}
         </MainImageContainer>
       )}
     </>

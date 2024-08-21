@@ -249,6 +249,7 @@ const ProductInfo = ({
   setOpenSection,
   loading,
 }) => {
+  console.log(product)
   const isMobileView = useMobileView()
   const formatCurrency = useCurrencyFormatter()
 
@@ -265,6 +266,12 @@ const ProductInfo = ({
       </>
     )
   }
+
+  const selectedVariant = product.variants?.[0]
+  const selectedSize = selectedVariant?.sizes?.[0]
+
+  const productPrice = selectedSize?.price || 0
+  const productSalePrice = selectedSize?.sale_price || productPrice
 
   return (
     <>
@@ -291,11 +298,11 @@ const ProductInfo = ({
         </ReviewWrapper>
         {!isMobileView && (
           <Product>
-            <Price>{formatCurrency(product.sale_price || product.price)}</Price>
-            {product.sale_price && (
+            <Price>{formatCurrency(productSalePrice)}</Price>
+            {selectedSize?.sale_price && (
               <span>
                 reg{" "}
-                <OriginalPrice>{formatCurrency(product.price)}</OriginalPrice>
+                <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
               </span>
             )}
             <ExchangeWrapper>
@@ -357,10 +364,10 @@ const ProductInfo = ({
       </ProductNameWrapper>
       {isMobileView && (
         <Product>
-          <Price>{formatCurrency(product.sale_price || product.price)}</Price>
-          {product.sale_price && (
+          <Price>{formatCurrency(productSalePrice)}</Price>
+          {selectedSize?.sale_price && (
             <span>
-              reg <OriginalPrice>{formatCurrency(product.price)}</OriginalPrice>
+              reg <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
             </span>
           )}
           <ExchangeWrapper>
