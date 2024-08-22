@@ -222,8 +222,8 @@ const ProductAttributes = ({ product, onSizeVariantSelected }) => {
                   <Image
                     src={option.color_swatch_url}
                     alt={option.color_name}
-                    width={40}
-                    height={40}
+                    width={24}
+                    height={24}
                   />
                 )}
               </ColorSwatch>
