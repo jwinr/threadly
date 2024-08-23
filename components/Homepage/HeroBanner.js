@@ -3,11 +3,12 @@ import styled, { keyframes } from "styled-components"
 import Image from "next/image"
 import HeroImg from "@/public/images/hero_main.jpg"
 import Arrow from "@/public/images/icons/ctaArrow.svg"
+import KnockoutText from "./KnockoutText"
 
 const fadeInUp = keyframes`
   from {
     opacity: 0;
-    transform: translateY(60%);
+    transform: translateY(50%);
   }
   to {
     opacity: 1;
@@ -18,42 +19,22 @@ const fadeInUp = keyframes`
 const fadeInUpSub = keyframes`
   from {
     opacity: 0;
-    transform: translateY(90%);
+    transform: translateY(175%);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0px);
   }
 `
 
 const fadeInUpCta = keyframes`
   from {
     opacity: 0;
-    transform: translateY(120%);
+    transform: translateY(325%);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-`
-
-const fadeInWithMask = keyframes`
-   0% {
-    opacity: 0;
-    transform: translateY(60%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`
-
-const insetClipPath = keyframes`
-  0% {
-    clip-path: inset(0 0 0 100%);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
+    transform: translateY(0%);
   }
 `
 
@@ -87,7 +68,9 @@ const HeroBannerContainer = styled.div`
   align-items: center;
   border-radius: 12px;
   overflow: hidden;
-  height: calc(100vh - 104px); // Viewport - navbar height and section padding
+  height: calc(
+    100vh - 104px
+  ); // Viewport subtracted by the navbar height and section padding
   background-color: white;
   perspective: 1000px;
 
@@ -131,14 +114,15 @@ const TextContainer = styled.div`
 const Headline = styled.div`
   font-weight: 700;
   color: #fff;
-  line-height: 1.2;
   display: flex;
   flex-direction: column;
+  animation: ${fadeInUp} 1.25s ease forwards;
 
   h1 {
-    font-size: 70px;
-    animation: ${fadeInUp} 1.25s ease forwards;
-    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
+    font-size: 76px;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.75);
   }
 
   @media (max-width: 768px) {
@@ -147,46 +131,17 @@ const Headline = styled.div`
   }
 `
 
-const KnockoutText = styled.div`
-  opacity: 0;
-  height: 100px;
-  animation: ${fadeInWithMask} 1s ease forwards,
-    ${insetClipPath} 0.75s ease-out forwards;
-
-  h1 {
-    font-size: 70px;
-    background: linear-gradient(
-      269.94deg,
-      #aa6dd3 13.86%,
-      #ff8562 84.56%
-    ) !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    text-shadow: none;
-  }
-
-  &::before {
-    animation: ${fadeInWithMask} 1s ease forwards,
-      ${insetClipPath} 0.75s ease-out forwards;
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 70px;
-    color: transparent;
-    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.5);
-    z-index: -1;
-  }
-`
-
 const Subheadline = styled.h2`
   font-size: 18px;
+  letter-spacing: 0.2px;
   font-weight: 400;
+  line-height: 1.55;
   color: #fff;
   text-shadow: 0px 2px 6px rgb(0 0 0), 1px 2px 5px rgb(0 0 0);
-  margin: 32px 0;
+  margin-top: 10px;
+  margin-bottom: 32px;
   opacity: 0;
-  animation: ${fadeInUpSub} 1.25s ease 0.25s forwards;
+  animation: ${fadeInUpSub} 1.5s 0.25s ease forwards;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -197,8 +152,10 @@ const Subheadline = styled.h2`
 const CtaButton = styled.button`
   display: flex;
   align-items: center;
+  position: absolute;
   background-color: var(--sc-color-carnation);
   color: var(--sc-color-white);
+  margin-bottom: 16px;
   padding-left: 16px;
   padding-top: 3px;
   padding-bottom: 6px;
@@ -206,14 +163,14 @@ const CtaButton = styled.button`
   border-radius: 16.5px;
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.6;
   opacity: 0;
   transition: transform 0.3s ease, background-color 0.15s ease;
-  animation: ${fadeInUpCta} 1.25s ease 0.5s forwards; /* Delayed start */
+  animation: ${fadeInUpCta} 1.25s ease 0.75s forwards;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 12px;
 
   &:hover {
     background-color: #360b07;
-    transform: scale(1.05);
 
     & ${HoverArrow} {
       opacity: 1;
@@ -257,14 +214,13 @@ const HeroBanner = () => {
       </ParallaxLayer>
       <TextContainer>
         <Headline>
-          <h1>Where timeless style meets modern</h1>
-          <KnockoutText data-text="confidence.">
-            <h1>confidence.</h1>
-          </KnockoutText>
+          <h1>Discover your unique style with lasting</h1>
+          <KnockoutText text="confidence" />
         </Headline>
+
         <Subheadline>
-          Redefine your wardrobe with exclusive pieces that speak elegance and
-          modernity. Perfect for the trend-savvy individual.
+          Find the perfect blend of modern trends and classic style with our
+          stylish, affordable pieces—crafted to enhance your everyday look.
         </Subheadline>
         <CtaButton>
           Explore now
