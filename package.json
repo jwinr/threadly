@@ -43,6 +43,7 @@
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.24.7",
     "@svgr/webpack": "^8.1.0",
+    "@types/cookie": "^0.6.0",
     "@types/lodash": "^4.17.7",
     "@types/micro-cors": "^0.1.5",
     "@types/react": "^18.3.3",

@@ -64,6 +64,7 @@ app/search/
 app/signup/
 app/orders/
 app/test/
+app/test2/
 utils/CategoriesConfig.js
 utils/CategoriesList.json
 utils/LocationProvider.js

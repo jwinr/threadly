@@ -19,6 +19,7 @@ const fadeInUp = keyframes`
 const fadeInUpSub = keyframes`
   from {
     opacity: 0;
+    filter: blur(3px);
     transform: translateY(175%);
   }
   to {
@@ -30,6 +31,7 @@ const fadeInUpSub = keyframes`
 const fadeInUpCta = keyframes`
   from {
     opacity: 0;
+    filter: blur(2px);
     transform: translateY(325%);
   }
   to {

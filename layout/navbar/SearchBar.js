@@ -18,6 +18,7 @@ const SearchContainer = styled.div`
   position: relative;
   display: flex;
   margin-left: auto;
+  height: 40px;
 
   @media (max-width: 768px) {
     padding: 0 20px;
@@ -57,6 +58,11 @@ const SubmitButton = styled.button`
   display: flex;
   border-radius: 8px;
   border: 1px transparent;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 
   svg > path {
     fill: #6c7688;

@@ -1,39 +1,139 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-} from "react"
+import React, { useState, useEffect, useContext, useRef } from "react"
 import { UserContext } from "@/context/UserContext"
 import { CartContext } from "@/context/CartContext"
 import { useSignOut } from "@/context/SignOutContext"
 import styled from "styled-components"
-import * as DropdownStyles from "./DropdownStyles"
-import ChevronDown from "@/public/images/icons/chevron-down.svg"
 import AccountIcon from "@/public/images/icons/account.svg"
-import { CSSTransition } from "react-transition-group"
-import Backdrop from "../Backdrop"
 import { signOut } from "aws-amplify/auth"
-import PropFilter from "@/utils/PropFilter"
 import { useRouter } from "next/navigation"
 import SigningOutOverlay from "@/components/Auth/SigningOutOverlay"
-import useScrollControl from "@/hooks/useScrollControl"
+import Popover from "@/components/Elements/Popover"
 
-const Dropdown = styled(DropdownStyles.Dropdown)`
-  right: ${(props) => props.right}px; // Dynamic right position
+import Profile from "@/public/images/icons/account.svg"
+import Order from "@/public/images/icons/order.svg"
+import Favorite from "@/public/images/icons/favorite.svg"
+import Logout from "@/public/images/icons/logout.svg"
 
-  @media (max-width: 768px) {
-    right: 0px !important;
-  }
-`
-
-const UserButton = styled(DropdownStyles.Button)`
+const UserButton = styled.button`
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--sc-color-text);
   padding-left: 16px;
+  padding-right: 8px;
+  height: 40px;
+  border-radius: 10px;
+  align-items: center;
+  background-color: ${({ isOpen }) => (isOpen ? "#f7f7f7" : "#fff")};
+  display: flex;
+
+  svg {
+    fill: var(--sc-color-icon);
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &:hover {
+    background-color: var(--sc-color-white-highlight);
+
+    svg {
+      opacity: 1;
+    }
+  }
+
+  &:focus-visible {
+    svg {
+      opacity: 1;
+    }
+  }
+
+  &:hover .arrow-icon,
+  &.arrow-icon-visible .arrow-icon svg {
+    opacity: 1;
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+  }
+
+  &.initial-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: none;
+  }
+
   @media (max-width: 768px) {
     order: 2; // Between the logo and cart icon on mobile layouts
     margin-left: auto;
     margin-right: 8px;
+    font-size: 30px;
+    height: 44px;
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+    background-color: transparent;
+
+    &:active {
+      background-color: var(--sc-color-white-highlight);
+    }
+  }
+`
+
+export const BtnText = styled.div`
+  padding: 0 5px;
+  color: var(--sc-color-gray-700);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const Menu = styled.div`
+  width: 240px;
+
+  & a:focus {
+    text-decoration: underline;
+    outline: none;
+  }
+`
+
+const MenuItem = styled.li`
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sc-color-carnation);
+  min-width: 160px;
+  margin-left: 4px;
+  margin-right: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: #f5f6f8;
+  }
+
+  &:focus:not(:focus-visible) {
+    --s-focus-ring: 0;
+    box-shadow: none;
+  }
+
+  span {
+    margin-left: 5px;
+  }
+
+  & svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+
+    > path {
+      fill: var(--sc-color-icon);
+    }
   }
 `
 
@@ -60,261 +160,141 @@ const IconContainer = styled.div`
   }
 `
 
-const UserDropdown = ({ isOpen: parentIsOpen, onToggle }) => {
+const UserDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false)
   const { userAttributes } = useContext(UserContext)
   const { setCart } = useContext(CartContext)
-  const [isMounted, setIsMounted] = useState(false)
   const { isSigningOut, setIsSigningOut } = useSignOut()
   const router = useRouter()
+  const dropdownRef = useRef(null)
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+  const given_name = userAttributes ? userAttributes.given_name : null
 
-  useEffect(() => {}, [parentIsOpen])
-
-  const handleSignOut = async (setIsSigningOut, router, setCart) => {
-    setIsSigningOut(true) // Show the overlay and popup
+  const signOutHandler = async () => {
+    setIsSigningOut(true) // Show the overlay
 
     try {
-      await signOut()
-      localStorage.removeItem("userAttributes") // Remove user attributes from local storage on logout
+      await signOut() // Sign out the user
       setTimeout(() => {
         router.push("/")
         setCart([]) // Clear the cart state
         setIsSigningOut(false)
-      }, 1100) // Add a 1100ms delay
+      }, 1100)
     } catch (error) {
       console.error("Error signing out:", error)
-      setIsSigningOut(false) // Hide the overlay and popup on error
+      setIsSigningOut(false)
     }
   }
 
-  // Use userAttributes to assign the given_name. If userAttributes is not available, set given_name to null.
-  // This is so we can conditionally display “Hi, {user}” if user is available, otherwise display “Sign in”.
-  const given_name = userAttributes ? userAttributes.given_name : null
-
-  const signOutHandler = async () => {
-    await handleSignOut(setIsSigningOut, router, setCart)
+  // Event handlers to set the proper aria-label state
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false)
+    }
   }
+
+  const handleEscapePress = (event) => {
+    if (event.key === "Escape") {
+      setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("keydown", handleEscapePress)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscapePress)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscapePress)
+    }
+  }, [isOpen])
+
+  const dropdownContent = (
+    <DropdownMenu user={given_name} handleSignOut={signOutHandler} />
+  )
 
   return (
     <>
       <SigningOutOverlay visible={isSigningOut} />
-      <NavItem
-        isOpen={isMounted && parentIsOpen}
-        onToggle={onToggle}
-        user={given_name}
-        isSigningOut={isSigningOut}
-      >
-        <DropdownMenu
-          isOpen={isMounted && parentIsOpen}
-          user={given_name}
-          handleSignOut={signOutHandler}
-        />
-      </NavItem>
+      <div ref={dropdownRef}>
+        <Popover
+          trigger="click"
+          content={dropdownContent}
+          position="bottom"
+          showArrow={false}
+          padding="4px 0"
+          fixed={true}
+        >
+          <UserButton
+            onClick={() => setIsOpen(!isOpen)}
+            $isOpen={isOpen}
+            aria-expanded={isOpen}
+            aria-label={isOpen ? "Close user dropdown" : "Open user dropdown"}
+          >
+            <IconContainer>
+              <AccountIcon />
+            </IconContainer>
+            <BtnText>{given_name ? `Hi, ${given_name}` : "Sign in"}</BtnText>
+          </UserButton>
+        </Popover>
+      </div>
     </>
   )
 }
 
-function NavItem(props) {
-  const { isOpen, onToggle, user, isSigningOut } = props
-  const userBtnRef = useRef(null)
-  const [dropdownRight, setDropdownRight] = useState(0)
-  const [isScrollDisabled, setIsScrollDisabled] = useScrollControl()
-  const [isMounted, setIsMounted] = useState(false)
-  const [initialLoad, setInitialLoad] = useState(true)
-
-  useEffect(() => {
-    setIsMounted(true)
-    setTimeout(() => setInitialLoad(false), 0) // Ensure initialLoad is set to false after the initial render
-
-    if (isOpen) {
-      setIsScrollDisabled(true)
-      if (userBtnRef.current) {
-        const rect = userBtnRef.current.getBoundingClientRect()
-        const viewportWidth = window.innerWidth
-        // Calculate the right position while keeping the dropdown within the viewport
-        const rightPosition = viewportWidth - rect.right - 15 // Offset for the additional padding/margin
-        setDropdownRight(rightPosition)
-        userBtnRef.current.focus()
-      }
-    } else {
-      setIsScrollDisabled(false)
-    }
-  }, [isOpen, setIsScrollDisabled])
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      onToggle()
-      userBtnRef.current.focus() // Return focus to the button when closed
-    }
-  }
-
-  // Prevent the dropdown from being opened by clicking on the backdrop component as it closes
-  const handleToggle = useCallback(() => {
-    if (isOpen) {
-      onToggle()
-    }
-  }, [isOpen, onToggle])
-
+function DropdownMenu({ handleSignOut, user }) {
   return (
-    <>
-      <Backdrop
-        className={initialLoad ? "initial-hidden" : isOpen ? "visible" : ""}
-        onClick={handleToggle}
-      />
-      <UserButton
-        onClick={onToggle}
-        onKeyDown={handleKeyDown}
-        ref={userBtnRef}
-        isOpen={isOpen}
-        aria-expanded={isOpen}
-        aria-label={isOpen ? "Close user dropdown" : "Open user dropdown"}
-        className={`${initialLoad ? "initial-hidden" : ""} ${
-          isOpen ? "arrow-icon-visible" : ""
-        }`}
-      >
-        <IconContainer>
-          <AccountIcon />
-        </IconContainer>
-        <DropdownStyles.BtnText>
-          {user ? `Hi, ${user}` : "Sign in"}
-        </DropdownStyles.BtnText>
-        <div className={`arrow-icon ${isOpen ? "rotate-arrow" : ""}`}>
-          <ChevronDown />
-        </div>
-      </UserButton>
-      {React.cloneElement(props.children, {
-        $isOpen: isOpen,
-        dropdownRight: dropdownRight,
-        setOpen: onToggle,
-        className: `${
-          initialLoad ? "initial-hidden" : isOpen ? "visible" : "invisible"
-        }`, // Add the visibility class only after mounted
-        user: user,
-        isSigningOut: isSigningOut,
-      })}
-    </>
+    <Menu>
+      {user ? (
+        <>
+          <DropdownItem href="/account">
+            <Profile />
+            <span>Profile</span>
+          </DropdownItem>
+          <DropdownItem href="/orders">
+            <Order />
+            <span>Orders</span>
+          </DropdownItem>
+          <DropdownItem href="/favorites">
+            <Favorite />
+            <span>Favorites</span>
+          </DropdownItem>
+          <DropdownItem onClick={handleSignOut}>
+            <Logout />
+            <span>Logout</span>
+          </DropdownItem>
+        </>
+      ) : (
+        <>
+          <DropdownItem href="/login">
+            <span>Sign in</span>
+          </DropdownItem>
+          <DropdownItem href="/signup">
+            <span>Create Account</span>
+          </DropdownItem>
+          <DropdownItem href="/orders">
+            <span>Orders</span>
+          </DropdownItem>
+        </>
+      )}
+    </Menu>
   )
 }
 
-function DropdownItem({ children, href, setOpen, onClick, isOpen }) {
+function DropdownItem({ children, href, onClick }) {
   const router = useRouter()
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      setOpen(false)
-      if (onClick) onClick()
-      if (href) router.push(href)
-    }
-  }
-
   const handleClick = () => {
-    setOpen(false)
     if (onClick) onClick()
     if (href) router.push(href)
   }
 
-  return (
-    <DropdownStyles.MenuItem
-      onClick={handleClick}
-      role="menuitem"
-      tabIndex={isOpen ? 0 : -1} // Make it focusable only if isOpen is true
-      onKeyDown={handleKeyDown}
-    >
-      <span>{children}</span>
-    </DropdownStyles.MenuItem>
-  )
-}
-
-function DropdownMenu({
-  dropdownRight,
-  setOpen,
-  className,
-  handleSignOut,
-  user,
-  isOpen,
-}) {
-  const [menuHeight, setMenuHeight] = useState(null)
-  const userDropdownRef = useRef(null)
-
-  useEffect(() => {
-    if (userDropdownRef.current && userDropdownRef.current.firstChild) {
-      setMenuHeight(userDropdownRef.current.firstChild.offsetHeight)
-    }
-  }, [user])
-
-  function calcHeight(el) {
-    const height = el.offsetHeight
-    setMenuHeight(height)
-  }
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      setOpen(false)
-    }
-  }
-
-  return (
-    <Dropdown
-      style={{ height: menuHeight, right: dropdownRight }}
-      ref={userDropdownRef}
-      role="menu"
-      onKeyDown={handleKeyDown}
-      className={className} // Apply the visibility class
-      $isOpen={isOpen}
-    >
-      <CSSTransition
-        in={true}
-        timeout={500}
-        classNames="menu-primary"
-        unmountOnExit
-        onEnter={calcHeight}
-      >
-        <DropdownStyles.Menu>
-          {user ? (
-            <>
-              <DropdownStyles.ListHeader>Account</DropdownStyles.ListHeader>
-              <DropdownItem href="/account" setOpen={setOpen} isOpen={isOpen}>
-                Profile
-              </DropdownItem>
-              <DropdownItem href="/orders" setOpen={setOpen} isOpen={isOpen}>
-                Orders
-              </DropdownItem>
-              <DropdownItem href="/favorites" setOpen={setOpen} isOpen={isOpen}>
-                Favorites
-              </DropdownItem>
-              <DropdownItem
-                onClick={handleSignOut}
-                setOpen={setOpen}
-                isOpen={isOpen}
-              >
-                Logout
-              </DropdownItem>
-            </>
-          ) : (
-            <>
-              <DropdownStyles.ListHeader>Account</DropdownStyles.ListHeader>
-              <DropdownItem href="/login" setOpen={setOpen} isOpen={isOpen}>
-                Sign in
-              </DropdownItem>
-              <DropdownItem href="/signup" setOpen={setOpen} isOpen={isOpen}>
-                Create Account
-              </DropdownItem>
-              <DropdownItem
-                href="/orders" // Need to modify this to lead to the sign-in component then redirect to the orders page
-                setOpen={setOpen}
-                isOpen={isOpen}
-              >
-                Orders
-              </DropdownItem>
-            </>
-          )}
-        </DropdownStyles.Menu>
-      </CSSTransition>
-    </Dropdown>
-  )
+  return <MenuItem onClick={handleClick}>{children}</MenuItem>
 }
 
 export default UserDropdown

@@ -1,11 +1,11 @@
-import React, { useState, useLayoutEffect, useRef } from "react"
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
 import styled from "styled-components"
 import { CSSTransition } from "react-transition-group"
 import PopArrow from "@/public/images/icons/popoverArrow.svg"
 import PortalWrapper from "@/components/Elements/PortalWrapper"
 
-const PopoverWrapper = styled.div`
-  position: absolute;
+const PopoverWrapper = styled.div<{ fixed: boolean }>`
+  position: ${({ fixed }) => (fixed ? "fixed" : "absolute")};
   z-index: 1000;
 `
 
@@ -101,6 +101,7 @@ interface PopoverProps {
   showArrow?: boolean
   color?: "light" | "dark"
   padding?: string
+  fixed?: boolean
 }
 
 /**
@@ -113,6 +114,7 @@ interface PopoverProps {
  * @param {boolean} [props.showArrow=true] - Whether to show an arrow pointing to the trigger element.
  * @param {"light" | "dark"} [props.color="light"] - The color theme of the popover.
  * @param {string} [props.padding="20px"] - The padding for the content inside the popover.
+ * @param {boolean} [props.fixed=false] - Whether the popover should remain fixed in place during scrolling.
  * @returns {JSX.Element} The rendered popover component.
  */
 const Popover: React.FC<PopoverProps> = ({
@@ -123,6 +125,7 @@ const Popover: React.FC<PopoverProps> = ({
   showArrow = true,
   color = "light",
   padding = "20px",
+  fixed = false,
 }) => {
   const [visible, setVisible] = useState(false)
   const [coords, setCoords] = useState({ top: 0, left: 0 })
@@ -147,40 +150,30 @@ const Popover: React.FC<PopoverProps> = ({
 
       const positions = {
         top: {
-          top: triggerRect.top + scrollY - scaledHeight - arrowAdjustment,
-          left:
-            triggerRect.left +
-            scrollX +
-            triggerRect.width / 2 -
-            scaledWidth / 2,
+          top: triggerRect.top - scaledHeight - arrowAdjustment,
+          left: triggerRect.left + triggerRect.width / 2 - scaledWidth / 2,
         },
         bottom: {
-          top: triggerRect.bottom + scrollY + arrowAdjustment + 1,
-          left:
-            triggerRect.left +
-            scrollX +
-            triggerRect.width / 2 -
-            scaledWidth / 2,
+          top: triggerRect.bottom + arrowAdjustment + 1,
+          left: triggerRect.left + triggerRect.width / 2 - scaledWidth / 2,
         },
         left: {
-          top:
-            triggerRect.top +
-            scrollY +
-            triggerRect.height / 2 -
-            scaledHeight / 2,
-          left: triggerRect.left + scrollX - scaledWidth - arrowAdjustment,
+          top: triggerRect.top + triggerRect.height / 2 - scaledHeight / 2,
+          left: triggerRect.left - scaledWidth - arrowAdjustment,
         },
         right: {
-          top:
-            triggerRect.top +
-            scrollY +
-            triggerRect.height / 2 -
-            scaledHeight / 2,
-          left: triggerRect.right + scrollX + arrowAdjustment,
+          top: triggerRect.top + triggerRect.height / 2 - scaledHeight / 2,
+          left: triggerRect.right + arrowAdjustment,
         },
       }
 
       let { top, left } = positions[position]
+
+      // If not fixed, add scroll offsets
+      if (!fixed) {
+        top += window.scrollY
+        left += window.scrollX
+      }
 
       if (top < 0) top = 10
       if (left < 0) left = 10
@@ -214,11 +207,11 @@ const Popover: React.FC<PopoverProps> = ({
     if (visible) {
       calculatePosition()
     }
-  }, [visible, position, content])
+  }, [visible, position, content, fixed])
 
   useLayoutEffect(() => {
     const handleScroll = () => {
-      if (wrapperRef.current) {
+      if (!fixed && wrapperRef.current) {
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
         if (
           wrapperRect.top < 0 ||
@@ -239,7 +232,25 @@ const Popover: React.FC<PopoverProps> = ({
       window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("resize", calculatePosition)
     }
-  }, [])
+  }, [fixed])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" || event.key === "Tab") {
+        setVisible(false)
+      }
+    }
+
+    if (visible) {
+      document.addEventListener("keydown", handleKeyDown)
+    } else {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [visible])
 
   useLayoutEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -312,6 +323,7 @@ const Popover: React.FC<PopoverProps> = ({
               top: coords.top,
               left: coords.left,
             }}
+            fixed={fixed}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >

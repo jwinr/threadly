@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components"
 const fadeInMask = keyframes`
   0% {
     mask-position: -20%;
+
   }
   100% {
     mask-position: 20% center;
@@ -31,7 +32,7 @@ const KnockoutTextWrapper = styled.span`
     #000 60%,
     transparent 80%
   );
-  animation: ${fadeInMask} 1s 0.25s ease-out forwards;
+  animation: ${fadeInMask} 1.25s 0.25s ease-out forwards;
   mask-position: 100% center;
 
   .shadow {

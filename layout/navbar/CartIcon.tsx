@@ -7,7 +7,7 @@ const Container = styled.a`
   position: relative;
   display: flex;
   width: fit-content;
-  height: 100%;
+  height: 40px;
 
   &:hover,
   &:active {
@@ -35,7 +35,6 @@ const Button = styled.button`
   transition: background-color 0.2s;
 
   svg {
-    width: 16px;
     height: 16px;
 
     path {
