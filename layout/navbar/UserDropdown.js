@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from "react"
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  forwardRef,
+} from "react"
 import { UserContext } from "@/context/UserContext"
 import { CartContext } from "@/context/CartContext"
 import { useSignOut } from "@/context/SignOutContext"
@@ -167,6 +173,8 @@ const UserDropdown = () => {
   const { isSigningOut, setIsSigningOut } = useSignOut()
   const router = useRouter()
   const dropdownRef = useRef(null)
+  const firstMenuItemRef = useRef(null)
+  const userButtonRef = useRef(null)
 
   const given_name = userAttributes ? userAttributes.given_name : null
 
@@ -199,10 +207,23 @@ const UserDropdown = () => {
     }
   }
 
+  const togglePopover = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const handleMenuItemClick = (href, onClick) => {
+    if (onClick) onClick()
+    if (href) router.push(href)
+    setIsOpen(false)
+  }
+
   useEffect(() => {
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside)
       document.addEventListener("keydown", handleEscapePress)
+      setTimeout(() => {
+        firstMenuItemRef.current?.focus()
+      }, 0) // Focus on the first item when opening
     } else {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleEscapePress)
@@ -215,7 +236,13 @@ const UserDropdown = () => {
   }, [isOpen])
 
   const dropdownContent = (
-    <DropdownMenu user={given_name} handleSignOut={signOutHandler} />
+    <DropdownMenu
+      user={given_name}
+      handleSignOut={signOutHandler}
+      firstMenuItemRef={firstMenuItemRef}
+      onMenuItemClick={handleMenuItemClick}
+      userButtonRef={userButtonRef}
+    />
   )
 
   return (
@@ -228,10 +255,12 @@ const UserDropdown = () => {
           position="bottom"
           showArrow={false}
           padding="4px 0"
-          fixed={true}
+          $fixed={true}
+          visible={isOpen}
         >
           <UserButton
-            onClick={() => setIsOpen(!isOpen)}
+            ref={userButtonRef}
+            onClick={togglePopover}
             $isOpen={isOpen}
             aria-expanded={isOpen}
             aria-label={isOpen ? "Close user dropdown" : "Open user dropdown"}
@@ -247,37 +276,80 @@ const UserDropdown = () => {
   )
 }
 
-function DropdownMenu({ handleSignOut, user }) {
+function DropdownMenu({
+  handleSignOut,
+  user,
+  firstMenuItemRef,
+  onMenuItemClick,
+  userButtonRef,
+}) {
   return (
-    <Menu>
+    <Menu role="menu">
       {user ? (
         <>
-          <DropdownItem href="/account">
+          <DropdownItem
+            ref={firstMenuItemRef}
+            href="/account"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <Profile />
             <span>Profile</span>
           </DropdownItem>
-          <DropdownItem href="/orders">
+          <DropdownItem
+            href="/orders"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <Order />
             <span>Orders</span>
           </DropdownItem>
-          <DropdownItem href="/favorites">
+          <DropdownItem
+            href="/favorites"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <Favorite />
             <span>Favorites</span>
           </DropdownItem>
-          <DropdownItem onClick={handleSignOut}>
+          <DropdownItem
+            onClick={handleSignOut}
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <Logout />
             <span>Logout</span>
           </DropdownItem>
         </>
       ) : (
         <>
-          <DropdownItem href="/login">
+          <DropdownItem
+            ref={firstMenuItemRef}
+            href="/login"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <span>Sign in</span>
           </DropdownItem>
-          <DropdownItem href="/signup">
+          <DropdownItem
+            href="/signup"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <span>Create Account</span>
           </DropdownItem>
-          <DropdownItem href="/orders">
+          <DropdownItem
+            href="/orders"
+            role="menuitem"
+            onMenuItemClick={onMenuItemClick}
+            userButtonRef={userButtonRef}
+          >
             <span>Orders</span>
           </DropdownItem>
         </>
@@ -286,15 +358,71 @@ function DropdownMenu({ handleSignOut, user }) {
   )
 }
 
-function DropdownItem({ children, href, onClick }) {
-  const router = useRouter()
+const DropdownItem = React.forwardRef(
+  ({ children, href, onClick, role, onMenuItemClick, userButtonRef }, ref) => {
+    const handleClick = () => {
+      onMenuItemClick(href, onClick)
+    }
 
-  const handleClick = () => {
-    if (onClick) onClick()
-    if (href) router.push(href)
+    // Handle arrow key navigation within the dropdown
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault()
+        if (event.currentTarget.nextSibling) {
+          event.currentTarget.nextSibling.focus()
+        } else {
+          // If there's no next sibling, loop back to the first item
+          event.currentTarget.parentNode.firstChild.focus()
+        }
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault()
+        if (event.currentTarget.previousSibling) {
+          event.currentTarget.previousSibling.focus()
+        } else {
+          // If there's no previous sibling, loop back to the last item
+          event.currentTarget.parentNode.lastChild.focus()
+        }
+      } else if (event.key === "Tab") {
+        event.preventDefault()
+
+        // Get all focusable elements relative to the UserButton
+        const focusableElements = document.querySelectorAll(
+          `a[href]:not([disabled]), button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])`
+        )
+
+        const userButtonIndex = Array.prototype.indexOf.call(
+          focusableElements,
+          userButtonRef.current
+        )
+
+        if (event.shiftKey) {
+          // Focus the previous element relative to UserButton
+          if (userButtonIndex > 0) {
+            focusableElements[userButtonIndex - 1].focus()
+          }
+        } else {
+          // Focus the next element relative to UserButton
+          if (userButtonIndex < focusableElements.length - 1) {
+            focusableElements[userButtonIndex + 1].focus()
+          }
+        }
+      } else if (event.key === "Enter" || event.key === " ") {
+        handleClick()
+      }
+    }
+
+    return (
+      <MenuItem
+        ref={ref}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role={role}
+      >
+        {children}
+      </MenuItem>
+    )
   }
-
-  return <MenuItem onClick={handleClick}>{children}</MenuItem>
-}
+)
 
 export default UserDropdown

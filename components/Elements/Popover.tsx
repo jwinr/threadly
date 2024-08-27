@@ -4,8 +4,8 @@ import { CSSTransition } from "react-transition-group"
 import PopArrow from "@/public/images/icons/popoverArrow.svg"
 import PortalWrapper from "@/components/Elements/PortalWrapper"
 
-const PopoverWrapper = styled.div<{ fixed: boolean }>`
-  position: ${({ fixed }) => (fixed ? "fixed" : "absolute")};
+const PopoverWrapper = styled.div<{ $fixed: boolean }>`
+  position: ${({ $fixed }) => ($fixed ? "fixed" : "absolute")};
   z-index: 1000;
 `
 
@@ -102,6 +102,7 @@ interface PopoverProps {
   color?: "light" | "dark"
   padding?: string
   fixed?: boolean
+  visible?: boolean
 }
 
 /**
@@ -115,6 +116,8 @@ interface PopoverProps {
  * @param {"light" | "dark"} [props.color="light"] - The color theme of the popover.
  * @param {string} [props.padding="20px"] - The padding for the content inside the popover.
  * @param {boolean} [props.fixed=false] - Whether the popover should remain fixed in place during scrolling.
+ * @param {boolean} [props.visible] - If provided, controls the visibility of the popover externally.
+ *    When this prop is passed, the visibility state is controlled by the parent component.
  * @returns {JSX.Element} The rendered popover component.
  */
 const Popover: React.FC<PopoverProps> = ({
@@ -126,12 +129,20 @@ const Popover: React.FC<PopoverProps> = ({
   color = "light",
   padding = "20px",
   fixed = false,
+  visible: controlledVisible,
 }) => {
   const [visible, setVisible] = useState(false)
   const [coords, setCoords] = useState({ top: 0, left: 0 })
   const [arrowOffset, setArrowOffset] = useState(0)
   const triggerRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+
+  // If a controlled visibility prop is passed, use it
+  useEffect(() => {
+    if (controlledVisible !== undefined) {
+      setVisible(controlledVisible)
+    }
+  }, [controlledVisible])
 
   const calculatePosition = () => {
     if (triggerRef.current && wrapperRef.current) {
@@ -304,7 +315,7 @@ const Popover: React.FC<PopoverProps> = ({
       <div
         ref={triggerRef}
         onClick={() => {
-          if (trigger === "click") {
+          if (trigger === "click" && controlledVisible === undefined) {
             setVisible(!visible)
           }
         }}
@@ -323,7 +334,7 @@ const Popover: React.FC<PopoverProps> = ({
               top: coords.top,
               left: coords.left,
             }}
-            fixed={fixed}
+            $fixed={fixed}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >

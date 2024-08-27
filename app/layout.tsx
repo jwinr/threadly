@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, ReactNode } from "react"
 import "../assets/main.css"
 import AmplifyConfig from "@/lib/awsConfig"
 import { MobileViewProvider } from "@/context/MobileViewContext"
@@ -9,8 +9,21 @@ import { ToastProvider } from "@/context/ToastContext"
 import { FavoritesProvider } from "@/context/FavoritesContext"
 import Layout from "../layout/Layout"
 import StyledComponentsRegistry from "../lib/registry"
+import cookie from "cookie"
+import { headers } from "next/headers"
 
-const RootLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
+interface RootLayoutProps {
+  children: ReactNode
+}
+
+const RootLayout: FC<RootLayoutProps> = ({ children }) => {
+  // Access cookies from the request headers on the server side
+  const headersList = headers()
+  const cookies = cookie.parse(headersList.get("cookie") || "")
+  const userAttributes = cookies.userAttributes
+    ? JSON.parse(cookies.userAttributes)
+    : null
+
   return (
     <html lang="en">
       <head>
@@ -22,7 +35,7 @@ const RootLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
             <StyledComponentsRegistry>
               <MobileViewProvider>
                 <ToastProvider>
-                  <UserProvider>
+                  <UserProvider initialUserAttributes={userAttributes}>
                     <SignOutProvider>
                       <FavoritesProvider>
                         <CartProvider>
