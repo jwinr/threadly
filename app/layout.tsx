@@ -11,6 +11,7 @@ import Layout from "../layout/Layout"
 import StyledComponentsRegistry from "../lib/registry"
 import cookie from "cookie"
 import { headers } from "next/headers"
+import Script from "next/script"
 
 interface RootLayoutProps {
   children: ReactNode
@@ -19,6 +20,7 @@ interface RootLayoutProps {
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   // Access cookies from the request headers on the server side
   const headersList = headers()
+  const nonce = headers().get("x-nonce")
   const cookies = cookie.parse(headersList.get("cookie") || "")
   const userAttributes = cookies.userAttributes
     ? JSON.parse(cookies.userAttributes)
@@ -27,12 +29,17 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <head>
-        <script src="https://js.stripe.com/v3/" async></script>
+        <Script
+          src="https://js.stripe.com/v3/"
+          async
+          nonce={nonce || ""}
+          data-nscript="afterInteractive"
+        ></Script>
       </head>
       <body>
         <React.StrictMode>
           <AmplifyConfig>
-            <StyledComponentsRegistry>
+            <StyledComponentsRegistry nonce={nonce || ""}>
               <MobileViewProvider>
                 <ToastProvider>
                   <UserProvider initialUserAttributes={userAttributes}>

@@ -43,13 +43,13 @@ const PopoverTransitionContainer = styled.div`
   }
 `
 
-const PopoverContainer = styled.div<{ color: string; padding: string }>`
+const PopoverContainer = styled.div<{ color: string; $padding: string }>`
   color: ${({ color }) => (color === "dark" ? "white" : "initial")};
   background: ${({ color }) =>
     color === "dark" ? "var(--sc-color-gray-700)" : "white"};
   box-shadow: 0 0 0 1px #8898aa1a, 0 15px 35px #31315d1a, 0 5px 15px #00000014;
   border-radius: 6px;
-  padding: ${({ padding }) => padding};
+  padding: ${({ $padding }) => $padding};
   font-size: 14px;
   max-width: 300px;
 `
@@ -136,6 +136,7 @@ const Popover: React.FC<PopoverProps> = ({
   const [arrowOffset, setArrowOffset] = useState(0)
   const triggerRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const nodeRef = React.useRef(null)
 
   // If a controlled visibility prop is passed, use it
   useEffect(() => {
@@ -339,17 +340,18 @@ const Popover: React.FC<PopoverProps> = ({
             onMouseLeave={handleMouseLeave}
           >
             <CSSTransition
+              nodeRef={nodeRef}
               in={visible}
               timeout={250}
               classNames="popover"
               unmountOnExit
               onEnter={calculatePosition}
             >
-              <PopoverTransitionContainer>
+              <PopoverTransitionContainer ref={nodeRef}>
                 {showArrow && (
                   <Arrow position={position} offset={arrowOffset} />
                 )}
-                <PopoverContainer color={color} padding={padding}>
+                <PopoverContainer color={color} $padding={padding}>
                   {content}
                 </PopoverContainer>
               </PopoverTransitionContainer>

@@ -207,8 +207,8 @@ const HeroBanner = () => {
       <ParallaxLayer>
         <Image
           src={HeroImg}
-          width={1600}
-          height={1103}
+          width={1920}
+          height={988}
           quality={85}
           alt="Background"
           priority={true}

@@ -255,7 +255,7 @@ const UserDropdown = () => {
           position="bottom"
           showArrow={false}
           padding="4px 0"
-          $fixed={true}
+          fixed={true}
           visible={isOpen}
         >
           <UserButton

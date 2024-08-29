@@ -12,6 +12,7 @@
     "@aws-amplify/adapter-nextjs": "^1.2.13",
     "@stripe/react-stripe-js": "^2.8.0",
     "@stripe/stripe-js": "^4.3.0",
+    "@tanstack/react-query": "^5.52.2",
     "autoprefixer": "^10.4.20",
     "aws-amplify": "^6.5.1",
     "aws-sdk": "^2.1677.0",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.24.7",
     "@svgr/webpack": "^8.1.0",
+    "@tanstack/eslint-plugin-query": "^5.52.0",
     "@types/cookie": "^0.6.0",
     "@types/lodash": "^4.17.7",
     "@types/micro-cors": "^0.1.5",

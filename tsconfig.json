@@ -42,7 +42,9 @@
     ".next/types/**/*.ts",
     "utils/PropFilter.js",
     "app/categories/[slug]/layout.js",
-    "app/api/video/route.js"
+    "app/api/video/route.js",
+    "context/NonceContext.js",
+    "context/NonceContext.js"
   ],
   "exclude": ["node_modules"]
 }

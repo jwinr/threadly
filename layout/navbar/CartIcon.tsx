@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
-import CartLogo from "../../public/images/icons/cart.svg"
+import CartLogo from "@/public/images/icons/cart.svg"
 import styled from "styled-components"
-import { CartContext } from "../../context/CartContext"
+import { CartContext } from "@/context/CartContext"
 
 const Container = styled.a`
   position: relative;
