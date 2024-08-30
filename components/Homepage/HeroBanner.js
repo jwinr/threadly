@@ -81,19 +81,15 @@ const HeroBannerContainer = styled.div`
   }
 `
 
-const ParallaxLayer = styled.div`
+const ImageWrapper = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  will-change: transform;
 
   img {
+    pointer-events: none;
     object-fit: cover;
-    width: 100%;
+    max-width: 100%;
     height: 100%;
+    border-radius: 12px;
   }
 `
 
@@ -204,16 +200,16 @@ const CtaButton = styled.button`
 const HeroBanner = () => {
   return (
     <HeroBannerContainer>
-      <ParallaxLayer>
+      <ImageWrapper>
         <Image
           src={HeroImg}
           width={1920}
-          height={988}
+          height={1080}
           quality={85}
           alt="Background"
           priority={true}
         />
-      </ParallaxLayer>
+      </ImageWrapper>
       <TextContainer>
         <Headline>
           <h1>Discover your unique style with lasting</h1>

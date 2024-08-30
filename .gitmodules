@@ -1,0 +1,3 @@
+[submodule "threadly-backend"]
+	path = threadly-backend
+	url = https://github.com/jwinr/threadly-backend.git

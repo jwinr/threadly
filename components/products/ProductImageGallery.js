@@ -6,7 +6,6 @@ import "swiper/css/pagination"
 import { Pagination } from "swiper/modules"
 import { useState, useRef } from "react"
 import PropFilter from "@/utils/PropFilter"
-import VideoIcon from "@/public/images/icons/video.svg"
 
 const loadingAnimation = keyframes`
   0% {
@@ -30,25 +29,6 @@ const AdditionalImageContainer = styled.div`
 
   @media (min-width: 768px) {
     order: 0; // Reset order in desktop view
-  }
-`
-
-const VideoPlay = styled(VideoIcon)`
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  opacity: 0.9;
-
-  > path {
-    fill: white;
-  }
-
-  @media (max-width: 768px) {
-    pointer-events: auto;
   }
 `
 

@@ -7,6 +7,7 @@ import { SignOutProvider } from "@/context/SignOutContext"
 import { CartProvider } from "@/context/CartContext"
 import { ToastProvider } from "@/context/ToastContext"
 import { FavoritesProvider } from "@/context/FavoritesContext"
+import Providers from "./providers"
 import Layout from "../layout/Layout"
 import StyledComponentsRegistry from "../lib/registry"
 import cookie from "cookie"
@@ -39,21 +40,23 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
       <body>
         <React.StrictMode>
           <AmplifyConfig>
-            <StyledComponentsRegistry nonce={nonce || ""}>
-              <MobileViewProvider>
-                <ToastProvider>
-                  <UserProvider initialUserAttributes={userAttributes}>
-                    <SignOutProvider>
-                      <FavoritesProvider>
-                        <CartProvider>
-                          <Layout>{children}</Layout>
-                        </CartProvider>
-                      </FavoritesProvider>
-                    </SignOutProvider>
-                  </UserProvider>
-                </ToastProvider>
-              </MobileViewProvider>
-            </StyledComponentsRegistry>
+            <Providers>
+              <StyledComponentsRegistry nonce={nonce || ""}>
+                <MobileViewProvider>
+                  <ToastProvider>
+                    <UserProvider initialUserAttributes={userAttributes}>
+                      <SignOutProvider>
+                        <FavoritesProvider>
+                          <CartProvider>
+                            <Layout>{children}</Layout>
+                          </CartProvider>
+                        </FavoritesProvider>
+                      </SignOutProvider>
+                    </UserProvider>
+                  </ToastProvider>
+                </MobileViewProvider>
+              </StyledComponentsRegistry>
+            </Providers>
           </AmplifyConfig>
         </React.StrictMode>
         <div id="portal-root"></div>

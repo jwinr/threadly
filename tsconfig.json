@@ -2,14 +2,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/app/*": ["./app/*"],
-      "@/db/*": ["./app/api/db/*"],
-      "@/components/*": ["components/*"],
-      "@/context/*": ["context/*"],
-      "@/utils/*": ["utils/*"],
-      "@/public/*": ["public/*"],
-      "@/hooks/*": ["hooks/*"],
-      "@/lib/*": ["lib/*"]
+      "@/app/*": ["./app/*", "./threadly-backend/app/*"],
+      "@/db/*": ["./threadly-backend/app/api/*"],
+      "@/components/*": ["./components/*"],
+      "@/context/*": ["./context/*"],
+      "@/utils/*": ["./utils/*", "./threadly-backend/utils/*"],
+      "@/public/*": ["./public/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/lib/*": ["./lib/*", "./threadly-backend/lib/*"],
+      "@/api/*": ["./threadly-backend/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "target": "es2015",
@@ -31,20 +32,6 @@
       }
     ]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "pages/api/webhooks/route.js",
-    "pages/test.tsx",
-    "pages/test.tsx",
-    "components/Elements/Popover.tsx",
-    ".next/types/**/*.ts",
-    "utils/PropFilter.js",
-    "app/categories/[slug]/layout.js",
-    "app/api/video/route.js",
-    "context/NonceContext.js",
-    "context/NonceContext.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
