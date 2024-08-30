@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import React, { useEffect, useRef, useState } from "react"
-import styled from "styled-components"
-import Head from "next/head"
+import React, {useEffect, useRef, useState} from 'react'
+import styled from 'styled-components'
+import Head from 'next/head'
 
-import HeroBanner from "@/components/Homepage/HeroBanner"
+import HeroBanner from '@/components/Homepage/HeroBanner'
 //import BrandGrid from "@/components/Homepage/BrandGrid"
-import FeatureHighlights from "@/components/Homepage/FeatureHighlights"
+import FeatureHighlights from '@/components/Homepage/FeatureHighlights'
 //import TopDeals from "@/components/Homepage/TopDeals"
 //import FeaturedCategories from "@/components/Homepage/FeaturedCategories"
-import NewsletterSignup from "@/components/Homepage/NewsletterSignup"
+import NewsletterSignup from '@/components/Homepage/NewsletterSignup'
 
 const HomeContainer = styled.div`
   display: flex;

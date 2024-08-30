@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Override .gitignore for Navbar/Menu and Public Folder
+        run: |
+          git checkout -- layout/navbar/Menu/
+          git checkout -- public/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set Environment Variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> $GITHUB_ENV
+          echo "COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}" >> $GITHUB_ENV
+          echo "COGNITO_REGION=${{ secrets.COGNITO_REGION }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_CONTACT_EMAIL=${{ secrets.NEXT_PUBLIC_CONTACT_EMAIL }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_CONTACT_LINKEDIN=${{ secrets.NEXT_PUBLIC_CONTACT_LINKEDIN }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_CONTACT_GITHUB=${{ secrets.NEXT_PUBLIC_CONTACT_GITHUB }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_USERNAME=${{ secrets.NEXT_PUBLIC_USERNAME }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_PASSWORD=${{ secrets.NEXT_PUBLIC_PASSWORD }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}" >> $GITHUB_ENV
+
+      - name: Run Linting
+        run: npm run lint
+
+      - name: Run Prettier Check
+        run: npm run prettier -- --check .
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Build Application
+        run: npm run build

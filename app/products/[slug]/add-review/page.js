@@ -1,12 +1,14 @@
-import React, { useContext, useState, useEffect, useRef } from "react"
-import { useRouter } from "next/router"
-import Head from "next/head"
-import Link from "next/link"
-import Image from "next/image"
-import styled from "styled-components"
-import { UserContext } from "@/context/UserContext"
-import LoaderDots from "@/components/Loaders/LoaderDots"
-import StarRatingSelector from "@/components/ReviewStars/StarRatingSelector"
+'use client'
+
+import React, {useContext, useState, useEffect, useRef} from 'react'
+import {useRouter} from 'next/router'
+import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import styled from 'styled-components'
+import {UserContext} from '@/context/UserContext'
+import LoaderDots from '@/components/Loaders/LoaderDots'
+import StarRatingSelector from '@/components/ReviewStars/StarRatingSelector'
 
 const Container = styled.div`
   padding: 20px;
@@ -199,19 +201,19 @@ const ButtonWrapper = styled.div`
 `
 
 const AddReview = () => {
-  const { userAttributes } = useContext(UserContext)
+  const {userAttributes} = useContext(UserContext)
   const router = useRouter()
-  const { slug } = router.query
-  const [reviewTitle, setReviewTitle] = useState("")
-  const [reviewText, setReviewText] = useState("")
+  const {slug} = router.query
+  const [reviewTitle, setReviewTitle] = useState('')
+  const [reviewText, setReviewText] = useState('')
   const [rating, setRating] = useState(0)
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
   const [product, setProduct] = useState(null)
   const [titleValid, setTitleValid] = useState(true)
   const [descriptionValid, setDescriptionValid] = useState(true)
-  const [titleErrorMessage, setTitleErrorMessage] = useState("")
-  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState("")
-  const [ratingError, setRatingError] = useState("")
+  const [titleErrorMessage, setTitleErrorMessage] = useState('')
+  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
+  const [ratingError, setRatingError] = useState('')
   const [hasSubmittedReview, setHasSubmittedReview] = useState(false)
 
   const titleRef = useRef(null)
@@ -220,13 +222,13 @@ const AddReview = () => {
   const validateTitle = (title) => {
     const regex = /^[a-zA-Z0-9\s!@#$%^&*(),.?":{}|<>]+$/
     if (title.length < 5) {
-      setTitleErrorMessage("Title must be at least 5 characters long.")
+      setTitleErrorMessage('Title must be at least 5 characters long.')
       return false
     } else if (title.length > 75) {
-      setTitleErrorMessage("Title must be no more than 75 characters long.")
+      setTitleErrorMessage('Title must be no more than 75 characters long.')
       return false
     } else if (!regex.test(title)) {
-      setTitleErrorMessage("Title contains invalid characters.")
+      setTitleErrorMessage('Title contains invalid characters.')
       return false
     }
     return true
@@ -235,17 +237,13 @@ const AddReview = () => {
   const validateDescription = (description) => {
     const regex = /^[a-zA-Z0-9\s!@#$%^&*(),.?":{}|<>]+$/
     if (description.length < 10) {
-      setDescriptionErrorMessage(
-        "Description must be at least 10 characters long."
-      )
+      setDescriptionErrorMessage('Description must be at least 10 characters long.')
       return false
     } else if (description.length > 500) {
-      setDescriptionErrorMessage(
-        "Description must be no more than 500 characters long."
-      )
+      setDescriptionErrorMessage('Description must be no more than 500 characters long.')
       return false
     } else if (!regex.test(description)) {
-      setDescriptionErrorMessage("Description contains invalid characters.")
+      setDescriptionErrorMessage('Description contains invalid characters.')
       return false
     }
     return true
@@ -268,12 +266,12 @@ const AddReview = () => {
   }
 
   const onChange = (e) => {
-    const { name, value } = e.target
-    if (name === "reviewTitle") {
+    const {name, value} = e.target
+    if (name === 'reviewTitle') {
       setReviewTitle(value)
       // Reset the title validity state to true when user starts editing
       setTitleValid(true)
-    } else if (name === "reviewText") {
+    } else if (name === 'reviewText') {
       setReviewText(value)
       setDescriptionValid(true)
     }
@@ -284,7 +282,7 @@ const AddReview = () => {
       try {
         const response = await fetch(`/api/products/${slug}/add-review`, {
           headers: {
-            "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+            'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
           },
         })
         if (response.ok) {
@@ -292,7 +290,7 @@ const AddReview = () => {
           setProduct(data)
         }
       } catch (error) {
-        console.error("Error fetching product details:", error)
+        console.error('Error fetching product details:', error)
       }
     }
 
@@ -303,17 +301,17 @@ const AddReview = () => {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault()
-    setError("") // Reset error message
+    setError('') // Reset error message
 
     // Check if user has already submitted a review
     if (hasSubmittedReview) {
-      setError("You have already submitted a review for this item!")
+      setError('You have already submitted a review for this item!')
       return
     }
 
     // Validate the rating before making the API call
     if (rating === 0) {
-      setRatingError("Please select a rating.")
+      setRatingError('Please select a rating.')
       return
     }
 
@@ -334,11 +332,11 @@ const AddReview = () => {
     }
 
     try {
-      const response = await fetch("/api/reviews", {
-        method: "POST",
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
         },
         body: JSON.stringify({
           title: reviewTitle,
@@ -354,22 +352,19 @@ const AddReview = () => {
         router.push(`/products/${slug}`)
       } else {
         const errorData = await response.json()
-        if (
-          errorData.error ===
-          "You have already submitted a review for this item!"
-        ) {
+        if (errorData.error === 'You have already submitted a review for this item!') {
           setHasSubmittedReview(true)
         }
         setError(errorData.error)
       }
     } catch (error) {
-      console.error("Error submitting review:", error)
+      console.error('Error submitting review:', error)
     }
   }
 
   const handleRatingChange = (newRating) => {
     setRating(newRating)
-    setRatingError("") // Clear the rating error message
+    setRatingError('') // Clear the rating error message
   }
 
   const handleCancel = () => {
@@ -377,8 +372,8 @@ const AddReview = () => {
   }
 
   const invalidStyle = {
-    borderColor: "var(--sc-color-red-dark)",
-    color: "var(--sc-color-red-dark)",
+    borderColor: 'var(--sc-color-red-dark)',
+    color: 'var(--sc-color-red-dark)',
   }
 
   return (
@@ -408,19 +403,11 @@ const AddReview = () => {
                   <h4>{product.name}</h4>
                   <p>{product.description}</p>
                 </div>
-                <ReviewForm
-                  onSubmit={handleReviewSubmit}
-                  data-form-type="other"
-                >
+                <ReviewForm onSubmit={handleReviewSubmit} data-form-type="other">
                   {error && <ErrorMessage>{error}</ErrorMessage>}
                   <h2>What would you rate this product?</h2>
-                  <StarRatingSelector
-                    rating={rating}
-                    setRating={handleRatingChange}
-                  />
-                  {ratingError && (
-                    <ValidationMessage>{ratingError}</ValidationMessage>
-                  )}
+                  <StarRatingSelector rating={rating} setRating={handleRatingChange} />
+                  {ratingError && <ValidationMessage>{ratingError}</ValidationMessage>}
                   <EntryWrapper>
                     <EntryContainer
                       ref={titleRef}
@@ -434,16 +421,11 @@ const AddReview = () => {
                       data-form-type="title,job"
                       style={!titleValid ? invalidStyle : {}}
                     />
-                    <Label
-                      htmlFor="reviewTitle"
-                      style={!titleValid ? invalidStyle : {}}
-                    >
+                    <Label htmlFor="reviewTitle" style={!titleValid ? invalidStyle : {}}>
                       Review title
                     </Label>
                   </EntryWrapper>
-                  {!titleValid && (
-                    <ValidationMessage>{titleErrorMessage}</ValidationMessage>
-                  )}
+                  {!titleValid && <ValidationMessage>{titleErrorMessage}</ValidationMessage>}
                   <EntryWrapper>
                     <EntryContainer
                       ref={descriptionRef}
@@ -457,17 +439,12 @@ const AddReview = () => {
                       data-form-type="other"
                       style={!descriptionValid ? invalidStyle : {}}
                     />
-                    <Label
-                      htmlFor="reviewText"
-                      style={!descriptionValid ? invalidStyle : {}}
-                    >
+                    <Label htmlFor="reviewText" style={!descriptionValid ? invalidStyle : {}}>
                       Write a short description
                     </Label>
                   </EntryWrapper>
                   {!descriptionValid && (
-                    <ValidationMessage>
-                      {descriptionErrorMessage}
-                    </ValidationMessage>
+                    <ValidationMessage>{descriptionErrorMessage}</ValidationMessage>
                   )}
                   <ButtonWrapper>
                     <SubmitBtn type="button" onClick={handleCancel}>
@@ -476,10 +453,7 @@ const AddReview = () => {
                     <SubmitBtn
                       type="submit"
                       disabled={
-                        !titleValid ||
-                        !descriptionValid ||
-                        hasSubmittedReview ||
-                        ratingError
+                        !titleValid || !descriptionValid || hasSubmittedReview || ratingError
                       }
                     >
                       Submit Review

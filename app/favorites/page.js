@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from "react"
-import { UserContext } from "../../context/UserContext"
-import Head from "next/head"
-import styled from "styled-components"
-import Link from "next/link"
-import LoaderDots from "../../components/loaders/LoaderDots"
-import useCheckLoggedInUser from "../../hooks/useCheckLoggedInUser"
+'use client'
+
+import React, {useState, useEffect, useContext} from 'react'
+import {UserContext} from '../../context/UserContext'
+import Head from 'next/head'
+import styled from 'styled-components'
+import Link from 'next/link'
+import LoaderDots from '../../components/loaders/LoaderDots'
+import useCheckLoggedInUser from '../../hooks/useCheckLoggedInUser'
 
 const FavoritesContainer = styled.div`
   max-width: 800px;
@@ -57,7 +59,7 @@ const RemoveButton = styled.button`
 `
 
 const Favorites = () => {
-  const { userAttributes } = useContext(UserContext)
+  const {userAttributes} = useContext(UserContext)
   const [favorites, setFavorites] = useState([])
   const [loading, setLoading] = useState(true)
   const checkingUser = useCheckLoggedInUser()
@@ -66,7 +68,7 @@ const Favorites = () => {
     if (!checkingUser) {
       fetch(`/api/favorites?cognitoSub=${userAttributes.sub}`, {
         headers: {
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
         },
       })
         .then((response) => response.json())
@@ -75,7 +77,7 @@ const Favorites = () => {
           setLoading(false)
         })
         .catch((error) => {
-          console.error("Error fetching favorites:", error)
+          console.error('Error fetching favorites:', error)
           setLoading(false)
         })
     }
@@ -84,10 +86,10 @@ const Favorites = () => {
   const removeFromFavorites = (productId) => {
     if (userAttributes) {
       fetch(`/api/favorites`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
         },
         body: JSON.stringify({
           cognitoSub: userAttributes.sub,
@@ -98,11 +100,11 @@ const Favorites = () => {
         .then(() => {
           // Update the favorites state to reflect the item removal
           setFavorites((currentFavorites) =>
-            currentFavorites.filter((item) => item.product_id !== productId)
+            currentFavorites.filter((item) => item.product_id !== productId),
           )
         })
         .catch((error) => {
-          console.error("Error removing item from favorites:", error)
+          console.error('Error removing item from favorites:', error)
         })
     }
   }
@@ -124,25 +126,19 @@ const Favorites = () => {
             <Header>Your favorites</Header>
             {favorites.length === 0 ? (
               <p>
-                Your favorites are empty.{" "}
-                <Link href="/">Continue shopping</Link>
+                Your favorites are empty. <Link href="/">Continue shopping</Link>
               </p>
             ) : (
               favorites.map((product) => (
                 <ProductItem key={product.product_id}>
                   <ProductInfo>
-                    <ProductImage
-                      src={product.product_image_url}
-                      alt={product.product_name}
-                    />
+                    <ProductImage src={product.product_image_url} alt={product.product_name} />
                     <ProductDetails>
                       <h3>{product.product_name}</h3>
                       <p>{product.product_price}</p>
                     </ProductDetails>
                   </ProductInfo>
-                  <RemoveButton
-                    onClick={() => removeFromFavorites(product.product_id)}
-                  >
+                  <RemoveButton onClick={() => removeFromFavorites(product.product_id)}>
                     Remove
                   </RemoveButton>
                 </ProductItem>

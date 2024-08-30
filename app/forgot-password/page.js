@@ -1,30 +1,26 @@
-import React, { useState, useEffect, useRef, useContext } from "react"
-import Head from "next/head"
-import styled from "styled-components"
-import { resetPassword, confirmResetPassword, signIn } from "aws-amplify/auth"
-import { useRouter } from "next/router"
-import LogoSymbol from "@/public/images/logo_n.svg"
-import Image from "next/image"
-import PasswordReveal from "@/components/Auth/PasswordReveal"
-import { IoCheckmarkCircleSharp } from "react-icons/io5"
-import LoaderDots from "@/components/Loaders/LoaderDots"
-import CognitoErrorMessages from "@/utils/CognitoErrorMessages"
-import ErrorRedirect from "@/components/Auth/ErrorRedirect"
-import PropFilter from "@/utils/PropFilter.js"
-import * as AuthStyles from "@/components/Auth/AuthStyles"
-import {
-  validateEmailDomain,
-  validatePassword,
-  validateCode,
-  handleBlur,
-} from "@/utils/AuthHelpers"
-import { UserContext } from "@/context/UserContext"
-import LoaderSpin from "@/components/Loaders/LoaderSpin.js"
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated"
-import { TiWarningOutline } from "react-icons/ti"
-import TooltipLabel from "@/components/Elements/TooltipLabel.js"
-import { useMobileView } from "@/context/MobileViewContext.js"
-import debounce from "lodash.debounce"
+'use client'
+
+import React, {useState, useRef, useContext} from 'react'
+import Head from 'next/head'
+import styled from 'styled-components'
+import {resetPassword, confirmResetPassword, signIn} from 'aws-amplify/auth'
+import {useRouter} from 'next/navigation'
+import LogoSymbol from '@/public/images/logo_n.svg'
+import PasswordReveal from '@/components/Auth/PasswordReveal'
+import {IoCheckmarkCircleSharp} from 'react-icons/io5'
+import LoaderDots from '@/components/Loaders/LoaderDots'
+import CognitoErrorMessages from '@/utils/CognitoErrorMessages'
+import ErrorRedirect from '@/components/Auth/ErrorRedirect'
+import PropFilter from '@/utils/PropFilter'
+import * as AuthStyles from '@/components/Auth/AuthStyles'
+import {validateEmailDomain, validatePassword, validateCode, handleBlur} from '@/utils/AuthHelpers'
+import {UserContext} from '@/context/UserContext'
+import LoaderSpin from '@/components/Loaders/LoaderSpin.js'
+import useRedirectIfAuthenticated from '@/hooks/useRedirectIfAuthenticated'
+import {TiWarningOutline} from 'react-icons/ti'
+import Popover from '@/components/Elements/Popover'
+import {useMobileView} from '@/context/MobileViewContext.js'
+import debounce from 'lodash.debounce'
 
 const ContinueBtn = styled(AuthStyles.AuthBtn)`
   margin-top: 15px;
@@ -59,19 +55,19 @@ const RequirementList = styled.ul`
   align-self: flex-start;
 `
 
-const RequirementListItem = styled(PropFilter("li")(["met"]))`
+const RequirementListItem = styled(PropFilter('li')(['met']))`
   margin-bottom: 4px;
   color: var(--sc-color-green);
   list-style: none;
   margin-left: -12px;
 
-  color: ${(props) => (props.met ? "var(--sc-color-green)" : "#d32f2f")};
+  color: ${(props) => (props.met ? 'var(--sc-color-green)' : '#d32f2f')};
 
   &:before {
     content: ${(props) => (props.met ? "'✓'" : "''")};
-    padding-right: ${(props) => (props.met ? "2px" : "0px")};
+    padding-right: ${(props) => (props.met ? '2px' : '0px')};
     font-weight: bold;
-    margin-left: ${(props) => (props.met ? "-13px" : "0px")};
+    margin-left: ${(props) => (props.met ? '-13px' : '0px')};
   }
 `
 
@@ -90,17 +86,17 @@ const PasswordSuccess = styled.div`
 `
 
 const ForgotPassword = () => {
-  const [code, setCode] = useState("")
-  const [newPassword, setNewPassword] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
+  const [code, setCode] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const [showError, setShowError] = useState(false)
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState('')
   const [emailValid, setEmailValid] = useState(true)
   const [passwordValid, setPasswordValid] = useState(true)
   const [codeValid, setCodeValid] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [passwordChanged, setPasswordChanged] = useState(false)
-  const [currentStep, setCurrentStep] = useState("initial")
+  const [currentStep, setCurrentStep] = useState('initial')
   const [pageLoading, setPageLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [shakeKey, setShakeKey] = useState(0)
@@ -110,8 +106,8 @@ const ForgotPassword = () => {
   const [numberMet, setNumberMet] = useState(false)
   const [specialCharMet, setSpecialCharMet] = useState(false)
   const [reqsMet, setReqsMet] = useState(false)
-  const { invalidStyle } = AuthStyles
-  const { fetchUserAttributes } = useContext(UserContext)
+  const {invalidStyle} = AuthStyles
+  const {fetchUserAttributes} = useContext(UserContext)
   const [isHovered, setIsHovered] = useState(false)
   const isMobileView = useMobileView()
   const hoverTimeout = useRef(null)
@@ -125,21 +121,21 @@ const ForgotPassword = () => {
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
 
   const obfuscateEmail = (username) => {
-    const [localPart] = username.split("@")
+    const [localPart] = username.split('@')
     if (localPart.length <= 3) {
       return `${localPart}@***`
     }
-    const obfuscatedLocalPart = localPart.slice(0, 3) + "*".repeat(3)
+    const obfuscatedLocalPart = localPart.slice(0, 3) + '*'.repeat(3)
     return `${obfuscatedLocalPart}@***`
   }
 
   const forwardSignUp = () => {
-    router.push("/signup")
+    router.push('/signup')
   }
 
   const handleKeyDown = (e) => {
     // Check if the key pressed is invalid
-    if (e.key !== "Backspace" && e.key !== "Tab" && !/^[0-9]$/.test(e.key)) {
+    if (e.key !== 'Backspace' && e.key !== 'Tab' && !/^[0-9]$/.test(e.key)) {
       e.preventDefault()
       setCodeValid(false)
     } else {
@@ -149,17 +145,13 @@ const ForgotPassword = () => {
 
   const resetPasswordHandler = async (username) => {
     try {
-      await resetPassword({ username })
+      await resetPassword({username})
     } catch (error) {
-      console.error("Error resetting password:", error)
+      console.error('Error resetting password:', error)
     }
   }
 
-  const confirmResetPasswordHandler = async ({
-    username,
-    confirmationCode,
-    newPassword,
-  }) => {
+  const confirmResetPasswordHandler = async ({username, confirmationCode, newPassword}) => {
     try {
       await confirmResetPassword({
         username,
@@ -167,14 +159,14 @@ const ForgotPassword = () => {
         newPassword,
       })
     } catch (error) {
-      console.error("Error completing password reset:", error)
+      console.error('Error completing password reset:', error)
     }
   }
 
   const handleSendCode = async (e) => {
     e.preventDefault()
     if (loading) return // Prevent form submission if loading
-    setErrorMessage("") // Reset any errors when we try resetting the password again
+    setErrorMessage('') // Reset any errors when we try resetting the password again
 
     // Validate the email before submitting the initial reset form
     const isEmailValid = validateEmailDomain(username)
@@ -188,28 +180,26 @@ const ForgotPassword = () => {
     // Check if the username exists in the database before we send a request to AWS
     const debouncedCheckUsername = debounce(async (username) => {
       try {
-        const response = await fetch("/api/check-username", {
-          method: "POST",
+        const response = await fetch('/api/check-username', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
           },
-          body: JSON.stringify({ username }),
+          body: JSON.stringify({username}),
         })
 
         const data = await response.json()
         if (!data.exists) {
-          setErrorMessage(
-            "User does not exist. Please check your email address."
-          )
+          setErrorMessage('User does not exist. Please check your email address.')
           setShakeKey((prevKey) => prevKey + 1)
           setLoading(false)
           return false
         }
         return true
       } catch (error) {
-        console.error("Error checking username:", error)
-        setErrorMessage("An unexpected error occurred. Please try again later.")
+        console.error('Error checking username:', error)
+        setErrorMessage('An unexpected error occurred. Please try again later.')
         setShakeKey((prevKey) => prevKey + 1)
         setLoading(false)
         return false
@@ -224,27 +214,27 @@ const ForgotPassword = () => {
 
     setTimeout(async () => {
       try {
-        const output = await resetPassword({ username: username })
-        const { nextStep } = output
-        if (nextStep.resetPasswordStep === "CONFIRM_RESET_PASSWORD_WITH_CODE") {
-          setCurrentStep("resetPassword")
+        const output = await resetPassword({username: username})
+        const {nextStep} = output
+        if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
+          setCurrentStep('resetPassword')
         }
       } catch (error) {
-        if (error.name === "UserNotFoundException") {
+        if (error.name === 'UserNotFoundException') {
           setErrorMessage(CognitoErrorMessages[error.name])
           setShakeKey((prevKey) => prevKey + 1)
-        } else if (error.name === "InvalidParameterException") {
+        } else if (error.name === 'InvalidParameterException') {
           setErrorMessage(CognitoErrorMessages[error.name])
           setShakeKey((prevKey) => prevKey + 1)
-        } else if (error.name === "LimitExceededException") {
+        } else if (error.name === 'LimitExceededException') {
           setErrorMessage(CognitoErrorMessages[error.name])
           setShakeKey((prevKey) => prevKey + 1)
           setShowError(true)
         } else {
           setErrorMessage(
             CognitoErrorMessages[error.name] ||
-              "An unexpected error occurred. Please try again later.",
-            setShowError(true)
+              'An unexpected error occurred. Please try again later.',
+            setShowError(true),
           )
           setShakeKey((prevKey) => prevKey + 1)
         }
@@ -266,19 +256,19 @@ const ForgotPassword = () => {
     if (loading) return // Prevent form submission if loading
 
     if (!code || !newPassword) {
-      setErrorMessage("Code and new password cannot be empty.")
+      setErrorMessage('Code and new password cannot be empty.')
       setShakeKey((prevKey) => prevKey + 1)
       return
     }
 
     if (!validatePassword(newPassword)) {
-      setErrorMessage("Password does not meet the requirements.")
+      setErrorMessage('Password does not meet the requirements.')
       setShakeKey((prevKey) => prevKey + 1)
       return
     }
 
     if (!validateCode(code)) {
-      setErrorMessage("Code does not meet the requirements.")
+      setErrorMessage('Code does not meet the requirements.')
       setShakeKey((prevKey) => prevKey + 1)
       return
     }
@@ -292,23 +282,23 @@ const ForgotPassword = () => {
           newPassword: newPassword,
         })
 
-        await signIn({ username, password: newPassword })
+        await signIn({username, password: newPassword})
 
         setPasswordChanged(true)
-        setErrorMessage("")
+        setErrorMessage('')
       } catch (error) {
         setPageLoading(false) // Hide loader if there's an error
-        if (error.name === "CodeMismatchException") {
+        if (error.name === 'CodeMismatchException') {
           setErrorMessage(CognitoErrorMessages[error.name])
           setShakeKey((prevKey) => prevKey + 1)
-          setCurrentStep("verifyCode")
-        } else if (error.name === "LimitExceededException") {
+          setCurrentStep('verifyCode')
+        } else if (error.name === 'LimitExceededException') {
           setShakeKey((prevKey) => prevKey + 1)
           setErrorMessage(CognitoErrorMessages[error.name])
         } else {
           setErrorMessage(
             CognitoErrorMessages[error.name] ||
-              "An unexpected error occurred. Please try again later."
+              'An unexpected error occurred. Please try again later.',
           )
           setShakeKey((prevKey) => prevKey + 1)
         }
@@ -331,16 +321,16 @@ const ForgotPassword = () => {
   }
 
   const onChange = (e) => {
-    const { name, value } = e.target
-    if (name === "username") {
+    const {name, value} = e.target
+    if (name === 'username') {
       setUsername(value)
       setEmailValid(true)
-    } else if (name === "code") {
+    } else if (name === 'code') {
       if (value.length <= 6) {
         setCode(value)
         setCodeValid(true)
       }
-    } else if (name === "newPassword") {
+    } else if (name === 'newPassword') {
       setNewPassword(value)
       setPasswordValid(true)
 
@@ -349,8 +339,7 @@ const ForgotPassword = () => {
       const lowerCaseMet = /[a-z]/.test(value)
       const upperCaseMet = /[A-Z]/.test(value)
       const numberMet = /[0-9]/.test(value)
-      const specialCharMet =
-        /[\^$*.\[\]{}\(\)?\"!@#%&\/\\,><\':;|_~`=+\-]/.test(value)
+      const specialCharMet = /[\^$*.\[\]{}\(\)?\"!@#%&\/\\,><\':;|_~`=+\-]/.test(value)
 
       setLengthMet(lengthMet)
       setLowerCaseMet(lowerCaseMet)
@@ -359,20 +348,16 @@ const ForgotPassword = () => {
       setSpecialCharMet(specialCharMet)
 
       // Set reqsMet to true if all of the criteria are met
-      setReqsMet(
-        lengthMet && lowerCaseMet && upperCaseMet && numberMet && specialCharMet
-      )
+      setReqsMet(lengthMet && lowerCaseMet && upperCaseMet && numberMet && specialCharMet)
 
       // Set passwordValid based on reqsMet
-      setPasswordValid(
-        lengthMet && lowerCaseMet && upperCaseMet && numberMet && specialCharMet
-      )
+      setPasswordValid(lengthMet && lowerCaseMet && upperCaseMet && numberMet && specialCharMet)
     }
   }
 
   // Inline style for resetPassword stage
   const resetPasswordStyle = {
-    padding: "50px 25px 50px 25px",
+    padding: '50px 25px 50px 25px',
   }
 
   const handleMouseEnter = () => {
@@ -412,29 +397,26 @@ const ForgotPassword = () => {
                 style={
                   passwordChanged
                     ? {
-                        height: "50%",
-                        transition: "height 0.5s ease-in-out",
+                        height: '50%',
+                        transition: 'height 0.5s ease-in-out',
                       }
-                    : currentStep === "resetPassword"
-                    ? resetPasswordStyle
-                    : {
-                        transition: "height 0.5s ease-in-out",
-                      }
+                    : currentStep === 'resetPassword'
+                      ? resetPasswordStyle
+                      : {
+                          transition: 'height 0.5s ease-in-out',
+                        }
                 }
               >
                 <AuthStyles.LogoBox>
                   <LogoSymbol />
                 </AuthStyles.LogoBox>
-                {currentStep === "initial" && !passwordChanged && (
+                {currentStep === 'initial' && !passwordChanged && (
                   <>
-                    <AuthStyles.HeaderText>
-                      Reset your password
-                    </AuthStyles.HeaderText>
+                    <AuthStyles.HeaderText>Reset your password</AuthStyles.HeaderText>
                     <SubheaderText>
                       <span>
-                        In order to change your password, we need to verify your
-                        identity. Enter the email address associated with your
-                        Nexari account.
+                        In order to change your password, we need to verify your identity. Enter the
+                        email address associated with your Nexari account.
                       </span>
                     </SubheaderText>
                     <AuthStyles.FormContainer
@@ -480,11 +462,7 @@ const ForgotPassword = () => {
                         loading={loading}
                         tabIndex={loading ? -1 : 0}
                       >
-                        {loading ? (
-                          <LoaderSpin loading={loading} />
-                        ) : (
-                          "Continue"
-                        )}
+                        {loading ? <LoaderSpin loading={loading} /> : 'Continue'}
                       </ContinueBtn>
                       <AuthStyles.ResetText
                         href="/login"
@@ -506,20 +484,17 @@ const ForgotPassword = () => {
                     </AuthStyles.AuthLoginLinkBox>
                   </>
                 )}
-                {currentStep === "resetPassword" && !passwordChanged && (
+                {currentStep === 'resetPassword' && !passwordChanged && (
                   <>
-                    <AuthStyles.HeaderText>
-                      Reset your password
-                    </AuthStyles.HeaderText>
+                    <AuthStyles.HeaderText>Reset your password</AuthStyles.HeaderText>
                     <SuccessMessage>
                       <span>
-                        We’ve sent your code to{" "}
-                        <strong>{obfuscateEmail(username)}</strong>
+                        We’ve sent your code to <strong>{obfuscateEmail(username)}</strong>
                       </span>
                       <br />
                       <SubheaderText>
-                        Enter the code below, and please change your password to
-                        something you haven’t used before.
+                        Enter the code below, and please change your password to something you
+                        haven’t used before.
                       </SubheaderText>
                     </SuccessMessage>
                     <AuthStyles.FormContainer
@@ -540,10 +515,7 @@ const ForgotPassword = () => {
                           onFocus={(e) => setCaretToEnd(e.target)}
                           onKeyDown={handleKeyDown}
                         />
-                        <AuthStyles.Label
-                          htmlFor="code"
-                          style={!codeValid ? invalidStyle : {}}
-                        >
+                        <AuthStyles.Label htmlFor="code" style={!codeValid ? invalidStyle : {}}>
                           Enter your code
                         </AuthStyles.Label>
                       </AuthStyles.EntryWrapper>
@@ -556,7 +528,7 @@ const ForgotPassword = () => {
                       <AuthStyles.EntryWrapper>
                         <AuthStyles.EntryContainer
                           ref={passwordRef}
-                          type={showPassword ? "text" : "password"}
+                          type={showPassword ? 'text' : 'password'}
                           placeholder=""
                           value={newPassword}
                           name="newPassword"
@@ -575,9 +547,7 @@ const ForgotPassword = () => {
                           onMouseEnter={handleMouseEnter}
                           onMouseLeave={handleMouseLeave}
                           clicked={showPassword}
-                          aria-label={
-                            showPassword ? "Hide password" : "Show password"
-                          }
+                          aria-label={showPassword ? 'Hide password' : 'Show password'}
                           role="button"
                           className="password-reveal-button"
                         />
@@ -605,55 +575,39 @@ const ForgotPassword = () => {
                           <RequirementTitle>Must contain:</RequirementTitle>
                           <RequirementList>
                             <RequirementListItem
-                              data-test={
-                                lengthMet ? "lengthSuccess" : "lengthNotMet"
-                              }
+                              data-test={lengthMet ? 'lengthSuccess' : 'lengthNotMet'}
                               met={lengthMet}
                             >
                               <span>8-20 characters</span>
                             </RequirementListItem>
                           </RequirementList>
-                          <RequirementTitle>
-                            And 1 of the following:
-                          </RequirementTitle>
+                          <RequirementTitle>And 1 of the following:</RequirementTitle>
                           <RequirementList>
                             <RequirementListItem
-                              data-test={
-                                lowerCaseMet
-                                  ? "lowerCaseSuccess"
-                                  : "lowerCaseNotMet"
-                              }
+                              data-test={lowerCaseMet ? 'lowerCaseSuccess' : 'lowerCaseNotMet'}
                               met={lowerCaseMet}
                             >
                               <span>Lowercase letters</span>
                             </RequirementListItem>
                             <RequirementListItem
-                              data-test={
-                                upperCaseMet
-                                  ? "upperCaseSuccess"
-                                  : "upperCaseNotMet"
-                              }
+                              data-test={upperCaseMet ? 'upperCaseSuccess' : 'upperCaseNotMet'}
                               met={upperCaseMet}
                             >
                               <span>Uppercase letters</span>
                             </RequirementListItem>
                             <RequirementListItem
-                              data-test={
-                                numberMet ? "numberSuccess" : "numberNotMet"
-                              }
+                              data-test={numberMet ? 'numberSuccess' : 'numberNotMet'}
                               met={numberMet}
                             >
                               <span>Numbers</span>
                             </RequirementListItem>
                             <RequirementListItem
                               data-test={
-                                specialCharMet
-                                  ? "specialCharSuccess"
-                                  : "specialCharNotMet"
+                                specialCharMet ? 'specialCharSuccess' : 'specialCharNotMet'
                               }
                               met={specialCharMet}
                             >
-                              <span>Special characters, except {"< >"}</span>
+                              <span>Special characters, except {'< >'}</span>
                             </RequirementListItem>
                           </RequirementList>
                         </>
@@ -662,7 +616,7 @@ const ForgotPassword = () => {
                         type="submit"
                         data-form-type="action,change_password"
                         disabled={!passwordValid || !reqsMet} // Just to be safe
-                        style={{ marginTop: "10px" }}
+                        style={{marginTop: '10px'}}
                       >
                         Create password
                       </AuthStyles.AuthBtn>
@@ -671,21 +625,21 @@ const ForgotPassword = () => {
                 )}
                 {passwordChanged && (
                   <>
-                    <AuthStyles.HeaderText style={{ textAlign: "center" }}>
+                    <AuthStyles.HeaderText style={{textAlign: 'center'}}>
                       You've successfully changed your password
                     </AuthStyles.HeaderText>
-                    <ContinueBtn type="button" onClick={() => router.push("/")}>
+                    <ContinueBtn type="button" onClick={() => router.push('/')}>
                       Continue to Nexari
                     </ContinueBtn>
                   </>
                 )}
               </AuthStyles.AuthCard>
               {!isMobileView && (
-                <TooltipLabel
-                  label={showPassword ? "Hide password" : "Show password"}
+                <Popover
+                  label={showPassword ? 'Hide password' : 'Show password'}
                   animate={isHovered}
                   exited={!isHovered}
-                  tooltipRef={passwordRef}
+                  trigger={passwordRef}
                 />
               )}
             </AuthStyles.FormContainerWrapper>

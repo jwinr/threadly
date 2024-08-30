@@ -1,26 +1,25 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect, useContext } from "react"
-import { UserContext } from "@/context/UserContext"
-import { signOut } from "aws-amplify/auth"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import styled from "styled-components"
-import Image from "next/image"
-import LoaderDots from "@/components/loaders/LoaderDots"
-import Head from "next/head"
-import Profile from "@/public/images/icons/Profile.svg"
-import { VscHeartFilled } from "react-icons/vsc"
-import Favorites from "@/public/images/icons/Favorites.svg"
-import CreditCard from "@/public/images/icons/DefaultPayment.svg"
-import HomeAddress from "@/public/images/icons/HomeAddress.svg"
-import House from "@/public/images/icons/house.svg"
-import Purchases from "@/public/images/icons/Purchases.svg"
-import Security from "@/public/images/icons/security.svg"
-import Shield from "@/public/images/icons/Shield.svg"
-import Settings from "@/public/images/icons/Settings.svg"
-import useCheckLoggedInUser from "@/hooks/useCheckLoggedInUser"
-import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
+import React, {useState, useEffect, useContext} from 'react'
+import {UserContext} from '@/context/UserContext'
+import {signOut} from 'aws-amplify/auth'
+import {useRouter} from 'next/navigation'
+import Link from 'next/link'
+import styled from 'styled-components'
+import Image from 'next/image'
+import LoaderDots from '@/components/loaders/LoaderDots'
+import Head from 'next/head'
+import Profile from '@/public/images/icons/Profile.svg'
+import Favorites from '@/public/images/icons/Favorites.svg'
+import CreditCard from '@/public/images/icons/DefaultPayment.svg'
+import HomeAddress from '@/public/images/icons/HomeAddress.svg'
+import House from '@/public/images/icons/house.svg'
+import Purchases from '@/public/images/icons/Purchases.svg'
+import Security from '@/public/images/icons/security.svg'
+import Shield from '@/public/images/icons/Shield.svg'
+import Settings from '@/public/images/icons/Settings.svg'
+import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
 
 const AccountContainer = styled.div`
   margin: 0 auto;
@@ -47,8 +46,10 @@ const ProfileContainer = styled.div`
   max-width: 33%;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -62,8 +63,10 @@ const OrderContainer = styled.div`
   max-width: 66%;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -77,8 +80,10 @@ const PaymentContainer = styled.div`
   max-width: 66%;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -94,8 +99,10 @@ const FavoriteContainer = styled.div`
   padding: 20px;
   display: flex;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -111,8 +118,10 @@ const AddressesContainer = styled.div`
   padding: 20px;
   display: flex;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -127,8 +136,10 @@ const SignInSecurityContainer = styled.div`
   padding: 20px;
   display: flex;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
-    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px, rgba(0, 0, 0, 0.06) 0px 2px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px 6px 12px 4px,
+    rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
+    rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
 
   svg {
@@ -219,7 +230,7 @@ const LoadMoreButton = styled.button`
 `
 
 const Account = () => {
-  const { userAttributes } = useContext(UserContext)
+  const {userAttributes} = useContext(UserContext)
   const checkingUser = useCheckLoggedInUser()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
@@ -234,15 +245,15 @@ const Account = () => {
     try {
       const apiKey = process.env.NEXT_PUBLIC_API_KEY
       if (!apiKey) {
-        throw new Error("API key is missing")
+        throw new Error('API key is missing')
       }
       const response = await fetch(
         `/api/orders?cognitoSub=${userAttributes.sub}&limit=${limit}&offset=${offset}`,
         {
           headers: {
-            "x-api-key": apiKey,
+            'x-api-key': apiKey,
           },
-        }
+        },
       )
       const data = await response.json()
       if (data.length < limit) {
@@ -250,7 +261,7 @@ const Account = () => {
       }
       setOrders((prevOrders) => [...prevOrders, ...data])
     } catch (error) {
-      console.error("Error fetching orders:", error)
+      console.error('Error fetching orders:', error)
     } finally {
       setLoading(false)
       setLoadingMore(false)
@@ -270,11 +281,11 @@ const Account = () => {
   }
 
   const handleFavorites = () => {
-    router.push("/favorites")
+    router.push('/favorites')
   }
 
   const handleAddPaymentMethod = () => {
-    router.push("account/payments")
+    router.push('account/payments')
   }
 
   return (
@@ -293,14 +304,13 @@ const Account = () => {
                 <CardButton onClick={handleFavorites} type="button">
                   <CardWrapper>
                     <Profile />
-                    <div style={{ textAlign: "start" }}>
+                    <div style={{textAlign: 'start'}}>
                       <Title>Profile</Title>
                       {userAttributes && (
                         <>
                           <InfoItem>
                             <span>
-                              Name: {userAttributes.given_name}{" "}
-                              {userAttributes.family_name}
+                              Name: {userAttributes.given_name} {userAttributes.family_name}
                             </span>
                           </InfoItem>
                           <InfoItem>
@@ -344,12 +354,10 @@ const Account = () => {
                             <span>Order ID:</span> <span>{order.order_id}</span>
                           </div>
                           <div>
-                            <span>Amount:</span>{" "}
-                            {formatCurrency(order.amount_total, true)}
+                            <span>Amount:</span> {formatCurrency(order.amount_total, true)}
                           </div>
                           <div>
-                            <span>Order Date:</span>{" "}
-                            {new Date(order.created_at).toLocaleString()}
+                            <span>Order Date:</span> {new Date(order.created_at).toLocaleString()}
                           </div>
                         </OrderListItem>
                       ))}
@@ -357,11 +365,8 @@ const Account = () => {
                   </OrderListContainer>
                 )}
                 {hasMore && (
-                  <LoadMoreButton
-                    onClick={handleLoadMore}
-                    disabled={loadingMore}
-                  >
-                    {loadingMore ? "Loading..." : "Load More"}
+                  <LoadMoreButton onClick={handleLoadMore} disabled={loadingMore}>
+                    {loadingMore ? 'Loading...' : 'Load More'}
                   </LoadMoreButton>
                 )}
               </OrderContainer>
@@ -373,9 +378,7 @@ const Account = () => {
                     <CreditCard />
                     <div>
                       <Title>Payments</Title>
-                      <InfoItem>
-                        Add a payment card for quick online ordering.
-                      </InfoItem>
+                      <InfoItem>Add a payment card for quick online ordering.</InfoItem>
                     </div>
                   </CardWrapper>
                 </CardButton>
@@ -399,9 +402,7 @@ const Account = () => {
                     <HomeAddress />
                     <div>
                       <Title>Addresses</Title>
-                      <InfoItem>
-                        Save an address to make it easier to order online.
-                      </InfoItem>
+                      <InfoItem>Save an address to make it easier to order online.</InfoItem>
                     </div>
                   </CardWrapper>
                 </CardButton>

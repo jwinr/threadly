@@ -3,10 +3,11 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "analyze": "ANALYZE=true next build",
     "dev": "next dev",
     "build": "GENERATE_SOURCEMAP=false next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.13",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.24.7",
+    "@eslint/js": "^9.9.1",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/eslint-plugin-query": "^5.52.0",
     "@types/cookie": "^0.6.0",
@@ -54,7 +56,41 @@
     "@types/react-dom": "^18.3.0",
     "@types/react-transition-group": "^4.4.10",
     "@types/styled-components": "^5.1.34",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "babel-plugin-styled-components": "^2.1.4",
-    "typescript": "^5.5.4"
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-sonarjs": "^2.0.1",
+    "eslint-plugin-unicorn": "^55.0.0",
+    "globals": "^15.9.0",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
