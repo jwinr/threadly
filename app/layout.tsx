@@ -13,9 +13,14 @@ import StyledComponentsRegistry from '../lib/registry'
 import cookie from 'cookie'
 import { headers } from 'next/headers'
 import Script from 'next/script'
+import { Metadata } from 'next'
 
 interface RootLayoutProps {
   children: ReactNode
+}
+
+export const metadata: Metadata = {
+  title: 'Threadly',
 }
 
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {

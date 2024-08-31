@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+          token: ${{ secrets.GH_PAT }}
 
       - name: Override .gitignore for Navbar/Menu and Public Folder
         run: |
