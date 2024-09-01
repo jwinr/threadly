@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react"
-
-import styled, { css } from "styled-components"
-
-import Check from "@/public/images/icons/check.svg"
-import Warning from "@/public/images/icons/warning.svg"
+import React, { useState, useEffect } from 'react'
+import styled, { css } from 'styled-components'
+import Check from '@/public/images/icons/check.svg'
+import Warning from '@/public/images/icons/warning.svg'
 
 interface ToastProps {
   message: string
-  type: "success" | "caution" | "pending"
+  type: 'success' | 'caution' | 'pending'
   action?: string
   onAction?: () => void
   onDismiss: () => void
@@ -26,7 +24,9 @@ const ToastContainer = styled.div<{ $isVisible: boolean }>`
   padding: 12px 16px;
   border-radius: 4px;
   box-shadow: var(--sc-shadow-medium);
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out,
+  transition:
+    opacity 0.2s ease-in-out,
+    visibility 0.2s ease-in-out,
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
     bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: all;
@@ -121,7 +121,9 @@ const Toast: React.FC<ToastProps> = ({
   }, [timeout, action, onDismiss])
 
   const handleActionClick = () => {
-    if (onAction) onAction()
+    if (onAction) {
+      onAction()
+    }
     setIsVisible(false)
     setTimeout(() => {
       onDismiss()
@@ -130,11 +132,11 @@ const Toast: React.FC<ToastProps> = ({
 
   const renderIcon = () => {
     switch (type) {
-      case "success":
+      case 'success':
         return <StyledCheck />
-      case "caution":
+      case 'caution':
         return <StyledWarning />
-      case "pending":
+      case 'pending':
         return
       default:
         return null
@@ -142,15 +144,10 @@ const Toast: React.FC<ToastProps> = ({
   }
 
   return (
-    <ToastContainer
-      $isVisible={isVisible}
-      style={{ bottom: `${20 + index * 60}px` }}
-    >
+    <ToastContainer $isVisible={isVisible} style={{ bottom: `${20 + index * 60}px` }}>
       <IconContainer>{renderIcon()}</IconContainer>
       {message}
-      {action && (
-        <ActionButton onClick={handleActionClick}>{action}</ActionButton>
-      )}
+      {action && <ActionButton onClick={handleActionClick}>{action}</ActionButton>}
     </ToastContainer>
   )
 }

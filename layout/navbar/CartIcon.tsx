@@ -1,7 +1,7 @@
-import React, { useContext } from "react"
-import CartLogo from "@/public/images/icons/cart.svg"
-import styled from "styled-components"
-import { CartContext } from "@/context/CartContext"
+import React, { useContext } from 'react'
+import CartLogo from '@/public/images/icons/cart.svg'
+import styled from 'styled-components'
+import { CartContext } from '@/context/CartContext'
 
 const Container = styled.a`
   position: relative;
@@ -95,15 +95,10 @@ const CartIcon: React.FC = () => {
   const { cart } = useContext(CartContext)
 
   // Calculate total quantity
-  const totalQuantity = cart.reduce(
-    (sum: number, item: CartItem) => sum + Number(item.quantity),
-    0
-  )
+  const totalQuantity = cart.reduce((sum: number, item: CartItem) => sum + Number(item.quantity), 0)
 
   // Dynamically change the label based on 1 or more items
-  const ariaLabel = `Cart, ${totalQuantity} ${
-    totalQuantity === 1 ? "item" : "items"
-  }`
+  const ariaLabel = `Cart, ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'}`
 
   return (
     <Container href="/cart" tabIndex={-1} aria-label={ariaLabel}>

@@ -3,7 +3,13 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<img src="assets/logo_small.png" alt="Threadly Logo" width="400">
+<a href="https://github.com/jwinr/threadly">
+<picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/logo_small_dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="assets/logo_small.png">
+      <img src="assets/logo_small.png" alt="Threadly Logo" width="400">
+    </picture>
+    </a>
   <p align="center">
     <br />
     <br />
@@ -44,7 +50,7 @@
 
 - Offers a seamless shopping experience by enabling users to browse, search, and purchase a wide range of fashion products across multiple categories and subcategories.
 - Ensures a consistent shopping experience across devices with fully responsive design.
-- Provides an intuitive, user-friendly interface inspired by best-in-class UX practices from the Baymard Institute and Stripe.
+- Provides an intuitive, user-friendly interface inspired by best-in-class UX practices from the Baymard Institute.
 - Handles transactions securely with Stripe Embedded Checkout to provide peace of mind for users.
 - Allows users to customize their profiles, including managing payment methods, address, and order history with ease.
 - Enables product favoriting so users can easily revisit and access preferred items.

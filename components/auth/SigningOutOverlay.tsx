@@ -1,8 +1,8 @@
-import React from "react"
+import React from 'react'
 
-import styled from "styled-components"
+import styled from 'styled-components'
 
-import LoaderSpin from "../Loaders/LoaderSpin"
+import LoaderSpin from '@/components/Loaders/LoaderSpin'
 
 const Overlay = styled.div`
   position: fixed;
@@ -27,9 +27,13 @@ const Popup = styled.div`
   justify-content: center;
   font-size: 14px;
   color: var(--sc-color-text-loader);
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px,
-    rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px,
-    rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  box-shadow:
+    rgba(0, 0, 0, 0.07) 0px 1px 2px,
+    rgba(0, 0, 0, 0.07) 0px 2px 4px,
+    rgba(0, 0, 0, 0.07) 0px 4px 8px,
+    rgba(0, 0, 0, 0.07) 0px 8px 16px,
+    rgba(0, 0, 0, 0.07) 0px 16px 32px,
+    rgba(0, 0, 0, 0.07) 0px 32px 64px;
 
   span {
     align-self: flex-end;
@@ -41,7 +45,9 @@ interface SigningOutOverlayProps {
 }
 
 const SigningOutOverlay: React.FC<SigningOutOverlayProps> = ({ visible }) => {
-  if (!visible) return null
+  if (!visible) {
+    return null
+  }
 
   return (
     <Overlay>

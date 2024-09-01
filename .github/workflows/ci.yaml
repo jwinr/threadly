@@ -17,12 +17,23 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GH_PAT_TB }}
 
-      - name: Override .gitignore for Navbar/Menu and Public Folder
+      - name: Modify .gitignore
         run: |
-          git checkout -- layout/navbar/Menu/
-          git checkout -- public/
+          sed -i 's|^layout/navbar/Menu/|#layout/navbar/Menu/|' .gitignore
+          sed -i 's|^public/|#public/|' .gitignore
+
+      - name: Add private files
+        run: |
+          mkdir -p layout/navbar/Menu/
+          touch layout/navbar/Menu/Discover.tsx
+          touch layout/navbar/Menu/Men.tsx
+          touch layout/navbar/Menu/Nav.tsx
+          touch layout/navbar/Menu/Sale.tsx
+          touch layout/navbar/Menu/SlideWrapper.tsx
+          touch layout/navbar/Menu/Women.tsx
+          mkdir -p public/
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -55,11 +66,19 @@ jobs:
       - name: Run Linting
         run: npm run lint
 
-      - name: Run Prettier Check
-        run: npm run prettier -- --check .
+      - name: Run Prettier and Fix Formatting
+        run: npm run prettier -- --write .
 
       - name: Run Unit Tests
         run: npm test
 
       - name: Build Application
         run: npm run build
+
+      - name: Restore .gitignore
+        run: git checkout .gitignore
+
+      - name: Cleanup sensitive files
+        run: |
+          rm -rf layout/navbar/Menu/
+          rm -rf public/

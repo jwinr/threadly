@@ -1,7 +1,7 @@
-import React, { forwardRef } from "react"
-import styled from "styled-components"
-import Link from "next/link"
-import Image, { StaticImageData } from "next/image"
+import React, { forwardRef } from 'react'
+import styled from 'styled-components'
+import Link from 'next/link'
+import Image, { StaticImageData } from 'next/image'
 
 const NavContainer = styled.div`
   display: flex;
@@ -23,7 +23,9 @@ const NavIcon = styled.div`
   border: 1px solid var(--sc-color-divider);
   margin-bottom: 10px;
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   div {
     height: 100%;
@@ -87,13 +89,11 @@ interface FeaturedCategoriesProps {
   className?: string
 }
 
-const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
-  (props, ref) => {
-    return (
-      <NavContainer ref={ref} className={props.className}>
-        {CategoriesConfig.filter(
-          (category: Category) => category.id !== "accessories"
-        ).map((category: Category) => (
+const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>((props, ref) => {
+  return (
+    <NavContainer ref={ref} className={props.className}>
+      {CategoriesConfig.filter((category: Category) => category.id !== 'accessories').map(
+        (category: Category) => (
           <NavLink
             key={category.id}
             href={`/categories/${category.slug}`}
@@ -103,12 +103,7 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
             <NavItem>
               <NavIcon>
                 {category.icon ? (
-                  <Image
-                    src={category.icon}
-                    alt={""}
-                    width={200}
-                    height={200}
-                  />
+                  <Image src={category.icon} alt={''} width={200} height={200} />
                 ) : (
                   <FallbackIcon>?</FallbackIcon>
                 )}
@@ -116,12 +111,12 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
               <NavTitle>{category.name}</NavTitle>
             </NavItem>
           </NavLink>
-        ))}
-      </NavContainer>
-    )
-  }
-)
+        ),
+      )}
+    </NavContainer>
+  )
+})
 
-FeaturedCategories.displayName = "FeaturedCategories"
+FeaturedCategories.displayName = 'FeaturedCategories'
 
 export default FeaturedCategories

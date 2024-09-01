@@ -1,8 +1,8 @@
-import styled, { keyframes, css } from "styled-components"
-import PropFilter from "@/utils/PropFilter"
+import styled, { keyframes, css } from 'styled-components'
+import PropFilter from '@/utils/PropFilter'
 
-const FilteredDiv = PropFilter("div")(["shake"])
-const FilteredButton = PropFilter("button")(["loading", "isInvalid"])
+const FilteredDiv = PropFilter('div')(['shake'])
+const FilteredButton = PropFilter('button')(['loading', 'isInvalid'])
 
 /* Shared Styles */
 export const fadeIn = keyframes`
@@ -115,7 +115,8 @@ export const AuthCard = styled(FilteredDiv)<AuthCardProps>`
   display: flex;
   flex-direction: column;
   background-color: var(--sc-color-white);
-  box-shadow: 0 15px 35px 0 rgba(60, 66, 87, 0.08),
+  box-shadow:
+    0 15px 35px 0 rgba(60, 66, 87, 0.08),
     0 5px 15px 0 rgba(0, 0, 0, 0.12);
   border-radius: 8px;
   align-items: center;
@@ -174,9 +175,13 @@ interface EntryContainerProps {
 
 export const EntryContainer = styled.input<EntryContainerProps>`
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
-    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px;
   border-radius: 4px;
   width: 100%;
@@ -185,12 +190,15 @@ export const EntryContainer = styled.input<EntryContainerProps>`
   padding-left: 10px;
   color: var(--sc-color-text);
   padding-right: 40px;
-  transition: background 0.15s ease, border 0.15s ease, box-shadow 0.15s ease,
+  transition:
+    background 0.15s ease,
+    border 0.15s ease,
+    box-shadow 0.15s ease,
     color 0.15s ease;
-  cursor: ${({ loading }) => (loading ? "default" : "text")};
-  pointer-events: ${({ loading }) => (loading ? "none" : "auto")};
+  cursor: ${({ loading }) => (loading ? 'default' : 'text')};
+  pointer-events: ${({ loading }) => (loading ? 'none' : 'auto')};
   background-color: ${({ loading }) =>
-    loading ? "var(--sc-color-entry-disabled)" : "var(--sc-color-white)"};
+    loading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
 
   &:focus + label,
   &:not(:placeholder-shown) + label {
@@ -202,10 +210,14 @@ export const EntryContainer = styled.input<EntryContainerProps>`
   }
 
   &:focus {
-    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-      rgba(58, 151, 212, 0.36) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-      rgba(60, 66, 87, 0.16) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-      rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;
+    box-shadow:
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(58, 151, 212, 0.36) 0px 0px 0px 4px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(60, 66, 87, 0.16) 0px 0px 0px 1px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px;
     outline: none;
     transition: box-shadow 240ms;
   }
@@ -229,14 +241,14 @@ export const Label = styled.label<LabelProps>`
   z-index: 1;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 50%;
     background-color: ${({ loading }) =>
-      loading ? "var(--sc-color-entry-disabled)" : "var(--sc-color-white)"};
+      loading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
     z-index: -1;
   }
 `
@@ -312,23 +324,28 @@ export const AuthBtn = styled(FilteredButton)<AuthBtnProps>`
   width: 100%;
   text-align: center;
   font-weight: 500;
-  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
-    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, rgb(0 116 230 / 80%) 0px 0px 0px 1px,
-    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px,
+    rgb(0 116 230 / 80%) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   background-color: var(--sc-color-button-blue);
   transition: all 240ms;
-  cursor: ${({ loading, isInvalid }) =>
-    loading || isInvalid ? "default" : "pointer"};
-  opacity: ${({ loading, isInvalid }) => (loading || isInvalid ? "0.5" : "1")};
-  pointer-events: ${({ loading, isInvalid }) =>
-    loading || isInvalid ? "none" : "auto"};
+  cursor: ${({ loading, isInvalid }) => (loading || isInvalid ? 'default' : 'pointer')};
+  opacity: ${({ loading, isInvalid }) => (loading || isInvalid ? '0.5' : '1')};
+  pointer-events: ${({ loading, isInvalid }) => (loading || isInvalid ? 'none' : 'auto')};
 
   &:focus {
-    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    box-shadow:
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(58, 151, 212, 0.36) 0px 0px 0px 4px,
-      rgba(0, 0, 0, 0.12) 0px 1px 1px 0px, rgb(43 121 255 / 80%) 0px 0px 0px 1px,
-      rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(0, 0, 0, 0.12) 0px 1px 1px 0px,
+      rgb(43 121 255 / 80%) 0px 0px 0px 1px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+      rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   }
 `
@@ -403,10 +420,10 @@ export const LogoBox = styled.div`
 `
 
 export const invalidStyle = {
-  borderColor: "var(--sc-color-red)",
+  borderColor: 'var(--sc-color-red)',
   boxShadow:
-    "0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 1px var(--sc-color-red)",
-  color: "var(--sc-color-red)",
+    '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 1px var(--sc-color-red)',
+  color: 'var(--sc-color-red)',
 } /* This one has to remain an object */
 
 export const SpinnerWrapper = styled.div`

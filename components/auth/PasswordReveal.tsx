@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 
-import styled from "styled-components"
+import styled from 'styled-components'
 
 interface PasswordRevealProps {
   onClick: () => void
@@ -26,7 +26,7 @@ const Container = styled.button`
 `
 
 interface EyeIconProps {
-  "data-clicked": boolean
+  'data-clicked': boolean
 }
 
 const EyeIcon = styled.svg<EyeIconProps>`
@@ -44,8 +44,10 @@ const EyeIcon = styled.svg<EyeIconProps>`
     stroke-linecap: round;
     stroke-miterlimit: 10;
     stroke-dasharray: 20px 29px;
-    stroke-dashoffset: ${(props) => (props["data-clicked"] ? "0px" : "20px")};
-    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.24s ease-in-out;
+    stroke-dashoffset: ${(props) => (props['data-clicked'] ? '0px' : '20px')};
+    transition:
+      stroke-dashoffset 0.3s ease-in-out,
+      stroke 0.24s ease-in-out;
   }
 
   &:hover .eye-line {
@@ -85,7 +87,7 @@ const PasswordReveal: React.FC<PasswordRevealProps> = ({
       aria-hidden="true"
       role="img"
     >
-      <title>{clicked ? "Hide password" : "Show password"}</title>
+      <title>{clicked ? 'Hide password' : 'Show password'}</title>
       <g>
         <path
           className="eye-line"

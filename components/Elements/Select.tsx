@@ -1,12 +1,6 @@
-import React, { FC, ChangeEvent } from "react"
-
-import styled from "styled-components"
-
-import PropFilter from "@/utils/PropFilter"
-
-import ArrowUpDown from "../../public/images/icons/arrowUpDown.svg"
-
-const FilteredSelect = PropFilter("select")(["invalid"])
+import React, { FC, ChangeEvent } from 'react'
+import styled from 'styled-components'
+import ArrowUpDown from '@/public/images/icons/arrowUpDown.svg'
 
 /**
  * WrapperProps - Interface for wrapper properties.
@@ -21,7 +15,7 @@ const Wrapper = styled.div`
 `
 
 const Label = styled.label<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? "none" : "flex")};
+  display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
   color: #353a44;
   margin-bottom: 4px;
   font-weight: 600;
@@ -29,14 +23,14 @@ const Label = styled.label<WrapperProps>`
 `
 
 const Description = styled.p<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? "none" : "block")};
+  display: ${({ hidden }) => (hidden ? 'none' : 'block')};
   margin-top: -0.5rem;
   margin-bottom: 0.5rem;
   color: gray;
 `
 
 const ErrorText = styled.p<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? "none" : "block")};
+  display: ${({ hidden }) => (hidden ? 'none' : 'block')};
   margin-top: 0.5rem;
   color: red;
 `
@@ -47,15 +41,15 @@ const ErrorText = styled.p<WrapperProps>`
  * @property {boolean} invalid - Indicates if the select input is in an invalid state.
  */
 interface SelectWrapperProps {
-  size: "small" | "medium" | "large"
+  size: 'small' | 'medium' | 'large'
   invalid: boolean
 }
 
-const SelectWrapper = styled(FilteredSelect)<SelectWrapperProps>`
+const SelectWrapper = styled.select<SelectWrapperProps>`
   display: flex;
   width: 100%;
-  padding: var(--s1-padding-top) var(--s1-padding-right)
-    var(--s1-padding-bottom) var(--s1-padding-left);
+  padding: var(--s1-padding-top) var(--s1-padding-right) var(--s1-padding-bottom)
+    var(--s1-padding-left);
   --s1-padding-right: 26px;
   background-color: white;
   border: none;
@@ -64,9 +58,12 @@ const SelectWrapper = styled(FilteredSelect)<SelectWrapperProps>`
   transition-duration: 240ms;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: var(--s1-top-shadow),
-    var(--s1-keyline) 0 0 0 var(--s1-keyline-width), var(--s1-focus-ring),
-    var(--s1-hover-ring), var(--s1-box-shadow);
+  box-shadow:
+    var(--s1-top-shadow),
+    var(--s1-keyline) 0 0 0 var(--s1-keyline-width),
+    var(--s1-focus-ring),
+    var(--s1-hover-ring),
+    var(--s1-box-shadow);
   --s1-box-shadow: rgba(64, 68, 82, 0.08) 0px 2px 5px 0px;
   --s1-top-shadow: 0px 1px 1px 0px rgba(16, 17, 26, 0.16);
   --s1-keyline: #d8dee4;
@@ -90,7 +87,7 @@ const SelectWrapper = styled(FilteredSelect)<SelectWrapperProps>`
     --s1-hover-ring: rgba(64, 68, 82, 0.08) 0px 3px 9px 0px;
   }
 
-  &[aria-invalid="true"] {
+  &[aria-invalid='true'] {
     --s1-keyline: #e61947;
   }
 
@@ -160,6 +157,7 @@ const GridWrapper = styled.div`
  * @property {React.ReactNode} [label] - Text that describes the control.
  * @property {boolean} [multiple] - If true, allows multiple selection.
  * @property {string} [name] - Specifies the name for this input submitted with the form.
+ * @property {string} [title] - Specifies the accessible title for this input submitted with the form.
  * @property {(event: ChangeEvent<HTMLSelectElement>) => void} [onChange] - Handler for value changes.
  * @property {boolean} [required] - If true, the value must be provided for the form to submit.
  * @property {"small" | "medium" | "large"} [size] - Size of the component.
@@ -174,15 +172,16 @@ interface SelectProps {
   disabled?: boolean
   error?: string
   form?: string
-  hiddenElements?: ("label" | "description" | "error")[]
+  hiddenElements?: ('label' | 'description' | 'error')[]
   invalid?: boolean
   label?: React.ReactNode
   multiple?: boolean
   name?: string
+  title?: string
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void
   required?: boolean
-  size?: "small" | "medium" | "large"
-  value?: string
+  size?: 'small' | 'medium' | 'large'
+  value?: string | number
 }
 
 /**
@@ -204,15 +203,14 @@ const Select: FC<SelectProps> = ({
   label,
   multiple,
   name,
+  title,
   onChange,
   required,
-  size = "medium",
+  size = 'medium',
   value,
 }) => {
   // Extract valid options from children
-  const validOptions = React.Children.map(children, (child: any) =>
-    String(child.props.value)
-  )
+  const validOptions = React.Children.map(children, (child: any) => String(child.props.value))
 
   /**
    * Handle change event for the select element.
@@ -231,14 +229,12 @@ const Select: FC<SelectProps> = ({
   return (
     <Wrapper>
       {label && (
-        <Label hidden={hiddenElements.includes("label")} htmlFor={name}>
+        <Label hidden={hiddenElements.includes('label')} htmlFor={name}>
           {label}
         </Label>
       )}
-      {description && !hiddenElements.includes("description") && (
-        <Description hidden={hiddenElements.includes("description")}>
-          {description}
-        </Description>
+      {description && !hiddenElements.includes('description') && (
+        <Description hidden={hiddenElements.includes('description')}>{description}</Description>
       )}
       <GridWrapper>
         <SelectWrapper
@@ -255,6 +251,7 @@ const Select: FC<SelectProps> = ({
           invalid={invalid ?? false}
           onChange={handleChange}
           aria-invalid={invalid}
+          title={title}
         >
           {children}
         </SelectWrapper>
@@ -262,19 +259,13 @@ const Select: FC<SelectProps> = ({
           <ArrowUpDown />
         </CustomArrow>
       </GridWrapper>
-      {error && !hiddenElements.includes("error") && (
-        <ErrorText
-          hidden={hiddenElements.includes("error")}
-          id={`${name}-error`}
-        >
+      {error && !hiddenElements.includes('error') && (
+        <ErrorText hidden={hiddenElements.includes('error')} id={`${name}-error`}>
           {error}
         </ErrorText>
       )}
-      {description && !hiddenElements.includes("description") && (
-        <Description
-          hidden={hiddenElements.includes("description")}
-          id={`${name}-description`}
-        >
+      {description && !hiddenElements.includes('description') && (
+        <Description hidden={hiddenElements.includes('description')} id={`${name}-description`}>
           {description}
         </Description>
       )}

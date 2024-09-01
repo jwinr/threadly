@@ -1,12 +1,12 @@
-import React from "react"
+import React from 'react'
 
-import styled from "styled-components"
+import styled from 'styled-components'
 
-import { useRouter } from "next/router"
+import { useRouter } from 'next/router'
 
-import LogoSymbol from "@/public/images/logo_n.svg"
-import * as AuthStyles from "./AuthStyles"
-import Button from "@/components/Elements/Button"
+import LogoSymbol from '@/public/images/logo_n.svg'
+import * as AuthStyles from './AuthStyles'
+import Button from '@/components/Elements/Button'
 
 const ErrorContainer = styled.div`
   display: flex;
@@ -42,7 +42,7 @@ const ErrorRedirect: React.FC<ErrorRedirectProps> = ({ message }) => {
   const router = useRouter()
 
   const handleRedirect = () => {
-    router.push("/")
+    router.push('/')
   }
 
   return (

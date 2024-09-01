@@ -93,4 +93,13 @@ export default [
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {},
   },
+  // Adding the recommended unicorn rules
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    rules: unicorn.configs.recommended.rules,
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    rules: sonarjs.configs.recommended.rules,
+  },
 ]

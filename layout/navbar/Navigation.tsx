@@ -1,12 +1,12 @@
-import React, { useState, FC } from "react"
-import { useRouter, usePathname } from "next/navigation"
-import styled from "styled-components"
-import BannerLogo from "../../public/images/logo.svg"
-import SearchBar from "./SearchBar"
-import CartIcon from "./CartIcon"
-import UserDropdown from "./UserDropdown"
-import { useMobileView } from "../../context/MobileViewContext"
-import { Nav } from "./Menu/Nav"
+import React, { useState, FC } from 'react'
+import { usePathname } from 'next/navigation'
+import styled from 'styled-components'
+import BannerLogo from '@/public/images/logo.svg'
+import SearchBar from './SearchBar'
+import CartIcon from './CartIcon'
+import UserDropdown from './UserDropdown'
+import { useMobileView } from '@/context/MobileViewContext'
+import { Nav } from './Menu/Nav'
 
 const HeaderContainer = styled.header`
   font-size: 16px;
@@ -16,7 +16,9 @@ const HeaderContainer = styled.header`
   background-color: var(--sc-color-white);
   top: 0;
   height: 64px;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px -1px 2px, rgba(0, 0, 0, 0.04) 0px 1px 2px,
+  box-shadow:
+    rgba(0, 0, 0, 0.04) 0px -1px 2px,
+    rgba(0, 0, 0, 0.04) 0px 1px 2px,
     rgba(0, 0, 0, 0.04) 0px 3px 4px;
   width: 100%;
   z-index: 300;
@@ -87,7 +89,7 @@ interface NavbarProps {
   handleToggle: (dropdown: string) => void
 }
 
-const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
+const Header: FC<NavbarProps> = ({}) => {
   const pathname = usePathname()
   const isMobileView = useMobileView()
   const [duration, setDuration] = useState(250)
@@ -97,10 +99,10 @@ const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
   }
 
   // Check if the current route is /login, /signup, /forgot-password or /404
-  const isLoginPage = pathname === "/login"
-  const isSignupPage = pathname === "/signup"
-  const isForgotPassPage = pathname === "/forgot-password"
-  const is404Page = pathname === "/404"
+  const isLoginPage = pathname === '/login'
+  const isSignupPage = pathname === '/signup'
+  const isForgotPassPage = pathname === '/forgot-password'
+  const is404Page = pathname === '/404'
 
   // Render the Navbar only if the route is not /login, /signup, /forgot-password or /404
   // This also extends to any invalid path routes, i.e. /<any-nonexistent-path>
@@ -118,11 +120,7 @@ const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
             </Logo>
             <Nav />
             <SearchBar />
-            <UserDropdown
-              isOpen={openDropdown === "user"}
-              onToggle={() => handleToggle("user")}
-              aria-label="User Menu"
-            />
+            <UserDropdown />
             <CartIcon aria-label="Shopping Cart" />
           </NavbarFlex>
         </>
@@ -132,11 +130,7 @@ const Header: FC<NavbarProps> = ({ openDropdown, handleToggle }) => {
           <Logo href="/" aria-label="Home">
             <BannerLogo alt="Threadly Logo" />
           </Logo>
-          <UserDropdown
-            isOpen={openDropdown === "user"}
-            onToggle={() => handleToggle("user")}
-            aria-label="User Menu"
-          />
+          <UserDropdown />
           <CartIcon aria-label="Shopping Cart" />
         </MobileFlexContainer>
       )}

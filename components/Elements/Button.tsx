@@ -1,10 +1,10 @@
-import React, { MouseEvent } from "react"
-import styled, { css } from "styled-components"
+import React, { MouseEvent } from 'react'
+import styled, { css } from 'styled-components'
 
 const sizes = {
-  small: "24px",
-  medium: "28px",
-  large: "40px",
+  small: '24px',
+  medium: '28px',
+  large: '40px',
 }
 
 const types = {
@@ -89,10 +89,12 @@ const ButtonWrapper = styled.button<ButtonProps>`
   font-weight: 600;
   position: relative;
   gap: 6px;
-  padding: var(--s1-padding-top) var(--s1-padding-right)
-    var(--s1-padding-bottom) var(--s1-padding-left);
-  box-shadow: var(--s1-top-shadow),
-    var(--s1-keyline) 0 0 0 var(--s1-keyline-width), var(--s1-focus-ring),
+  padding: var(--s1-padding-top) var(--s1-padding-right) var(--s1-padding-bottom)
+    var(--s1-padding-left);
+  box-shadow:
+    var(--s1-top-shadow),
+    var(--s1-keyline) 0 0 0 var(--s1-keyline-width),
+    var(--s1-focus-ring),
     var(--s1-box-shadow);
   min-height: 28px;
   user-select: none;
@@ -101,14 +103,14 @@ const ButtonWrapper = styled.button<ButtonProps>`
   transition-duration: 150ms;
   height: ${(props) => sizes[props.size!]};
   font-size: ${(props) =>
-    props.size === "small" ? "12px" : props.size === "large" ? "16px" : "14px"};
+    props.size === 'small' ? '12px' : props.size === 'large' ? '16px' : '14px'};
   border-radius: 6px;
   --s1-focus-ring: 0 0 0 0 transparent;
   outline: none;
-  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
   ${(props) => props.type && types[props.type!]};
-  ${(props) => props.disabled && "pointer-events: none;"};
+  ${(props) => props.disabled && 'pointer-events: none;'};
   ${(props) =>
     props.href &&
     css`
@@ -131,9 +133,9 @@ interface ButtonProps {
   disabled?: boolean
   href?: string
   onPress?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void
-  size?: "small" | "medium" | "large"
-  target?: "_self" | "_blank" | "_top" | "_parent"
-  type?: "primary" | "secondary" | "destructive"
+  size?: 'small' | 'medium' | 'large'
+  target?: '_self' | '_blank' | '_top' | '_parent'
+  type?: 'primary' | 'secondary' | 'destructive'
 }
 
 /**
@@ -153,9 +155,9 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   href,
   onPress,
-  size = "medium",
-  target = "_self",
-  type = "secondary",
+  size = 'medium',
+  target = '_self',
+  type = 'secondary',
 }) => {
   if (href) {
     return (

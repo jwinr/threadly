@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import styled, { css } from "styled-components"
-import StarRatings from "@/components/ReviewStars/StarRatings"
-import useCurrencyFormatter from "@/hooks/useCurrencyFormatter"
-import Missing from "@/public/images/icons/block.svg"
-import Arrow from "@/public/images/icons/chevronLeft.svg"
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import styled, { css } from 'styled-components'
+import StarRatings from '@/components/ReviewStars/StarRatings'
+import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
+import Missing from '@/public/images/icons/block.svg'
+import Arrow from '@/public/images/icons/chevronLeft.svg'
 
 const CardContainer = styled.div<{ $isLoading: boolean }>`
   display: flex;
@@ -88,8 +88,8 @@ const Swatches = styled.div<{ $hovered: boolean }>`
   width: 100%;
   left: 0;
   right: 0;
-  top: ${({ $hovered }) => ($hovered ? "-40px" : "0")};
-  visibility: ${({ $hovered }) => ($hovered ? "visible" : "hidden")};
+  top: ${({ $hovered }) => ($hovered ? '-40px' : '0')};
+  visibility: ${({ $hovered }) => ($hovered ? 'visible' : 'hidden')};
   background-color: white;
   height: 100%;
   line-height: 18px;
@@ -100,7 +100,7 @@ const SwatchWrapper = styled.div<{ $hovered: boolean }>`
   display: flex;
   padding: 16px 16px 0px 16px;
   gap: 15px;
-  opacity: ${({ $hovered }) => ($hovered ? "1" : "0")};
+  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
   transition: opacity 140ms ease;
 `
 
@@ -157,7 +157,7 @@ const SliderImage = styled(Image)`
 
 const SliderNav = styled.div<{ $hovered: boolean }>`
   position: absolute;
-  bottom: ${({ $hovered }) => ($hovered ? "40px" : "0")};
+  bottom: ${({ $hovered }) => ($hovered ? '40px' : '0')};
   left: 0;
   right: 0;
   display: flex;
@@ -169,34 +169,29 @@ const SliderNav = styled.div<{ $hovered: boolean }>`
   padding: 0 20px;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.8) -42.5%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    opacity: ${({ $hovered }) => ($hovered ? "0.3" : "0")};
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) -42.5%, rgba(0, 0, 0, 0) 100%);
+    opacity: ${({ $hovered }) => ($hovered ? '0.3' : '0')};
     transition: opacity 0.25s ease;
     z-index: -1;
   }
 `
 
 const SliderArrow = styled(Arrow)<{
-  $direction: "left" | "right"
+  $direction: 'left' | 'right'
   $hovered: boolean
 }>`
-  transform: ${({ $direction }) =>
-    $direction === "left" ? "none" : "rotate(180deg)"};
+  transform: ${({ $direction }) => ($direction === 'left' ? 'none' : 'rotate(180deg)')};
   margin-top: 17px;
   width: 15px;
   height: 15px;
   cursor: pointer;
-  opacity: ${({ $hovered }) => ($hovered ? "0.5" : "0")};
+  opacity: ${({ $hovered }) => ($hovered ? '0.5' : '0')};
   transition: opacity 140ms ease;
   z-index: 2;
   user-select: none;
@@ -224,24 +219,23 @@ const SliderCounter = styled.div<{ $hovered: boolean }>`
   text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.35);
   margin: 0 10px;
   user-select: none;
-  opacity: ${({ $hovered }) => ($hovered ? "1" : "0")};
+  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
   z-index: 2;
 `
 
 const SliderDot = styled.div<{ $active: boolean; $hovered: boolean }>`
   width: 15%;
   height: 2px;
-  background-color: ${({ $active }) =>
-    $active ? "#fff" : "rgba(255, 255, 255, 0.3)"};
+  background-color: ${({ $active }) => ($active ? '#fff' : 'rgba(255, 255, 255, 0.3)')};
   border: none;
   margin: 17px 4px 0px 4px;
-  opacity: ${({ $hovered }) => ($hovered ? "1" : "0")};
+  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
   cursor: default;
   user-select: none;
   transition: background-color 0.3s ease;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0px; /* Adjust these values to control the clickable area */
     bottom: 0px;
@@ -284,7 +278,7 @@ const Price = styled.h1<{ $sale?: boolean }>`
   margin-top: 8px;
   margin-bottom: 8px;
   margin-right: 5px;
-  color: ${(props) => (props.$sale ? "var(--sc-color-carnation)" : "#353a44")};
+  color: ${(props) => (props.$sale ? 'var(--sc-color-carnation)' : '#353a44')};
   position: relative;
 
   @media (max-width: 768px) {
@@ -357,7 +351,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleSwatchClick = (colorVariantId: string) => {
     const selectedColor = allColors.find(
-      (colorOption: any) => colorOption.color_variant_id === colorVariantId
+      (colorOption: any) => colorOption.color_variant_id === colorVariantId,
     )
     if (selectedColor) {
       const colorImages = selectedColor.images || []
@@ -397,11 +391,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    direction: "prev" | "next"
+    direction: 'prev' | 'next',
   ) => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      if (direction === "prev") {
+      if (direction === 'prev') {
         handlePrevClick()
       } else {
         handleNextClick()
@@ -428,7 +422,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return null
   }
 
-  const imageUrl = currentImage.image_url || "/images/products/placeholder.jpg"
+  const imageUrl = currentImage.image_url || '/images/products/placeholder.jpg'
 
   return (
     <CardContainer
@@ -449,13 +443,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <ImageSlider $activeIndex={activeImageIndex}>
             {variantImages.map((img, index) => (
-              <SliderImage
-                key={index}
-                alt={title}
-                src={img.image_url}
-                width={500}
-                height={500}
-              />
+              <SliderImage key={index} alt={title} src={img.image_url} width={500} height={500} />
             ))}
           </ImageSlider>
         </Link>
@@ -467,27 +455,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
             $hovered={imgHovered}
             $direction="left"
             onClick={handlePrevClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
-              handleKeyDown(e, "next")
-            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => handleKeyDown(e, 'next')}
             tabIndex={0}
             role="button"
             aria-label="Previous image"
           />
           {variantImages.map((img, index) => (
-            <SliderDot
-              $hovered={imgHovered}
-              key={index}
-              $active={index === activeImageIndex}
-            />
+            <SliderDot $hovered={imgHovered} key={index} $active={index === activeImageIndex} />
           ))}
           <SliderArrow
             $hovered={hovered}
             $direction="right"
             onClick={handleNextClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
-              handleKeyDown(e, "next")
-            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => handleKeyDown(e, 'next')}
             tabIndex={0}
             role="button"
             aria-label="Next image"
@@ -496,10 +476,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </ImageWrapper>
       <SlideWrapper>
         <Swatches $hovered={hovered}>
-          <SwatchWrapper
-            $hovered={hovered}
-            onMouseEnter={() => setImgHovered(false)}
-          >
+          <SwatchWrapper $hovered={hovered} onMouseEnter={() => setImgHovered(false)}>
             {allColors.map((colorOption: any) => (
               <SwatchButton
                 key={colorOption.color_variant_id}

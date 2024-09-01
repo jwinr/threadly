@@ -1,14 +1,14 @@
-import React, { useContext, useState, useEffect, useRef } from "react"
-import styled, { keyframes, css } from "styled-components"
-import { LiaHeart, LiaHeartSolid } from "react-icons/lia"
-import { useRouter } from "next/navigation"
-import { UserContext } from "@/context/UserContext"
-import { useFavorites } from "@/context/FavoritesContext"
-import Popover from "@/components/Elements/Popover"
-import PropFilter from "@/utils/PropFilter"
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import styled, { keyframes, css } from 'styled-components'
+import { LiaHeart, LiaHeartSolid } from 'react-icons/lia'
+import { useRouter } from 'next/navigation'
+import { UserContext } from '@/context/UserContext'
+import { useFavorites } from '@/context/FavoritesContext'
+import Popover from '@/components/Elements/Popover'
+import PropFilter from '@/utils/PropFilter'
 
-const FilteredLiaHeart = PropFilter(LiaHeart)(["loading", "isAdding"])
-const FilteredLiaHeartSolid = PropFilter(LiaHeartSolid)(["loading", "isAdding"])
+const FilteredLiaHeart = PropFilter(LiaHeart)(['loading', 'isAdding'])
+const FilteredLiaHeartSolid = PropFilter(LiaHeartSolid)(['loading', 'isAdding'])
 
 const loadingAnimation = keyframes`
   0% {
@@ -73,33 +73,27 @@ interface AddToFavoritesButtonProps {
   productName: string
 }
 
-const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
-  productId,
-  productName,
-}) => {
+const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, productName }) => {
   const { userAttributes } = useContext(UserContext)
   const { favorites, addFavorite, removeFavorite } = useFavorites()
   const [loading, setLoading] = useState(false)
   const [added, setAdded] = useState(false)
   const [isAdding, setIsAdding] = useState(true)
-  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>("")
+  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>('')
   const router = useRouter()
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
     if (userAttributes && userAttributes.sub) {
-      const isAdded = favorites.some(
-        (item: FavoriteItem) => item.product_id === productId
-      )
+      const isAdded = favorites.some((item: FavoriteItem) => item.product_id === productId)
       setAdded(isAdded)
       if (!isAdded) {
-        setTooltipContent("Favorite to keep tabs on it")
+        setTooltipContent('Favorite to keep tabs on it')
       }
     } else {
-      setTooltipContent("Sign in to favorite this product")
+      setTooltipContent('Sign in to favorite this product')
     }
   }, [productId, userAttributes, favorites])
 
@@ -113,9 +107,8 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
       setLoading(false)
       setTooltipContent(
         <>
-          <span>Favorited! See all of your</span>{" "}
-          <a href="/favorites">favorites</a>
-        </>
+          <span>Favorited! See all of your</span> <a href="/favorites">favorites</a>
+        </>,
       )
     }
   }
@@ -128,14 +121,14 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
       await removeFavorite(userAttributes.sub, productId)
       setLoading(false)
       setAdded(false)
-      setTooltipContent("Favorite to keep tabs on it")
+      setTooltipContent('Favorite to keep tabs on it')
     }
   }
 
   const handleClick = () => {
     if (!userAttributes) {
-      setTooltipContent("Sign in to favorite this product")
-      router.push("/login")
+      setTooltipContent('Sign in to favorite this product')
+      router.push('/login')
       return
     }
 
@@ -160,12 +153,7 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
 
   return (
     <Container>
-      <Popover
-        trigger="hover"
-        position="top"
-        content={tooltipContent}
-        showArrow={true}
-      >
+      <Popover trigger="hover" position="top" content={tooltipContent} showArrow={true}>
         <Button
           ref={buttonRef}
           onClick={handleClick}
@@ -173,17 +161,9 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
           aria-label={getAriaLabel()}
         >
           {added ? (
-            <IconFilled
-              loading={loading}
-              isAdding={isAdding}
-              aria-hidden="true"
-            />
+            <IconFilled loading={loading} isAdding={isAdding} aria-hidden="true" />
           ) : (
-            <IconOutline
-              loading={loading}
-              isAdding={isAdding}
-              aria-hidden="true"
-            />
+            <IconOutline loading={loading} isAdding={isAdding} aria-hidden="true" />
           )}
         </Button>
       </Popover>

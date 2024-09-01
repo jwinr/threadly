@@ -1,9 +1,9 @@
-import React, { useState, useEffect, forwardRef } from "react"
-import styled from "styled-components"
-import Image from "next/image"
-import Link from "next/link"
-import AddToCartButton from "../Shopping/AddToCartButton"
-import { useMobileView } from "../../context/MobileViewContext"
+import React, { useState, useEffect, forwardRef } from 'react'
+import styled from 'styled-components'
+import Image from 'next/image'
+import Link from 'next/link'
+import AddToCartButton from '@/components/Shopping/AddToCartButton'
+import { useMobileView } from '@/context/MobileViewContext'
 
 const Container = styled.div`
   background-color: #dff3ff;
@@ -149,41 +149,38 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
     const fetchDeals = async () => {
       const apiKey = process.env.NEXT_PUBLIC_API_KEY
       if (!apiKey) {
-        console.error("API key is missing")
+        console.error('API key is missing')
         return
       }
 
       try {
         const response = await fetch(`/api/deals`, {
           headers: {
-            "x-api-key": apiKey,
+            'x-api-key': apiKey,
           },
         })
         const data = await response.json()
         setDeals(data)
       } catch (error) {
-        console.error("Error fetching deals:", error)
+        console.error('Error fetching deals:', error)
       }
     }
 
     fetchDeals()
   }, [])
 
-  const loveDeals = deals.filter((deal) => deal.category === "deals_love")
+  const loveDeals = deals.filter((deal) => deal.category === 'deals_love')
 
   return (
     <Container ref={ref} className={props.className}>
       {isMobileView
         ? loveDeals.map((deal, index) => (
             <ItemContainer key={index}>
-              <Link
-                href={`products/${deal.slug}`}
-                aria-label={`View details of ${deal.name}`}
-              >
+              <Link href={`products/${deal.slug}`} aria-label={`View details of ${deal.name}`}>
                 <ImgContainer>
                   <Image
                     alt={deal.name}
-                    src={deal.image_url || "/images/products/placeholder.jpg"}
+                    src={deal.image_url || '/images/products/placeholder.jpg'}
                     width={1540}
                     height={649}
                   />
@@ -191,9 +188,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 <DetailWrapper>
                   <Title>{deal.name}</Title>
                   <PriceContainer>
-                    <Price>
-                      ${(deal.price - deal.discount_amount).toFixed(2)}
-                    </Price>
+                    <Price>${(deal.price - deal.discount_amount).toFixed(2)}</Price>
                     <PriceText>
                       reg <OriginalPrice>${deal.price}</OriginalPrice>
                     </PriceText>
@@ -202,24 +197,17 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 </DetailWrapper>
               </Link>
               <ButtonWrapper>
-                <AddToCartButton
-                  productId={deal.product_id}
-                  quantity={1}
-                  productName={deal.name}
-                />
+                <AddToCartButton productId={deal.product_id} quantity={1} productName={deal.name} />
               </ButtonWrapper>
             </ItemContainer>
           ))
         : loveDeals.map((deal, index) => (
             <ItemContainer key={index}>
-              <Link
-                href={`products/${deal.slug}`}
-                aria-label={`View details of ${deal.name}`}
-              >
+              <Link href={`products/${deal.slug}`} aria-label={`View details of ${deal.name}`}>
                 <ImgContainer>
                   <Image
                     alt={deal.name}
-                    src={deal.image_url || "/images/products/placeholder.jpg"}
+                    src={deal.image_url || '/images/products/placeholder.jpg'}
                     width={1540}
                     height={649}
                   />
@@ -227,9 +215,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 <DetailWrapper>
                   <Title>{deal.name}</Title>
                   <PriceContainer>
-                    <Price>
-                      ${(deal.price - deal.discount_amount).toFixed(2)}
-                    </Price>
+                    <Price>${(deal.price - deal.discount_amount).toFixed(2)}</Price>
                     <PriceText>
                       reg <OriginalPrice>${deal.price}</OriginalPrice>
                     </PriceText>
@@ -238,11 +224,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 </DetailWrapper>
               </Link>
               <ButtonWrapper>
-                <AddToCartButton
-                  productId={deal.product_id}
-                  quantity={1}
-                  productName={deal.name}
-                />
+                <AddToCartButton productId={deal.product_id} quantity={1} productName={deal.name} />
               </ButtonWrapper>
             </ItemContainer>
           ))}
@@ -250,6 +232,6 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
   )
 })
 
-TopDeals.displayName = "TopDeals"
+TopDeals.displayName = 'TopDeals'
 
 export default TopDeals

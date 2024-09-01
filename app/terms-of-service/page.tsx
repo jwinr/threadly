@@ -3,7 +3,7 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 
-const PrivacyPageWrapper = styled.div`
+const TermsPageWrapper = styled.div`
   display: flex;
   padding: 80px;
   flex-direction: column;
@@ -78,7 +78,7 @@ const TermsService = () => {
 
   return (
     <>
-      <PrivacyPageWrapper role="main">
+      <TermsPageWrapper role="main">
         <HeaderText>Terms of Service</HeaderText>
         <section>
           <p>Thank you for using Threadly!</p>
@@ -103,8 +103,12 @@ const TermsService = () => {
         <section>
           <SubheaderText>1. Website Usage Terms.</SubheaderText>
           <p>
-            By using this site, you confirm that you are of legal age in your jurisdiction or have
-            consent from a guardian.
+            Service is intended only for access and use by individuals at least eighteen (18) years
+            old. By accessing or using the Site, you warrant and represent that you are at least
+            eighteen (18) years of age and with the full authority, right, and capacity to enter
+            into this agreement and abide by all of the terms and conditions of Terms. If you are
+            not at least eighteen (18) years old, you are prohibited from both the access and usage
+            of Service.
           </p>
           <p>
             You may not use our Service for any illegal or unauthorized purpose nor may you, in the
@@ -345,7 +349,7 @@ const TermsService = () => {
             Questions about the Terms of Service should be sent to us at <b>{emailString}</b>
           </p>
         </section>
-      </PrivacyPageWrapper>
+      </TermsPageWrapper>
     </>
   )
 }

@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import React, { useState, ReactNode, FC, useCallback } from "react"
-import Footer from "./Footer"
-import Navigation from "./navbar/Navigation"
-import styled from "styled-components"
+import React, { useState, ReactNode, FC, useCallback } from 'react'
+import Footer from './Footer'
+import Navigation from './navbar/Navigation'
+import styled from 'styled-components'
 
 const SiteWrapper = styled.div`
   background-color: var(--sc-color-background);

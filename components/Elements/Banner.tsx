@@ -1,20 +1,18 @@
-import React from "react"
-
-import styled, { css } from "styled-components"
-
-import Info from "@/public/images/icons/info.svg"
-import Warning from "@/public/images/icons/warning.svg"
-import Close from "@/public/images/icons/cancel.svg"
+import React from 'react'
+import styled, { css } from 'styled-components'
+import Info from '@/public/images/icons/info.svg'
+import Warning from '@/public/images/icons/warning.svg'
+import Close from '@/public/images/icons/cancel.svg'
 
 interface BannerProps {
-  type?: "default" | "caution" | "critical"
+  type?: 'default' | 'caution' | 'critical'
   onDismiss?: () => void
   title: string
   description?: string
   actions?: React.ReactNode
 }
 
-const BannerWrapper = styled.div<{ type: "default" | "caution" | "critical" }>`
+const BannerWrapper = styled.div<{ type: 'default' | 'caution' | 'critical' }>`
   display: flex;
   align-items: center;
   padding: 16px;
@@ -24,19 +22,19 @@ const BannerWrapper = styled.div<{ type: "default" | "caution" | "critical" }>`
   z-index: 100;
   ${(props) => {
     switch (props.type) {
-      case "caution":
+      case 'caution':
         return css`
           background-color: #fdf8c9;
           color: #b13600;
           border: 1px solid #fbd992;
         `
-      case "critical":
+      case 'critical':
         return css`
           background-color: #fef4f6;
           color: #c0123c;
           border: 1px solid #fbd3dc;
         `
-      case "default":
+      case 'default':
       default:
         return css`
           background-color: #ffffff;
@@ -60,15 +58,15 @@ const IconWrapper = styled.div<{ type: string }>`
     path {
       ${(props) => {
         switch (props.type) {
-          case "caution":
+          case 'caution':
             return css`
               fill: #b13600;
             `
-          case "critical":
+          case 'critical':
             return css`
               fill: #c0123c;
             `
-          case "default":
+          case 'default':
           default:
             return css`
               fill: #353a44;
@@ -124,7 +122,7 @@ const DismissButton = styled.button`
  * @returns {JSX.Element} The Banner component.
  */
 const Banner: React.FC<BannerProps> = ({
-  type = "default",
+  type = 'default',
   onDismiss,
   title,
   description,
@@ -133,16 +131,16 @@ const Banner: React.FC<BannerProps> = ({
   return (
     <BannerWrapper type={type}>
       <IconWrapper type={type}>
-        {type === "caution" && <Warning />}
-        {type === "critical" && <Warning />}
-        {type === "default" && <Info />}
+        {type === 'caution' && <Warning />}
+        {type === 'critical' && <Warning />}
+        {type === 'default' && <Info />}
       </IconWrapper>
       <ContentWrapper>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
         {actions && <ActionsWrapper>{actions}</ActionsWrapper>}
       </ContentWrapper>
-      {type !== "critical" && onDismiss && (
+      {type !== 'critical' && onDismiss && (
         <DismissButton onClick={onDismiss}>
           <Close />
         </DismissButton>
