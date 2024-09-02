@@ -1,105 +1,122 @@
+import globals from 'globals'
+import typescriptParser from '@typescript-eslint/parser'
 import react from 'eslint-plugin-react'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import typescript from '@typescript-eslint/eslint-plugin'
-import typescriptParser from '@typescript-eslint/parser'
 import prettier from 'eslint-plugin-prettier'
 import eslintComments from 'eslint-plugin-eslint-comments'
 import promise from 'eslint-plugin-promise'
 import unicorn from 'eslint-plugin-unicorn'
 import sonarjs from 'eslint-plugin-sonarjs'
-import importPlugin from 'eslint-plugin-import'
-import reactHooks from 'eslint-plugin-react-hooks'
 
 export default [
   {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: globals.browser,
+      parser: typescriptParser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
     plugins: {
       '@typescript-eslint': typescript,
-      import: importPlugin,
-      'jsx-a11y': jsxA11y,
       react: react,
-      'react-hooks': reactHooks,
+      'jsx-a11y': jsxA11y,
       prettier: prettier,
       'eslint-comments': eslintComments,
       promise: promise,
       unicorn: unicorn,
       sonarjs: sonarjs,
     },
-    languageOptions: {
-      ecmaVersion: 2021,
-      sourceType: 'module',
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-        project: './tsconfig.json',
-      },
-    },
+    ignorePatterns: [
+      'node_modules/',
+      '.next/',
+      'amplify/',
+      'dist/',
+      'build/',
+      'public/',
+      'src/',
+      '*.config.js',
+      '*.d.ts',
+      '*.env',
+    ],
     rules: {
-      '@typescript-eslint/naming-convention': [
-        'error',
-        {
-          selector: ['classProperty'],
-          modifiers: ['static'],
-          format: ['UPPER_CASE'],
-        },
-      ],
-      complexity: 'error',
-      'no-duplicate-imports': 'error',
-      'no-multiple-empty-lines': 'error',
-      'no-trailing-spaces': 'error',
-      'prefer-const': 'error',
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-unused-vars': ['error'],
+      'accessor-pairs': 'error',
+      'array-bracket-spacing': ['error', 'never'],
+      'array-callback-return': 'off',
       'arrow-parens': 'error',
       'arrow-spacing': 'error',
-      'space-infix-ops': 'error',
-      'no-unused-vars': 'error',
-      curly: 'error',
-      // Too restrictive: https://eslint.org/docs/rules/no-prototype-builtins
-      'no-prototype-builtins': 'off',
-      // https://basarat.gitbook.io/typescript/main-1/defaultisbad
-      'import/prefer-default-export': 'off',
-      'import/no-default-export': 'error',
-      // Too restrictive: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/destructuring-assignment.md
-      'react/destructuring-assignment': 'off',
-      'prettier/prettier': 'error',
-      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-      'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.tsx'] }],
-      // Next.js's <Link> component usage
-      'jsx-a11y/anchor-is-valid': 'off',
-      // Too strict, common abbreviations are known and readable
+      'block-spacing': 'off',
+      'comma-style': ['error', 'last'],
+      complexity: 'error',
+      'dot-notation': 'error',
+      'eol-last': 'error',
+      'func-call-spacing': 'error',
+      'jsx-quotes': 'error',
+      'no-unused-vars': ['error', { args: 'none' }],
+      'no-duplicate-imports': 'error',
+      'prefer-const': 'error',
+      quotes: ['error', 'single', { avoidEscape: true }],
+      'space-before-blocks': 'error',
+      'space-in-parens': ['error', 'never'],
+      'no-multiple-empty-lines': 'error',
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/anchor-has-content': 'error',
+      'jsx-a11y/anchor-is-valid': 'error',
+      'jsx-a11y/aria-props': 'error',
+      'jsx-a11y/aria-role': 'error',
+      'jsx-a11y/click-events-have-key-events': 'error',
+      'jsx-a11y/heading-has-content': 'error',
+      'jsx-a11y/html-has-lang': 'error',
+      'jsx-a11y/label-has-associated-control': 'error',
+      'jsx-a11y/no-redundant-roles': 'error',
+      'jsx-a11y/no-static-element-interactions': 'error',
+      'jsx-a11y/role-has-required-aria-props': 'error',
+      'jsx-a11y/tabindex-no-positive': 'error',
+      'jsx-a11y/interactive-supports-focus': 'error',
+      'jsx-a11y/mouse-events-have-key-events': 'error',
+      'jsx-a11y/no-aria-hidden-on-focusable': 'error',
       'unicorn/prevent-abbreviations': 'off',
-      'sonarjs/no-duplicate-string': 'warn',
-      'sonarjs/no-identical-functions': 'warn',
+      'unicorn/better-regex': 'error',
+      'unicorn/error-message': 'error',
+      'unicorn/no-invalid-fetch-options': 'error',
+      'unicorn/no-unused-properties': 'error',
+      'unicorn/prefer-array-find': 'error',
+      'unicorn/prefer-includes': 'error',
+      'unicorn/prefer-optional-catch-binding': 'error',
+      'unicorn/prefer-string-slice': 'error',
+      'unicorn/prefer-top-level-await': 'error',
+      'unicorn/no-useless-undefined': 'error',
+      'sonarjs/no-identical-conditions': 'error',
+      'sonarjs/no-duplicate-string': 'error',
+      'sonarjs/cognitive-complexity': 'error',
+      'sonarjs/no-identical-expressions': 'error',
+      'sonarjs/no-unused-collection': 'error',
+      'sonarjs/no-collapsible-if': 'error',
+      'sonarjs/no-ignored-return': 'error',
+      'sonarjs/no-duplicated-branches': 'error',
+      'sonarjs/no-redundant-boolean': 'error',
+      'sonarjs/prefer-immediate-return': 'error',
+      'prettier/prettier': 'error',
+      'no-param-reassign': [2, { props: false }],
+      'no-unused-expressions': [2, { allowShortCircuit: true }],
+      'no-useless-call': 'error',
+      curly: 'error',
+      eqeqeq: 'error',
+      'default-case': 'error',
+      'dot-notation': [2, { allowPattern: '^_*[A-Za-z0-9]+(_[A-Za-z0-9]+)+$' }],
+      'no-else-return': 'off',
+      'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.tsx'] }],
+      'jsx-a11y/anchor-is-valid': 'off', // Next.js-specific adjustment
+      yoda: ['error', 'never'],
     },
     settings: {
       react: {
         version: 'detect',
       },
-      'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        },
-      },
     },
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    rules: {
-      // Disabled for TypeScript since @typescript-eslint/no-unused-vars is used instead
-      'no-unused-vars': 'off',
-    },
-  },
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    rules: {},
-  },
-  // Adding the recommended unicorn rules
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    rules: unicorn.configs.recommended.rules,
-  },
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    rules: sonarjs.configs.recommended.rules,
   },
 ]

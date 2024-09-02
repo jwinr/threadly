@@ -145,10 +145,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   isMounted,
 }) => {
   const [shouldRender, setShouldRender] = useState(isOpen)
-  const [isScrollDisabled, setIsScrollDisabled] = useScrollControl()
+  const [, setIsScrollDisabled] = useScrollControl()
   const panelRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
-  const applyButtonRef = useRef<HTMLButtonElement>(null)
 
   const firstFocusableElement = useRef<HTMLElement | null>(null)
   const lastFocusableElement = useRef<HTMLElement | null>(null)
@@ -174,7 +173,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   useEffect(() => {
     setIsScrollDisabled(isOpen)
-  }, [isOpen, setIsScrollDisabled])
+  }, [isOpen])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -275,12 +274,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 <Button
                   type="secondary"
                   size="large"
-                  onClick={resetFilters}
+                  onPress={resetFilters}
                   disabled={!hasSelectedFilters()}
                 >
                   Clear all
                 </Button>
-                <Button type="primary" size="large" ref={applyButtonRef} onClick={applyFilters}>
+                <Button type="primary" size="large" onPress={applyFilters}>
                   See results
                 </Button>
               </BottomContainer>

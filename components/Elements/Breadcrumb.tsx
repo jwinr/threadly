@@ -44,6 +44,7 @@ const generateBreadcrumbPart = (
         <Link href={`/categories/${categorySlug}`} aria-label={capitalizeFirstLetter(categoryName)}>
           {capitalizeFirstLetter(categoryName)}
         </Link>
+        {!isLast && <RiArrowDropRightLine />}
       </span>
     )
   } else {
@@ -71,8 +72,8 @@ const generateBreadcrumbPart = (
 
 interface BreadcrumbProps {
   title?: string
-  categoryName?: string
-  categorySlug?: string
+  categoryName?: string | null
+  categorySlug?: string | null
   loading?: boolean
 }
 

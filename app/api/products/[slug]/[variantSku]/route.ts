@@ -11,6 +11,11 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 
   try {
     const productWithDetails = await fetchProductDetails(slug, variantSku)
+
+    if (!productWithDetails) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
     return NextResponse.json(productWithDetails)
   } catch (error: any) {
     console.error('Error fetching product:', error)

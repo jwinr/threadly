@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react'
 
 function addBusinessDays(startDate: Date, businessDays: number): Date {
   const currentDate = new Date(startDate)
+  let remainingBusinessDays = businessDays
 
-  while (businessDays > 0) {
+  while (remainingBusinessDays > 0) {
     currentDate.setDate(currentDate.getDate() + 1)
 
     // Check if the current day is a weekend day (Saturday or Sunday)
     if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
-      businessDays--
+      remainingBusinessDays--
     }
   }
 

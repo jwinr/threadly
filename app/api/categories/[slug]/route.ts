@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: Params) {
 
     try {
       parsedFilters = JSON.parse(decodeURIComponent(filters))
-    } catch (error) {
+    } catch {
       return NextResponse.json({ error: 'Invalid filters format' }, { status: 400 })
     }
 

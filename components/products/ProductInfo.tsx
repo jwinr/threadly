@@ -3,8 +3,6 @@ import styled, { css, keyframes } from 'styled-components'
 import StarRating from '@/components/ReviewStars/StarRatings'
 import Truck from '@/public/images/icons/truck.svg'
 import Subscription from '@/public/images/icons/subscription.svg'
-import Location from '@/public/images/icons/location.svg'
-import { RiArrowDownSLine } from 'react-icons/ri'
 import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
 import { useMobileView } from '@/context/MobileViewContext'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
@@ -16,19 +14,9 @@ interface ProductInfoProps {
     variants?: { sizes?: { price: number; sale_price?: number }[] }[]
     reviews: { length: number }[]
   }
-  zipCode: string
-  toggleZipPopup: () => void
-  isZipPopupVisible: boolean
-  enteredZipCode: string
-  isOpen: boolean
-  handleZipCodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handleZipCodeBlur: () => void
-  handleZipCodeSubmit: () => void
-  zipCodeValid: boolean
   deliveryDate: string
   dayOfWeek: string
   returnDate: string
-  setOpenSection: (section: string) => void
   loading: boolean
 }
 
@@ -123,60 +111,6 @@ const Price = styled.h1`
   }
 `
 
-const ZipWrapper = styled.div`
-  display: flex;
-  font-size: 16px;
-  padding: 15px 0;
-  position: relative;
-  align-items: center;
-`
-
-const ZipUnderline = styled.div`
-  display: flex;
-  font-weight: 700;
-  font-size: 16px;
-  text-decoration: underline;
-  margin: 0 5px;
-`
-
-const ZipDropdownBtn = styled.button`
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  user-select: none;
-`
-
-const ZipSubmitBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.1s ease-in 0s;
-  border-radius: 6px;
-  color: var(--sc-color-button-text-disabled);
-  border: medium;
-  font-weight: bold;
-  min-height: 44px;
-  padding: 0px 16px;
-  text-align: center;
-  background-color: var(--sc-color-carnation);
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-carnation);
-  }
-
-  &:active {
-    background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-carnation);
-  }
-
-  &:focus-visible {
-    background-color: var(--sc-color-button-text-disabled);
-    color: var(--sc-color-carnation);
-  }
-`
-
 const ShipWrapper = styled.div`
   display: flex;
   font-weight: 700;
@@ -230,13 +164,6 @@ const ExchangeContent = styled.div`
   flex-direction: column;
 `
 
-const ValidationMessage = styled.div`
-  color: #d32f2f;
-  font-size: 14px;
-  bottom: -20px;
-  text-align: left;
-`
-
 const ReviewWrapper = styled.div`
   display: flex;
   font-size: 14px;
@@ -247,40 +174,19 @@ const AddFavsWrapper = styled.div`
   right: 0;
 `
 
-const StyledLocation = styled(Location)`
-  width: 20px;
-  height: 20px;
-  fill: #30313d;
-  margin-right: 8px;
-`
-
 const StyledTruck = styled(Truck)`
   margin-right: 8px;
 `
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
   product,
-  zipCode,
-  toggleZipPopup,
-  isZipPopupVisible,
-  enteredZipCode,
-  isOpen,
-  handleZipCodeChange,
-  handleZipCodeBlur,
-  handleZipCodeSubmit,
-  zipCodeValid,
   deliveryDate,
   dayOfWeek,
   returnDate,
-  setOpenSection,
   loading,
 }) => {
   const isMobileView = useMobileView()
   const formatCurrency = useCurrencyFormatter()
-
-  const handleReviewCountClick = () => {
-    setOpenSection((prevSection) => (prevSection === 'reviews' ? '' : 'reviews'))
-  }
 
   if (loading) {
     return (
@@ -305,7 +211,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </AddFavsWrapper>
         <ReviewWrapper>
           <StarRating reviews={product.reviews} />
-          <button className="average-rating-text" onClick={handleReviewCountClick}>
+          <button className="average-rating-text">
             {product.reviews.length === 0
               ? 'Be the first!'
               : `(${product.reviews.length} review${product.reviews.length !== 1 ? 's' : ''})`}
@@ -330,39 +236,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
                 </p>
               </ExchangeContent>
             </ExchangeWrapper>
-            <ZipWrapper>
-              <StyledLocation />
-              Delivery to{' '}
-              <ZipDropdownBtn onClick={toggleZipPopup}>
-                <ZipUnderline>{zipCode}</ZipUnderline>
-                {isZipPopupVisible && (
-                  <PopupContainer onClick={(e) => e.stopPropagation()}>
-                    <ZipForm
-                      type="tel"
-                      name="zipCode"
-                      placeholder=""
-                      value={enteredZipCode}
-                      isOpen={isOpen}
-                      aria-haspopup="true"
-                      aria-expanded={isOpen}
-                      onChange={handleZipCodeChange}
-                      onBlur={handleZipCodeBlur}
-                    />
-                    <Label htmlFor="zip">Enter ZIP Code</Label>
-                    <ZipSubmitBtn onClick={handleZipCodeSubmit}>Submit</ZipSubmitBtn>
-                    {!zipCodeValid && (
-                      <ValidationMessage>Please enter a valid ZIP code.</ValidationMessage>
-                    )}
-                  </PopupContainer>
-                )}
-                <div
-                  className={`arrow-icon ${isOpen ? 'rotate-arrow' : ''}`}
-                  style={{ opacity: 1 }}
-                >
-                  <RiArrowDownSLine />
-                </div>
-              </ZipDropdownBtn>
-            </ZipWrapper>
             <DateWrapper>Get it by {deliveryDate}</DateWrapper>
             <ShipWrapper>
               <StyledTruck />
@@ -391,39 +264,6 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             </ExchangeContent>
           </ExchangeWrapper>
           <AddToFavoritesButton productId={product.product_id} productName={product.name} />
-          <ZipWrapper>
-            <StyledLocation />
-            Delivery to{' '}
-            <ZipDropdownBtn onClick={toggleZipPopup}>
-              <ZipUnderline>{zipCode}</ZipUnderline>
-              {isZipPopupVisible && (
-                <PopupContainer onClick={(e) => e.stopPropagation()}>
-                  <ZipForm
-                    type="tel"
-                    name="zipCode"
-                    placeholder=""
-                    value={enteredZipCode}
-                    isOpen={isOpen}
-                    aria-haspopup="true"
-                    aria-expanded={isOpen}
-                    onChange={handleZipCodeChange}
-                    style={!zipCodeValid ? invalidStyle : {}}
-                    onBlur={handleZipCodeBlur}
-                  />
-                  <Label htmlFor="zip" style={!zipCodeValid ? invalidStyle : {}}>
-                    Enter ZIP Code
-                  </Label>
-                  <ZipSubmitBtn onClick={handleZipCodeSubmit}>Submit</ZipSubmitBtn>
-                  {!zipCodeValid && (
-                    <ValidationMessage>Please enter a valid ZIP code.</ValidationMessage>
-                  )}
-                </PopupContainer>
-              )}
-              <div className={`arrow-icon ${isOpen ? 'rotate-arrow' : ''}`} style={{ opacity: 1 }}>
-                <RiArrowDownSLine />
-              </div>
-            </ZipDropdownBtn>
-          </ZipWrapper>
           <DateWrapper>Get it by {deliveryDate}</DateWrapper>
           <ShipWrapper>
             <StyledTruck />

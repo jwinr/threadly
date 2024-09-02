@@ -5,20 +5,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import { useState, useRef, MouseEvent } from 'react'
-import PropFilter from '@/utils/PropFilter'
-
-interface Media {
-  type: 'image' | 'video'
-  image_url?: string
-  video_url?: string
-  thumbnail_url: string
-  alt_text?: string
-}
 
 interface Product {
   name: string
-  images: Array<{ image_url: string }>
-  videos: Array<{ video_url: string; thumbnail_url: string }>
+  images: Array<{ image_url: string; alt_text: string }>
 }
 
 interface ProductImageGalleryProps {
@@ -38,8 +28,6 @@ const loadingAnimation = keyframes`
     opacity: 1;
   }
 `
-
-const FilteredDiv = PropFilter('div')(['mediaType', 'zoomed', 'slideIndex'])
 
 const AdditionalImageContainer = styled.div`
   display: flex;
@@ -95,8 +83,7 @@ const AdditionalImageThumbnail = styled.div`
     padding: 2px; // Retain the image size when the border is present
   }
 
-  img,
-  video {
+  img {
     width: 100%;
     height: 100%;
   }
@@ -108,10 +95,6 @@ const CarouselContainer = styled.div`
   background-color: white;
   height: 290px;
   order: 2; // Make sure main image is below the product details in mobile view
-
-  .next-video-container {
-    height: 100%;
-  }
 `
 
 const LoaderImageContainer = styled.div`
@@ -131,19 +114,18 @@ const LoaderImageContainer = styled.div`
   }
 `
 
-const MainImageContainer = styled(FilteredDiv)<{ zoomed: boolean; mediaType: string }>`
+const MainImageContainer = styled.div<{ $zoomed: boolean }>`
   max-width: 50%;
   min-width: 50%;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
-  border-color: ${(props) => (props.zoomed ? '#000' : 'transparent')};
+  border-color: ${($zoomed) => ($zoomed ? '#000' : 'transparent')};
   height: 100%;
   background-color: var(--sc-color-white);
   overflow: hidden;
   position: relative;
-  cursor: ${(props) =>
-    props.mediaType === 'image' ? (props.zoomed ? 'zoom-out' : 'zoom-in') : 'default'};
+  cursor: ${($zoomed) => ($zoomed ? 'zoom-out' : 'zoom-in')};
   outline: none;
 
   .zoomed-image {
@@ -153,7 +135,7 @@ const MainImageContainer = styled(FilteredDiv)<{ zoomed: boolean; mediaType: str
     width: 200%; // Double the size for zoom effect
     height: 200%; // Double the size for zoom effect
     transform-origin: center center; // Will be updated dynamically
-    transform: scale(2); // Initial zoom
+    transform: scale(1.5); // Initial zoom
     pointer-events: none;
     z-index: 10;
     transition:
@@ -184,8 +166,7 @@ const MainImageContainer = styled(FilteredDiv)<{ zoomed: boolean; mediaType: str
       user-select: auto;
     }
 
-    img,
-    video {
+    img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -202,7 +183,6 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   const [zoomed, setZoomed] = useState(false)
   const [hoveredImage, setHoveredImage] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [videoLoaded, setVideoLoaded] = useState(false)
   const mainImageContainerRef = useRef<HTMLDivElement | null>(null)
   const imageRefs = useRef<(HTMLImageElement | null)[]>([])
   const zoomedImageRef = useRef<HTMLImageElement | null>(null)
@@ -215,22 +195,12 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
             <LoaderThumbnails key={index} />
           ))}
         </LoaderThumbnailsContainer>
-        <LoaderImageContainer></LoaderImageContainer>
+        <LoaderImageContainer />
       </>
     )
   }
 
-  // Combine videos and images into a single array for indexing
-  const media: Media[] = [
-    ...product.videos.map((video) => ({ type: 'video', ...video })),
-    ...product.images.map((image) => ({ type: 'image', ...image })),
-  ]
-
   const handleImageClick = (e: MouseEvent<HTMLDivElement>) => {
-    const mediaItem = media[currentIndex]
-
-    if (mediaItem.type !== 'image') return
-
     const { left, top, width, height } = mainImageContainerRef.current!.getBoundingClientRect()
 
     const x = ((e.clientX - left) / width) * 100
@@ -272,47 +242,24 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
 
   const handleThumbnailHover = (index: number) => {
     setCurrentIndex(index)
-    setHoveredImage(
-      media[index].type === 'image' ? media[index].image_url! : media[index].thumbnail_url,
-    )
-  }
-
-  const handleVideoLoaded = () => {
-    setVideoLoaded(true)
+    setHoveredImage(index)
   }
 
   return (
     <>
       {!isMobileView && (
         <AdditionalImageContainer>
-          {media.map((item, index) => (
+          {product.images.map((item, index) => (
             <AdditionalImageThumbnail
               key={index}
-              className={
-                hoveredImage === (item.type === 'image' ? item.image_url! : item.thumbnail_url)
-                  ? 'additional-image-hovered'
-                  : ''
-              }
+              className={hoveredImage === index ? 'additional-image-hovered' : ''}
               onMouseOver={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 handleThumbnailHover(index)
               }}
             >
-              {item.type === 'image' ? (
-                <Image
-                  src={item.image_url!}
-                  width={100}
-                  height={100}
-                  alt={`Product Thumbnail ${index} - ${product.name}`}
-                />
-              ) : (
-                <>
-                  <Image src={item.thumbnail_url} alt={item.alt_text} width={100} height={100} />
-                  {/* Assuming VideoPlay is a component or element representing a play icon or similar */}
-                  <VideoPlay />
-                </>
-              )}
+              <Image src={item.image_url} width={100} height={100} alt={item.alt_text} />
             </AdditionalImageThumbnail>
           ))}
         </AdditionalImageContainer>
@@ -320,40 +267,15 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       {isMobileView ? (
         <CarouselContainer>
           <Swiper pagination={{ dynamicBullets: true }} modules={[Pagination]} spaceBetween={10}>
-            {media.map((item, index) => (
+            {product.images.map((item, index) => (
               <SwiperSlide key={index}>
-                {item.type === 'image' ? (
-                  <Image
-                    src={item.image_url!}
-                    width={250}
-                    height={250}
-                    alt={`Product Image ${index} - ${product.name}`}
-                    priority={index === 0}
-                  />
-                ) : (
-                  <>
-                    <Image
-                      src={item.thumbnail_url}
-                      alt={`Video Thumbnail ${index}`}
-                      fill={true}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority={true}
-                    />
-                    <video
-                      muted
-                      loop
-                      autoPlay
-                      onLoadedData={handleVideoLoaded}
-                      style={{
-                        opacity: videoLoaded ? 1 : 0,
-                        zIndex: 10,
-                      }}
-                    >
-                      <source src={`${item.video_url}`} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </>
-                )}
+                <Image
+                  src={item.image_url}
+                  width={250}
+                  height={250}
+                  alt={item.alt_text}
+                  priority={index === 0}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -364,9 +286,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
           onClick={handleImageClick}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          zoomed={zoomed}
-          slideIndex={currentIndex}
-          mediaType={media[currentIndex]?.type}
+          $zoomed={zoomed}
         >
           <div
             className="image-row"
@@ -374,42 +294,19 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
               transform: `translate3d(${-100 * currentIndex}%, 0, 0)`,
             }}
           >
-            {media.map((item, index) => (
+            {product.images.map((item, index) => (
               <div key={index} className="image-container">
-                {item.type === 'image' ? (
-                  <Image
-                    ref={(el) => (imageRefs.current[index] = el)}
-                    src={item.image_url!}
-                    width={880}
-                    height={880}
-                    quality={90}
-                    alt="Inventory item"
-                    priority={index === 0}
-                  />
-                ) : (
-                  <>
-                    <Image
-                      src={item.thumbnail_url}
-                      alt={`Video Thumbnail ${index}`}
-                      fill={true}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      priority={true}
-                    />
-                    <video
-                      muted
-                      loop
-                      autoPlay
-                      onLoadedData={handleVideoLoaded}
-                      style={{
-                        opacity: videoLoaded ? 1 : 0,
-                        zIndex: 10,
-                      }}
-                    >
-                      <source src={`${item.video_url}`} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </>
-                )}
+                <Image
+                  ref={(el) => {
+                    imageRefs.current[index] = el
+                  }}
+                  src={item.image_url}
+                  width={880}
+                  height={880}
+                  quality={80}
+                  alt={item.alt_text}
+                  priority={index === 0}
+                />
               </div>
             ))}
           </div>
@@ -417,11 +314,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
             <Image
               className="zoomed-image"
               ref={zoomedImageRef}
-              src={media[currentIndex].image_url!}
+              src={product.images[currentIndex].image_url}
               width={2000}
               height={2000}
               quality={100}
-              alt={`Zoomed Image - ${product.name}`}
+              alt={product.images[currentIndex].alt_text}
             />
           )}
         </MainImageContainer>

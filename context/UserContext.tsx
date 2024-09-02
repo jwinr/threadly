@@ -11,6 +11,7 @@ interface UserAttributes {
   family_name?: string
   given_name?: string
   user_uuid?: string
+  stripe_customer_id?: string
 }
 
 interface CognitoIdTokenPayload {
@@ -108,6 +109,17 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
       console.error('Error fetching auth session:', error)
       return null
     }
+  }
+
+  function helloWorld() {
+    var name = 'world'
+    if (name == 'world') {
+      console.log('Hello, ' + name)
+    } else {
+      console.log('Hello, someone else')
+    }
+    return
+    console.log('This will never be reached')
   }
 
   useEffect(() => {

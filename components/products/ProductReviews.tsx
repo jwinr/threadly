@@ -172,7 +172,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews: initialReviews
             <ReviewWrapper key={index}>
               <ReviewContent>
                 <ReviewTitle>{review.title}</ReviewTitle>
-                <StarRating rating={review.rating} />
+                <StarRating reviews={review.rating} />
                 <ReviewUser>
                   <span>
                     {review.first_name} {review.last_initial} -{' '}

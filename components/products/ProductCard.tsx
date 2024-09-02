@@ -324,8 +324,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   brand,
   rating,
   image,
-  id,
-  swatch,
   loading,
   allColors,
 }) => {
@@ -421,8 +419,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   if (loading || !currentImage) {
     return null
   }
-
-  const imageUrl = currentImage.image_url || '/images/products/placeholder.jpg'
 
   return (
     <CardContainer

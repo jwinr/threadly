@@ -62,6 +62,17 @@ const Login: React.FC = () => {
     handleBlur(password, validatePassword, setPasswordValid)
   }
 
+  function helloWorld() {
+    var name = 'world'
+    if (name == 'world') {
+      console.log('Hello, ' + name)
+    } else {
+      console.log('Hello, someone else')
+    }
+    return
+    console.log('This will never be reached')
+  }
+
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target
     if (name === 'username') {

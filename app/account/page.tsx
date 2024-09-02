@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useContext } from 'react'
 import { UserContext } from '@/context/UserContext'
-import { signOut } from 'aws-amplify/auth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -12,10 +11,7 @@ import Profile from '@/public/images/icons/Profile.svg'
 import Favorites from '@/public/images/icons/Favorites.svg'
 import CreditCard from '@/public/images/icons/DefaultPayment.svg'
 import HomeAddress from '@/public/images/icons/HomeAddress.svg'
-import House from '@/public/images/icons/house.svg'
 import Purchases from '@/public/images/icons/Purchases.svg'
-import Security from '@/public/images/icons/security.svg'
-import Shield from '@/public/images/icons/Shield.svg'
 import Settings from '@/public/images/icons/Settings.svg'
 import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
@@ -149,14 +145,6 @@ const SignInSecurityContainer = styled.div`
 const CardWrapper = styled.div`
   display: flex;
   gap: 10px;
-`
-
-const ScrollCardWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 250px;
-  border-radius: 8px;
 `
 
 const CardButton = styled.button`

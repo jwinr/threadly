@@ -5,9 +5,7 @@ interface BackdropProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
 }
 
-const e = React.createElement
-
-const Backdrop = styled(({ isOpen, ...props }: BackdropProps) => e('div', props))<BackdropProps>`
+const StyledBackdrop = styled.div<BackdropProps>`
   display: block;
   position: absolute;
   top: 0;
@@ -34,5 +32,9 @@ const Backdrop = styled(({ isOpen, ...props }: BackdropProps) => e('div', props)
     transition: none;
   }
 `
+
+const Backdrop: React.FC<BackdropProps> = ({ isOpen, ...props }) => {
+  return <StyledBackdrop isOpen={isOpen} {...props} />
+}
 
 export default Backdrop

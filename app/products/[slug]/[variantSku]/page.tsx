@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState, ChangeEvent } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import LoaderDots from '@/components/Loaders/LoaderDots'
 import Breadcrumb from '@/components/Elements/Breadcrumb'
 import { useParams } from 'next/navigation'
 import { useMobileView } from '@/context/MobileViewContext'
@@ -51,45 +50,10 @@ const AddCartWrapper = styled.div`
 function ProductDetails() {
   const { slug, variantSku } = useParams() as { slug: string; variantSku: string }
   const { product, categoryName, categorySlug } = useProductData(slug, variantSku)
-  const { zipCode, setZipCode, deliveryDate, dayOfWeek, returnDate } = ShippingInfo()
-  const [zipCodeValid, setZipCodeValid] = useState(true)
-  const [isZipPopupVisible, setIsZipPopupVisible] = useState(false)
-  const [enteredZipCode, setEnteredZipCode] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
+  const { deliveryDate, dayOfWeek, returnDate } = ShippingInfo()
   const isMobileView = useMobileView()
   const [loading, setLoading] = useState(true)
   const [selectedSizeVariantId, setSelectedSizeVariantId] = useState<string | null>(null)
-
-  const toggleZipPopup = () => {
-    setIsZipPopupVisible(!isZipPopupVisible)
-    setIsOpen(!isOpen)
-  }
-
-  const handleZipCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
-    if (name === 'zipCode') {
-      setEnteredZipCode(value)
-      setZipCodeValid(true)
-    }
-  }
-
-  const handleZipCodeBlur = () => {
-    if (enteredZipCode.trim().length === 0) {
-      setZipCodeValid(true)
-    } else {
-      setZipCodeValid(/^[0-9]{5}$/.test(enteredZipCode))
-    }
-  }
-
-  const handleZipCodeSubmit = () => {
-    const zipCodePattern = /^[0-9]{5}$/
-    if (zipCodePattern.test(enteredZipCode)) {
-      setZipCode(enteredZipCode)
-      setIsZipPopupVisible(false)
-    } else {
-      setZipCodeValid(false)
-    }
-  }
 
   useEffect(() => {
     if (product) {
@@ -107,20 +71,15 @@ function ProductDetails() {
             <ProductInfo
               loading={loading}
               product={product}
-              zipCode={zipCode}
-              toggleZipPopup={toggleZipPopup}
-              isZipPopupVisible={isZipPopupVisible}
-              enteredZipCode={enteredZipCode}
-              isOpen={isOpen}
-              handleZipCodeChange={handleZipCodeChange}
-              handleZipCodeBlur={handleZipCodeBlur}
-              handleZipCodeSubmit={handleZipCodeSubmit}
-              zipCodeValid={zipCodeValid}
               deliveryDate={deliveryDate}
               dayOfWeek={dayOfWeek}
               returnDate={returnDate}
             />
-            <ProductAttributes product={product} onSizeVariantSelected={setSelectedSizeVariantId} />
+            <ProductAttributes
+              product={product}
+              loading={loading}
+              onSizeVariantSelected={setSelectedSizeVariantId}
+            />
             <AddCartWrapper>
               {product && (
                 <AddToCartButton

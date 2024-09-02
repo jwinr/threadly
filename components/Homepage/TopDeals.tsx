@@ -154,7 +154,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
       }
 
       try {
-        const response = await fetch(`/api/deals`, {
+        const response = await fetch('/api/deals', {
           headers: {
             'x-api-key': apiKey,
           },
@@ -197,7 +197,11 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 </DetailWrapper>
               </Link>
               <ButtonWrapper>
-                <AddToCartButton productId={deal.product_id} quantity={1} productName={deal.name} />
+                <AddToCartButton
+                  sizeVariantId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
+                />
               </ButtonWrapper>
             </ItemContainer>
           ))
@@ -224,7 +228,11 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 </DetailWrapper>
               </Link>
               <ButtonWrapper>
-                <AddToCartButton productId={deal.product_id} quantity={1} productName={deal.name} />
+                <AddToCartButton
+                  sizeVariantId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
+                />
               </ButtonWrapper>
             </ItemContainer>
           ))}

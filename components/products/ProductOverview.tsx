@@ -64,9 +64,45 @@ const Section = styled.div`
   }
 `
 
+const LoaderDescription = styled.div`
+  padding: 64px 0;
+  border-radius: 8px;
+  min-height: 250px;
+  width: 75%;
+  background-color: #d6d6d6;
+  animation:
+    enter 0.3s forwards,
+    loadingAnimation 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation:
+      enter 0.3s 0.1s forwards,
+      loadingAnimation 2s ease-in-out infinite;
+  }
+`
+
+const LoaderFeatures = styled.div`
+  padding: 64px 0;
+  border-radius: 8px;
+  min-height: 250px;
+  width: 75%;
+  background-color: #d6d6d6;
+  animation:
+    enter 0.3s forwards,
+    loadingAnimation 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation:
+      enter 0.3s 0.1s forwards,
+      loadingAnimation 2s ease-in-out infinite;
+  }
+`
+
 interface ProductFeature {
   feature_title: string
-  feature_content: string
+  feature_contents: string[]
 }
 
 interface Product {
@@ -91,51 +127,30 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ description }) 
 
 const ProductOverview: React.FC<ProductOverviewProps> = ({ product, loading }) => {
   if (loading) {
-    return <p>Blahggghh</p>
+    return (
+      <ProductSpecifications>
+        <LoaderDescription />
+        <LoaderFeatures />
+      </ProductSpecifications>
+    )
   }
-
-  // Group features by title
-  const groupedFeatures = product.features.reduce((acc: Record<string, string[]>, feature) => {
-    if (!acc[feature.feature_title]) {
-      acc[feature.feature_title] = []
-    }
-    acc[feature.feature_title].push(feature.feature_content)
-    return acc
-  }, {})
 
   return (
     <ProductSpecifications>
       <ProductOverviewSection>
         <ProductDescription description={product.description} />
-        {groupedFeatures['Features'] && (
-          <ul>
-            {groupedFeatures['Features'].map((content, idx) => (
-              <li key={idx}>{content}</li>
-            ))}
-          </ul>
-        )}
       </ProductOverviewSection>
       <ProductSpecs>
-        <Section>
-          <h1>How it Fits</h1>
-          {groupedFeatures['How it Fits'] && (
+        {product.features.map((feature, idx) => (
+          <Section key={idx}>
+            <h1>{feature.feature_title}</h1>
             <ul>
-              {groupedFeatures['How it Fits'].map((content, idx) => (
-                <li key={idx}>{content}</li>
+              {feature.feature_contents.map((content, contentIdx) => (
+                <li key={contentIdx}>{content}</li>
               ))}
             </ul>
-          )}
-        </Section>
-        <Section>
-          <h1>Composition & Care</h1>
-          {groupedFeatures['Composition & Care'] && (
-            <ul>
-              {groupedFeatures['Composition & Care'].map((content, idx) => (
-                <li key={idx}>{content}</li>
-              ))}
-            </ul>
-          )}
-        </Section>
+          </Section>
+        ))}
       </ProductSpecs>
     </ProductSpecifications>
   )

@@ -166,6 +166,8 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         event.preventDefault()
         focusPrevItem(headerRef)
         break
+      default:
+        break
     }
   }
 

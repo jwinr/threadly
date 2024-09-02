@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/navigation'
 import { UserContext } from '@/context/UserContext'
 import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
 import styled from 'styled-components'
@@ -92,7 +91,6 @@ const Payments: React.FC = () => {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const checkingUser = useCheckLoggedInUser()
-  const router = useRouter()
 
   useEffect(() => {
     if (!checkingUser && userAttributes?.stripe_customer_id) {
@@ -110,7 +108,7 @@ const Payments: React.FC = () => {
   }
 
   const removePaymentMethod = async (methodId: string) => {
-    // Implement the logic to remove the payment method
+    // TODO: Implement logic to perform after removing the card
   }
 
   return (

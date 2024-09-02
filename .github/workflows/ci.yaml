@@ -72,6 +72,11 @@ jobs:
       - name: Run Unit Tests
         run: npm test
 
+      - name: Run Snyk
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
       - name: Build Application
         run: npm run build
 

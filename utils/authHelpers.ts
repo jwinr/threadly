@@ -4,8 +4,7 @@ export const validateEmailDomain = (email: string): boolean => {
 }
 
 export const validatePassword = (password: string): boolean => {
-  const pattern =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])[A-Za-z\d#?!@$%^&*-]{8,}$/
+  const pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[!#$%&*?@^-])[\d!#$%&*?@A-Z^a-z-]{8,}$/
   return pattern.test(password)
 }
 
@@ -25,7 +24,7 @@ export const validateFullName = (fullName: string): boolean => {
 }
 
 export const validateCode = (code: string): boolean => {
-  return /^[0-9]{6}$/.test(code)
+  return /^\d{6}$/.test(code)
 }
 
 export const handleBlur = (

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useEffect, useState, useContext, ReactNode } from 'react'
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 
 interface MobileViewContextType {
   isMobileView: boolean

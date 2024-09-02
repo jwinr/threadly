@@ -18,8 +18,7 @@ function LocationEstimator() {
 
       if (response.status === 200) {
         const address = response.data.address
-        const zipCode = address.postcode
-        return zipCode
+        return address.postcode
       }
     } catch (error) {
       console.error('Error retrieving zip code:', error)

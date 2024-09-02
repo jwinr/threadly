@@ -1,24 +1,18 @@
 'use client'
 
-import React, { useContext, useState, useEffect, useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import getStripe from '@/utils/get-stripejs'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js'
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
 import { UserContext } from '@/context/UserContext'
+import getStripe from '@/utils/get-stripejs'
 
 const CheckoutWrapper = styled.div`
   position: relative;
   padding: 25px 10px;
 `
 
-interface UserAttributes {
-  stripe_customer_id?: string
-}
-
 export default function NewPayment() {
-  const { userAttributes } = useContext<{ userAttributes?: UserAttributes }>(UserContext)
-  const router = useRouter()
+  const { userAttributes } = useContext(UserContext)
   const [isUserLoaded, setIsUserLoaded] = useState<boolean>(false)
 
   useEffect(() => {

@@ -1,13 +1,13 @@
 'use client'
 
 import React, {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  useRef,
   ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 import { UserContext } from '@/context/UserContext'
 import { useToast } from '@/context/ToastContext'
@@ -229,7 +229,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         showToast('Removed from cart.', {
           type: 'success',
-          position: 'bottom-right',
         })
       }
     } catch (error) {
@@ -244,13 +243,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchCartDetails = async (): Promise<CartItem[]> => {
     try {
-      const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`, {
+      const response = await fetch(`/api/cart?id=${userAttributes?.user_uuid}`, {
         headers: {
           'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
         },
       })
-      const data = await response.json()
-      return data
+      return await response.json()
     } catch (error) {
       console.error('Error fetching cart details:', error)
       return []
