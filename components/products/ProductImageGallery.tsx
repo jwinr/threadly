@@ -4,17 +4,14 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
-import { useState, useRef, MouseEvent } from 'react'
-
-interface Product {
-  name: string
-  images: Array<{ image_url: string; alt_text: string }>
-}
+import { useEffect, useState, useRef, MouseEvent } from 'react'
+import { Product } from '@/types/product'
 
 interface ProductImageGalleryProps {
-  product: Product
+  product: Pick<Product, 'images'>
   isMobileView: boolean
   loading: boolean
+  hoveredImage: number
 }
 
 const loadingAnimation = keyframes`
@@ -26,66 +23,6 @@ const loadingAnimation = keyframes`
   }
   100% {
     opacity: 1;
-  }
-`
-
-const AdditionalImageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  order: 3; // Make sure additional images are below the main image in mobile view
-
-  @media (min-width: 768px) {
-    order: 0; // Reset order in desktop view
-  }
-`
-
-const LoaderThumbnails = styled.div`
-  border-radius: 6px;
-  width: 70px;
-  height: 70px;
-  display: grid;
-  align-content: center;
-  overflow: hidden;
-  position: relative;
-  background-color: #d6d6d6;
-  animation:
-    enter 0.3s forwards,
-    ${loadingAnimation} 2s ease-in-out infinite;
-  animation-fill-mode: forwards;
-
-  @media (max-width: 768px) {
-    animation:
-      enter 0.3s 0.1s forwards,
-      ${loadingAnimation} 2s ease-in-out infinite;
-  }
-`
-
-const LoaderThumbnailsContainer = styled.div`
-  display: grid;
-  gap: 16px;
-`
-
-const AdditionalImageThumbnail = styled.div`
-  border: 1px solid var(--sc-color-border-gray);
-  border-radius: 6px;
-  cursor: pointer;
-  width: 70px;
-  height: 70px;
-  display: grid;
-  align-content: center;
-  overflow: hidden;
-  position: relative;
-  background-color: white;
-
-  &:focus-visible {
-    border: 2px solid var(--sc-color-blue-highlight);
-    padding: 2px; // Retain the image size when the border is present
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
   }
 `
 
@@ -120,27 +57,25 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
-  border-color: ${($zoomed) => ($zoomed ? '#000' : 'transparent')};
+  border-color: ${({ $zoomed }) => ($zoomed ? '#000' : 'transparent')};
   height: 100%;
   background-color: var(--sc-color-white);
   overflow: hidden;
   position: relative;
-  cursor: ${($zoomed) => ($zoomed ? 'zoom-out' : 'zoom-in')};
+  cursor: ${({ $zoomed }) => ($zoomed ? 'zoom-out' : 'zoom-in')};
   outline: none;
 
   .zoomed-image {
     position: absolute;
     top: 0;
     left: 0;
-    width: 200%; // Double the size for zoom effect
-    height: 200%; // Double the size for zoom effect
-    transform-origin: center center; // Will be updated dynamically
-    transform: scale(1.5); // Initial zoom
+    width: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
+    height: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
+    transform-origin: ${({ $zoomed }) => ($zoomed ? 'center center' : 'center center')};
+    transform: ${({ $zoomed }) => ($zoomed ? 'scale(1.5)' : 'scale(1)')};
+    transition: transform 0.3s ease;
     pointer-events: none;
     z-index: 10;
-    transition:
-      transform 0.1s ease,
-      transform-origin 0.1s ease; // Smooth transition
   }
 
   .image-row {
@@ -179,22 +114,21 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   product,
   isMobileView,
   loading,
+  hoveredImage,
 }) => {
   const [zoomed, setZoomed] = useState(false)
-  const [hoveredImage, setHoveredImage] = useState(0)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(hoveredImage)
   const mainImageContainerRef = useRef<HTMLDivElement | null>(null)
   const imageRefs = useRef<(HTMLImageElement | null)[]>([])
   const zoomedImageRef = useRef<HTMLImageElement | null>(null)
 
+  useEffect(() => {
+    setCurrentIndex(hoveredImage)
+  }, [hoveredImage])
+
   if (loading) {
     return (
       <>
-        <LoaderThumbnailsContainer>
-          {Array.from({ length: 4 }, (_, index) => (
-            <LoaderThumbnails key={index} />
-          ))}
-        </LoaderThumbnailsContainer>
         <LoaderImageContainer />
       </>
     )
@@ -240,34 +174,12 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
     }
   }
 
-  const handleThumbnailHover = (index: number) => {
-    setCurrentIndex(index)
-    setHoveredImage(index)
-  }
-
   return (
     <>
-      {!isMobileView && (
-        <AdditionalImageContainer>
-          {product.images.map((item, index) => (
-            <AdditionalImageThumbnail
-              key={index}
-              className={hoveredImage === index ? 'additional-image-hovered' : ''}
-              onMouseOver={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                handleThumbnailHover(index)
-              }}
-            >
-              <Image src={item.image_url} width={100} height={100} alt={item.alt_text} />
-            </AdditionalImageThumbnail>
-          ))}
-        </AdditionalImageContainer>
-      )}
       {isMobileView ? (
         <CarouselContainer>
           <Swiper pagination={{ dynamicBullets: true }} modules={[Pagination]} spaceBetween={10}>
-            {product.images.map((item, index) => (
+            {product?.images.map((item, index) => (
               <SwiperSlide key={index}>
                 <Image
                   src={item.image_url}
@@ -294,7 +206,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
               transform: `translate3d(${-100 * currentIndex}%, 0, 0)`,
             }}
           >
-            {product.images.map((item, index) => (
+            {product?.images.map((item, index) => (
               <div key={index} className="image-container">
                 <Image
                   ref={(el) => {

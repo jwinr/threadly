@@ -1,6 +1,10 @@
 import React from 'react'
 
-const EmptyStar: React.FC = () => {
+interface EmptyStarProps {
+  className?: string
+}
+
+const EmptyStar: React.FC<EmptyStarProps> = () => {
   // Defining the svg here otherwise the DOM won't receive it
   return (
     <>

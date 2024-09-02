@@ -4,7 +4,7 @@ import React, { ReactNode, createContext, useContext, useRef, useState } from 'r
 import ToastManager from '../components/Elements/Toast'
 
 interface ToastOptions {
-  type?: 'success' | 'caution' | 'pending'
+  type?: 'success' | 'caution' | 'pending' | undefined
   action?: string
   onAction?: () => void
 }
@@ -12,7 +12,7 @@ interface ToastOptions {
 interface Toast {
   id: number
   message: string
-  type?: string
+  type: 'success' | 'caution' | 'pending' | undefined
   action?: string
   onAction?: () => void
   timeout?: number

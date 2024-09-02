@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 import React, { useState, useEffect, useRef, useMemo, useCallback, RefObject } from 'react'
 import styled, { css } from 'styled-components'
 import { RiArrowDownSLine } from 'react-icons/ri'

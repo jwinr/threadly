@@ -1,19 +1,15 @@
 import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import StarRating from '@/components/ReviewStars/StarRatings'
 import Truck from '@/public/images/icons/truck.svg'
 import Subscription from '@/public/images/icons/subscription.svg'
 import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
 import { useMobileView } from '@/context/MobileViewContext'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
+import { Product } from '@/types/product'
 
 interface ProductInfoProps {
-  product: {
-    name: string
-    product_id: string
-    variants?: { sizes?: { price: number; sale_price?: number }[] }[]
-    reviews: { length: number }[]
-  }
+  product: Product
   deliveryDate: string
   dayOfWeek: string
   returnDate: string
@@ -62,7 +58,7 @@ const ProductNameWrapper = styled.div`
   }
 `
 
-const Product = styled.div`
+const ProductContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -196,7 +192,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
     )
   }
 
-  const selectedVariant = product.variants?.[0]
+  const selectedVariant = product?.variants?.[0]
   const selectedSize = selectedVariant?.sizes?.[0]
 
   const productPrice = selectedSize?.price || 0
@@ -205,20 +201,20 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   return (
     <>
       <ProductNameWrapper>
-        <h1>{product.name}</h1>
+        <h1>{product?.name}</h1>
         <AddFavsWrapper>
-          <AddToFavoritesButton productId={product.product_id} productName={product.name} />
+          <AddToFavoritesButton productId={product?.product_id} productName={product?.name} />
         </AddFavsWrapper>
         <ReviewWrapper>
-          <StarRating reviews={product.reviews} />
+          <StarRating reviews={product?.reviews} />
           <button className="average-rating-text">
-            {product.reviews.length === 0
+            {product?.reviews.length === 0
               ? 'Be the first!'
-              : `(${product.reviews.length} review${product.reviews.length !== 1 ? 's' : ''})`}
+              : `(${product?.reviews.length} review${product?.reviews.length !== 1 ? 's' : ''})`}
           </button>
         </ReviewWrapper>
         {!isMobileView && (
-          <Product>
+          <ProductContainer>
             <Price>{formatCurrency(productSalePrice)}</Price>
             {selectedSize?.sale_price && (
               <span>
@@ -241,11 +237,11 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
               <StyledTruck />
               <ShippingOffer>Free Shipping</ShippingOffer>
             </ShipWrapper>
-          </Product>
+          </ProductContainer>
         )}
       </ProductNameWrapper>
       {isMobileView && (
-        <Product>
+        <ProductContainer>
           <Price>{formatCurrency(productSalePrice)}</Price>
           {selectedSize?.sale_price && (
             <span>
@@ -269,7 +265,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             <StyledTruck />
             <ShippingOffer>Free Shipping</ShippingOffer>
           </ShipWrapper>
-        </Product>
+        </ProductContainer>
       )}
     </>
   )

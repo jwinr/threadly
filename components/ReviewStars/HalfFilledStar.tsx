@@ -2,6 +2,7 @@ import React from 'react'
 
 interface HalfFilledStarProps {
   fractionalPart: number
+  className?: string
 }
 
 const HalfFilledStar: React.FC<HalfFilledStarProps> = ({ fractionalPart }) => {

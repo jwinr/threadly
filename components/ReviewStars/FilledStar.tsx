@@ -1,6 +1,10 @@
 import React from 'react'
 
-const FilledStar: React.FC = () => {
+interface FilledStarProps {
+  className?: string
+}
+
+const FilledStar: React.FC<FilledStarProps> = () => {
   return (
     <>
       <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">

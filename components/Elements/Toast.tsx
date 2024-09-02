@@ -5,13 +5,13 @@ import Warning from '@/public/images/icons/warning.svg'
 
 interface ToastProps {
   message: string
-  type: 'success' | 'caution' | 'pending'
+  type: 'success' | 'caution' | 'pending' | undefined
   action?: string
   onAction?: () => void
   onDismiss: () => void
   timeout?: number
   index: number
-  id: string
+  id: number
 }
 
 const ToastContainer = styled.div<{ $isVisible: boolean }>`

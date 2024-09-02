@@ -4,9 +4,8 @@ import React, { useEffect, useState, useContext, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CartContext } from '@/context/CartContext'
 import styled from 'styled-components'
-import SuccessCheckmark from '../../components/Shopping/SuccessCheckmark'
-import Head from 'next/head'
-import useCheckLoggedInUser from '../../hooks/useCheckLoggedInUser'
+import SuccessCheckmark from '@/components/Shopping/SuccessCheckmark'
+import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
 import Button from '@/components/Elements/Button'
 import LoaderDots from '@/components/Loaders/LoaderDots'
 
@@ -90,7 +89,7 @@ type CheckoutSessionData = {
 
 export default function Return() {
   const router = useRouter()
-  const { clearCart } = useContext(CartContext)
+  const { clearCart } = useContext(CartContext)!
   const [status, setStatus] = useState<string | null>(null)
   const [customerEmail, setCustomerEmail] = useState<string>('')
   const [isCartCleared, setIsCartCleared] = useState<boolean>(false)
@@ -149,6 +148,10 @@ export default function Return() {
           }
         })
         .then((res) => {
+          if (!res) {
+            throw new Error('Fulfillment response is undefined')
+          }
+
           console.log('Fulfillment response status:', res.status)
           if (!res.ok) {
             throw new Error('Fulfillment failed')
@@ -186,9 +189,6 @@ export default function Return() {
     case 'complete':
       return (
         <>
-          <Head>
-            <title>Thank you! | Nexari</title>
-          </Head>
           <Container>
             <SuccessSection id="success">
               <SuccessCheckmark />
@@ -207,9 +207,6 @@ export default function Return() {
     case 'pending':
       return (
         <>
-          <Head>
-            <title>Order Processing | Nexari</title>
-          </Head>
           <Container>
             <SuccessSection id="pending">
               <Message>
@@ -223,9 +220,6 @@ export default function Return() {
     case 'failed':
       return (
         <>
-          <Head>
-            <title>Order Failed | Nexari</title>
-          </Head>
           <Container>
             <ErrorSection id="failed">
               <Message>
@@ -239,9 +233,6 @@ export default function Return() {
     case 'session_not_found':
       return (
         <>
-          <Head>
-            <title>Session Not Found | Nexari</title>
-          </Head>
           <Container>
             <ErrorSection id="session_not_found">
               <Message>
@@ -255,9 +246,6 @@ export default function Return() {
     case 'unauthorized':
       return (
         <>
-          <Head>
-            <title>Unauthorized | Nexari</title>
-          </Head>
           <Container>
             <ErrorSection id="unauthorized">
               <Message>
@@ -272,9 +260,6 @@ export default function Return() {
     case 'error':
       return (
         <>
-          <Head>
-            <title>Error | Nexari</title>
-          </Head>
           <Container>
             <ErrorSection id="error">
               <Message>
@@ -288,9 +273,6 @@ export default function Return() {
     default:
       return (
         <>
-          <Head>
-            <title>Nexari</title>
-          </Head>
           <LoaderDots />
         </>
       )

@@ -5,47 +5,6 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import styled from 'styled-components'
 
-interface VariantSize {
-  waist?: string
-  length?: string
-  size?: string
-  size_variant_id: string
-}
-
-interface ProductVariant {
-  color_sku: string
-  color_name: string
-  color: string
-  color_swatch_url: string
-  sizes: VariantSize[]
-}
-
-interface Product {
-  slug: string
-  selectedVariant: {
-    color_sku: string
-    color: string
-    waist?: string
-    length?: string
-    size?: string
-  }
-  variants: ProductVariant[]
-}
-
-interface ProductAttributesProps {
-  product: Product | null
-  onSizeVariantSelected?: (sizeVariantId: string) => void
-  loading: boolean
-}
-
-interface SelectedAttributes {
-  color: string
-  color_name: string
-  waist?: string
-  length?: string
-  size?: string
-}
-
 const AttributeSelection = styled.div`
   margin-top: 20px;
   display: flex;

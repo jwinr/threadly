@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@/app/*": ["./app/*"],
+      "@/types/*": ["./types/*"],
       "@/db/*": ["./threadly-backend/lib/*"],
       "@/components/*": ["./components/*"],
       "@/context/*": ["./context/*"],

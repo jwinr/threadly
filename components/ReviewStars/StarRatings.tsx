@@ -2,11 +2,7 @@ import React from 'react'
 import FilledStar from './FilledStar'
 import HalfFilledStar from './HalfFilledStar'
 import EmptyStar from './EmptyStar'
-
-// Define types for the reviews prop
-interface Review {
-  rating: number
-}
+import { Review } from '@/types/product'
 
 interface StarRatingsProps {
   reviews: Review[] | number[] | number[][] | number

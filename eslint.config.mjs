@@ -29,7 +29,7 @@ export default [
       unicorn: unicorn,
       sonarjs: sonarjs,
     },
-    ignorePatterns: [
+    ignores: [
       'node_modules/',
       '.next/',
       'amplify/',

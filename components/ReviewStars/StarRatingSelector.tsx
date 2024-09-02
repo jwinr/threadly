@@ -18,6 +18,7 @@ const StarContainer = styled.div`
 interface StarRatingSelectorProps {
   rating: number
   setRating: (rating: number) => void
+  className?: string
 }
 
 const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRating }) => {
@@ -64,7 +65,9 @@ const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRati
         return (
           <span
             tabIndex={starIndex === 1 ? 0 : -1}
-            ref={(el) => (starRefs.current[index] = el)}
+            ref={(el) => {
+              starRefs.current[index] = el
+            }}
             key={starIndex}
             onMouseEnter={() => handleMouseEnter(starIndex)}
             onMouseLeave={handleMouseLeave}
