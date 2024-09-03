@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ProductDescriptionProps, ProductOverviewProps } from '@/types/product'
+import { ProductDescriptionProps, ProductOverviewProps } from '@/app/types/product'
 
 const ProductSpecifications = styled.div`
   display: grid;

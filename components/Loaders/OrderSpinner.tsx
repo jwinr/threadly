@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import PropFilter from '../../utils/PropFilter'
 
 const spin = keyframes`
   0% {
@@ -21,10 +20,10 @@ const spinner = keyframes`
 `
 
 interface SpinProps {
-  loading: boolean
+  $isLoading: boolean
 }
 
-const Spin = styled(PropFilter('div')(['loading']))<SpinProps>`
+const Spin = styled.div<SpinProps>`
   position: absolute;
   justify-content: center;
   align-items: center;
@@ -32,8 +31,8 @@ const Spin = styled(PropFilter('div')(['loading']))<SpinProps>`
   left: 50%;
   transform: scale(2.5);
   padding-right: 16px;
-  opacity: ${({ loading }) => (loading ? 1 : 0)};
-  visibility: ${({ loading }) => (loading ? 'visible' : 'hidden')};
+  opacity: ${({ $isLoading }) => ($isLoading ? 1 : 0)};
+  visibility: ${({ $isLoading }) => ($isLoading ? 'visible' : 'hidden')};
   transition:
     opacity 0.3s ease-in-out,
     visibility 0.3s ease-in-out;
@@ -64,11 +63,11 @@ const InnerDiv = styled.div`
 `
 
 interface OrderSpinnerProps {
-  loading: boolean
+  $isLoading: boolean
 }
 
-const OrderSpinner: React.FC<OrderSpinnerProps> = ({ loading }) => (
-  <Spin loading={loading}>
+const OrderSpinner: React.FC<OrderSpinnerProps> = ({ $isLoading }) => (
+  <Spin $isLoading={$isLoading}>
     <InnerDiv>
       <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" x="0" y="0">
         <circle

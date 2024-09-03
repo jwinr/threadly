@@ -15,21 +15,21 @@ const loadingAnimation = keyframes`
 `
 
 interface OrderSummaryContainerProps {
-  $loading: boolean
+  $isLoading: boolean
   $loadingSummary: boolean
 }
 
 const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
   margin: 30px 16px;
   flex: 1 1 auto;
-  background-color: ${({ $loading }) => ($loading ? '#d6d6d6' : 'initial')};
-  height: ${({ $loading }) => ($loading ? '300px' : 'initial')};
-  border-radius: ${({ $loading }) => ($loading ? '6px' : 'initial')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
+  height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
+  border-radius: ${({ $isLoading }) => ($isLoading ? '6px' : 'initial')};
   opacity: ${({ $loadingSummary }) => ($loadingSummary ? '0.5' : '1')};
   transition: opacity 0.3s ease-in-out;
 
-  ${({ $loading }) =>
-    $loading &&
+  ${({ $isLoading }) =>
+    $isLoading &&
     css`
       animation:
         enter-form-desktop 0.3s forwards,
@@ -43,8 +43,8 @@ const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
       }
     `}
 
-  ${({ $loading, $loadingSummary }) =>
-    !$loading &&
+  ${({ $isLoading, $loadingSummary }) =>
+    !$isLoading &&
     !$loadingSummary &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
@@ -100,7 +100,7 @@ interface OrderSummaryProps {
   total: string
   totalQuantity: number
   zipCode: string
-  loading: boolean
+  $isLoading: boolean
   loadingSummary: boolean
 }
 
@@ -110,12 +110,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   total,
   totalQuantity,
   zipCode,
-  loading,
+  $isLoading,
   loadingSummary,
 }) => {
   return (
-    <OrderSummaryContainer $loading={loading} $loadingSummary={loadingSummary}>
-      {loading ? null : (
+    <OrderSummaryContainer $isLoading={$isLoading} $loadingSummary={loadingSummary}>
+      {$isLoading ? null : (
         <>
           <h2>Order summary</h2>
           {totalQuantity > 0 ? (

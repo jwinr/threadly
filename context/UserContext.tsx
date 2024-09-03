@@ -4,6 +4,7 @@ import React, { createContext, useState, useEffect, useCallback, ReactNode } fro
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { Hub } from 'aws-amplify/utils'
 import debounce from 'lodash.debounce'
+import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 
 interface UserAttributes {
   sub?: string
@@ -44,7 +45,7 @@ interface UserProviderProps {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUserAttributes }) => {
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>(initialUserAttributes)
-  const [authChecked, setAuthChecked] = useState<boolean>(false)
+  const [, setAuthChecked] = useState<boolean>(false)
 
   const debouncedFetchUserAttributes = useCallback(
     debounce(async (attributes: UserAttributes) => {
@@ -53,7 +54,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
             'x-user-attributes': JSON.stringify(attributes),
           },
           body: JSON.stringify(attributes),
@@ -103,23 +103,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
       if (session && session.tokens && session.tokens.accessToken) {
         return session.tokens.accessToken
       } else {
-        throw new Error('User is not authenticated')
+        throw new Error(INVALID_JWT_TOKEN_ERROR)
       }
     } catch (error) {
       console.error('Error fetching auth session:', error)
       return null
     }
-  }
-
-  function helloWorld() {
-    var name = 'world'
-    if (name == 'world') {
-      console.log('Hello, ' + name)
-    } else {
-      console.log('Hello, someone else')
-    }
-    return
-    console.log('This will never be reached')
   }
 
   useEffect(() => {
@@ -164,7 +153,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
           },
         })
 
@@ -185,7 +173,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
-              'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
               'x-user-attributes': JSON.stringify(userAttributes),
             },
           },

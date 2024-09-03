@@ -1,29 +1,22 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useContext, FormEvent, ChangeEvent } from 'react'
-import { signUp, signIn } from 'aws-amplify/auth'
+import React, { useState, useEffect, useContext, FormEvent } from 'react'
+import { signUp } from 'aws-amplify/auth'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 import PasswordReveal from '@/components/Auth/PasswordReveal'
-import LogoSymbol from '@/public/images/logo_n.svg'
+import LogoSymbol from '@/public/images/logo_solid.svg'
 import Popover from '@/components/Elements/Popover'
-import Head from 'next/head'
-import CognitoErrorMessages from '@/utils/CognitoErrorMessages'
+import { CognitoErrorMessages } from '@/lib/constants'
 import * as AuthStyles from '@/components/Auth/AuthStyles'
-import {
-  validateEmailDomain,
-  validatePassword,
-  validateFullName,
-  handleBlur,
-  handleKeyDown,
-  splitFullName,
-} from '@/utils/authHelpers'
+import { getValidationStyle, handleKeyDown, splitFullName } from '@/utils/authHelpers'
 import { UserContext } from '@/context/UserContext'
 import LoaderDots from '@/components/Loaders/LoaderDots'
 import LoaderSpin from '@/components/Loaders/LoaderSpin'
 import useRedirectIfAuthenticated from '@/hooks/useRedirectIfAuthenticated'
 import { TiWarningOutline } from 'react-icons/ti'
 import { useMobileView } from '@/context/MobileViewContext'
+import { useAuthFormValidation } from '@/hooks/useAuthFormValidation'
 
 const SubheaderText = styled.h1`
   font-weight: 500;
@@ -32,120 +25,44 @@ const SubheaderText = styled.h1`
 `
 
 const SignUp: React.FC = () => {
-  const [username, setUsername] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [fullName, setFullName] = useState<string>('')
-  const [fullNameValid, setFullNameValid] = useState<boolean>(true)
-  const [passwordValid, setPasswordValid] = useState<boolean>(true)
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [emailValid, setEmailValid] = useState<boolean>(true)
-  const [signUpResponse, setSignUpResponse] = useState<any>(null)
+  const { formState, emailValid, passwordValid, fullNameValid, onChange, onBlur } =
+    useAuthFormValidation({
+      username: '',
+      password: '',
+      fullName: '',
+    })
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const router = useRouter()
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [signUpResponse, setSignUpResponse] = useState<any>(null)
   const { fetchUserAttributes } = useContext(UserContext)
   const [shakeKey, setShakeKey] = useState<number>(0)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [isHovered, setIsHovered] = useState<boolean>(false)
-  const hoverTimeout = useRef<NodeJS.Timeout | null>(null)
-  const [isButtonInvalid, setIsButtonInvalid] = useState<boolean>(true)
+  const [isInvalid, setIsInvalid] = useState<boolean>(true)
   const isMobileView = useMobileView()
   const { invalidStyle } = AuthStyles
 
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const fullNameRef = useRef<HTMLInputElement>(null)
+  type CognitoErrorName = keyof typeof CognitoErrorMessages
 
-  const router = useRouter()
+  const GENERIC_ERROR_MESSAGE = 'An unexpected error occurred. Please try again later.'
+
   // Check if there's already an active sign-in
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
 
   useEffect(() => {
-    const isEmailValid = validateEmailDomain(username)
-    const isPasswordValid = validatePassword(password)
-    const isFullNameValid = validateFullName(fullName)
+    const isFormValid =
+      emailValid &&
+      passwordValid &&
+      fullNameValid &&
+      formState.username &&
+      formState.password &&
+      formState.fullName
 
-    setIsButtonInvalid(!(isEmailValid && isPasswordValid && isFullNameValid))
-  }, [username, password, fullName])
+    setIsInvalid(!isFormValid)
+  }, [emailValid, passwordValid, fullNameValid, formState])
 
-  // Automatically log the user in once they're confirmed
-  const confirmUser = async () => {
-    try {
-      const signInResponse = await signIn({
-        username: username,
-        password: password,
-      })
-
-      if (signInResponse.isSignedIn) {
-        await fetchUserAttributes()
-      } else {
-        setErrorMessage('An unexpected error occurred. Please try again later.')
-        setShakeKey((prevKey) => prevKey + 1)
-      }
-    } catch (error) {
-      console.error('SignIn Error:', error)
-      if (error.response && error.response.data) {
-        console.error('SignIn Error Details:', error.response.data)
-      }
-      setErrorMessage('An unexpected error occurred. Please try again later.')
-      setShakeKey((prevKey) => prevKey + 1)
-    }
-  }
-
-  const handleEmailBlur = () => {
-    handleBlur(username, validateEmailDomain, setEmailValid)
-  }
-
-  const handleFullNameBlur = () => {
-    handleBlur(fullName, validateFullName, setFullNameValid)
-  }
-
-  const handlePasswordBlur = () => {
-    handleBlur(password, validatePassword, setPasswordValid)
-  }
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    if (name === 'username') {
-      setUsername(value)
-      setEmailValid(true)
-    } else if (name === 'password') {
-      setPassword(value)
-      setPasswordValid(true)
-    } else if (name === 'full_name') {
-      setFullName(value)
-      setFullNameValid(true)
-    }
-  }
-
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-  const checkUsername = async (username: string): Promise<boolean> => {
-    await delay(500)
-
-    try {
-      const response = await fetch('/api/check-username', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
-        },
-        body: JSON.stringify({ username }),
-      })
-
-      const data = await response.json()
-      if (data.exists) {
-        setErrorMessage(
-          'An account with the given email already exists. Please use a different email.',
-        )
-        setShakeKey((prevKey) => prevKey + 1)
-        return false
-      }
-      return true
-    } catch (error) {
-      console.error('Error checking username:', error)
-      setErrorMessage('An unexpected error occurred. Please try again later.')
-      setShakeKey((prevKey) => prevKey + 1)
-      return false
-    }
+  if (!authChecked) {
+    return <LoaderDots />
   }
 
   // Send the AWS user details to the backend for Stripe & Postgres creation
@@ -160,7 +77,7 @@ const SignUp: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
         },
         body: JSON.stringify(user),
       })
@@ -170,50 +87,32 @@ const SignUp: React.FC = () => {
       }
     } catch (error) {
       console.error('Error sending user details:', error)
-      setErrorMessage('Failed to send user details. Please try again later.')
+      setErrorMessage(GENERIC_ERROR_MESSAGE)
       setShakeKey((prevKey) => prevKey + 1)
     }
   }
 
-  const handleSignUp = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
-    if (loading) return
-    setErrorMessage('')
+    if (isLoading) {
+      setErrorMessage('')
+      return // Prevent form submission if loading
+    }
 
-    const isEmailValid = validateEmailDomain(username)
-    const isPasswordValid = validatePassword(password)
-    const isFullNameValid = validateFullName(fullName)
-
-    setEmailValid(isEmailValid)
-    setPasswordValid(isPasswordValid)
-    setFullNameValid(isFullNameValid)
-
-    if (!isEmailValid) {
-      emailRef.current?.focus()
-      return
-    } else if (!isFullNameValid) {
-      fullNameRef.current?.focus()
-      setShakeKey((prevKey) => prevKey + 1)
-      return
-    } else if (!isPasswordValid) {
-      passwordRef.current?.focus()
+    if (isInvalid) {
+      setErrorMessage('Please fill in all fields with valid information.')
       setShakeKey((prevKey) => prevKey + 1)
       return
     }
 
     setLoading(true)
 
-    const usernameExists = await checkUsername(username)
-    if (!usernameExists) {
-      setLoading(false)
-      return
-    } else if (usernameExists) {
-      const { firstName, lastName } = splitFullName(fullName)
-
+    setTimeout(async () => {
+      const { firstName, lastName } = splitFullName(formState.fullName || '')
       try {
         const signUpResponse = await signUp({
-          username,
-          password,
+          username: formState.username,
+          password: formState.password,
           options: {
             userAttributes: {
               given_name: firstName,
@@ -227,26 +126,26 @@ const SignUp: React.FC = () => {
         if (signUpResponse.userId) {
           await sendUserDetails({
             sub: signUpResponse.userId,
-            email: username,
+            email: formState.username,
             given_name: firstName,
             family_name: lastName,
           })
         }
+      } catch (err) {
+        const error = err as Error
+        console.error(error)
 
-        // Call confirmUser after a successful sign-up
-        await confirmUser()
-      } catch (error) {
-        console.error('Error during sign up:', error)
-        if (error.name && CognitoErrorMessages[error.name]) {
-          setErrorMessage(CognitoErrorMessages[error.name])
+        // Check if error.name is a key in CognitoErrorMessages
+        if (error.name in CognitoErrorMessages) {
+          setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName])
         } else {
-          setErrorMessage('An unexpected error occurred. Please try again later.')
+          setErrorMessage(GENERIC_ERROR_MESSAGE)
         }
         setShakeKey((prevKey) => prevKey + 1)
       } finally {
         setLoading(false)
       }
-    }
+    }, 250)
   }
 
   const handleRedirect = () => {
@@ -257,195 +156,171 @@ const SignUp: React.FC = () => {
     router.push('/login')
   }
 
-  const handleMouseEnter = () => {
-    clearTimeout(hoverTimeout.current!)
-    hoverTimeout.current = setTimeout(() => {
-      setIsHovered(true)
-    }, 100)
-  }
-
-  const handleMouseLeave = () => {
-    clearTimeout(hoverTimeout.current!)
-    hoverTimeout.current = setTimeout(() => {
-      setIsHovered(false)
-    }, 400)
-  }
-
   return (
-    <>
-      <Head>
-        <title>Nexari Login | Sign in to your Nexari account</title>
-      </Head>
-      {!authChecked ? (
-        <LoaderDots />
-      ) : (
-        <AuthStyles.AuthContainerWrapper>
-          <AuthStyles.FormContainerWrapper>
-            <AuthStyles.AuthCard key={shakeKey} shake={!!errorMessage}>
-              <AuthStyles.AuthCardContent>
-                <AuthStyles.LogoBox>
-                  <LogoSymbol />
-                </AuthStyles.LogoBox>
-                {signUpResponse &&
-                signUpResponse.nextStep &&
-                signUpResponse.nextStep.signUpStep === 'DONE' ? (
-                  /* We're using a Lambda function to automatically confirm the user for demonstrative purposes.
-                  /* In a proper use-case, we would use the "CONFIRM_SIGN_UP" step, collect a code from the
-                  /* user, and call confirmSignUp. */
-                  <>
-                    <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
-                      Success! Your Nexari account has been created.
-                    </AuthStyles.HeaderText>
-                    <SubheaderText style={{ marginBottom: '30px' }}>
-                      You're ready to start shopping!
-                    </SubheaderText>
-                    <AuthStyles.AuthBtn onClick={handleRedirect} type="button">
-                      Shop now
-                    </AuthStyles.AuthBtn>
-                  </>
-                ) : (
-                  <>
-                    <AuthStyles.HeaderText>Create your Nexari account</AuthStyles.HeaderText>
-                    <AuthStyles.FormContainer
-                      onSubmit={handleSignUp}
-                      noValidate
-                      data-form-type="register"
-                      onKeyDown={handleKeyDown}
+    <AuthStyles.AuthContainerWrapper>
+      <AuthStyles.FormContainerWrapper>
+        <AuthStyles.AuthCard key={shakeKey} $shake={!!errorMessage}>
+          <AuthStyles.AuthCardContent>
+            <AuthStyles.LogoBox>
+              <LogoSymbol />
+            </AuthStyles.LogoBox>
+            {signUpResponse?.nextStep?.signUpStep === 'DONE' ? (
+              // We're using a Lambda function to automatically confirm the user for demonstrative purposes.
+              // In a production environment, we would use the "CONFIRM_SIGN_UP" step, collect a code
+              // from the user, and call the confirmSignUp action.
+              <>
+                <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
+                  Success! Your Nexari account has been created.
+                </AuthStyles.HeaderText>
+                <SubheaderText style={{ marginBottom: '30px' }}>
+                  You're ready to start shopping!
+                </SubheaderText>
+                <AuthStyles.AuthBtn onClick={handleRedirect} type="button">
+                  Shop now
+                </AuthStyles.AuthBtn>
+              </>
+            ) : (
+              <>
+                <AuthStyles.HeaderText>Create your Threadly account</AuthStyles.HeaderText>
+                <AuthStyles.FormContainer
+                  onSubmit={handleSignUp}
+                  noValidate
+                  data-form-type="register"
+                  onKeyDown={(e) =>
+                    handleKeyDown(e, setShowPassword, emailValid, passwordValid, fullNameValid)
+                  }
+                >
+                  <AuthStyles.EntryWrapper>
+                    <AuthStyles.EntryContainer
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name="username"
+                      id="username"
+                      required
+                      type="email"
+                      placeholder=""
+                      autoComplete="off"
+                      aria-label="Email address"
+                      style={getValidationStyle(emailValid, invalidStyle)}
+                      value={formState.username}
+                    />
+                    <AuthStyles.Label
+                      htmlFor="username"
+                      style={getValidationStyle(emailValid, invalidStyle)}
                     >
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          ref={emailRef}
-                          onChange={onChange}
-                          name="username"
-                          id="username"
-                          required
-                          type="email"
-                          placeholder=""
-                          autoComplete="off"
-                          aria-label="Email address"
-                          style={!emailValid ? invalidStyle : {}}
-                          onBlur={handleEmailBlur}
-                          value={username}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="username"
-                          style={!emailValid ? invalidStyle : {}}
-                        >
-                          Email address
-                        </AuthStyles.Label>
-                      </AuthStyles.EntryWrapper>
-                      {!emailValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid email address.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          ref={fullNameRef}
-                          onChange={onChange}
-                          type="text"
-                          id="full_name"
-                          name="full_name"
-                          placeholder=""
-                          required
-                          autoComplete="off"
-                          aria-required="true"
-                          value={fullName}
-                          data-form-type="name,full"
-                          style={!fullNameValid ? invalidStyle : {}}
-                          onBlur={handleFullNameBlur}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="full_name"
-                          style={!fullNameValid ? invalidStyle : {}}
-                        >
-                          Full Name
-                        </AuthStyles.Label>
-                      </AuthStyles.EntryWrapper>
-                      {!fullNameValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid full name.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          ref={passwordRef}
-                          onChange={onChange}
-                          name="password"
-                          id="password"
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder=""
-                          value={password}
-                          autoComplete="new-password"
-                          aria-label="Password"
-                          data-form-type="password,new"
-                          style={!passwordValid ? invalidStyle : {}}
-                          onBlur={handlePasswordBlur}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="password"
-                          style={!passwordValid ? invalidStyle : {}}
-                        >
-                          Password
-                        </AuthStyles.Label>
+                      Email address
+                    </AuthStyles.Label>
+                  </AuthStyles.EntryWrapper>
+                  {!emailValid && (
+                    <AuthStyles.ValidationMessage>
+                      <TiWarningOutline />
+                      Please enter a valid email address.
+                    </AuthStyles.ValidationMessage>
+                  )}
+                  <AuthStyles.EntryWrapper>
+                    <AuthStyles.EntryContainer
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      placeholder=""
+                      required
+                      autoComplete="off"
+                      aria-required="true"
+                      value={formState.fullName}
+                      data-form-type="name,full"
+                      style={getValidationStyle(fullNameValid, invalidStyle)}
+                    />
+                    <AuthStyles.Label
+                      htmlFor="fullName"
+                      style={getValidationStyle(fullNameValid, invalidStyle)}
+                    >
+                      Full name
+                    </AuthStyles.Label>
+                  </AuthStyles.EntryWrapper>
+                  {!fullNameValid && (
+                    <AuthStyles.ValidationMessage>
+                      <TiWarningOutline />
+                      Please enter a valid full name.
+                    </AuthStyles.ValidationMessage>
+                  )}
+                  <AuthStyles.EntryWrapper>
+                    <AuthStyles.EntryContainer
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name="password"
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder=""
+                      value={formState.password}
+                      autoComplete="new-password"
+                      aria-label="Password"
+                      data-form-type="password,new"
+                      style={getValidationStyle(passwordValid, invalidStyle)}
+                    />
+                    <AuthStyles.Label
+                      htmlFor="password"
+                      style={getValidationStyle(passwordValid, invalidStyle)}
+                    >
+                      Password
+                    </AuthStyles.Label>
+                    {!isMobileView && (
+                      <Popover
+                        trigger="hover"
+                        position="right"
+                        content={showPassword ? 'Hide password' : 'Show password'}
+                        showArrow={false}
+                        color="dark"
+                        padding="4px 8px"
+                      >
                         <PasswordReveal
                           onClick={() => setShowPassword(!showPassword)}
-                          onMouseEnter={handleMouseEnter}
-                          onMouseLeave={handleMouseLeave}
                           clicked={showPassword}
-                          aria-label={showPassword ? 'Hide password' : 'Show password'}
-                          disabled={loading}
+                          role="button"
+                          className="password-reveal-button"
+                          disabled={isLoading}
+                          ariaLabel={showPassword ? 'Hide password' : 'Show password'}
                         />
-                      </AuthStyles.EntryWrapper>
-                      {!isMobileView && (
-                        <Popover
-                          label={showPassword ? 'Hide password' : 'Show password'}
-                          animate={isHovered}
-                          exited={!isHovered}
-                          tooltipRef={passwordRef}
-                        />
-                      )}
-                      {!passwordValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid password.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      {errorMessage && (
-                        <AuthStyles.ErrorMessage>
-                          <TiWarningOutline />
-                          {errorMessage}
-                        </AuthStyles.ErrorMessage>
-                      )}
-                      <AuthStyles.EntryBtnWrapper>
-                        <AuthStyles.AuthBtn
-                          type="submit"
-                          data-form-type="action,register"
-                          loading={loading}
-                          tabIndex={loading || isButtonInvalid ? -1 : 0}
-                          style={{ marginTop: '10px' }}
-                          isInvalid={isButtonInvalid}
-                        >
-                          {loading ? <LoaderSpin loading={loading} /> : 'Create account'}
-                        </AuthStyles.AuthBtn>
-                      </AuthStyles.EntryBtnWrapper>
-                    </AuthStyles.FormContainer>
-                    <AuthStyles.AuthLoginLinkBox onClick={forwardLogin}>
-                      <span>Already have an account?</span>
-                      <AuthStyles.AuthLoginLink href="/login" className="create-account-button">
-                        Sign in
-                      </AuthStyles.AuthLoginLink>
-                    </AuthStyles.AuthLoginLinkBox>
-                  </>
-                )}
-              </AuthStyles.AuthCardContent>
-            </AuthStyles.AuthCard>
-          </AuthStyles.FormContainerWrapper>
-        </AuthStyles.AuthContainerWrapper>
-      )}
-    </>
+                      </Popover>
+                    )}
+                  </AuthStyles.EntryWrapper>
+                  {!passwordValid && (
+                    <AuthStyles.ValidationMessage>
+                      <TiWarningOutline />
+                      Please enter a valid password.
+                    </AuthStyles.ValidationMessage>
+                  )}
+                  {errorMessage && (
+                    <AuthStyles.ErrorMessage>
+                      <TiWarningOutline />
+                      {errorMessage}
+                    </AuthStyles.ErrorMessage>
+                  )}
+                  <AuthStyles.EntryBtnWrapper>
+                    <AuthStyles.AuthBtn
+                      type="submit"
+                      data-form-type="action,register"
+                      $isLoading={isLoading}
+                      style={{ marginTop: '10px' }}
+                      $isInvalid={isInvalid}
+                    >
+                      {isLoading ? <LoaderSpin isLoading={isLoading} /> : 'Create account'}
+                    </AuthStyles.AuthBtn>
+                  </AuthStyles.EntryBtnWrapper>
+                </AuthStyles.FormContainer>
+                <AuthStyles.AuthLoginLinkBox onClick={forwardLogin}>
+                  <span>Already have an account?</span>
+                  <AuthStyles.AuthLoginLink href="/login" className="create-account-button">
+                    Sign in
+                  </AuthStyles.AuthLoginLink>
+                </AuthStyles.AuthLoginLinkBox>
+              </>
+            )}
+          </AuthStyles.AuthCardContent>
+        </AuthStyles.AuthCard>
+      </AuthStyles.FormContainerWrapper>
+    </AuthStyles.AuthContainerWrapper>
   )
 }
 

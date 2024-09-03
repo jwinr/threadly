@@ -14,20 +14,20 @@ export async function POST(req: NextRequest) {
     console.log('Received email:', email)
 
     // Check if user already exists
-    let customer = await findUserBySub(sub)
+    let customer = await findUserBySub(sub, req)
 
-    if (customer.length > 0) {
+    if (customer) {
       const userAttributes = {
-        email: customer[0].email,
+        email: customer.email,
         family_name,
         given_name,
-        user_uuid: customer[0].user_uuid,
+        user_uuid: customer.user_uuid,
       }
 
       return NextResponse.json(
         {
           message: 'User already exists',
-          userUuid: customer[0].user_uuid,
+          userUuid: customer.user_uuid,
         },
         {
           status: 200,
@@ -41,19 +41,19 @@ export async function POST(req: NextRequest) {
       const stripeCustomer = await createStripeCustomer(email, given_name, family_name)
 
       try {
-        customer = await createUser(sub, email, family_name, given_name, stripeCustomer.id)
+        customer = await createUser(sub, email, family_name, given_name, stripeCustomer.id, req)
 
         const userAttributes = {
           email,
           family_name,
           given_name,
-          user_uuid: customer[0].user_uuid,
+          user_uuid: customer.user_uuid,
         }
 
         return NextResponse.json(
           {
             message: 'User created',
-            userUuid: customer[0].user_uuid,
+            userUuid: customer.user_uuid,
           },
           {
             status: 201,
@@ -65,19 +65,19 @@ export async function POST(req: NextRequest) {
       } catch (dbError: any) {
         if (dbError.code === '23505') {
           // Unique constraint violation
-          customer = await findUserBySub(sub)
+          customer = await findUserBySub(sub, req)
 
           const userAttributes = {
-            email: customer[0].email,
+            email: customer?.email,
             family_name,
             given_name,
-            user_uuid: customer[0].user_uuid,
+            user_uuid: customer?.user_uuid,
           }
 
           return NextResponse.json(
             {
               message: 'User already exists',
-              userUuid: customer[0].user_uuid,
+              userUuid: customer?.user_uuid,
             },
             {
               status: 200,

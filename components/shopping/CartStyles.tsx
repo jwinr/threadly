@@ -1,13 +1,10 @@
 import styled, { keyframes, css } from 'styled-components'
-import PropFilter from '@/utils/PropFilter'
 
-interface LoadingProps {
-  loading: boolean
+interface isLoadingProps {
+  $isLoading: boolean
 }
 
-const FilteredDiv = PropFilter('div')(['loading'])
-
-const loadingAnimation = keyframes`
+const isLoadingAnimation = keyframes`
   0% {
     opacity: 1;
   }
@@ -73,57 +70,57 @@ export const Header = styled.h1`
   color: var(--sc-color-title);
 `
 
-export const Subtitle = styled(FilteredDiv)<LoadingProps>`
-  background-color: ${({ loading }) => (loading ? '#d6d6d6' : 'initial')};
+export const Subtitle = styled.div<isLoadingProps>`
+  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
   border-radius: 6px;
-  min-height: ${({ loading }) => (loading ? '28px' : '20px')};
-  width: ${({ loading }) => (loading ? '300px' : 'fit-content')};
-  ${({ loading }) =>
-    loading &&
+  min-height: ${({ $isLoading }) => ($isLoading ? '28px' : '20px')};
+  width: ${({ $isLoading }) => ($isLoading ? '300px' : 'fit-content')};
+  ${({ $isLoading }) =>
+    $isLoading &&
     css`
       animation:
         enter 0.3s forwards,
-        ${loadingAnimation} 2s ease-in-out infinite;
+        ${isLoadingAnimation} 2s ease-in-out infinite;
       animation-fill-mode: forwards, infinite;
 
       @media (max-width: 768px) {
         animation:
           enter 0.3s forwards,
-          ${loadingAnimation} 2s ease-in-out infinite;
+          ${isLoadingAnimation} 2s ease-in-out infinite;
       }
     `}
 
   h1 {
-    display: ${({ loading }) => (loading ? 'none' : 'flex')};
+    display: ${({ $isLoading }) => ($isLoading ? 'none' : 'flex')};
     font-size: 19px;
     font-weight: 700;
     align-items: center;
   }
 `
 
-export const CartContainer = styled(FilteredDiv)<LoadingProps>`
+export const CartContainer = styled.div<isLoadingProps>`
   border-radius: 6px;
   margin-top: 16px;
-  background-color: ${({ loading }) => (loading ? '#d6d6d6' : 'initial')};
-  height: ${({ loading }) => (loading ? '300px' : 'initial')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
+  height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
 
-  ${({ loading }) =>
-    loading &&
+  ${({ $isLoading }) =>
+    $isLoading &&
     css`
       animation:
         enter 0.3s 0s forwards,
-        ${loadingAnimation} 2s ease-in-out infinite;
+        ${isLoadingAnimation} 2s ease-in-out infinite;
       animation-fill-mode: forwards, infinite;
 
       @media (max-width: 768px) {
         animation:
           enter-form-mobile 0.3s 0.1s forwards,
-          ${loadingAnimation} 2s ease-in-out infinite;
+          ${isLoadingAnimation} 2s ease-in-out infinite;
       }
     `}
 
-  ${({ loading }) =>
-    !loading &&
+  ${({ $isLoading }) =>
+    !$isLoading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
     `}

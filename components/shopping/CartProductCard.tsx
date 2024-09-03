@@ -237,12 +237,12 @@ interface CartProductCardProps {
     color: string
     waist: string
     length: string
-    variant_id: string
+    variant_id: number
   }
   isMobileView: boolean
   deliveryDate: string
-  removeFromCart: (variantId: string) => void
-  handleQuantityChange: (variantId: string, value: string) => void
+  removeFromCart: (variantId: number) => void
+  handleQuantityChange: (variantId: number, value: string) => void
   index: number
 }
 

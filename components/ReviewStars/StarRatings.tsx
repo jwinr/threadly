@@ -2,7 +2,7 @@ import React from 'react'
 import FilledStar from './FilledStar'
 import HalfFilledStar from './HalfFilledStar'
 import EmptyStar from './EmptyStar'
-import { Review } from '@/types/product'
+import { Review } from '@/app/types/product'
 
 interface StarRatingsProps {
   reviews: Review[] | number[] | number[][] | number

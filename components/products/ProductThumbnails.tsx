@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styled from 'styled-components'
-import { ProductImage } from '@/types/product'
+import { ProductImage } from '@/app/types/product'
 
 interface ProductThumbnailsProps {
   hoveredImage: number

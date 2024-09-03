@@ -27,24 +27,13 @@ export const validateCode = (code: string): boolean => {
   return /^\d{6}$/.test(code)
 }
 
-export const handleBlur = (
-  value: string,
-  validator: (value: string) => boolean,
-  setValid: (isValid: boolean) => void,
-): void => {
-  if (value.trim().length === 0) {
-    setValid(true)
-  } else {
-    setValid(validator(value))
-  }
-}
-
 /* Allow users to press enter to toggle the password reveal */
 export const handleKeyDown = (
   event: React.KeyboardEvent,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
   emailValid: boolean,
   passwordValid: boolean,
+  fullNameValid?: boolean,
 ): void => {
   if (event.key === 'Enter') {
     const activeElement = document.activeElement as HTMLElement
@@ -59,7 +48,13 @@ export const handleKeyDown = (
     if (isPasswordRevealButton) {
       event.preventDefault()
       setShowPassword((prev) => !prev)
-    } else if (!isForgotPasswordButton && !isCreateAccountButton && emailValid && passwordValid) {
+    } else if (
+      !isForgotPasswordButton &&
+      !isCreateAccountButton &&
+      emailValid &&
+      passwordValid &&
+      fullNameValid
+    ) {
       event.preventDefault()
       const formElement = activeElement.closest('form') as HTMLFormElement | null
       formElement?.requestSubmit()
@@ -73,4 +68,8 @@ export const splitFullName = (fullName: string): { firstName: string; lastName: 
   const firstName = parts.slice(0, -1).join(' ')
   const lastName = parts.slice(-1).join(' ')
   return { firstName, lastName }
+}
+
+export const getValidationStyle = (isValid: boolean, invalidStyle: React.CSSProperties) => {
+  return isValid ? {} : invalidStyle
 }

@@ -24,6 +24,7 @@ interface FavoritesSectionProps {
   loadMoreFavorites: () => Promise<void>
   isMobileView: boolean
   userAttributes: { sub: string }
+  favorites: boolean
 }
 
 const FavoritesWrapper = styled.div`

@@ -11,21 +11,22 @@ import React, {
 } from 'react'
 import { UserContext } from '@/context/UserContext'
 import { useToast } from '@/context/ToastContext'
+import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 
 export interface CartItem {
-  variant_id: string
+  variant_id: number
   quantity: number
   [key: string]: any
 }
 
 interface CartContextType {
   cart: CartItem[]
-  addToCart: (variantId: string, quantity?: number, isSyncing?: boolean) => Promise<void>
-  removeFromCart: (variantId: string) => Promise<void>
+  addToCart: (variantId: number, quantity?: number, isSyncing?: boolean) => Promise<void>
+  removeFromCart: (variantId: number) => Promise<void>
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>
   loadingSummary: boolean
   setLoadingSummary: React.Dispatch<React.SetStateAction<boolean>>
-  handleQuantityChange: (variantId: string, newQuantity: number) => Promise<void>
+  handleQuantityChange: (variantId: number, newQuantity: number) => Promise<void>
   clearCart: () => Promise<void>
 }
 
@@ -39,142 +40,75 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isSyncing, setIsSyncing] = useState<boolean>(false)
   const hasSyncedCart = useRef<boolean>(false)
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-  const fetchProductDetails = async (cartItems: CartItem[]): Promise<CartItem[]> => {
-    try {
-      const variantIds = cartItems.map((item) => item.variant_id)
-      const response = await fetch(`/api/cart?variantIds=${variantIds.join(',')}`, {
-        headers: {
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
-        },
-      })
-      const products = await response.json()
-      return cartItems.map((item) => ({
-        ...item,
-        ...products.find((product: any) => product.variant_id === item.variant_id),
-      }))
-    } catch (error) {
-      console.error('Error fetching product details:', error)
-      return cartItems
-    }
-  }
-
   const fetchCart = async () => {
     if (userAttributes && userAttributes.user_uuid) {
       try {
-        console.log('Fetching cart for user:', userAttributes.user_uuid)
-        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`, {
-          headers: {
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
-          },
-        })
+        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
         const data = await response.json()
-        const detailedCart = await fetchProductDetails(data)
-        setCart(detailedCart)
+        setCart(data)
       } catch (error) {
         console.error('Error fetching cart:', error)
       }
     } else {
       const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
       if (localCart.length > 0) {
-        const detailedCart = await fetchProductDetails(localCart)
-        setCart(detailedCart)
+        setCart(localCart)
       }
     }
   }
 
   const addToCart = useCallback(
-    async (variantId: string, quantity = 1, isSyncing = false) => {
+    async (variantId: number, quantity = 1, isSyncing = false) => {
       setLoadingSummary(true)
       try {
         if (userAttributes) {
-          const currentCart = await fetchCartDetails()
-          const existingItem = currentCart.find((item) => item.variant_id === variantId)
-          const currentQuantity = existingItem ? existingItem.quantity : 0
-          const newQuantity = currentQuantity + quantity
-
-          let quantityToAdd = quantity
-          if (newQuantity > 10) {
-            quantityToAdd = 10 - currentQuantity
-            if (quantityToAdd <= 0) {
-              if (!isSyncing) {
-                await delay(1000)
-                showToast("Sorry, you've reached the limit for this item", {
-                  type: 'caution',
-                })
-              }
-              return
-            }
-          }
-
           const token = await getToken()
           if (!token) {
-            throw new Error('User is not authenticated')
+            throw new Error(INVALID_JWT_TOKEN_ERROR)
           }
-
-          const body = JSON.stringify({
-            cognitoSub: userAttributes.sub,
-            variantId,
-            quantity: quantityToAdd,
-          })
 
           const response = await fetch('/api/cart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
               Authorization: `Bearer ${token}`,
             },
-            body,
+            body: JSON.stringify({
+              userId: userAttributes.user_uuid,
+              variantId,
+              quantity,
+            }),
           })
 
           if (!response.ok) {
             const errorData = await response.json()
-            console.error('Error response:', errorData)
+            console.error('Error adding to cart:', errorData)
             throw new Error(`Error adding to cart: ${errorData.message}`)
           }
 
-          await delay(1000)
           await fetchCart()
           if (!isSyncing) {
-            showToast(`Added ${quantityToAdd} item(s) to cart`, {
+            showToast(`Added ${quantity} item(s) to cart`, {
               type: 'success',
             })
           }
         } else {
           const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
           const existingItem = localCart.find((item) => item.variant_id === variantId)
-          const currentQuantity = existingItem ? existingItem.quantity : 0
-          const newQuantity = currentQuantity + quantity
-
-          let quantityToAdd = quantity
-          if (newQuantity > 10) {
-            quantityToAdd = 10 - currentQuantity
-            if (quantityToAdd <= 0) {
-              if (!isSyncing) {
-                showToast("Sorry, you've reached the limit for this item", {
-                  type: 'caution',
-                })
-              }
-              return
-            }
-          }
 
           if (existingItem) {
-            existingItem.quantity += quantityToAdd
+            existingItem.quantity += quantity
           } else {
             localCart.push({
               variant_id: variantId,
-              quantity: quantityToAdd,
+              quantity,
             })
           }
 
           localStorage.setItem('cart', JSON.stringify(localCart))
           await fetchCart()
-          await delay(1000)
           if (!isSyncing) {
-            showToast(`Added ${quantityToAdd} item(s) to cart`, {
+            showToast(`Added ${quantity} item(s) to cart`, {
               type: 'success',
             })
           }
@@ -191,41 +125,43 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     [userAttributes, fetchCart, getToken, showToast],
   )
 
-  const removeFromCart = async (variantId: string) => {
+  const removeFromCart = async (variantId: number) => {
     setLoadingSummary(true)
     try {
       if (userAttributes) {
         const token = await getToken()
         if (!token) {
-          throw new Error('User is not authenticated')
+          throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        await fetch('/api/cart', {
+        const response = await fetch('/api/cart', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            cognitoSub: userAttributes.sub,
+            userId: userAttributes.user_uuid,
             variantId,
           }),
         })
-        await delay(50)
-        fetchCart()
-        await delay(1000)
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Error removing from cart:', errorData)
+          throw new Error(`Error removing from cart: ${errorData.message}`)
+        }
+
+        await fetchCart()
         showToast('Item removed from cart', {
           type: 'success',
         })
       } else {
         const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
         const updatedCart = localCart.filter((item) => item.variant_id !== variantId)
-        await delay(1000)
-        localStorage.setItem('cart', JSON.stringify(updatedCart))
 
-        const detailedCart = await fetchProductDetails(updatedCart)
-        setCart(detailedCart)
+        localStorage.setItem('cart', JSON.stringify(updatedCart))
+        setCart(updatedCart)
 
         showToast('Removed from cart.', {
           type: 'success',
@@ -241,69 +177,51 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }
 
-  const fetchCartDetails = async (): Promise<CartItem[]> => {
+  const handleQuantityChange = async (variantId: number, newQuantity: number) => {
+    setLoadingSummary(true)
     try {
-      const response = await fetch(`/api/cart?id=${userAttributes?.user_uuid}`, {
-        headers: {
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
-        },
-      })
-      return await response.json()
-    } catch (error) {
-      console.error('Error fetching cart details:', error)
-      return []
-    }
-  }
-
-  const handleQuantityChange = async (variantId: string, newQuantity: number) => {
-    try {
-      setLoadingSummary(true)
-
-      const quantity = Number(newQuantity)
-
-      await delay(100)
-      setCart((prevCart) =>
-        prevCart.map((item) => (item.variant_id === variantId ? { ...item, quantity } : item)),
-      )
-
-      await delay(900)
-
       if (userAttributes) {
         const token = await getToken()
         if (!token) {
-          throw new Error('User is not authenticated')
+          throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        const body = JSON.stringify({
-          cognitoSub: userAttributes.sub,
-          variantId,
-          quantity: newQuantity,
-        })
-
-        await fetch('/api/cart', {
+        const response = await fetch('/api/cart', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
             Authorization: `Bearer ${token}`,
           },
-          body,
+          body: JSON.stringify({
+            userId: userAttributes.user_uuid,
+            variantId,
+            quantity: newQuantity,
+          }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Error updating quantity:', errorData)
+          throw new Error(`Error updating quantity: ${errorData.message}`)
+        }
+
+        await fetchCart()
+        showToast(`Item quantity updated to ${newQuantity}`, {
+          type: 'success',
         })
       } else {
         const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
         const updatedCart = localCart.map((item) =>
           item.variant_id === variantId ? { ...item, quantity: newQuantity } : item,
         )
+
         localStorage.setItem('cart', JSON.stringify(updatedCart))
+        setCart(updatedCart)
 
-        // Update the cart state directly after localStorage update
-        const detailedCart = await fetchProductDetails(updatedCart)
-        setCart(detailedCart)
+        showToast(`Item quantity updated to ${newQuantity}`, {
+          type: 'success',
+        })
       }
-
-      showToast(`Item quantity updated to ${newQuantity}`, {
-        type: 'success',
-      })
     } catch (error) {
       console.error('Error updating product quantity:', error)
       showToast('Failed to update product quantity', {
@@ -320,34 +238,29 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
 
-        // Fetch the current cart from the server
-        const currentServerCart = await fetchCartDetails()
-
-        for (const item of localCart) {
-          const existingItem = currentServerCart.find(
-            (cartItem) => cartItem.variant_id === item.variant_id,
-          )
-          const currentQuantity = existingItem ? existingItem.quantity : 0
-          const newTotalQuantity = currentQuantity + item.quantity
-
-          let quantityToAdd = item.quantity
-          if (newTotalQuantity > 10) {
-            quantityToAdd = 10 - currentQuantity
-          }
-
-          if (quantityToAdd > 0) {
-            await addToCart(item.variant_id, quantityToAdd, true)
-          }
+        const token = await getToken()
+        if (!token) {
+          throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
+        await fetch('/api/cart/sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ cart: localCart }),
+        })
+
         localStorage.removeItem('cart')
+        await fetchCart()
       } catch (error) {
         console.error('Error syncing cart with server:', error)
       } finally {
         setIsSyncing(false)
       }
     }
-  }, [userAttributes, isSyncing, fetchCartDetails, addToCart])
+  }, [userAttributes, isSyncing, fetchCart, getToken])
 
   const clearCart = async () => {
     setLoadingSummary(true)
@@ -355,22 +268,30 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (userAttributes) {
         const token = await getToken()
         if (!token) {
-          throw new Error('User is not authenticated')
+          throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        await fetch('/api/cart', {
+        const response = await fetch('/api/cart', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ cognitoSub: userAttributes.sub }),
+          body: JSON.stringify({ userId: userAttributes.user_uuid }),
         })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Error clearing cart:', errorData)
+          throw new Error(`Error clearing cart: ${errorData.message}`)
+        }
       } else {
         localStorage.removeItem('cart')
       }
       setCart([]) // Clear the cart state
+      showToast('Cart cleared', {
+        type: 'success',
+      })
     } catch (error) {
       console.error('Error clearing cart:', error)
       showToast('Failed to clear cart', {

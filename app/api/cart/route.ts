@@ -8,6 +8,8 @@ import {
   fetchCartItemsByVariantIds,
 } from '@/api/cartService'
 import { NextRequest, NextResponse } from 'next/server'
+import { validateCsrfToken } from '@/utils/csrf'
+import { INVALID_CSRF_TOKEN_ERROR } from '@/lib/constants'
 
 interface CartItemRequestBody {
   userId: string
@@ -15,8 +17,8 @@ interface CartItemRequestBody {
   quantity?: number
 }
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
   const userId = searchParams.get('id')
   const variantIds = searchParams.get('variantIds')
 
@@ -24,17 +26,17 @@ export async function GET(request: NextRequest) {
     let cartItems: any[] = []
 
     if (userId) {
-      const customerId = await findCustomerIdByUserUuid(userId)
-      const cartId = await findCartIdByCustomerId(customerId)
+      const customerId = await findCustomerIdByUserUuid(req, userId)
+      const cartId = await findCartIdByCustomerId(req, customerId)
 
       if (cartId === null) {
         return NextResponse.json(cartItems, { status: 200 })
       }
 
-      cartItems = await fetchCartItemsByCartId(cartId)
+      cartItems = await fetchCartItemsByCartId(req, cartId)
     } else if (variantIds) {
       const variantIdsArray = variantIds.split(',').map((id) => parseInt(id, 10))
-      cartItems = await fetchCartItemsByVariantIds(variantIdsArray)
+      cartItems = await fetchCartItemsByVariantIds(req, variantIdsArray)
     } else {
       return NextResponse.json(
         { message: 'Invalid request: Missing userId or variantIds' },
@@ -52,13 +54,37 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
-  const { userId, variantId, quantity }: CartItemRequestBody = await request.json()
+export async function POST(req: NextRequest) {
+  if (!validateCsrfToken(req)) {
+    return NextResponse.json({ error: INVALID_CSRF_TOKEN_ERROR }, { status: 403 })
+  }
+
+  const { userId, variantId, quantity }: CartItemRequestBody = await req.json()
 
   try {
-    const customerId = await findCustomerIdByUserUuid(userId)
-    const cartId = await findCartIdByCustomerId(customerId)
-    await addItemToCart(cartId, variantId, quantity || 1)
+    const customerId = await findCustomerIdByUserUuid(req, userId)
+    const cartId = await findCartIdByCustomerId(req, customerId)
+
+    // Fetch the current items in the cart
+    const currentCartItems = await fetchCartItemsByVariantIds(req, [variantId])
+
+    // Determine if the variant is already in the cart and get the current quantity
+    const currentCartItem = currentCartItems.find((item) => item.variant_id === variantId)
+    const currentQuantity = currentCartItem ? currentCartItem.quantity : 0
+
+    // Calculate the new quantity and enforce the maximum limit
+    const newQuantity = currentQuantity + (quantity || 1)
+    const MAX_QUANTITY = 10
+
+    if (newQuantity > MAX_QUANTITY) {
+      return NextResponse.json(
+        { error: `Cannot add more than ${MAX_QUANTITY} items of this product to the cart.` },
+        { status: 400 },
+      )
+    }
+
+    // Add the item to the cart using the service function
+    await addItemToCart(req, cartId, variantId, quantity || 1)
 
     return NextResponse.json({ message: 'Product added to cart' }, { status: 200 })
   } catch (error: any) {
@@ -70,14 +96,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
-  const { userId, variantId }: Pick<CartItemRequestBody, 'userId' | 'variantId'> =
-    await request.json()
+export async function DELETE(req: NextRequest) {
+  if (!validateCsrfToken(req)) {
+    return NextResponse.json({ error: INVALID_CSRF_TOKEN_ERROR }, { status: 403 })
+  }
+
+  const { userId, variantId }: Pick<CartItemRequestBody, 'userId' | 'variantId'> = await req.json()
 
   try {
-    const customerId = await findCustomerIdByUserUuid(userId)
-    const cartId = await findCartIdByCustomerId(customerId)
-    await removeItemFromCart(cartId, variantId)
+    const customerId = await findCustomerIdByUserUuid(req, userId)
+    const cartId = await findCartIdByCustomerId(req, customerId)
+    await removeItemFromCart(req, cartId, variantId)
 
     return NextResponse.json({ message: 'Item removed from cart' }, { status: 200 })
   } catch (error: any) {
@@ -89,13 +118,17 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-export async function PATCH(request: NextRequest) {
-  const { userId, variantId, quantity }: CartItemRequestBody = await request.json()
+export async function PATCH(req: NextRequest) {
+  if (!validateCsrfToken(req)) {
+    return NextResponse.json({ error: INVALID_CSRF_TOKEN_ERROR }, { status: 403 })
+  }
+
+  const { userId, variantId, quantity }: CartItemRequestBody = await req.json()
 
   try {
-    const customerId = await findCustomerIdByUserUuid(userId)
-    const cartId = await findCartIdByCustomerId(customerId)
-    await updateCartItemQuantity(cartId, variantId, quantity || 1)
+    const customerId = await findCustomerIdByUserUuid(req, userId)
+    const cartId = await findCartIdByCustomerId(req, customerId)
+    await updateCartItemQuantity(req, cartId, variantId, quantity || 1)
 
     return NextResponse.json({ message: 'Product quantity updated' }, { status: 200 })
   } catch (error: any) {

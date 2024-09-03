@@ -6,7 +6,7 @@ import Subscription from '@/public/images/icons/subscription.svg'
 import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
 import { useMobileView } from '@/context/MobileViewContext'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
-import { Product } from '@/types/product'
+import { Product } from '@/app/types/product'
 
 interface ProductInfoProps {
   product: Product

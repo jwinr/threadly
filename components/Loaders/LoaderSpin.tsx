@@ -24,12 +24,12 @@ interface LoaderSpinnerProps {
   loading: boolean
 }
 
-const LoaderSpinner = styled(PropFilter('div')(['loading']))<LoaderSpinnerProps>`
+const LoaderSpinner = styled(PropFilter('div')(['isLoading']))<LoaderSpinnerProps>`
   position: absolute;
   justify-content: center;
   align-items: center;
-  opacity: ${({ loading }) => (loading ? 1 : 0)};
-  display: ${({ loading }) => (loading ? 'flex' : 'none')};
+  opacity: ${({ isLoading }) => (isLoading ? 1 : 0)};
+  display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   transition: opacity 0.3s ease-in-out;
 
   & > div {
@@ -58,11 +58,11 @@ const InnerDiv = styled.div`
 `
 
 interface LoaderSpinProps {
-  loading: boolean
+  isLoading: boolean
 }
 
-const LoaderSpin: React.FC<LoaderSpinProps> = ({ loading }) => (
-  <LoaderSpinner loading={loading}>
+const LoaderSpin: React.FC<LoaderSpinProps> = ({ isLoading }) => (
+  <LoaderSpinner isLoading={isLoading}>
     <InnerDiv>
       <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" x="0" y="0">
         <circle

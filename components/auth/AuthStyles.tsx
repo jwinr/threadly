@@ -1,8 +1,4 @@
 import styled, { keyframes, css } from 'styled-components'
-import PropFilter from '@/utils/PropFilter'
-
-const FilteredDiv = PropFilter('div')(['shake'])
-const FilteredButton = PropFilter('button')(['loading', 'isInvalid'])
 
 /* Shared Styles */
 export const fadeIn = keyframes`
@@ -83,8 +79,8 @@ export const AuthContainerWrapper = styled.div`
 
 // Wrapper for the content inside AuthCard
 interface AuthCardContentProps {
-  authFadeIn?: boolean
-  authFadeOut?: boolean
+  $authFadeIn?: boolean
+  $authFadeOut?: boolean
 }
 
 export const AuthCardContent = styled.div<AuthCardContentProps>`
@@ -93,25 +89,25 @@ export const AuthCardContent = styled.div<AuthCardContentProps>`
   align-items: center;
   width: 100%;
   opacity: 1 !important;
-  ${(props) =>
-    props.authFadeOut &&
+  ${($authFadeOut) =>
+    $authFadeOut &&
     css`
       justify-content: center;
       position: relative;
       opacity: 1 !important; // This brings the spinner into view
       animation: ${authFadeOut} 0.3s forwards;
     `}
-  ${(props) =>
-    props.authFadeIn &&
+  ${($authFadeIn) =>
+    $authFadeIn &&
     css`
       animation: ${authFadeIn} 0.3s forwards;
     `}
 `
 
 interface AuthCardProps {
-  shake?: boolean
+  $shake?: boolean
 }
-export const AuthCard = styled(FilteredDiv)<AuthCardProps>`
+export const AuthCard = styled.div<AuthCardProps>`
   display: flex;
   flex-direction: column;
   background-color: var(--sc-color-white);
@@ -127,8 +123,8 @@ export const AuthCard = styled(FilteredDiv)<AuthCardProps>`
   overflow: hidden;
   justify-content: center;
 
-  ${(props) =>
-    props.shake &&
+  ${({ $shake }) =>
+    $shake &&
     css`
       animation: ${shake} 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     `}
@@ -170,7 +166,7 @@ export const EntryWrapper = styled.div`
 `
 
 interface EntryContainerProps {
-  loading?: boolean
+  $isLoading?: boolean
 }
 
 export const EntryContainer = styled.input<EntryContainerProps>`
@@ -195,10 +191,10 @@ export const EntryContainer = styled.input<EntryContainerProps>`
     border 0.15s ease,
     box-shadow 0.15s ease,
     color 0.15s ease;
-  cursor: ${({ loading }) => (loading ? 'default' : 'text')};
-  pointer-events: ${({ loading }) => (loading ? 'none' : 'auto')};
-  background-color: ${({ loading }) =>
-    loading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
+  cursor: ${({ $isLoading }) => ($isLoading ? 'default' : 'text')};
+  pointer-events: ${({ $isLoading }) => ($isLoading ? 'none' : 'auto')};
+  background-color: ${({ $isLoading }) =>
+    $isLoading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
 
   &:focus + label,
   &:not(:placeholder-shown) + label {
@@ -224,7 +220,7 @@ export const EntryContainer = styled.input<EntryContainerProps>`
 `
 
 interface LabelProps {
-  loading?: boolean
+  $isLoading?: boolean
 }
 
 export const Label = styled.label<LabelProps>`
@@ -247,8 +243,8 @@ export const Label = styled.label<LabelProps>`
     left: 0;
     width: 100%;
     height: 50%;
-    background-color: ${({ loading }) =>
-      loading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
+    background-color: ${({ $isLoading }) =>
+      $isLoading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
     z-index: -1;
   }
 `
@@ -268,7 +264,7 @@ export const ResetText = styled.a`
   align-content: baseline;
   font-weight: 500;
   font-size: 14px;
-  color: var(--sc-color-carnation);
+  color: var(--sc-color-text-red);
 
   &:hover {
     color: var(--sc-color-text-hover);
@@ -296,7 +292,7 @@ export const AuthLoginLinkBox = styled.div`
 export const AuthLoginLink = styled.a`
   margin: 4px;
   font-weight: 500;
-  color: var(--sc-color-carnation);
+  color: var(--sc-color-text-red);
 
   &:hover {
     color: var(--sc-color-text-hover);
@@ -309,11 +305,13 @@ export const AuthLoginLink = styled.a`
 `
 
 interface AuthBtnProps {
-  loading?: boolean
-  isInvalid?: boolean
+  $isLoading?: boolean
+  $isInvalid?: boolean
 }
 
-export const AuthBtn = styled(FilteredButton)<AuthBtnProps>`
+export const AuthBtn = styled.button.attrs<AuthBtnProps>(({ $isLoading, $isInvalid }) => ({
+  tabIndex: $isLoading || $isInvalid ? -1 : 0,
+}))<AuthBtnProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -328,22 +326,22 @@ export const AuthBtn = styled(FilteredButton)<AuthBtnProps>`
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0.12) 0px 1px 1px 0px,
-    rgb(0 116 230 / 80%) 0px 0px 0px 1px,
+    rgb(230 15 0 / 80%) 0px 0px 0px 1px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
-  background-color: var(--sc-color-button-blue);
+  background-color: var(--sc-color-carnation);
   transition: all 240ms;
-  cursor: ${({ loading, isInvalid }) => (loading || isInvalid ? 'default' : 'pointer')};
-  opacity: ${({ loading, isInvalid }) => (loading || isInvalid ? '0.5' : '1')};
-  pointer-events: ${({ loading, isInvalid }) => (loading || isInvalid ? 'none' : 'auto')};
+  cursor: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? 'default' : 'pointer')};
+  opacity: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? '0.5' : '1')};
+  pointer-events: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? 'none' : 'auto')};
 
   &:focus {
     box-shadow:
       rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(58, 151, 212, 0.36) 0px 0px 0px 4px,
       rgba(0, 0, 0, 0.12) 0px 1px 1px 0px,
-      rgb(43 121 255 / 80%) 0px 0px 0px 1px,
+      rgb(255 50 43 / 80%) 0px 0px 0px 1px,
       rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;

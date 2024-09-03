@@ -5,15 +5,15 @@ export async function POST(request: NextRequest) {
   const { username } = await request.json()
 
   if (!username) {
-    return NextResponse.json({ message: 'Username is required' }, { status: 400 })
+    return NextResponse.json({ message: 'Username or password is incorrect' }, { status: 400 })
   }
 
   try {
     const exists = await checkUsernameExists(username)
 
-    return NextResponse.json({ exists }, { status: 200 })
+    return NextResponse.json({ exists: exists ? true : false }, { status: 200 })
   } catch (error: any) {
     console.error('Error checking username:', error)
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ message: 'Username or password is incorrect' }, { status: 500 })
   }
 }

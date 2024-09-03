@@ -13,7 +13,7 @@ import ProductOverview from '@/components/Products/ProductOverview'
 import AddToCartButton from '@/components/Shopping/AddToCartButton'
 import useProductData from '@/hooks/useProductData'
 import ProductThumbnails from '@/components/Products/ProductThumbnails'
-import { Product } from '@/types/product'
+import { Product } from '@/app/types/product'
 
 const PageWrapper = styled.div`
   display: flex;

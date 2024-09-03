@@ -226,7 +226,7 @@ const AddReview: React.FC = () => {
   const descriptionRef = useRef<HTMLTextAreaElement | null>(null)
 
   const validateTitle = (title: string): boolean => {
-    const regex = /^[a-zA-Z0-9\s!@#$%^&*(),.?":{}|<>]+$/
+    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/
     if (title.length < 5) {
       setTitleErrorMessage('Title must be at least 5 characters long.')
       return false
@@ -241,7 +241,7 @@ const AddReview: React.FC = () => {
   }
 
   const validateDescription = (description: string): boolean => {
-    const regex = /^[a-zA-Z0-9\s!@#$%^&*(),.?":{}|<>]+$/
+    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/
     if (description.length < 10) {
       setDescriptionErrorMessage('Description must be at least 10 characters long.')
       return false

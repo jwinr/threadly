@@ -3,8 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@/app/*": ["./app/*"],
-      "@/types/*": ["./types/*"],
-      "@/db/*": ["./threadly-backend/lib/*"],
+      "@/types/*": ["app/types/*"],
+      "@/reducers/*": ["./reducers/*"],
       "@/components/*": ["./components/*"],
       "@/context/*": ["./context/*"],
       "@/utils/*": ["./utils/*", "./threadly-backend/utils/*"],
