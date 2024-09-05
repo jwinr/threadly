@@ -70,7 +70,7 @@ interface FavoriteItem {
 
 interface AddToFavoritesButtonProps {
   productId: string
-  productName: string
+  productName: string | undefined
 }
 
 const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
@@ -109,7 +109,7 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
       setIsAdding(true)
       setAdded(true)
       await delay(500)
-      await addFavorite(userAttributes.sub, productId)
+      await addFavorite(userAttributes.sub!, productId)
       setLoading(false)
       setTooltipContent(
         <>
@@ -125,7 +125,7 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
       setLoading(true)
       setIsAdding(false)
       await delay(200) // Slight delay to prevent UI flicker
-      await removeFavorite(userAttributes.sub, productId)
+      await removeFavorite(userAttributes.sub!, productId)
       setLoading(false)
       setAdded(false)
       setTooltipContent('Favorite to keep tabs on it')

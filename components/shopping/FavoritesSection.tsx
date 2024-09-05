@@ -23,7 +23,7 @@ interface FavoriteItem {
 interface FavoritesSectionProps {
   loadMoreFavorites: () => Promise<void>
   isMobileView: boolean
-  favorites: boolean
+  favorites: unknown
 }
 
 const FavoritesWrapper = styled.div`
@@ -282,7 +282,11 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                         </Title>
                       </TitleSection>
                       <ReviewWrapper>
-                        <StarRatings reviews={item.reviews} />
+                        <StarRatings
+                          reviews={
+                            item.reviews?.map((review) => review.rating) || []
+                          }
+                        />
                         <span>
                           {item.reviews && item.reviews.length > 0
                             ? `(${item.reviews.length} review${
@@ -294,7 +298,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                     </FavoriteDetails>
                     <FavButtonWrapper>
                       <AddToCartButton
-                        sizeVariantId={item.product_id}
+                        sizeVariantId={Number(item.product_id)}
                         quantity={1}
                         productName={item.product_name}
                       />
@@ -316,7 +320,11 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                         </Title>
                       </TitleSection>
                       <ReviewWrapper>
-                        <StarRatings reviews={item.reviews} />
+                        <StarRatings
+                          reviews={
+                            item.reviews?.map((review) => review.rating) || []
+                          }
+                        />
                         <span>
                           {item.reviews && item.reviews.length > 0
                             ? `(${item.reviews.length} review${
@@ -327,7 +335,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                       </ReviewWrapper>
                       <FavButtonWrapper>
                         <AddToCartButton
-                          sizeVariantId={item.product_id}
+                          sizeVariantId={Number(item.product_id)}
                           quantity={1}
                           productName={item.product_name}
                         />

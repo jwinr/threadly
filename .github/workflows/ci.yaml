@@ -20,14 +20,6 @@ jobs:
           submodules: true
           token: ${{ secrets.GH_PAT_TB }}
 
-      - name: Modify .gitignore
-        run: |
-          sed -i 's|^layout/navbar/Menu/|#layout/navbar/Menu/|' .gitignore
-          sed -i 's|^public/|#public/|' .gitignore
-
-      - name: Verify staged files
-        run: git ls-files --stage
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -69,11 +61,3 @@ jobs:
 
       - name: Build Application
         run: npm run build
-
-      - name: Restore .gitignore
-        run: git checkout .gitignore
-
-      - name: Cleanup Private Files
-        run: |
-          rm -rf layout/navbar/Menu/
-          rm -rf public/

@@ -115,7 +115,7 @@ const ProductInfo = styled.div`
   }
 `
 
-export const EntryWrapper = styled.div`
+const EntryWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
@@ -124,7 +124,7 @@ export const EntryWrapper = styled.div`
   margin: 5px 0;
 `
 
-export const EntryContainer = styled.input`
+const EntryContainer = styled.input`
   border: 1px solid var(--sc-color-border-gray);
   border-radius: 0.25rem;
   width: 100%;
@@ -145,7 +145,7 @@ export const EntryContainer = styled.input`
   }
 `
 
-export const Label = styled.label`
+const Label = styled.label`
   position: absolute;
   top: 50%;
   left: 10px;
@@ -200,7 +200,7 @@ const SubmitBtn = styled.button`
   }
 `
 
-export const ValidationMessage = styled.div`
+const ValidationMessage = styled.div`
   color: var(--sc-color-red-dark);
   font-size: 12px;
   align-self: flex-start;
@@ -304,11 +304,7 @@ const AddReview: React.FC = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`/api/products/${slug}/add-review`, {
-          headers: {
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
-          },
-        })
+        const response = await fetch(`/api/products/${slug}/add-review`)
         if (response.ok) {
           const data: Product = await response.json()
           setProduct(data)
@@ -360,7 +356,6 @@ const AddReview: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
         },
         body: JSON.stringify({
           title: reviewTitle,

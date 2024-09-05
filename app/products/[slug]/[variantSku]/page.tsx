@@ -67,8 +67,8 @@ function ProductDetails() {
   const isMobileView = useMobileView()
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedSizeVariantId, setSelectedSizeVariantId] = useState<
-    string | null
-  >(null)
+    string | undefined
+  >()
   const [hoveredImage, setHoveredImage] = useState<number>(0)
 
   useEffect(() => {
@@ -112,7 +112,7 @@ function ProductDetails() {
             <AddCartWrapper>
               <AddToCartButton
                 loading={loading}
-                sizeVariantId={selectedSizeVariantId!}
+                sizeVariantId={Number(selectedSizeVariantId) || 0}
                 quantity={1}
                 productName={product?.name || ''}
               />

@@ -5,6 +5,43 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import styled from 'styled-components'
 
+interface SelectedAttributes {
+  color: string
+  color_name: string
+  waist: string
+  length: string
+  size: string
+}
+
+interface SizeVariant {
+  size_variant_id: string
+  waist?: string
+  length?: string
+  size?: string
+}
+
+interface ProductVariant {
+  size: string
+  length: string
+  waist: string
+  color_sku: string
+  color: string
+  color_swatch_url: string
+  sizes: SizeVariant[]
+}
+
+interface Product {
+  slug: string
+  selectedVariant?: ProductVariant
+  variants?: ProductVariant[]
+}
+
+interface ProductAttributesProps {
+  product: Product | null
+  loading: boolean
+  onSizeVariantSelected?: (sizeVariantId: string) => void
+}
+
 const AttributeSelection = styled.div`
   margin-top: 20px;
   display: flex;
@@ -131,7 +168,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
 
     if (attributeType === 'color') {
       const selectedVariant = product?.variants?.find(
-        (variant) => variant.color_sku === value
+        (variant: { color_sku: string }) => variant.color_sku === value
       )
       if (selectedVariant) {
         router.push(`/products/${product?.slug}/${selectedVariant.color_sku}`)
@@ -213,7 +250,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
           </span>
         </h3>
         <AttributeOptions>
-          {product?.variants.map((option, index) => (
+          {product?.variants?.map((option, index) => (
             <div key={index}>
               <ColorSwatch
                 aria-label={`${option.color}${

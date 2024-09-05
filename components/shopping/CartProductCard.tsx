@@ -7,6 +7,30 @@ import ShipBox from '@/public/images/icons/shipbox.svg'
 import Select from '@/components/Elements/Select'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
 
+export interface CartProductItem {
+  product_id: number
+  product_name: string
+  product_slug: string
+  sku: string
+  product_image_url: string
+  product_price: number
+  product_sale_price?: number | null
+  color?: string
+  waist?: string
+  length?: string
+  quantity: number
+  variant_id: number
+}
+
+interface CartProductCardProps {
+  item: CartProductItem
+  isMobileView: boolean
+  deliveryDate: string
+  removeFromCart: (variantId: number) => void
+  handleQuantityChange: (variantId: number, quantity: number) => void
+  index: number
+}
+
 interface PriceProps {
   sale: boolean
 }
@@ -224,28 +248,6 @@ const Sale = styled.span`
   color: var(--sc-color-carnation);
 `
 
-interface CartProductCardProps {
-  item: {
-    product_id: string
-    product_name: string
-    product_slug: string
-    sku: string
-    product_image_url: string
-    product_price: number
-    product_sale_price?: number
-    quantity: number
-    color: string
-    waist: string
-    length: string
-    variant_id: number
-  }
-  isMobileView: boolean
-  deliveryDate: string
-  removeFromCart: (variantId: number) => void
-  handleQuantityChange: (variantId: number, value: string) => void
-  index: number
-}
-
 const CartProductCard: React.FC<CartProductCardProps> = ({
   item,
   isMobileView,
@@ -331,7 +333,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               label="Quantity"
               value={item.quantity}
               onChange={(e) =>
-                handleQuantityChange(item.variant_id, e.target.value)
+                handleQuantityChange(item.variant_id, Number(e.target.value))
               }
               title="Quantity"
             >
@@ -403,7 +405,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               label="Quantity"
               value={item.quantity}
               onChange={(e) =>
-                handleQuantityChange(item.variant_id, e.target.value)
+                handleQuantityChange(item.variant_id, Number(e.target.value))
               }
               title="Quantity"
             >

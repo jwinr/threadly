@@ -31,8 +31,8 @@ const generateBreadcrumbPart = (
   pathnames: string[],
   index: number,
   title?: string,
-  categorySlug?: string,
-  categoryName?: string
+  categorySlug?: string | '',
+  categoryName?: string | ''
 ) => {
   if (pathname === 'categories') {
     return null
@@ -123,8 +123,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
             pathnames,
             index,
             title,
-            categorySlug,
-            categoryName
+            categorySlug ?? undefined,
+            categoryName ?? undefined
           )
         )
         .slice(0, productsIndex === -1 ? pathnames.length : productsIndex + 1)}

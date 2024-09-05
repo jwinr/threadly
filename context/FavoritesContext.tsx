@@ -25,8 +25,8 @@ interface Favorite {
 
 interface FavoritesContextType {
   favorites: Favorite[]
-  addFavorite: (productId: string) => Promise<void>
-  removeFavorite: (productId: string) => Promise<void>
+  addFavorite: (userId: string, productId: string) => Promise<void>
+  removeFavorite: (userId: string, productId: string) => Promise<void>
 }
 
 // Initialize the context with a default value
@@ -84,7 +84,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
     fetchFavorites()
   }, [userAttributes])
 
-  const addFavorite = async (productId: string) => {
+  const addFavorite = async (userId: string, productId: string) => {
     if (!userAttributes?.user_uuid) {
       return
     }
@@ -93,7 +93,6 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
         },
         body: JSON.stringify({ id: userAttributes.user_uuid, productId }),
       })
@@ -106,7 +105,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
     }
   }
 
-  const removeFavorite = async (productId: string) => {
+  const removeFavorite = async (userId: string, productId: string) => {
     if (!userAttributes?.user_uuid) {
       return
     }

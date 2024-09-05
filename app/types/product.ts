@@ -1,6 +1,7 @@
 export interface VariantSize {
   /** The regular price of the product size */
   price: number
+  size_variant_id: string
   /** The sale price of the product size, if applicable */
   sale_price?: number
 }
@@ -8,6 +9,12 @@ export interface VariantSize {
 export interface ProductVariant {
   /** The sizes available for this variant */
   sizes: VariantSize[]
+  size: string
+  length: string
+  waist: string
+  color_sku: string
+  color: string
+  color_swatch_url: string
 }
 
 export interface ProductImage {
@@ -31,6 +38,7 @@ export interface Product {
   description: string
   features: ProductFeature[]
   variants?: ProductVariant[]
+  slug: string
   reviews: Review[]
   images: ProductImage[]
 }
@@ -51,4 +59,9 @@ export interface Review {
   comment: string
   userId: string
   date: string
+}
+
+export interface Attribute {
+  attribute_type: string
+  attribute_values: string[]
 }

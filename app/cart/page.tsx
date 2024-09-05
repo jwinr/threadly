@@ -201,18 +201,19 @@ const Cart: React.FC = () => {
                         <CartProductCard
                           key={item.variant_id}
                           item={{
-                            product_id: item.product_id,
-                            product_name: item.product_name,
-                            product_slug: item.product_slug,
-                            sku: item.sku,
+                            product_id: item.product_id || 0,
+                            product_name:
+                              item.product_name || 'Unknown Product',
+                            product_slug: item.product_slug || 'unknown-slug',
+                            sku: item.sku || 'unknown-sku',
                             product_image_url:
-                              item.product_image_url || '/images/default.png', // Default image
-                            product_price: item.product_price,
+                              item.product_image_url || '/images/default.png',
+                            product_price: item.product_price || 0,
                             product_sale_price: item.product_sale_price,
                             quantity: item.quantity,
                             color: item.color,
                             waist: item.waist,
-                            length: item.length,
+                            length: item.length || 'Unknown',
                             variant_id: item.variant_id,
                           }}
                           isMobileView={isMobileView}

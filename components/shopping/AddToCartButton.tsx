@@ -7,7 +7,7 @@ import Button from '@/components/Elements/Button'
 interface AddToCartButtonProps {
   sizeVariantId: number
   quantity?: number
-  productName: string
+  productName: string | undefined
   loading?: boolean
 }
 

@@ -9,6 +9,11 @@ import ProductFilters from '@/components/Products/ProductFilters'
 import Pagination from '@/components/Elements/Pagination'
 import useCategoryData from '@/hooks/useCategoryData'
 
+interface Size {
+  price: number
+  sale_price?: number
+}
+
 const animationStyles = css`
   animation: loadingAnimation 2s infinite;
 `
@@ -218,11 +223,6 @@ export default function CategoryPage() {
     }
   }, [])
 
-  /* useEffect(() => {
-    console.log("Filtered Items Length:", filteredItems.length)
-    console.log("Filtered Items:", filteredItems)
-  }, [filteredItems])*/
-
   return (
     <>
       <CategoryPageContainer>
@@ -242,7 +242,7 @@ export default function CategoryPage() {
             <ProductFilters
               inventoryItems={categoryData?.products}
               onFilterChange={handleFilterChange}
-              attributes={categoryData?.attributes}
+              attributes={categoryData?.attributes || []}
               resetFilters={resetFilters}
               filterState={{ selectedAttributes: filterState }}
               loading={loading}
@@ -252,7 +252,7 @@ export default function CategoryPage() {
               <ProductFilters
                 inventoryItems={categoryData?.products}
                 onFilterChange={handleFilterChange}
-                attributes={categoryData?.attributes}
+                attributes={categoryData?.attributes || []}
                 resetFilters={resetFilters}
                 filterState={{ selectedAttributes: filterState }}
                 loading={loading}
@@ -271,9 +271,9 @@ export default function CategoryPage() {
             console.log(item)
             return item.colors.map((color) => {
               // Using the price and sale price from the first size
-              const firstSize = color.sizes[0]
-              const price = firstSize?.price || 'Price not available'
-              const salePrice = firstSize?.sale_price || null
+              const firstSize = color.sizes[0] as Size
+              const price = firstSize.price
+              const salePrice = firstSize.sale_price
 
               return (
                 <MemoizedProductCard

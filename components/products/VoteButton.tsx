@@ -96,7 +96,7 @@ const VoteButton: React.FC<VoteButtonProps> = ({
         {type === 'upvote' ? <LiaThumbsUpSolid /> : <LiaThumbsDownSolid />}
       </ThumbsIcon>
       <Count loading={loading}>{voteCount}</Count>
-      <LoaderSpin loading={loading} />
+      <LoaderSpin isLoading={loading} />
     </Button>
   )
 }

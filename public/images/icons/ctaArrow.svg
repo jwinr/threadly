@@ -1,0 +1,10 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="10"
+  height="10"
+  viewBox="0 0 10 10"
+  aria-hidden="true"
+>
+    <path fill="none" class="HoverArrow_linePath" d="M0 5h7"></path>
+    <path fill="none" class="HoverArrow_tipPath" d="M1 1l4 4-4 4"></path>
+</svg>

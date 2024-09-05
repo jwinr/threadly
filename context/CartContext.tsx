@@ -14,9 +14,20 @@ import { useToast } from '@/context/ToastContext'
 import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 
 export interface CartItem {
+  product_stripe_sale_price_id: number
+  product_stripe_price_id: number
   variant_id: number
   quantity: number
-  [key: string]: unknown
+  product_id?: number
+  product_name?: string
+  product_slug?: string
+  sku?: string
+  product_image_url?: string
+  product_price?: number
+  product_sale_price?: number | null
+  color?: string
+  waist?: string
+  length?: string
 }
 
 interface CartContextType {
@@ -117,6 +128,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             localCart.push({
               variant_id: variantId,
               quantity,
+              product_stripe_sale_price_id: 0,
+              product_stripe_price_id: 0,
             })
           }
 

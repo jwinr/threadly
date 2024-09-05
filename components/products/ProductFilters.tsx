@@ -25,7 +25,7 @@ interface FilterState {
 }
 
 interface ProductFiltersProps {
-  inventoryItems: { price: number }[]
+  inventoryItems?: { price: number }[]
   onFilterChange: (filters: Record<string, string[] | string[]>) => void
   attributes: Attribute[]
   resetFilters: () => void
@@ -392,7 +392,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
   const availablePriceRanges = useMemo(() => {
     return predefinedPriceRanges.filter((range) =>
-      inventoryItems.some((item) => isItemInPriceRange(item, range))
+      inventoryItems?.some((item) => isItemInPriceRange(item, range))
     )
   }, [inventoryItems, isItemInPriceRange])
 

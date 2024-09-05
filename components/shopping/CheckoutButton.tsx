@@ -103,7 +103,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
       <ButtonText $loading={loading}>
         {userAttributes ? 'Checkout' : 'Sign in to check out'}
       </ButtonText>
-      <LoaderSpin loading={loading} />
+      <LoaderSpin isLoading={loading} />
     </Button>
   )
 }

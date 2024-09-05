@@ -21,13 +21,13 @@ import { CartContext } from '@/context/CartContext'
 import { UserContext } from '@/context/UserContext'
 
 interface Price {
-  product_id: string
-  stripe_price_id: string
+  product_id: number | undefined
+  stripe_price_id: number
   quantity: number
 }
 
 export default function Checkout() {
-  const { cart } = useContext(CartContext)
+  const { cart } = useContext(CartContext)!
   const { userAttributes } = useContext(UserContext)
   const router = useRouter()
   const [prices, setPrices] = useState<Price[]>([])

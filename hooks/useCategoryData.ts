@@ -1,16 +1,38 @@
 import { useEffect, useState } from 'react'
+import { Attribute } from '@/types/product'
 
 interface Filter {
   [key: string]: unknown
 }
 
+interface Size {
+  price: number
+  sale_price?: number
+}
+
+interface Color {
+  color: string
+  sizes: Size[]
+  color_variant_id: string
+  color_sku: number
+  images: Array<{ image_url: string }>
+  color_swatch_url: string
+}
+
 interface Product {
+  slug: string
+  brand: string
+  rating: number
   id: string
   name: string
+  price: number
+  colors: Color[]
 }
 
 interface CategoryData {
+  name: string
   products: Product[]
+  attributes?: Attribute[]
 }
 
 interface UseCategoryDataReturn {
@@ -32,12 +54,6 @@ const useCategoryData = (
 
   useEffect(() => {
     const fetchCategoryData = async () => {
-      if (!slug) {
-        return
-      }
-
-      setLoading(true)
-
       const filterQuery = filters
         ? `&filters=${encodeURIComponent(JSON.stringify(filters))}`
         : ''
