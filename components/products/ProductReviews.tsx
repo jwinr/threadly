@@ -121,7 +121,10 @@ const NoReviews = styled.div`
   justify-content: center;
 `
 
-const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews: initialReviews, productId }) => {
+const ProductReviews: React.FC<ProductReviewsProps> = ({
+  reviews: initialReviews,
+  productId,
+}) => {
   const { userAttributes } = useContext(UserContext)
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
@@ -147,8 +150,10 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews: initialReviews
       if (response.ok) {
         setReviews((prevReviews) =>
           prevReviews.map((review) =>
-            review.review_id === reviewId ? { ...review, ...data.updatedReview } : review,
-          ),
+            review.review_id === reviewId
+              ? { ...review, ...data.updatedReview }
+              : review
+          )
         )
       } else {
         console.error('Failed to record vote:', data.error)
@@ -208,7 +213,9 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ reviews: initialReviews
       )}
 
       {userAttributes && (
-        <WriteReviewButton onClick={handleWriteReviewClick}>Write a review</WriteReviewButton>
+        <WriteReviewButton onClick={handleWriteReviewClick}>
+          Write a review
+        </WriteReviewButton>
       )}
     </Container>
   )

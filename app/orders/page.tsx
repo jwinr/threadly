@@ -93,11 +93,14 @@ const Orders: React.FC = () => {
           if (!apiKey) {
             throw new Error('API key is missing')
           }
-          const response = await fetch(`/api/orders?cognitoSub=${userAttributes.sub}`, {
-            headers: {
-              'x-api-key': apiKey,
-            },
-          })
+          const response = await fetch(
+            `/api/orders?cognitoSub=${userAttributes.sub}`,
+            {
+              headers: {
+                'x-api-key': apiKey,
+              },
+            }
+          )
           const data = await response.json()
           setOrders(data)
         }
@@ -124,7 +127,9 @@ const Orders: React.FC = () => {
         orders.map((order) => (
           <OrderContainer key={order.order_id}>
             <OrderInfo>
-              <OrderDate>Order Date: {new Date(order.created_at).toLocaleDateString()}</OrderDate>
+              <OrderDate>
+                Order Date: {new Date(order.created_at).toLocaleDateString()}
+              </OrderDate>
               <p>{formatCurrency(order.amount_total)}</p>
               <p>Order #{order.order_id}</p>
             </OrderInfo>

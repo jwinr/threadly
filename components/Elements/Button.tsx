@@ -89,8 +89,8 @@ const ButtonWrapper = styled.button<ButtonProps>`
   font-weight: 600;
   position: relative;
   gap: 6px;
-  padding: var(--s1-padding-top) var(--s1-padding-right) var(--s1-padding-bottom)
-    var(--s1-padding-left);
+  padding: var(--s1-padding-top) var(--s1-padding-right)
+    var(--s1-padding-bottom) var(--s1-padding-left);
   box-shadow:
     var(--s1-top-shadow),
     var(--s1-keyline) 0 0 0 var(--s1-keyline-width),

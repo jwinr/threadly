@@ -1,4 +1,11 @@
-import React, { useContext, useState, useEffect, ReactNode, useRef, KeyboardEvent } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+  KeyboardEvent,
+} from 'react'
 import styled from 'styled-components'
 import { AccordionContext } from './Accordion'
 import Chevron from '@/public/images/icons/chevron-down.svg'
@@ -58,14 +65,17 @@ const ContentDiv = styled.div<{ isOpen: boolean }>`
   transition-property: transform;
   transition-duration: 300ms;
   transition-timing-function: ease;
-  transform: ${({ isOpen }) => (isOpen ? 'translateY(0px)' : 'translateY(-15px)')};
+  transform: ${({ isOpen }) =>
+    isOpen ? 'translateY(0px)' : 'translateY(-15px)'};
 `
 
 const Content = styled.div<{ isOpen: boolean }>`
   padding: 12px;
   transition: visibility 300ms ease;
   visibility: ${({ isOpen }) =>
-    isOpen ? 'visible' : 'hidden'}; // Don't allow us to tab into contents that shouldn't be visible
+    isOpen
+      ? 'visible'
+      : 'hidden'}; // Don't allow us to tab into contents that shouldn't be visible
 `
 
 const ChevronDiv = styled.div<{ isOpen: boolean }>`
@@ -104,8 +114,14 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   media,
   onChange,
 }) => {
-  const { openIndices, setOpenIndex, registerItem, getItemIndex, focusNextItem, focusPrevItem } =
-    useContext(AccordionContext)
+  const {
+    openIndices,
+    setOpenIndex,
+    registerItem,
+    getItemIndex,
+    focusNextItem,
+    focusPrevItem,
+  } = useContext(AccordionContext)
   const [isOpen, setIsOpen] = useState(defaultOpen)
   const [height, setHeight] = useState(0)
   const itemRef = useRef<number>(Math.random())
@@ -204,8 +220,8 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             <Content isOpen={isOpen} ref={contentRef}>
               {React.Children.map(children, (child) =>
                 React.isValidElement(child)
-                  ? React.cloneElement(child as React.ReactElement<any>)
-                  : child,
+                  ? React.cloneElement(child as React.ReactElement<unknown>)
+                  : child
               )}
             </Content>
           </ContentDiv>

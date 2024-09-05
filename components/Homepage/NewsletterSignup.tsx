@@ -99,7 +99,9 @@ const NewsletterSignup: React.FC = () => {
         Be the first to know the latest deals and more. We won't spam.
       </NewsletterSubtitle>
       {submitted ? (
-        <SuccessMessage>Thanks for subscribing to our newsletter!</SuccessMessage>
+        <SuccessMessage>
+          Thanks for subscribing to our newsletter!
+        </SuccessMessage>
       ) : (
         <NewsletterForm isVisible={!submitted} onSubmit={handleSubmit}>
           <NewsletterInput

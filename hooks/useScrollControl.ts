@@ -12,7 +12,8 @@ const useScrollControl = (): [boolean, (state: boolean) => void] => {
   const [isScrollDisabled, setIsScrollDisabled] = useState(false)
 
   const disableScroll = useCallback(() => {
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth
+    const scrollBarWidth =
+      window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflowY = 'hidden'
     document.body.style.paddingRight = `${scrollBarWidth}px`
     document.body.style.touchAction = 'none'

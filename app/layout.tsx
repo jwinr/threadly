@@ -28,7 +28,9 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const headersList = headers()
   const nonce = headers().get('x-nonce')
   const cookies = cookie.parse(headersList.get('cookie') || '')
-  const userAttributes = cookies.userAttributes ? JSON.parse(cookies.userAttributes) : null
+  const userAttributes = cookies.userAttributes
+    ? JSON.parse(cookies.userAttributes)
+    : null
 
   return (
     <html lang="en">

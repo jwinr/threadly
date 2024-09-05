@@ -17,7 +17,12 @@ const FilledStar: React.FC<FilledStarProps> = () => {
         {/* Filled star */}
         <use xlinkHref="#star" fill="#fed94b"></use>
         {/* Outline */}
-        <use xlinkHref="#star" fill="none" stroke="DarkGoldenRod" strokeWidth="2"></use>
+        <use
+          xlinkHref="#star"
+          fill="none"
+          stroke="DarkGoldenRod"
+          strokeWidth="2"
+        ></use>
       </svg>
     </>
   )

@@ -7,7 +7,7 @@ interface PasswordRevealProps {
   clicked: boolean
   ariaLabel: string
   className?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const Container = styled.button`

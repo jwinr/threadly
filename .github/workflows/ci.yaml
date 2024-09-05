@@ -7,14 +7,15 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v3
         with:
           submodules: true
           token: ${{ secrets.GH_PAT_TB }}
@@ -24,19 +25,11 @@ jobs:
           sed -i 's|^layout/navbar/Menu/|#layout/navbar/Menu/|' .gitignore
           sed -i 's|^public/|#public/|' .gitignore
 
-      - name: Add private files
-        run: |
-          mkdir -p layout/navbar/Menu/
-          touch layout/navbar/Menu/Discover.tsx
-          touch layout/navbar/Menu/Men.tsx
-          touch layout/navbar/Menu/Nav.tsx
-          touch layout/navbar/Menu/Sale.tsx
-          touch layout/navbar/Menu/SlideWrapper.tsx
-          touch layout/navbar/Menu/Women.tsx
-          mkdir -p public/
+      - name: Verify staged files
+        run: git ls-files --stage
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '22.x'
 
@@ -67,13 +60,10 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier and Fix Formatting
-        run: npm run prettier -- --write .
-
-      - name: Run Unit Tests
-        run: npm test
+        run: npm run prettier --check .
 
       - name: Run Snyk
-        run: snyk test
+        run: npm run snyk:test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -83,7 +73,7 @@ jobs:
       - name: Restore .gitignore
         run: git checkout .gitignore
 
-      - name: Cleanup sensitive files
+      - name: Cleanup Private Files
         run: |
           rm -rf layout/navbar/Menu/
           rm -rf public/

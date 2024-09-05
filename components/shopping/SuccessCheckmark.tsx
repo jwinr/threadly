@@ -131,7 +131,12 @@ const SuccessCheckmark: React.FC = () => (
       <CheckmarkIcon />
       <CheckmarkIcon />
       <CheckmarkIcon />
-      <CheckmarkCheck height="36" viewBox="0 0 48 36" width="48" xmlns="http://www.w3.org/2000/svg">
+      <CheckmarkCheck
+        height="36"
+        viewBox="0 0 48 36"
+        width="48"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path d="M47.248 3.9L43.906.667a2.428 2.428 0 0 0-3.344 0l-23.63 23.09-9.554-9.338a2.432 2.432 0 0 0-3.345 0L.692 17.654a2.236 2.236 0 0 0 .002 3.233l14.567 14.175c.926.894 2.42.894 3.342.01L47.248 7.128c.922-.89.922-2.34 0-3.23" />
       </CheckmarkCheck>
       <CheckmarkBack

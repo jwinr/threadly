@@ -71,7 +71,8 @@ const VoteButton: React.FC<VoteButtonProps> = ({
     setVoteCount(count)
   }, [count])
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleClick = async () => {
     if (voteType === type) {

@@ -96,13 +96,14 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
   onSizeVariantSelected,
 }) => {
   const router = useRouter()
-  const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttributes>({
-    color: '',
-    color_name: 'Select a color',
-    waist: '',
-    length: '',
-    size: '',
-  })
+  const [selectedAttributes, setSelectedAttributes] =
+    useState<SelectedAttributes>({
+      color: '',
+      color_name: 'Select a color',
+      waist: '',
+      length: '',
+      size: '',
+    })
   const [hoveredColorName, setHoveredColorName] = useState('')
 
   useEffect(() => {
@@ -117,7 +118,11 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }
   }, [product])
 
-  const handleAttributeSelection = (attributeType: string, value: string, colorName?: string) => {
+  const handleAttributeSelection = (
+    attributeType: string,
+    value: string,
+    colorName?: string
+  ) => {
     setSelectedAttributes((prevState) => ({
       ...prevState,
       [attributeType]: value,
@@ -125,7 +130,9 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }))
 
     if (attributeType === 'color') {
-      const selectedVariant = product?.variants?.find((variant) => variant.color_sku === value)
+      const selectedVariant = product?.variants?.find(
+        (variant) => variant.color_sku === value
+      )
       if (selectedVariant) {
         router.push(`/products/${product?.slug}/${selectedVariant.color_sku}`)
       }
@@ -135,8 +142,9 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
   }
 
   const availableSizes =
-    product?.variants?.find((variant) => variant.color_sku === selectedAttributes.color)?.sizes ||
-    []
+    product?.variants?.find(
+      (variant) => variant.color_sku === selectedAttributes.color
+    )?.sizes || []
 
   const handleSizeSelection = (attributeType: string, value: string) => {
     setSelectedAttributes((prevState) => ({
@@ -154,7 +162,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }
 
     const selectedVariant = product?.variants?.find(
-      (variant) => variant.color_sku === attributes.color,
+      (variant) => variant.color_sku === attributes.color
     )
 
     if (!selectedVariant) {
@@ -164,7 +172,8 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
 
     const selectedSizeVariant = selectedVariant?.sizes.find((size) => {
       return (
-        (size.waist === attributes.waist && size.length === attributes.length) ||
+        (size.waist === attributes.waist &&
+          size.length === attributes.length) ||
         size.size === attributes.size
       )
     })
@@ -199,23 +208,42 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
       <AttributeSelection>
         <h3>
           Color:{' '}
-          <span className="color-name">{hoveredColorName || selectedAttributes.color_name}</span>
+          <span className="color-name">
+            {hoveredColorName || selectedAttributes.color_name}
+          </span>
         </h3>
         <AttributeOptions>
           {product?.variants.map((option, index) => (
             <div key={index}>
               <ColorSwatch
                 aria-label={`${option.color}${
-                  selectedAttributes.color === option.color_sku ? ' currently selected' : ''
+                  selectedAttributes.color === option.color_sku
+                    ? ' currently selected'
+                    : ''
                 }`}
                 selected={selectedAttributes.color === option.color_sku}
-                onClick={() => handleAttributeSelection('color', option.color_sku, option.color)}
+                onClick={() =>
+                  handleAttributeSelection(
+                    'color',
+                    option.color_sku,
+                    option.color
+                  )
+                }
                 onMouseEnter={() => handleMouseEnter(option.color)}
                 onMouseLeave={handleMouseLeave}
-                className={selectedAttributes.color === option.color_sku ? 'selected' : ''}
+                className={
+                  selectedAttributes.color === option.color_sku
+                    ? 'selected'
+                    : ''
+                }
               >
                 {option.color_swatch_url && (
-                  <Image src={option.color_swatch_url} alt={''} width={24} height={24} />
+                  <Image
+                    src={option.color_swatch_url}
+                    alt={''}
+                    width={24}
+                    height={24}
+                  />
                 )}
               </ColorSwatch>
             </div>
@@ -235,7 +263,9 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
                   <SizeOption
                     key={index}
                     selected={selectedAttributes.waist === waistSize}
-                    onClick={() => handleSizeSelection('waist', waistSize ?? '')}
+                    onClick={() =>
+                      handleSizeSelection('waist', waistSize ?? '')
+                    }
                   >
                     {waistSize}
                   </SizeOption>
@@ -253,7 +283,9 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
                   <SizeOption
                     key={index}
                     selected={selectedAttributes.length === lengthSize}
-                    onClick={() => handleSizeSelection('length', lengthSize ?? '')}
+                    onClick={() =>
+                      handleSizeSelection('length', lengthSize ?? '')
+                    }
                   >
                     {lengthSize}
                   </SizeOption>
@@ -267,7 +299,9 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
           <AttributeOptions>
             {availableSizes
               .map((size) => size.size)
-              .filter((value, index, self) => value && self.indexOf(value) === index)
+              .filter(
+                (value, index, self) => value && self.indexOf(value) === index
+              )
               .map((genericSize, index) => (
                 <SizeOption
                   key={index}

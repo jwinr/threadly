@@ -10,12 +10,12 @@ const PopoverWrapper = styled.div<{ $fixed: boolean }>`
 `
 
 const PopoverTransitionContainer = styled.div`
-  /* Note that we're using the same values for the enter states.
-  /* This is to prevent an unpleasant scaling/opacity flicker if
-  /* the user rapidly hovers & dehovers the trigger. Instead,
-  /* we can simply start with the base styles below and then
-  /* transition to the enter classes, while the enter-done
-  /* class will prevent it from reverting to the base styles.*/
+  // Note that we're using the same values for the enter states.
+  // This is to prevent an unpleasant scaling/opacity flicker if
+  // the user rapidly hovers & dehovers the trigger. Instead,
+  // we can simply start with the base styles below and then
+  // transition to the enter classes, while the enter-done
+  // class will prevent it from reverting to the base styles.
   opacity: 0;
   transition:
     opacity 0.25s cubic-bezier(0, 1, 0.4, 1),
@@ -48,7 +48,8 @@ const PopoverTransitionContainer = styled.div`
 
 const PopoverContainer = styled.div<{ color: string; $padding: string }>`
   color: ${({ color }) => (color === 'dark' ? 'white' : 'initial')};
-  background: ${({ color }) => (color === 'dark' ? 'var(--sc-color-gray-700)' : 'white')};
+  background: ${({ color }) =>
+    color === 'dark' ? 'var(--sc-color-gray-700)' : 'white'};
   box-shadow:
     0 0 0 1px #8898aa1a,
     0 15px 35px #31315d1a,
@@ -65,7 +66,8 @@ const Arrow = styled(PopArrow)<{ position: string; offset: number }>`
   height: 9px;
 
   & svg > path {
-    color: ${({ color }) => (color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff')};
+    color: ${({ color }) =>
+      color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff'};
   }
 
   ${({ position, offset }) =>
@@ -150,71 +152,91 @@ const Popover: React.FC<PopoverProps> = ({
   }, [controlledVisible])
 
   const calculatePosition = () => {
-    if (triggerRef.current && wrapperRef.current) {
-      const triggerRect = triggerRef.current.getBoundingClientRect()
-      const wrapperRect = wrapperRef.current.getBoundingClientRect()
-      const viewportWidth = window.innerWidth
-      const viewportHeight = window.innerHeight
-
-      const scaledWidth = wrapperRect.width
-      const scaledHeight = wrapperRect.height
-
-      const scrollX = window.scrollX
-      const scrollY = window.scrollY
-
-      const arrowAdjustment = showArrow ? 10 : 5
-
-      const positions = {
-        top: {
-          top: triggerRect.top - scaledHeight - arrowAdjustment,
-          left: triggerRect.left + triggerRect.width / 2 - scaledWidth / 2,
-        },
-        bottom: {
-          top: triggerRect.bottom + arrowAdjustment + 1,
-          left: triggerRect.left + triggerRect.width / 2 - scaledWidth / 2,
-        },
-        left: {
-          top: triggerRect.top + triggerRect.height / 2 - scaledHeight / 2,
-          left: triggerRect.left - scaledWidth - arrowAdjustment,
-        },
-        right: {
-          top: triggerRect.top + triggerRect.height / 2 - scaledHeight / 2,
-          left: triggerRect.right + arrowAdjustment,
-        },
-      }
-
-      let { top, left } = positions[position]
-
-      // If not fixed, add scroll offsets
-      if (!fixed) {
-        top += window.scrollY
-        left += window.scrollX
-      }
-
-      if (top < 0) {
-        top = 10
-      }
-      if (left < 0) {
-        left = 10
-      }
-      if (top + wrapperRect.height > viewportHeight + scrollY) {
-        top = viewportHeight + scrollY - wrapperRect.height - 20
-      }
-      if (left + wrapperRect.width > viewportWidth + scrollX) {
-        left = viewportWidth + scrollX - wrapperRect.width - 20
-      }
-
-      // Calculate the arrow offset
-      let offset
-      if (position === 'top' || position === 'bottom') {
-        offset = triggerRect.left + triggerRect.width / 2 - left - wrapperRect.width / 2
-      } else {
-        offset = triggerRect.top + triggerRect.height / 2 - top - wrapperRect.height / 2
-      }
-
-      setCoords({ top, left })
-      setArrowOffset(offset)
+    if (!triggerRef.current || !wrapperRef.current) {
+      return
     }
+
+    const triggerRect = triggerRef.current.getBoundingClientRect()
+    const wrapperRect = wrapperRef.current.getBoundingClientRect()
+    const arrowAdjustment = showArrow ? 10 : 5
+
+    const baseTopPosition =
+      triggerRect.top + triggerRect.height / 2 - wrapperRect.height / 2
+    const baseLeftPosition =
+      triggerRect.left + triggerRect.width / 2 - wrapperRect.width / 2
+
+    const positions = {
+      top: {
+        top: triggerRect.top - wrapperRect.height - arrowAdjustment,
+        left: baseLeftPosition,
+      },
+      bottom: {
+        top: triggerRect.bottom + arrowAdjustment + 1,
+        left: baseLeftPosition,
+      },
+      left: {
+        top: baseTopPosition,
+        left: triggerRect.left - wrapperRect.width - arrowAdjustment,
+      },
+      right: {
+        top: baseTopPosition,
+        left: triggerRect.right + arrowAdjustment,
+      },
+    }
+
+    let { top, left } = positions[position]
+
+    // Adjust for scrolling if not fixed
+    if (!fixed) {
+      top += window.scrollY
+      left += window.scrollX
+    }
+
+    // Prevent overflow from screen edges
+    top = Math.max(
+      10,
+      Math.min(
+        top,
+        window.innerHeight + window.scrollY - wrapperRect.height - 20
+      )
+    )
+    left = Math.max(
+      10,
+      Math.min(
+        left,
+        window.innerWidth + window.scrollX - wrapperRect.width - 20
+      )
+    )
+
+    // Calculate arrow offset
+    const offset =
+      position === 'top' || position === 'bottom'
+        ? triggerRect.left +
+          triggerRect.width / 2 -
+          left -
+          wrapperRect.width / 2
+        : triggerRect.top +
+          triggerRect.height / 2 -
+          top -
+          wrapperRect.height / 2
+
+    setCoords({ top, left })
+    setArrowOffset(offset)
+  }
+
+  const isOutOfViewport = (rect: DOMRect) =>
+    rect.top < 0 ||
+    rect.left < 0 ||
+    rect.bottom > window.innerHeight ||
+    rect.right > window.innerWidth
+
+  const isClickOutside = (
+    event: MouseEvent,
+    refs: React.RefObject<HTMLElement>[]
+  ): boolean => {
+    return refs.every(
+      (ref) => ref.current && !ref.current.contains(event.target as Node)
+    )
   }
 
   useLayoutEffect(() => {
@@ -227,12 +249,7 @@ const Popover: React.FC<PopoverProps> = ({
     const handleScroll = () => {
       if (!fixed && wrapperRef.current) {
         const wrapperRect = wrapperRef.current.getBoundingClientRect()
-        if (
-          wrapperRect.top < 0 ||
-          wrapperRect.bottom > window.innerHeight ||
-          wrapperRect.left < 0 ||
-          wrapperRect.right > window.innerWidth
-        ) {
+        if (isOutOfViewport(wrapperRect)) {
           setTimeout(() => {
             setVisible(false)
           }, 250)
@@ -268,20 +285,13 @@ const Popover: React.FC<PopoverProps> = ({
 
   useLayoutEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
-      ) {
+      if (isClickOutside(event, [wrapperRef, triggerRef])) {
         setVisible(false)
       }
     }
 
     if (trigger === 'click' && visible) {
       document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
@@ -317,6 +327,9 @@ const Popover: React.FC<PopoverProps> = ({
     <>
       <div
         ref={triggerRef}
+        role="button"
+        aria-label="hidden"
+        tabIndex={-1}
         onClick={() => {
           if (trigger === 'click' && controlledVisible === undefined) {
             setVisible(!visible)
@@ -329,7 +342,7 @@ const Popover: React.FC<PopoverProps> = ({
       >
         {children}
       </div>
-      {content && content !== '' && (
+      {content && (
         <PortalWrapper>
           <PopoverWrapper
             ref={wrapperRef}
@@ -350,7 +363,9 @@ const Popover: React.FC<PopoverProps> = ({
               onEnter={calculatePosition}
             >
               <PopoverTransitionContainer ref={nodeRef}>
-                {showArrow && <Arrow position={position} offset={arrowOffset} />}
+                {showArrow && (
+                  <Arrow position={position} offset={arrowOffset} />
+                )}
                 <PopoverContainer color={color} $padding={padding}>
                   {content}
                 </PopoverContainer>

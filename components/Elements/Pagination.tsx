@@ -21,7 +21,9 @@ interface PaginationButtonProps {
   isActive: boolean
 }
 
-const PaginationButton = styled(PropFilter('button')(['isActive']))<PaginationButtonProps>`
+const PaginationButton = styled(
+  PropFilter('button')(['isActive'])
+)<PaginationButtonProps>`
   position: relative;
   border: none;
   display: flex;
@@ -151,7 +153,11 @@ interface PaginationProps {
   handlePageChange: (page: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, handlePageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  handlePageChange,
+}) => {
   useEffect(() => {
     // Scroll to the top when currentPage changes
     window.scrollTo({ top: 0 })
@@ -161,9 +167,13 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, handle
     const paginationItems = []
     for (let i = 1; i <= totalPages; i++) {
       paginationItems.push(
-        <PaginationButton key={i} onClick={() => handlePageChange(i)} isActive={i === currentPage}>
+        <PaginationButton
+          key={i}
+          onClick={() => handlePageChange(i)}
+          isActive={i === currentPage}
+        >
           {i}
-        </PaginationButton>,
+        </PaginationButton>
       )
     }
     return paginationItems
@@ -192,7 +202,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, handle
         </ArrowContainer>
       </PrevButton>
       {renderPagination()}
-      <NextButton onClick={handleNextPageChange} disabled={currentPage === totalPages}>
+      <NextButton
+        onClick={handleNextPageChange}
+        disabled={currentPage === totalPages}
+      >
         <ArrowContainer>
           {'Next '}
           <ArrowIcon direction="forward">

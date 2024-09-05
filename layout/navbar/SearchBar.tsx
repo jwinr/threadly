@@ -148,7 +148,9 @@ const SearchBar: React.FC = () => {
           type="text"
           placeholder="What can we help you find?"
           value={searchTerm}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(e.target.value)
+          }
           onFocus={handleFocus}
           onBlur={handleBlur}
           aria-label="Search for products"

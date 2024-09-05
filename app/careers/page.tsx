@@ -1,9 +1,9 @@
-import React from "react"
-import styled from "styled-components"
-import Head from "next/head"
-import Button from "@/components/Elements/Button"
-import { useToast } from "@/context/ToastContext"
-import { RiLinkedinBoxFill, RiGithubFill } from "react-icons/ri"
+import React from 'react'
+import styled from 'styled-components'
+import Head from 'next/head'
+import Button from '@/components/Elements/Button'
+import { useToast } from '@/context/ToastContext'
+import { RiLinkedinBoxFill, RiGithubFill } from 'react-icons/ri'
 
 const CareersContainer = styled.div`
   display: flex;
@@ -56,27 +56,27 @@ const ButtonContainer = styled.div`
 `
 
 const Careers: React.FC = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ""
-  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN || ""
-  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB || ""
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ''
+  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN || ''
+  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB || ''
 
   const { showToast } = useToast()
 
   const handleButtonClick = async () => {
     if (!emailString) {
-      showToast("Email not available", { type: "caution" })
+      showToast('Email not available', { type: 'caution' })
       return
     }
 
     try {
       await navigator.clipboard.writeText(emailString)
-      showToast("Email copied to clipboard", {
-        type: "success",
+      showToast('Email copied to clipboard', {
+        type: 'success',
       })
     } catch (err) {
-      console.error("Failed to copy email: ", err)
-      showToast("Failed to copy email", {
-        type: "caution",
+      console.error('Failed to copy email: ', err)
+      showToast('Failed to copy email', {
+        type: 'caution',
       })
     }
   }

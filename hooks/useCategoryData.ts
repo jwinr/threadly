@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 interface Filter {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface Product {
@@ -24,7 +24,7 @@ interface UseCategoryDataReturn {
 const useCategoryData = (
   slug: string | undefined,
   currentPage: number,
-  filters: Filter | null,
+  filters: Filter | null
 ): UseCategoryDataReturn => {
   const [categoryData, setCategoryData] = useState<CategoryData | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
@@ -38,14 +38,19 @@ const useCategoryData = (
 
       setLoading(true)
 
-      const filterQuery = filters ? `&filters=${encodeURIComponent(JSON.stringify(filters))}` : ''
+      const filterQuery = filters
+        ? `&filters=${encodeURIComponent(JSON.stringify(filters))}`
+        : ''
 
       try {
-        const response = await fetch(`/api/categories/${slug}?page=${currentPage}${filterQuery}`, {
-          headers: {
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-          },
-        })
+        const response = await fetch(
+          `/api/categories/${slug}?page=${currentPage}${filterQuery}`,
+          {
+            headers: {
+              'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+            },
+          }
+        )
 
         if (response.ok) {
           const data: CategoryData = await response.json()

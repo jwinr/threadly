@@ -8,6 +8,7 @@ import eslintComments from 'eslint-plugin-eslint-comments'
 import promise from 'eslint-plugin-promise'
 import unicorn from 'eslint-plugin-unicorn'
 import sonarjs from 'eslint-plugin-sonarjs'
+import prettierConfig from 'eslint-config-prettier'
 
 export default [
   {
@@ -37,15 +38,19 @@ export default [
       '@typescript-eslint': typescript,
       react: react,
       'jsx-a11y': jsxA11y,
-      prettier: prettier,
       'eslint-comments': eslintComments,
       promise: promise,
       unicorn: unicorn,
       sonarjs: sonarjs,
+      prettier: prettier,
     },
     rules: {
+      ...typescript.configs.recommended.rules,
+      ...prettierConfig.rules,
       '@typescript-eslint/no-unused-expressions': 'warn',
       '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      'prettier/prettier': 'error',
       'accessor-pairs': 'error',
       'array-bracket-spacing': ['error', 'never'],
       'arrow-parens': 'error',
@@ -95,17 +100,19 @@ export default [
       'sonarjs/no-duplicated-branches': 'error',
       'sonarjs/no-redundant-boolean': 'error',
       'sonarjs/prefer-immediate-return': 'error',
-      'prettier/prettier': 'error',
       'no-param-reassign': [2, { props: false }],
       'no-unused-expressions': [2, { allowShortCircuit: true }],
       'no-useless-call': 'error',
       curly: 'error',
       eqeqeq: 'error',
       'default-case': 'error',
-      'dot-notation': [2, { allowPattern: '^_*[A-Za-z0-9]+(_[A-Za-z0-9]+)+$' }],
       'no-else-return': 'off',
-      'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.tsx'] }],
+      'react/jsx-filename-extension': [
+        'warn',
+        { extensions: ['.jsx', '.tsx'] },
+      ],
       'jsx-a11y/anchor-is-valid': 'off', // Next.js-specific adjustment
+      'spaced-comment': ['error', 'always'],
       yoda: ['error', 'never'],
     },
     settings: {

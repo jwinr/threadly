@@ -44,8 +44,13 @@ interface PreviousTotals {
 
 const Cart: React.FC = () => {
   const { userAttributes } = useContext(UserContext)
-  const { cart, setCart, removeFromCart, loadingSummary, handleQuantityChange } =
-    useContext(CartContext)!
+  const {
+    cart,
+    setCart,
+    removeFromCart,
+    loadingSummary,
+    handleQuantityChange,
+  } = useContext(CartContext)!
   const [isLoading, setIsLoading] = useState(true)
   const [offset, setOffset] = useState(0)
   const isMobileView = useMobileView()
@@ -69,14 +74,16 @@ const Cart: React.FC = () => {
       }
       try {
         if (userAttributes && userAttributes.user_uuid) {
-          const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
+          const response = await fetch(
+            `/api/cart?id=${userAttributes.user_uuid}`
+          )
           const data = await response.json()
 
           setCart(
             data.map((item: CartItem) => ({
               ...item,
               quantity: item.quantity || 1,
-            })),
+            }))
           )
         } else {
           console.error('user_uuid is null or undefined')
@@ -91,7 +98,9 @@ const Cart: React.FC = () => {
 
             const detailedCart = localCart.map((item: CartItem) => ({
               ...item,
-              ...data.find((product: CartItem) => product.variant_id === item.variant_id),
+              ...data.find(
+                (product: CartItem) => product.variant_id === item.variant_id
+              ),
               quantity: item.quantity,
             }))
 
@@ -118,7 +127,7 @@ const Cart: React.FC = () => {
     }
     try {
       const response = await fetch(
-        `/api/favorites?id=${userAttributes?.user_uuid}&limit=5&offset=${newOffset}`,
+        `/api/favorites?id=${userAttributes?.user_uuid}&limit=5&offset=${newOffset}`
       )
       const data = await response.json()
       setFavorites((prevFavorites) => [...prevFavorites, ...data])
@@ -142,7 +151,10 @@ const Cart: React.FC = () => {
     const estimatedTaxes = subtotal * 0.07
     const total = subtotal + estimatedTaxes
 
-    const totalQuantity = cart.reduce((sum, item) => sum + Number(item.quantity), 0)
+    const totalQuantity = cart.reduce(
+      (sum, item) => sum + Number(item.quantity),
+      0
+    )
 
     return {
       subtotal: formatCurrency(subtotal),
@@ -193,7 +205,8 @@ const Cart: React.FC = () => {
                             product_name: item.product_name,
                             product_slug: item.product_slug,
                             sku: item.sku,
-                            product_image_url: item.product_image_url || '/images/default.png', // Default image
+                            product_image_url:
+                              item.product_image_url || '/images/default.png', // Default image
                             product_price: item.product_price,
                             product_sale_price: item.product_sale_price,
                             quantity: item.quantity,

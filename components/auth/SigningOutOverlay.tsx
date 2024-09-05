@@ -52,7 +52,7 @@ const SigningOutOverlay: React.FC<SigningOutOverlayProps> = ({ visible }) => {
   return (
     <Overlay>
       <Popup>
-        <LoaderSpin loading={visible} />
+        <LoaderSpin isLoading={visible} />
         <span>Signing out...</span>
       </Popup>
     </Overlay>

@@ -11,9 +11,12 @@ interface StarRatingsProps {
 const StarRatings: React.FC<StarRatingsProps> = ({ reviews }) => {
   // Calculate the average rating
   const averageRating = calculateAverageRating(reviews)
+
+  // Determine if reviews is an array
   const isReviewsArray = Array.isArray(reviews)
   const hasReviews = isReviewsArray && reviews.length > 0
-  const reviewCountText = hasReviews && reviews.length === 1 ? 'review' : 'reviews'
+  const reviewCountText =
+    hasReviews && reviews.length === 1 ? 'review' : 'reviews'
 
   // Calculate the number of filled and half-filled stars for the average rating
   const totalStars = 5
@@ -22,11 +25,14 @@ const StarRatings: React.FC<StarRatingsProps> = ({ reviews }) => {
 
   return (
     <div className="star-rating">
-      <span>
-        {hasReviews
-          ? `Average Rating: ${averageRating} stars out of 5, with ${reviews.length} ${reviewCountText}`
-          : "This product doesn't have any reviews"}
-      </span>
+      {hasReviews ? (
+        <span>
+          Average Rating: {averageRating.toFixed(1)} stars out of 5, with{' '}
+          {reviews.length} {reviewCountText}
+        </span>
+      ) : (
+        <span>This product doesn't have any reviews</span>
+      )}
       {[...Array(totalStars)].map((_, i) => {
         if (i < filledStars) {
           // Filled star
@@ -45,46 +51,60 @@ const StarRatings: React.FC<StarRatingsProps> = ({ reviews }) => {
           return <EmptyStar key={i} />
         }
       })}
-      {hasReviews && <span className="average-rating-text">{averageRating.toFixed(1)}</span>}
+      {hasReviews && (
+        <span className="average-rating-text">{averageRating.toFixed(1)}</span>
+      )}
     </div>
   )
 }
 
-function calculateAverageRating(reviews: Review[] | number[] | number[][] | number): number {
-  if (!Array.isArray(reviews)) {
-    if (typeof reviews === 'number') {
-      // Handle the scenario when a single rating (number) is received
-      return reviews
-    } else {
-      return 0 // Return 0 for non-array and non-number data
-    }
+function calculateAverageRating(
+  reviews: Review[] | number[] | number[][] | number
+): number {
+  // Handle single number review case
+  if (typeof reviews === 'number') {
+    return reviews
   }
 
-  if (reviews.length === 0) {
-    return 0 // Return 0 for empty array
+  // Handle when no reviews exist
+  if (!Array.isArray(reviews) || reviews.length === 0) {
+    return 0
   }
 
+  // Handle case when reviews are an array of `Review` objects
   if (typeof reviews[0] === 'object' && 'rating' in reviews[0]) {
-    // Ratings are in an array of objects format
-    const totalRating = (reviews as Review[]).reduce((sum, review) => sum + review.rating, 0)
-    const averageRating = totalRating / reviews.length
-    return averageRating
-  } else if (Array.isArray(reviews[0])) {
-    // Ratings are in an array of arrays format
-    const totalRating = (reviews as number[][]).reduce((sum, ratingsArray) => {
-      const sumRatings = ratingsArray.reduce((innerSum, rating) => innerSum + rating, 0)
-      return sum + sumRatings
-    }, 0)
-
-    // Calculate the average rating for arrays
-    const averageRating = totalRating / (reviews.length * (reviews[0] as number[]).length)
-    return averageRating
-  } else {
-    // Ratings are treated as a single array or an unknown format
-    const totalRating = (reviews as number[]).reduce((sum, rating) => sum + rating, 0)
-    const averageRating = totalRating / reviews.length
-    return averageRating
+    const totalRating = (reviews as Review[]).reduce(
+      (sum, review) => sum + review.rating,
+      0
+    )
+    return totalRating / reviews.length
   }
+
+  // Handle case when reviews are an array of arrays of numbers
+  if (Array.isArray(reviews[0])) {
+    const totalRatings = (reviews as number[][]).reduce(
+      (outerSum, ratingsArray) => {
+        const sumRatings = ratingsArray.reduce(
+          (innerSum, rating) => innerSum + rating,
+          0
+        )
+        return outerSum + sumRatings
+      },
+      0
+    )
+    const totalEntries = (reviews as number[][]).reduce(
+      (count, ratingsArray) => count + ratingsArray.length,
+      0
+    )
+    return totalRatings / totalEntries
+  }
+
+  // Handle case when reviews are a single array of numbers
+  const totalRating = (reviews as number[]).reduce(
+    (sum, rating) => sum + rating,
+    0
+  )
+  return totalRating / reviews.length
 }
 
 export default StarRatings

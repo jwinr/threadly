@@ -175,7 +175,11 @@ const SliderNav = styled.div<{ $hovered: boolean }>`
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) -42.5%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.8) -42.5%,
+      rgba(0, 0, 0, 0) 100%
+    );
     opacity: ${({ $hovered }) => ($hovered ? '0.3' : '0')};
     transition: opacity 0.25s ease;
     z-index: -1;
@@ -186,7 +190,8 @@ const SliderArrow = styled(Arrow)<{
   $direction: 'left' | 'right'
   $hovered: boolean
 }>`
-  transform: ${({ $direction }) => ($direction === 'left' ? 'none' : 'rotate(180deg)')};
+  transform: ${({ $direction }) =>
+    $direction === 'left' ? 'none' : 'rotate(180deg)'};
   margin-top: 17px;
   width: 15px;
   height: 15px;
@@ -226,7 +231,8 @@ const SliderCounter = styled.div<{ $hovered: boolean }>`
 const SliderDot = styled.div<{ $active: boolean; $hovered: boolean }>`
   width: 15%;
   height: 2px;
-  background-color: ${({ $active }) => ($active ? '#fff' : 'rgba(255, 255, 255, 0.3)')};
+  background-color: ${({ $active }) =>
+    $active ? '#fff' : 'rgba(255, 255, 255, 0.3)'};
   border: none;
   margin: 17px 4px 0px 4px;
   opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
@@ -312,8 +318,15 @@ interface ProductCardProps {
   image: { image_url: string }[]
   id: string
   swatch: string
-  allColors: any
+  allColors: ColorOption[]
   loading: boolean
+}
+
+interface ColorOption {
+  color_variant_id: string
+  color_swatch_url?: string
+  color: string
+  images: { image_url: string }[]
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -349,7 +362,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleSwatchClick = (colorVariantId: string) => {
     const selectedColor = allColors.find(
-      (colorOption: any) => colorOption.color_variant_id === colorVariantId,
+      (colorOption: ColorOption) =>
+        colorOption.color_variant_id === colorVariantId
     )
     if (selectedColor) {
       const colorImages = selectedColor.images || []
@@ -389,7 +403,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    direction: 'prev' | 'next',
+    direction: 'prev' | 'next'
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
@@ -439,7 +453,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <ImageSlider $activeIndex={activeImageIndex}>
             {variantImages.map((img, index) => (
-              <SliderImage key={index} alt={title} src={img.image_url} width={500} height={500} />
+              <SliderImage
+                key={index}
+                alt={title}
+                src={img.image_url}
+                width={500}
+                height={500}
+              />
             ))}
           </ImageSlider>
         </Link>
@@ -451,19 +471,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
             $hovered={imgHovered}
             $direction="left"
             onClick={handlePrevClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => handleKeyDown(e, 'next')}
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
+              handleKeyDown(e, 'next')
+            }
             tabIndex={0}
             role="button"
             aria-label="Previous image"
           />
           {variantImages.map((img, index) => (
-            <SliderDot $hovered={imgHovered} key={index} $active={index === activeImageIndex} />
+            <SliderDot
+              $hovered={imgHovered}
+              key={index}
+              $active={index === activeImageIndex}
+            />
           ))}
           <SliderArrow
             $hovered={hovered}
             $direction="right"
             onClick={handleNextClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => handleKeyDown(e, 'next')}
+            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
+              handleKeyDown(e, 'next')
+            }
             tabIndex={0}
             role="button"
             aria-label="Next image"
@@ -472,8 +500,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </ImageWrapper>
       <SlideWrapper>
         <Swatches $hovered={hovered}>
-          <SwatchWrapper $hovered={hovered} onMouseEnter={() => setImgHovered(false)}>
-            {allColors.map((colorOption: any) => (
+          <SwatchWrapper
+            $hovered={hovered}
+            onMouseEnter={() => setImgHovered(false)}
+          >
+            {allColors.map((colorOption: ColorOption) => (
               <SwatchButton
                 key={colorOption.color_variant_id}
                 onClick={() => handleSwatchClick(colorOption.color_variant_id)}

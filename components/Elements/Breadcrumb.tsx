@@ -32,7 +32,7 @@ const generateBreadcrumbPart = (
   index: number,
   title?: string,
   categorySlug?: string,
-  categoryName?: string,
+  categoryName?: string
 ) => {
   if (pathname === 'categories') {
     return null
@@ -41,7 +41,10 @@ const generateBreadcrumbPart = (
   if (pathname === 'products' && categorySlug && categoryName) {
     return (
       <span key={index} className="breadcrumb-part">
-        <Link href={`/categories/${categorySlug}`} aria-label={capitalizeFirstLetter(categoryName)}>
+        <Link
+          href={`/categories/${categorySlug}`}
+          aria-label={capitalizeFirstLetter(categoryName)}
+        >
           {capitalizeFirstLetter(categoryName)}
         </Link>
         {!isLast && <RiArrowDropRightLine />}
@@ -61,7 +64,10 @@ const generateBreadcrumbPart = (
 
     return (
       <span key={index} className="breadcrumb-part">
-        <Link href={`/${pathnames.slice(0, index + 1).join('/')}`} aria-label={capitalizedTitle}>
+        <Link
+          href={`/${pathnames.slice(0, index + 1).join('/')}`}
+          aria-label={capitalizedTitle}
+        >
           {capitalizedTitle}
         </Link>
         {!isLast && <RiArrowDropRightLine />}
@@ -77,7 +83,12 @@ interface BreadcrumbProps {
   loading?: boolean
 }
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ title, categoryName, categorySlug, loading }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({
+  title,
+  categoryName,
+  categorySlug,
+  loading,
+}) => {
   const isMobileView = useMobileView()
   if (isMobileView) {
     return null
@@ -113,8 +124,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ title, categoryName, categorySl
             index,
             title,
             categorySlug,
-            categoryName,
-          ),
+            categoryName
+          )
         )
         .slice(0, productsIndex === -1 ? pathnames.length : productsIndex + 1)}
     </BreadWrapper>

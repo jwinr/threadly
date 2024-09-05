@@ -45,7 +45,9 @@ const slideOut = keyframes`
   }
 `
 
-const PanelContainer = styled(PropFilter('div')(['isOpen']))<{ isOpen: boolean }>`
+const PanelContainer = styled(PropFilter('div')(['isOpen']))<{
+  isOpen: boolean
+}>`
   position: absolute;
   top: 0;
   right: 0;
@@ -178,9 +180,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Tab' && panelRef.current) {
-        const focusableElements = panelRef.current.querySelectorAll(focusableSelectors)
+        const focusableElements =
+          panelRef.current.querySelectorAll(focusableSelectors)
         const firstElement = focusableElements[0] as HTMLElement
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement
         firstFocusableElement.current = firstElement
         lastFocusableElement.current = lastElement
 
@@ -197,20 +202,21 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         }
       }
     },
-    [focusableSelectors],
+    [focusableSelectors]
   )
 
   const handleInitialFocus = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Tab' && panelRef.current) {
         e.preventDefault()
-        const focusableElements = panelRef.current.querySelectorAll(focusableSelectors)
+        const focusableElements =
+          panelRef.current.querySelectorAll(focusableSelectors)
         const firstElement = focusableElements[0] as HTMLElement
         firstElement.focus()
         document.removeEventListener('keydown', handleInitialFocus)
       }
     },
-    [focusableSelectors],
+    [focusableSelectors]
   )
 
   useEffect(() => {
@@ -230,7 +236,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         shouldRender &&
         ReactDOM.createPortal(
           <Backdrop isOpen={isOpen} onClick={onClose}>
-            <PanelContainer ref={panelRef} isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+            <PanelContainer
+              ref={panelRef}
+              isOpen={isOpen}
+              onClick={(e) => e.stopPropagation()}
+            >
               <Header>
                 <h2>All filters</h2>
               </Header>
@@ -244,7 +254,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                           id={`price-${priceRange}`}
                           label={priceRange}
                           checked={selectedPriceRanges.includes(priceRange)}
-                          onChange={() => toggleSelection('price', priceRange, true)}
+                          onChange={() =>
+                            toggleSelection('price', priceRange, true)
+                          }
                           data-type="price"
                         />
                       ))}
@@ -253,15 +265,22 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </Accordion>
                 {attributes.map((attribute, index) => (
                   <Accordion key={index}>
-                    <AccordionItem title={attribute.attribute_type} defaultOpen={false}>
+                    <AccordionItem
+                      title={attribute.attribute_type}
+                      defaultOpen={false}
+                    >
                       <div>
                         {attribute.attribute_values.map((value, valueIndex) => (
                           <Checkbox
                             key={valueIndex}
                             id={`attribute-${attribute.attribute_type}-${value}`}
                             label={value}
-                            checked={selectedAttributes[attribute.attribute_type]?.includes(value)}
-                            onChange={() => toggleSelection(attribute.attribute_type, value)}
+                            checked={selectedAttributes[
+                              attribute.attribute_type
+                            ]?.includes(value)}
+                            onChange={() =>
+                              toggleSelection(attribute.attribute_type, value)
+                            }
                             data-type={attribute.attribute_type}
                           />
                         ))}
@@ -283,12 +302,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   See results
                 </Button>
               </BottomContainer>
-              <CloseButton ref={closeButtonRef} onClick={onClose} aria-label="Close filter panel">
+              <CloseButton
+                ref={closeButtonRef}
+                onClick={onClose}
+                aria-label="Close filter panel"
+              >
                 <Cancel />
               </CloseButton>
             </PanelContainer>
           </Backdrop>,
-          document.body,
+          document.body
         )}
     </>
   )

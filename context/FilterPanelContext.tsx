@@ -1,13 +1,19 @@
 'use client'
 
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useRouter } from 'next/router'
 
 interface FilterState {
   currentPage: number
   selectedPriceRanges: string[]
   selectedAttributes: Record<string, string[]>
-  filteredItems: any[]
+  filteredItems: unknown[]
   isAttributeDropdownOpen: Record<string, boolean>
 }
 
@@ -18,7 +24,9 @@ interface FilterPanelContextType {
   setFilterState: React.Dispatch<React.SetStateAction<FilterState>>
 }
 
-const FilterPanelContext = createContext<FilterPanelContextType | undefined>(undefined)
+const FilterPanelContext = createContext<FilterPanelContextType | undefined>(
+  undefined
+)
 
 const initialState: FilterState = {
   currentPage: 1,
@@ -49,7 +57,9 @@ interface FilterPanelProviderProps {
   children: ReactNode
 }
 
-export const FilterPanelProvider: React.FC<FilterPanelProviderProps> = ({ children }) => {
+export const FilterPanelProvider: React.FC<FilterPanelProviderProps> = ({
+  children,
+}) => {
   const router = useRouter()
   const { slug } = router.query
   const [isPanelOpen, setIsPanelOpen] = useState(false)
@@ -70,7 +80,9 @@ export const FilterPanelProvider: React.FC<FilterPanelProviderProps> = ({ childr
   // Sync filter state with URL query parameters
   useEffect(() => {
     if (router.query.filters) {
-      const queryFilters = JSON.parse(decodeURIComponent(router.query.filters as string))
+      const queryFilters = JSON.parse(
+        decodeURIComponent(router.query.filters as string)
+      )
 
       setFilterState((prev) => ({
         ...prev,
@@ -81,7 +93,11 @@ export const FilterPanelProvider: React.FC<FilterPanelProviderProps> = ({ childr
 
   // Save filter state to sessionStorage whenever it changes
   useEffect(() => {
-    if (slug && typeof slug === 'string' && router.pathname.startsWith('/categories/')) {
+    if (
+      slug &&
+      typeof slug === 'string' &&
+      router.pathname.startsWith('/categories/')
+    ) {
       sessionStorage.setItem(`filterState_${slug}`, JSON.stringify(filterState))
     }
   }, [filterState, slug, router.pathname])

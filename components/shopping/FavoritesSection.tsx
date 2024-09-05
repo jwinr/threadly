@@ -9,10 +9,10 @@ import { useFavorites } from '@/context/FavoritesContext'
 
 interface FavoriteItem {
   product_id: string
-  product_slug: string
-  product_image_url: string
-  product_name: string
-  product_price: number
+  product_slug?: string
+  product_image_url?: string
+  product_name?: string
+  product_price?: number
   product_sale_price?: number
   reviews?: Array<{
     rating: number
@@ -23,7 +23,6 @@ interface FavoriteItem {
 interface FavoritesSectionProps {
   loadMoreFavorites: () => Promise<void>
   isMobileView: boolean
-  userAttributes: { sub: string }
   favorites: boolean
 }
 
@@ -225,10 +224,9 @@ const Sale = styled.span`
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({
   loadMoreFavorites,
   isMobileView,
-  userAttributes,
 }) => {
   const [showAll, setShowAll] = useState(false)
-  const { favorites, removeFavorite } = useFavorites()
+  const { favorites } = useFavorites()
 
   const handleShowAll = async () => {
     await loadMoreFavorites()
@@ -249,10 +247,13 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
             const isOnSale = !!item.product_sale_price
             return (
               <ProductCard key={item.product_id}>
-                <ImageWrapper prefetch={false} href={`/products/${item.product_slug}`}>
+                <ImageWrapper
+                  prefetch={false}
+                  href={`/products/${item.product_slug}`}
+                >
                   <Image
-                    src={item.product_image_url}
-                    alt={item.product_name}
+                    src={item.product_image_url || '/default-image.jpg'}
+                    alt={item.product_name!}
                     width={80}
                     height={80}
                   />
@@ -266,13 +267,17 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                         }`}</Price>
                         {item.product_sale_price && (
                           <span>
-                            reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                            reg{' '}
+                            <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
                           </span>
                         )}
                       </PriceWrapper>
                       {item.product_sale_price && <Sale>Sale</Sale>}
                       <TitleSection>
-                        <Title prefetch={false} href={`/products/${item.product_slug}`}>
+                        <Title
+                          prefetch={false}
+                          href={`/products/${item.product_slug}`}
+                        >
                           {item.product_name}
                         </Title>
                       </TitleSection>
@@ -303,7 +308,10 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                   <>
                     <FavoriteDetails>
                       <TitleSection>
-                        <Title prefetch={false} href={`/products/${item.product_slug}`}>
+                        <Title
+                          prefetch={false}
+                          href={`/products/${item.product_slug}`}
+                        >
                           {item.product_name}
                         </Title>
                       </TitleSection>
@@ -335,7 +343,8 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                       }`}</Price>
                       {item.product_sale_price && (
                         <span>
-                          reg <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
+                          reg{' '}
+                          <OriginalPrice>{`$${item.product_price}`}</OriginalPrice>
                         </span>
                       )}
                       {item.product_sale_price && <Sale>Sale</Sale>}

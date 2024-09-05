@@ -1,14 +1,24 @@
 'use client'
 
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 interface MobileViewContextType {
   isMobileView: boolean
 }
 
-const MobileViewContext = createContext<MobileViewContextType | undefined>(undefined)
+const MobileViewContext = createContext<MobileViewContextType | undefined>(
+  undefined
+)
 
-export const MobileViewProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const MobileViewProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [isMobileView, setIsMobileView] = useState(false)
 
   useEffect(() => {
@@ -29,7 +39,9 @@ export const MobileViewProvider: React.FC<{ children: ReactNode }> = ({ children
   }, [])
 
   return (
-    <MobileViewContext.Provider value={{ isMobileView }}>{children}</MobileViewContext.Provider>
+    <MobileViewContext.Provider value={{ isMobileView }}>
+      {children}
+    </MobileViewContext.Provider>
   )
 }
 

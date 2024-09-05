@@ -9,7 +9,7 @@ const Popover = styled(FilteredDiv)<PopoverProps>`
 where 'div' is the element and 'left' is replaced with the prop name.
 */
 
-type PropsWithChildren<P = {}> = P & { children?: ReactNode }
+type PropsWithChildren<P = { object: ReactNode }> = P & { children?: ReactNode }
 
 const e = React.createElement
 
@@ -18,18 +18,20 @@ const PropFilter =
   (whitelist: string[]) => {
     type Props = PropsWithChildren<React.ComponentPropsWithoutRef<T>>
 
-    return forwardRef<React.ElementRef<T>, Props>(({ children, ...props }, ref) => {
-      // Create a new object to avoid mutation of props directly
-      const filteredProps = { ...props } as Record<string, any>
+    return forwardRef<React.ElementRef<T>, Props>(
+      ({ children, ...props }, ref) => {
+        // Create a new object to avoid mutation of props directly
+        const filteredProps = { ...props } as Record<string, undefined>
 
-      whitelist.forEach((prop) => {
-        if (prop in filteredProps) {
-          delete filteredProps[prop]
-        }
-      })
+        whitelist.forEach((prop) => {
+          if (prop in filteredProps) {
+            delete filteredProps[prop]
+          }
+        })
 
-      return e(tag, { ref, ...filteredProps }, children)
-    })
+        return e(tag, { ref, ...filteredProps }, children)
+      }
+    )
   }
 
 export default PropFilter

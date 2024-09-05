@@ -92,9 +92,9 @@ const FeatureHighlights: React.FC = () => {
     <Container>
       <SecTitle>Why choose Threadly?</SecTitle>
       <Subtitle>
-        United in a common goal, everything we do is focused on delivering the best possible service
-        and experience to you. We call this The Threadly Difference – here’s what it looks like in
-        action.
+        United in a common goal, everything we do is focused on delivering the
+        best possible service and experience to you. We call this The Threadly
+        Difference – here’s what it looks like in action.
       </Subtitle>
       <Wrapper>
         <Column>
@@ -103,8 +103,8 @@ const FeatureHighlights: React.FC = () => {
           </Outline>
           <HeaderText>Wide Selection of Tech Products</HeaderText>
           <p>
-            Shop top-tier tech, from powerful components to essential accessories, for your custom
-            builds and upgrades.
+            Shop top-tier tech, from powerful components to essential
+            accessories, for your custom builds and upgrades.
           </p>
         </Column>
         <Divider />
@@ -114,8 +114,8 @@ const FeatureHighlights: React.FC = () => {
           </Outline>
           <HeaderText>Expert Guidance</HeaderText>
           <p>
-            Our tech experts provide personalized advice and support to help you choose and use the
-            right gear.
+            Our tech experts provide personalized advice and support to help you
+            choose and use the right gear.
           </p>
         </Column>
         <Divider />
@@ -125,8 +125,8 @@ const FeatureHighlights: React.FC = () => {
           </Outline>
           <HeaderText>Fast, free shipping</HeaderText>
           <p>
-            From mouse pads to full-sized computer cases, nearly everything ships for free — no
-            minimum purchase required.
+            From mouse pads to full-sized computer cases, nearly everything
+            ships for free — no minimum purchase required.
           </p>
         </Column>
         <Divider />
@@ -136,8 +136,8 @@ const FeatureHighlights: React.FC = () => {
           </Outline>
           <HeaderText>Latest Tech & Innovations</HeaderText>
           <p>
-            Discover the latest tech trends and innovations, from cutting-edge GPUs to the newest
-            peripherals.
+            Discover the latest tech trends and innovations, from cutting-edge
+            GPUs to the newest peripherals.
           </p>
         </Column>
       </Wrapper>

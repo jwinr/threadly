@@ -298,21 +298,31 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
           <Details>
             <PriceWrapper>
               <Price sale={isOnSale}>
-                {formatCurrency((item.product_sale_price || item.product_price) * item.quantity)}
+                {formatCurrency(
+                  (item.product_sale_price || item.product_price) *
+                    item.quantity
+                )}
               </Price>
               {item.product_sale_price && (
                 <>
                   <span>
-                    reg <OriginalPrice>{formatCurrency(item.product_price)}</OriginalPrice>
+                    reg{' '}
+                    <OriginalPrice>
+                      {formatCurrency(item.product_price)}
+                    </OriginalPrice>
                   </span>
                 </>
               )}
             </PriceWrapper>
             {item.quantity > 1 && !item.product_sale_price && (
-              <SingleItemPrice>{formatCurrency(item.product_price)} each</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_price)} each
+              </SingleItemPrice>
             )}
             {item.quantity > 1 && item.product_sale_price && (
-              <SingleItemPrice>{formatCurrency(item.product_sale_price)} each</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_sale_price)} each
+              </SingleItemPrice>
             )}
             {item.product_sale_price && <Sale>Sale</Sale>}
           </Details>
@@ -320,7 +330,9 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
             <Select
               label="Quantity"
               value={item.quantity}
-              onChange={(e) => handleQuantityChange(item.variant_id, e.target.value)}
+              onChange={(e) =>
+                handleQuantityChange(item.variant_id, e.target.value)
+              }
               title="Quantity"
             >
               {Array.from({ length: 10 }, (_, i) => (
@@ -358,21 +370,31 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
           <Details>
             <PriceWrapper>
               <Price sale={isOnSale}>
-                {formatCurrency((item.product_sale_price || item.product_price) * item.quantity)}
+                {formatCurrency(
+                  (item.product_sale_price || item.product_price) *
+                    item.quantity
+                )}
               </Price>
               {item.product_sale_price && (
                 <>
                   <span>
-                    reg <OriginalPrice>{formatCurrency(item.product_price)}</OriginalPrice>
+                    reg{' '}
+                    <OriginalPrice>
+                      {formatCurrency(item.product_price)}
+                    </OriginalPrice>
                   </span>
                 </>
               )}
             </PriceWrapper>
             {item.quantity > 1 && !item.product_sale_price && (
-              <SingleItemPrice>{formatCurrency(item.product_price)} each</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_price)} each
+              </SingleItemPrice>
             )}
             {item.quantity > 1 && item.product_sale_price && (
-              <SingleItemPrice>{formatCurrency(item.product_sale_price)} each</SingleItemPrice>
+              <SingleItemPrice>
+                {formatCurrency(item.product_sale_price)} each
+              </SingleItemPrice>
             )}
             {item.product_sale_price && <Sale>Sale</Sale>}
           </Details>
@@ -380,7 +402,9 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
             <Select
               label="Quantity"
               value={item.quantity}
-              onChange={(e) => handleQuantityChange(item.variant_id, e.target.value)}
+              onChange={(e) =>
+                handleQuantityChange(item.variant_id, e.target.value)
+              }
               title="Quantity"
             >
               {Array.from({ length: 10 }, (_, i) => (

@@ -184,7 +184,8 @@ const Footer = () => {
   const is404Page = pathname === '/404'
 
   // Render the Footer only if the route is not /login, /signup, /forgot-password or /404
-  const renderFooter = !isLoginPage && !isSignupPage && !isForgotPassPage && !is404Page
+  const renderFooter =
+    !isLoginPage && !isSignupPage && !isForgotPassPage && !is404Page
 
   return (
     <>
@@ -269,7 +270,9 @@ const Footer = () => {
             <LogoBox>
               <LogoSymbol />
             </LogoBox>
-            <CopyrightText>© Threadly, Inc. All Rights Reserved.</CopyrightText>
+            <CopyrightText>
+              © Threadly, Inc. All Rights Reserved.
+            </CopyrightText>
             <BottomLinksWrapper>
               <a href="/terms-of-service">
                 <FooterLinkBottom>

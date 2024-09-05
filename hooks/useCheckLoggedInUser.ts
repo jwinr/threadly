@@ -9,7 +9,10 @@ import { UserContext } from '@/context/UserContext'
  * @param {boolean} shouldCheck - Whether or not the check should be performed
  * @returns {boolean} - Whether the user check is still ongoing
  */
-const useCheckLoggedInUser = (timeout: number = 5000, shouldCheck: boolean = true): boolean => {
+const useCheckLoggedInUser = (
+  timeout: number = 5000,
+  shouldCheck: boolean = true
+): boolean => {
   const { userAttributes } = useContext(UserContext)
   const [checkingUser, setCheckingUser] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(true)

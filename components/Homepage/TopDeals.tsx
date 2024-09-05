@@ -134,7 +134,7 @@ interface Deal {
   image_url: string
   price: number
   discount_amount: number
-  product_id: string
+  product_id: number
 }
 
 interface TopDealsProps {
@@ -176,7 +176,10 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
       {isMobileView
         ? loveDeals.map((deal, index) => (
             <ItemContainer key={index}>
-              <Link href={`products/${deal.slug}`} aria-label={`View details of ${deal.name}`}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
                 <ImgContainer>
                   <Image
                     alt={deal.name}
@@ -188,7 +191,9 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 <DetailWrapper>
                   <Title>{deal.name}</Title>
                   <PriceContainer>
-                    <Price>${(deal.price - deal.discount_amount).toFixed(2)}</Price>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
                     <PriceText>
                       reg <OriginalPrice>${deal.price}</OriginalPrice>
                     </PriceText>
@@ -207,7 +212,10 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
           ))
         : loveDeals.map((deal, index) => (
             <ItemContainer key={index}>
-              <Link href={`products/${deal.slug}`} aria-label={`View details of ${deal.name}`}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
                 <ImgContainer>
                   <Image
                     alt={deal.name}
@@ -219,7 +227,9 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
                 <DetailWrapper>
                   <Title>{deal.name}</Title>
                   <PriceContainer>
-                    <Price>${(deal.price - deal.discount_amount).toFixed(2)}</Price>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
                     <PriceText>
                       reg <OriginalPrice>${deal.price}</OriginalPrice>
                     </PriceText>

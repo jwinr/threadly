@@ -140,37 +140,43 @@ export default function CategoryPage() {
 
   const page = parseInt(searchParams.get('page') || '1')
   const [currentPage, setCurrentPage] = useState<number>(page)
-  const [filterState, setFilterState] = useState(JSON.parse(searchParams.get('filters') || '{}'))
-  const { categoryData, loading, filteredItems, setFilteredItems, setLoading } = useCategoryData(
+  const [filterState, setFilterState] = useState(
+    JSON.parse(searchParams.get('filters') || '{}')
+  )
+  const { categoryData, loading, filteredItems } = useCategoryData(
     slug,
     currentPage,
-    filterState,
+    filterState
   )
   const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
 
   const handleFilterChange = useCallback(
-    (selectedAttributes: Record<string, any>) => {
+    (selectedAttributes: Record<string, unknown>) => {
       const filters = { ...selectedAttributes }
       const encodedFilters = encodeURIComponent(JSON.stringify(filters))
 
-      const newQuery = new URLSearchParams(searchParams as any)
+      const newQuery = new URLSearchParams(
+        searchParams as URLSearchParams | string[][]
+      )
       newQuery.set('filters', encodedFilters)
       newQuery.set('page', '1')
 
-      router.push(`${pathname}?${newQuery.toString()}`, { shallow: true })
+      router.push(`${pathname}?${newQuery.toString()}`)
     },
-    [router, pathname, searchParams],
+    [router, pathname, searchParams]
   )
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      const newQuery = new URLSearchParams(searchParams as any)
+      const newQuery = new URLSearchParams(
+        searchParams as URLSearchParams | string[][]
+      )
       newQuery.set('page', newPage.toString())
 
-      router.push(`${pathname}?${newQuery.toString()}`, { shallow: true })
+      router.push(`${pathname}?${newQuery.toString()}`)
       setCurrentPage(newPage)
     },
-    [router, pathname, searchParams],
+    [router, pathname, searchParams]
   )
 
   const paginatedItems = useMemo(() => {
@@ -186,24 +192,13 @@ export default function CategoryPage() {
   }, [filteredItems])
 
   const updateURL = useCallback(
-    (filters: Record<string, any>) => {
-      const newQuery = {
-        ...router.query,
-        filters: encodeURIComponent(JSON.stringify(filters)),
-      }
+    (filters: Record<string, unknown>) => {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set('filters', encodeURIComponent(JSON.stringify(filters)))
 
-      delete newQuery.slug
-
-      router.push(
-        {
-          pathname: `/categories/${slug}`,
-          query: newQuery,
-        },
-        undefined,
-        { shallow: true },
-      )
+      router.push(`${pathname}?${searchParams.toString()}`)
     },
-    [router, slug],
+    [router, pathname]
   )
 
   const resetFilters = useCallback(() => {
@@ -223,7 +218,7 @@ export default function CategoryPage() {
     }
   }, [])
 
-  /*useEffect(() => {
+  /* useEffect(() => {
     console.log("Filtered Items Length:", filteredItems.length)
     console.log("Filtered Items:", filteredItems)
   }, [filteredItems])*/

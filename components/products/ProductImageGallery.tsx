@@ -71,7 +71,8 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
     left: 0;
     width: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
     height: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
-    transform-origin: ${({ $zoomed }) => ($zoomed ? 'center center' : 'center center')};
+    transform-origin: ${({ $zoomed }) =>
+      $zoomed ? 'center center' : 'center center'};
     transform: ${({ $zoomed }) => ($zoomed ? 'scale(1.5)' : 'scale(1)')};
     transition: transform 0.3s ease;
     pointer-events: none;
@@ -135,7 +136,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   }
 
   const handleImageClick = (e: MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = mainImageContainerRef.current!.getBoundingClientRect()
+    const { left, top, width, height } =
+      mainImageContainerRef.current!.getBoundingClientRect()
 
     const x = ((e.clientX - left) / width) * 100
     const y = ((e.clientY - top) / height) * 100
@@ -160,7 +162,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       return
     }
 
-    const { left, top, width, height } = mainImageContainerRef.current.getBoundingClientRect()
+    const { left, top, width, height } =
+      mainImageContainerRef.current.getBoundingClientRect()
 
     const x = ((e.clientX - left) / width) * 100
     const y = ((e.clientY - top) / height) * 100
@@ -178,7 +181,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
     <>
       {isMobileView ? (
         <CarouselContainer>
-          <Swiper pagination={{ dynamicBullets: true }} modules={[Pagination]} spaceBetween={10}>
+          <Swiper
+            pagination={{ dynamicBullets: true }}
+            modules={[Pagination]}
+            spaceBetween={10}
+          >
             {product?.images.map((item, index) => (
               <SwiperSlide key={index}>
                 <Image

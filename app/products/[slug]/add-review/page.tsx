@@ -1,6 +1,13 @@
 'use client'
 
-import React, { useContext, useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  ChangeEvent,
+  FormEvent,
+} from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -218,7 +225,8 @@ const AddReview: React.FC = () => {
   const [titleValid, setTitleValid] = useState<boolean>(true)
   const [descriptionValid, setDescriptionValid] = useState<boolean>(true)
   const [titleErrorMessage, setTitleErrorMessage] = useState<string>('')
-  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState<string>('')
+  const [descriptionErrorMessage, setDescriptionErrorMessage] =
+    useState<string>('')
   const [ratingError, setRatingError] = useState<string>('')
   const [hasSubmittedReview, setHasSubmittedReview] = useState<boolean>(false)
 
@@ -243,10 +251,14 @@ const AddReview: React.FC = () => {
   const validateDescription = (description: string): boolean => {
     const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/
     if (description.length < 10) {
-      setDescriptionErrorMessage('Description must be at least 10 characters long.')
+      setDescriptionErrorMessage(
+        'Description must be at least 10 characters long.'
+      )
       return false
     } else if (description.length > 500) {
-      setDescriptionErrorMessage('Description must be no more than 500 characters long.')
+      setDescriptionErrorMessage(
+        'Description must be no more than 500 characters long.'
+      )
       return false
     } else if (!regex.test(description)) {
       setDescriptionErrorMessage('Description contains invalid characters.')
@@ -258,7 +270,7 @@ const AddReview: React.FC = () => {
   const handleBlur = (
     value: string,
     validator: (value: string) => boolean,
-    setValid: React.Dispatch<React.SetStateAction<boolean>>,
+    setValid: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     if (value.trim().length === 0) {
       setValid(true)
@@ -275,7 +287,9 @@ const AddReview: React.FC = () => {
     handleBlur(reviewText, validateDescription, setDescriptionValid)
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const onChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     const { name, value } = e.target
     if (name === 'reviewTitle') {
       setReviewTitle(value)
@@ -362,7 +376,10 @@ const AddReview: React.FC = () => {
         router.push(`/products/${slug}`)
       } else {
         const errorData = await response.json()
-        if (errorData.error === 'You have already submitted a review for this item!') {
+        if (
+          errorData.error ===
+          'You have already submitted a review for this item!'
+        ) {
           setHasSubmittedReview(true)
         }
         setError(errorData.error)
@@ -413,11 +430,19 @@ const AddReview: React.FC = () => {
                   <h4>{product.name}</h4>
                   <p>{product.description}</p>
                 </div>
-                <ReviewForm onSubmit={handleReviewSubmit} data-form-type="other">
+                <ReviewForm
+                  onSubmit={handleReviewSubmit}
+                  data-form-type="other"
+                >
                   {error && <ErrorMessage>{error}</ErrorMessage>}
                   <h2>What would you rate this product?</h2>
-                  <StarRatingSelector rating={rating} setRating={handleRatingChange} />
-                  {ratingError && <ValidationMessage>{ratingError}</ValidationMessage>}
+                  <StarRatingSelector
+                    rating={rating}
+                    setRating={handleRatingChange}
+                  />
+                  {ratingError && (
+                    <ValidationMessage>{ratingError}</ValidationMessage>
+                  )}
                   <EntryWrapper>
                     <EntryContainer
                       ref={titleRef}
@@ -431,11 +456,16 @@ const AddReview: React.FC = () => {
                       data-form-type="title,job"
                       style={!titleValid ? invalidStyle : {}}
                     />
-                    <Label htmlFor="reviewTitle" style={!titleValid ? invalidStyle : {}}>
+                    <Label
+                      htmlFor="reviewTitle"
+                      style={!titleValid ? invalidStyle : {}}
+                    >
                       Review title
                     </Label>
                   </EntryWrapper>
-                  {!titleValid && <ValidationMessage>{titleErrorMessage}</ValidationMessage>}
+                  {!titleValid && (
+                    <ValidationMessage>{titleErrorMessage}</ValidationMessage>
+                  )}
                   <EntryWrapper>
                     <EntryContainer
                       ref={descriptionRef}
@@ -449,12 +479,17 @@ const AddReview: React.FC = () => {
                       data-form-type="other"
                       style={!descriptionValid ? invalidStyle : {}}
                     />
-                    <Label htmlFor="reviewText" style={!descriptionValid ? invalidStyle : {}}>
+                    <Label
+                      htmlFor="reviewText"
+                      style={!descriptionValid ? invalidStyle : {}}
+                    >
                       Write a short description
                     </Label>
                   </EntryWrapper>
                   {!descriptionValid && (
-                    <ValidationMessage>{descriptionErrorMessage}</ValidationMessage>
+                    <ValidationMessage>
+                      {descriptionErrorMessage}
+                    </ValidationMessage>
                   )}
                   <ButtonWrapper>
                     <SubmitBtn type="button" onClick={handleCancel}>
@@ -463,7 +498,10 @@ const AddReview: React.FC = () => {
                     <SubmitBtn
                       type="submit"
                       disabled={
-                        !titleValid || !descriptionValid || hasSubmittedReview || !!ratingError
+                        !titleValid ||
+                        !descriptionValid ||
+                        hasSubmittedReview ||
+                        !!ratingError
                       }
                     >
                       Submit Review

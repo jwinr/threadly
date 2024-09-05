@@ -92,10 +92,13 @@ type CartItem = {
 }
 
 const CartIcon: React.FC = () => {
-  const { cart } = useContext(CartContext)
+  const { cart } = useContext(CartContext)!
 
   // Calculate total quantity
-  const totalQuantity = cart.reduce((sum: number, item: CartItem) => sum + Number(item.quantity), 0)
+  const totalQuantity = cart.reduce(
+    (sum: number, item: CartItem) => sum + Number(item.quantity),
+    0
+  )
 
   // Dynamically change the label based on 1 or more items
   const ariaLabel = `Cart, ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'}`

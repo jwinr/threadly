@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation'
  * @param {() => Promise<void>} fetchUserAttributes - A function to fetch user attributes if needed
  * @returns {boolean} - Whether the authentication check has been completed
  */
-const useRedirectIfAuthenticated = (fetchUserAttributes: () => Promise<void>): boolean => {
+const useRedirectIfAuthenticated = (
+  fetchUserAttributes: () => Promise<void>
+): boolean => {
   const [authChecked, setAuthChecked] = useState<boolean>(false)
   const router = useRouter()
 

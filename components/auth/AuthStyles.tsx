@@ -309,9 +309,11 @@ interface AuthBtnProps {
   $isInvalid?: boolean
 }
 
-export const AuthBtn = styled.button.attrs<AuthBtnProps>(({ $isLoading, $isInvalid }) => ({
-  tabIndex: $isLoading || $isInvalid ? -1 : 0,
-}))<AuthBtnProps>`
+export const AuthBtn = styled.button.attrs<AuthBtnProps>(
+  ({ $isLoading, $isInvalid }) => ({
+    tabIndex: $isLoading || $isInvalid ? -1 : 0,
+  })
+)<AuthBtnProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,9 +334,12 @@ export const AuthBtn = styled.button.attrs<AuthBtnProps>(({ $isLoading, $isInval
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   background-color: var(--sc-color-carnation);
   transition: all 240ms;
-  cursor: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? 'default' : 'pointer')};
-  opacity: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? '0.5' : '1')};
-  pointer-events: ${({ $isLoading, $isInvalid }) => ($isLoading || $isInvalid ? 'none' : 'auto')};
+  cursor: ${({ $isLoading, $isInvalid }) =>
+    $isLoading || $isInvalid ? 'default' : 'pointer'};
+  opacity: ${({ $isLoading, $isInvalid }) =>
+    $isLoading || $isInvalid ? '0.5' : '1'};
+  pointer-events: ${({ $isLoading, $isInvalid }) =>
+    $isLoading || $isInvalid ? 'none' : 'auto'};
 
   &:focus {
     box-shadow:

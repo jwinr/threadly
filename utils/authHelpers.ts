@@ -4,7 +4,8 @@ export const validateEmailDomain = (email: string): boolean => {
 }
 
 export const validatePassword = (password: string): boolean => {
-  const pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[!#$%&*?@^-])[\d!#$%&*?@A-Z^a-z-]{8,}$/
+  const pattern =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[!#$%&*?@^-])[\d!#$%&*?@A-Z^a-z-]{8,}$/
   return pattern.test(password)
 }
 
@@ -20,7 +21,10 @@ export const validateLastName = (family_name: string): boolean => {
 
 export const validateFullName = (fullName: string): boolean => {
   const parts = fullName.trim().split(' ')
-  return parts.length >= 2 && parts.every((part) => /^[\p{L}'][ \p{L}'-]*[\p{L}]$/u.test(part))
+  return (
+    parts.length >= 2 &&
+    parts.every((part) => /^[\p{L}'][ \p{L}'-]*[\p{L}]$/u.test(part))
+  )
 }
 
 export const validateCode = (code: string): boolean => {
@@ -33,15 +37,17 @@ export const handleKeyDown = (
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
   emailValid: boolean,
   passwordValid: boolean,
-  fullNameValid?: boolean,
+  fullNameValid?: boolean
 ): void => {
   if (event.key === 'Enter') {
     const activeElement = document.activeElement as HTMLElement
 
     const isPasswordRevealButton =
-      activeElement && activeElement.classList.contains('password-reveal-button')
+      activeElement &&
+      activeElement.classList.contains('password-reveal-button')
     const isForgotPasswordButton =
-      activeElement && activeElement.classList.contains('forgot-password-button')
+      activeElement &&
+      activeElement.classList.contains('forgot-password-button')
     const isCreateAccountButton =
       activeElement && activeElement.classList.contains('create-account-button')
 
@@ -56,13 +62,17 @@ export const handleKeyDown = (
       fullNameValid
     ) {
       event.preventDefault()
-      const formElement = activeElement.closest('form') as HTMLFormElement | null
+      const formElement = activeElement.closest(
+        'form'
+      ) as HTMLFormElement | null
       formElement?.requestSubmit()
     }
   }
 }
 
-export const splitFullName = (fullName: string): { firstName: string; lastName: string } => {
+export const splitFullName = (
+  fullName: string
+): { firstName: string; lastName: string } => {
   console.log(`splitFullName(${fullName})`)
   const parts = fullName.trim().split(' ')
   const firstName = parts.slice(0, -1).join(' ')
@@ -70,6 +80,9 @@ export const splitFullName = (fullName: string): { firstName: string; lastName: 
   return { firstName, lastName }
 }
 
-export const getValidationStyle = (isValid: boolean, invalidStyle: React.CSSProperties) => {
+export const getValidationStyle = (
+  isValid: boolean,
+  invalidStyle: React.CSSProperties
+) => {
   return isValid ? {} : invalidStyle
 }

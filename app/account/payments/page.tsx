@@ -101,7 +101,9 @@ const Payments: React.FC = () => {
   const fetchSavedPaymentMethods = async () => {
     setLoading(true)
     if (userAttributes?.stripe_customer_id) {
-      const methods = await fetchPaymentMethods(userAttributes.stripe_customer_id)
+      const methods = await fetchPaymentMethods(
+        userAttributes.stripe_customer_id
+      )
       setPaymentMethods(methods)
     }
     setLoading(false)
@@ -109,6 +111,7 @@ const Payments: React.FC = () => {
 
   const removePaymentMethod = async (methodId: string) => {
     // TODO: Implement logic to perform after removing the card
+    console.log('TODO: ', methodId)
   }
 
   return (
@@ -127,7 +130,12 @@ const Payments: React.FC = () => {
               {!loading && paymentMethods.length === 0 ? (
                 <NoSavedMethodsCard>
                   <p>No saved payment methods found.</p>
-                  <Button href="/account/payments/new" target="_self" size="medium" type="primary">
+                  <Button
+                    href="/account/payments/new"
+                    target="_self"
+                    size="medium"
+                    type="primary"
+                  >
                     Add payment card
                   </Button>
                 </NoSavedMethodsCard>
@@ -136,9 +144,14 @@ const Payments: React.FC = () => {
                   {paymentMethods.map((method) => (
                     <PaymentMethodItem key={method.id}>
                       <span>
-                        {method.card.brand.toUpperCase()} ending in {method.card.last4}
+                        {method.card.brand.toUpperCase()} ending in{' '}
+                        {method.card.last4}
                       </span>
-                      <RemoveCard onClick={() => removePaymentMethod(method.id)}>Remove</RemoveCard>
+                      <RemoveCard
+                        onClick={() => removePaymentMethod(method.id)}
+                      >
+                        Remove
+                      </RemoveCard>
                     </PaymentMethodItem>
                   ))}
                 </PaymentMethodsList>

@@ -63,8 +63,8 @@ const EmptyFavoritesSection = () => {
           </EmptyWrapper>
           <EmptyHeader>Track your favorite items</EmptyHeader>
           <span>
-            While browsing, select the heart icon on your favorite items to keep tabs on new sale
-            prices.
+            While browsing, select the heart icon on your favorite items to keep
+            tabs on new sale prices.
           </span>
         </EmptyContents>
       </EmptyFavoritesContainer>

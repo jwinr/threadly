@@ -31,9 +31,11 @@ const Button = styled.button<ButtonProps>`
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   transition: all 240ms;
-  cursor: ${({ $loading, disabled }) => ($loading || disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${({ $loading, disabled }) =>
+    $loading || disabled ? 'not-allowed' : 'pointer'};
   opacity: ${({ $loading, disabled }) => ($loading || disabled ? 0.6 : 1)};
-  pointer-events: ${({ $loading, disabled }) => ($loading || disabled ? 'none' : 'auto')};
+  pointer-events: ${({ $loading, disabled }) =>
+    $loading || disabled ? 'none' : 'auto'};
 
   &:focus {
     box-shadow:
@@ -62,7 +64,8 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
   const { showToast } = useToast()
   const { userAttributes } = useContext(UserContext)
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCheckout = useCallback(async () => {
     if (disabled) {
@@ -92,7 +95,9 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
       onClick={handleCheckout}
       $loading={loading}
       disabled={disabled}
-      aria-label={userAttributes ? 'Proceed to checkout' : 'Sign in to check out'}
+      aria-label={
+        userAttributes ? 'Proceed to checkout' : 'Sign in to check out'
+      }
       aria-disabled={disabled}
     >
       <ButtonText $loading={loading}>

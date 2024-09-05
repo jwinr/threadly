@@ -203,7 +203,10 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
       <ProductNameWrapper>
         <h1>{product?.name}</h1>
         <AddFavsWrapper>
-          <AddToFavoritesButton productId={product?.product_id} productName={product?.name} />
+          <AddToFavoritesButton
+            productId={product?.product_id}
+            productName={product?.name}
+          />
         </AddFavsWrapper>
         <ReviewWrapper>
           <StarRating reviews={product?.reviews} />
@@ -218,7 +221,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             <Price>{formatCurrency(productSalePrice)}</Price>
             {selectedSize?.sale_price && (
               <span>
-                reg <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
+                reg{' '}
+                <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
               </span>
             )}
             <ExchangeWrapper>
@@ -228,7 +232,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
               <ExchangeContent>
                 <ExchangeHeader>15-DAY FREE & EASY RETURNS</ExchangeHeader>
                 <p>
-                  If received {dayOfWeek}, the last day to return this item would be {returnDate}.
+                  If received {dayOfWeek}, the last day to return this item
+                  would be {returnDate}.
                 </p>
               </ExchangeContent>
             </ExchangeWrapper>
@@ -255,11 +260,15 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             <ExchangeContent>
               <ExchangeHeader>15-DAY FREE & EASY RETURNS</ExchangeHeader>
               <p>
-                If received {dayOfWeek}, the last day to return this item would be {returnDate}.
+                If received {dayOfWeek}, the last day to return this item would
+                be {returnDate}.
               </p>
             </ExchangeContent>
           </ExchangeWrapper>
-          <AddToFavoritesButton productId={product.product_id} productName={product.name} />
+          <AddToFavoritesButton
+            productId={product.product_id}
+            productName={product.name}
+          />
           <DateWrapper>Get it by {deliveryDate}</DateWrapper>
           <ShipWrapper>
             <StyledTruck />

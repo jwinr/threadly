@@ -9,7 +9,9 @@ interface SignOutContextType {
 
 const SignOutContext = createContext<SignOutContextType | undefined>(undefined)
 
-export const SignOutProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SignOutProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [isSigningOut, setIsSigningOut] = useState(false)
 
   return (

@@ -68,7 +68,12 @@ const BrandGrid: React.FC = () => {
       {brandsData.map((brand, index) => (
         <Wrapper key={index}>
           <ImageContainer>
-            <Image src={brand.image} width={300} height={161} alt={brand.name} />
+            <Image
+              src={brand.image}
+              width={300}
+              height={161}
+              alt={brand.name}
+            />
           </ImageContainer>
         </Wrapper>
       ))}

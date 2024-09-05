@@ -106,7 +106,7 @@ const Favorites: React.FC = () => {
         .then(() => {
           // Update the favorites state to reflect the item removal
           setFavorites((currentFavorites) =>
-            currentFavorites.filter((item) => item.product_id !== productId),
+            currentFavorites.filter((item) => item.product_id !== productId)
           )
         })
         .catch((error) => {
@@ -125,19 +125,25 @@ const Favorites: React.FC = () => {
             <Header>Your favorites</Header>
             {favorites.length === 0 ? (
               <p>
-                Your favorites are empty. <Link href="/">Continue shopping</Link>
+                Your favorites are empty.{' '}
+                <Link href="/">Continue shopping</Link>
               </p>
             ) : (
               favorites.map((product) => (
                 <ProductItem key={product.product_id}>
                   <ProductInfo>
-                    <ProductImage src={product.product_image_url} alt={product.product_name} />
+                    <ProductImage
+                      src={product.product_image_url}
+                      alt={product.product_name}
+                    />
                     <ProductDetails>
                       <h3>{product.product_name}</h3>
                       <p>{product.product_price}</p>
                     </ProductDetails>
                   </ProductInfo>
-                  <RemoveButton onClick={() => removeFromFavorites(product.product_id)}>
+                  <RemoveButton
+                    onClick={() => removeFromFavorites(product.product_id)}
+                  >
                     Remove
                   </RemoveButton>
                 </ProductItem>

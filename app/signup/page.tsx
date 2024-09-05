@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useContext, FormEvent } from 'react'
-import { signUp } from 'aws-amplify/auth'
+import { signUp, SignUpOutput } from 'aws-amplify/auth'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 import PasswordReveal from '@/components/Auth/PasswordReveal'
@@ -9,7 +9,11 @@ import LogoSymbol from '@/public/images/logo_solid.svg'
 import Popover from '@/components/Elements/Popover'
 import { CognitoErrorMessages } from '@/lib/constants'
 import * as AuthStyles from '@/components/Auth/AuthStyles'
-import { getValidationStyle, handleKeyDown, splitFullName } from '@/utils/authHelpers'
+import {
+  getValidationStyle,
+  handleKeyDown,
+  splitFullName,
+} from '@/utils/authHelpers'
 import { UserContext } from '@/context/UserContext'
 import LoaderDots from '@/components/Loaders/LoaderDots'
 import LoaderSpin from '@/components/Loaders/LoaderSpin'
@@ -25,17 +29,23 @@ const SubheaderText = styled.h1`
 `
 
 const SignUp: React.FC = () => {
-  const { formState, emailValid, passwordValid, fullNameValid, onChange, onBlur } =
-    useAuthFormValidation({
-      username: '',
-      password: '',
-      fullName: '',
-    })
+  const {
+    formState,
+    emailValid,
+    passwordValid,
+    fullNameValid,
+    onChange,
+    onBlur,
+  } = useAuthFormValidation({
+    username: '',
+    password: '',
+    fullName: '',
+  })
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
   const router = useRouter()
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [signUpResponse, setSignUpResponse] = useState<any>(null)
+  const [signUpResponse, setSignUpResponse] = useState<SignUpOutput>()
   const { fetchUserAttributes } = useContext(UserContext)
   const [shakeKey, setShakeKey] = useState<number>(0)
   const [isInvalid, setIsInvalid] = useState<boolean>(true)
@@ -44,7 +54,8 @@ const SignUp: React.FC = () => {
 
   type CognitoErrorName = keyof typeof CognitoErrorMessages
 
-  const GENERIC_ERROR_MESSAGE = 'An unexpected error occurred. Please try again later.'
+  const GENERIC_ERROR_MESSAGE =
+    'An unexpected error occurred. Please try again later.'
 
   // Check if there's already an active sign-in
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
@@ -73,11 +84,10 @@ const SignUp: React.FC = () => {
     family_name: string
   }) => {
     try {
-      const response = await fetch('/api/user/', {
+      const response = await fetch('/api/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
         },
         body: JSON.stringify(user),
       })
@@ -181,13 +191,21 @@ const SignUp: React.FC = () => {
               </>
             ) : (
               <>
-                <AuthStyles.HeaderText>Create your Threadly account</AuthStyles.HeaderText>
+                <AuthStyles.HeaderText>
+                  Create your Threadly account
+                </AuthStyles.HeaderText>
                 <AuthStyles.FormContainer
                   onSubmit={handleSignUp}
                   noValidate
                   data-form-type="register"
                   onKeyDown={(e) =>
-                    handleKeyDown(e, setShowPassword, emailValid, passwordValid, fullNameValid)
+                    handleKeyDown(
+                      e,
+                      setShowPassword,
+                      emailValid,
+                      passwordValid,
+                      fullNameValid
+                    )
                   }
                 >
                   <AuthStyles.EntryWrapper>
@@ -269,7 +287,9 @@ const SignUp: React.FC = () => {
                       <Popover
                         trigger="hover"
                         position="right"
-                        content={showPassword ? 'Hide password' : 'Show password'}
+                        content={
+                          showPassword ? 'Hide password' : 'Show password'
+                        }
                         showArrow={false}
                         color="dark"
                         padding="4px 8px"
@@ -280,7 +300,9 @@ const SignUp: React.FC = () => {
                           role="button"
                           className="password-reveal-button"
                           disabled={isLoading}
-                          ariaLabel={showPassword ? 'Hide password' : 'Show password'}
+                          ariaLabel={
+                            showPassword ? 'Hide password' : 'Show password'
+                          }
                         />
                       </Popover>
                     )}
@@ -305,13 +327,20 @@ const SignUp: React.FC = () => {
                       style={{ marginTop: '10px' }}
                       $isInvalid={isInvalid}
                     >
-                      {isLoading ? <LoaderSpin isLoading={isLoading} /> : 'Create account'}
+                      {isLoading ? (
+                        <LoaderSpin isLoading={isLoading} />
+                      ) : (
+                        'Create account'
+                      )}
                     </AuthStyles.AuthBtn>
                   </AuthStyles.EntryBtnWrapper>
                 </AuthStyles.FormContainer>
                 <AuthStyles.AuthLoginLinkBox onClick={forwardLogin}>
                   <span>Already have an account?</span>
-                  <AuthStyles.AuthLoginLink href="/login" className="create-account-button">
+                  <AuthStyles.AuthLoginLink
+                    href="/login"
+                    className="create-account-button"
+                  >
                     Sign in
                   </AuthStyles.AuthLoginLink>
                 </AuthStyles.AuthLoginLinkBox>

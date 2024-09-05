@@ -32,12 +32,12 @@ function ShippingInfo(): ShippingInfoReturn {
   const [returnDate, setReturnDate] = useState<string>('')
 
   useEffect(() => {
-    /*const fetchUserLocation = async () => {
+    /* const fetchUserLocation = async () => {
       const userLocation = await LocationProvider();
       if (userLocation && userLocation.postal) {
         setZipCode(userLocation.postal);
       }
-    }*/
+    } */
 
     const calculateDeliveryDate = () => {
       const today = new Date()
@@ -51,16 +51,25 @@ function ShippingInfo(): ShippingInfoReturn {
       }
       const formattedDeliveryDate = calculatedDeliveryDate.toLocaleDateString(
         'en-US',
-        deliveryOptions,
+        deliveryOptions
       )
 
       const dayOfWeekOption: Intl.DateTimeFormatOptions = { weekday: 'long' }
-      const formattedDayOfWeek = calculatedDeliveryDate.toLocaleDateString('en-US', dayOfWeekOption)
+      const formattedDayOfWeek = calculatedDeliveryDate.toLocaleDateString(
+        'en-US',
+        dayOfWeekOption
+      )
 
-      const returnOptions: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' }
+      const returnOptions: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        day: 'numeric',
+      }
       const returnDate = new Date(calculatedDeliveryDate)
       returnDate.setDate(returnDate.getDate() + 15) // Add 15 days including non-business days
-      const formattedReturnDate = returnDate.toLocaleDateString('en-US', returnOptions)
+      const formattedReturnDate = returnDate.toLocaleDateString(
+        'en-US',
+        returnOptions
+      )
 
       setDayOfWeek(formattedDayOfWeek)
       setDeliveryDate(formattedDeliveryDate)

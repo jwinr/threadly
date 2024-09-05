@@ -20,8 +20,8 @@ const ActiveFilter = styled.button`
   font-weight: 600;
   color: #596171;
   height: 42px;
-  padding: var(--s1-padding-top) var(--s1-padding-right) var(--s1-padding-bottom)
-    var(--s1-padding-left);
+  padding: var(--s1-padding-top) var(--s1-padding-right)
+    var(--s1-padding-bottom) var(--s1-padding-left);
   position: relative;
   border-radius: 25px;
   align-items: center;
@@ -114,7 +114,10 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
     })
   })
 
-  const handleRemoveFilter = (filter: Filter, e: React.MouseEvent<SVGElement>) => {
+  const handleRemoveFilter = (
+    filter: Filter,
+    e: React.MouseEvent<SVGElement>
+  ) => {
     e.stopPropagation()
     removeFilter(filter.type, filter.value, filter.isPrice)
   }

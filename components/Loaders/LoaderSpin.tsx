@@ -21,10 +21,12 @@ const spinner = keyframes`
 `
 
 interface LoaderSpinnerProps {
-  loading: boolean
+  isLoading: boolean
 }
 
-const LoaderSpinner = styled(PropFilter('div')(['isLoading']))<LoaderSpinnerProps>`
+const LoaderSpinner = styled(
+  PropFilter('div')(['isLoading'])
+)<LoaderSpinnerProps>`
   position: absolute;
   justify-content: center;
   align-items: center;

@@ -144,10 +144,15 @@ const Toast: React.FC<ToastProps> = ({
   }
 
   return (
-    <ToastContainer $isVisible={isVisible} style={{ bottom: `${20 + index * 60}px` }}>
+    <ToastContainer
+      $isVisible={isVisible}
+      style={{ bottom: `${20 + index * 60}px` }}
+    >
       <IconContainer>{renderIcon()}</IconContainer>
       {message}
-      {action && <ActionButton onClick={handleActionClick}>{action}</ActionButton>}
+      {action && (
+        <ActionButton onClick={handleActionClick}>{action}</ActionButton>
+      )}
     </ToastContainer>
   )
 }

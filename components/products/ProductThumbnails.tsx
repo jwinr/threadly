@@ -60,19 +60,26 @@ const ProductThumbnails: React.FC<ProductThumbnailsProps> = ({
 
   return (
     <AdditionalImageContainer>
-      {images.map((item: { image_url: string; alt_text: string }, index: number) => (
-        <AdditionalImageThumbnail
-          key={index}
-          className={hoveredImage === index ? 'additional-image-hovered' : ''}
-          onMouseOver={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            onThumbnailHover(index)
-          }}
-        >
-          <Image src={item.image_url} width={100} height={100} alt={item.alt_text} />
-        </AdditionalImageThumbnail>
-      ))}
+      {images.map(
+        (item: { image_url: string; alt_text: string }, index: number) => (
+          <AdditionalImageThumbnail
+            key={index}
+            className={hoveredImage === index ? 'additional-image-hovered' : ''}
+            onMouseOver={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onThumbnailHover(index)
+            }}
+          >
+            <Image
+              src={item.image_url}
+              width={100}
+              height={100}
+              alt={item.alt_text}
+            />
+          </AdditionalImageThumbnail>
+        )
+      )}
     </AdditionalImageContainer>
   )
 }

@@ -24,7 +24,13 @@ const KnockoutTextWrapper = styled.span`
   display: inline-block;
   width: min-content;
   mask-size: 1000%;
-  mask-image: linear-gradient(45deg, transparent, #000 20%, #000 60%, transparent 80%);
+  mask-image: linear-gradient(
+    45deg,
+    transparent,
+    #000 20%,
+    #000 60%,
+    transparent 80%
+  );
   animation: ${fadeInMask} 1.25s 0.25s ease-out forwards;
   mask-position: 100% center;
 

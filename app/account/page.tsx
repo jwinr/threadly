@@ -252,17 +252,8 @@ const Account: React.FC = () => {
 
   const fetchOrders = async (offset = 0) => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY
-      if (!apiKey) {
-        throw new Error('API key is missing')
-      }
       const response = await fetch(
-        `/api/orders?cognitoSub=${userAttributes?.sub}&limit=${limit}&offset=${offset}`,
-        {
-          headers: {
-            'x-api-key': apiKey,
-          },
-        },
+        `/api/orders?id=${userAttributes?.sub}&limit=${limit}&offset=${offset}`
       )
       const data = await response.json()
       if (data.length < limit) {
@@ -278,7 +269,7 @@ const Account: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!checkingUser && userAttributes && userAttributes.sub) {
+    if (!checkingUser && userAttributes) {
       fetchOrders()
     }
   }, [checkingUser, userAttributes])
@@ -316,7 +307,8 @@ const Account: React.FC = () => {
                         <>
                           <InfoItem>
                             <span>
-                              Name: {userAttributes.given_name} {userAttributes.family_name}
+                              Name: {userAttributes.given_name}{' '}
+                              {userAttributes.family_name}
                             </span>
                           </InfoItem>
                           <InfoItem>
@@ -360,10 +352,12 @@ const Account: React.FC = () => {
                             <span>Order ID:</span> <span>{order.order_id}</span>
                           </div>
                           <div>
-                            <span>Amount:</span> {formatCurrency(order.amount_total, true)}
+                            <span>Amount:</span>{' '}
+                            {formatCurrency(order.amount_total, true)}
                           </div>
                           <div>
-                            <span>Order Date:</span> {new Date(order.created_at).toLocaleString()}
+                            <span>Order Date:</span>{' '}
+                            {new Date(order.created_at).toLocaleString()}
                           </div>
                         </OrderListItem>
                       ))}
@@ -371,7 +365,10 @@ const Account: React.FC = () => {
                   </OrderListContainer>
                 )}
                 {hasMore && (
-                  <LoadMoreButton onClick={handleLoadMore} disabled={loadingMore}>
+                  <LoadMoreButton
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                  >
                     {loadingMore ? 'Loading...' : 'Load More'}
                   </LoadMoreButton>
                 )}
@@ -384,7 +381,9 @@ const Account: React.FC = () => {
                     <CreditCard />
                     <div>
                       <Title>Payments</Title>
-                      <InfoItem>Add a payment card for quick online ordering.</InfoItem>
+                      <InfoItem>
+                        Add a payment card for quick online ordering.
+                      </InfoItem>
                     </div>
                   </CardWrapper>
                 </CardButton>
@@ -408,7 +407,9 @@ const Account: React.FC = () => {
                     <HomeAddress />
                     <div>
                       <Title>Addresses</Title>
-                      <InfoItem>Save an address to make it easier to order online.</InfoItem>
+                      <InfoItem>
+                        Save an address to make it easier to order online.
+                      </InfoItem>
                     </div>
                   </CardWrapper>
                 </CardButton>

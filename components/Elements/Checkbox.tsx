@@ -123,7 +123,12 @@ interface CheckboxProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ id, label, checked = false, onChange }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+  id,
+  label,
+  checked = false,
+  onChange,
+}) => {
   return (
     <CheckboxWrapper htmlFor={id}>
       <input

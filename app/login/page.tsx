@@ -22,10 +22,11 @@ import { useAuthFormValidation } from '@/hooks/useAuthFormValidation'
 import { debouncedCheckUsername } from '@/utils/checkUsername'
 
 const Login: React.FC = () => {
-  const { formState, emailValid, passwordValid, onChange, onBlur } = useAuthFormValidation({
-    username: '',
-    password: '',
-  })
+  const { formState, emailValid, passwordValid, onChange, onBlur } =
+    useAuthFormValidation({
+      username: '',
+      password: '',
+    })
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
   const router = useRouter()
@@ -40,7 +41,8 @@ const Login: React.FC = () => {
 
   type CognitoErrorName = keyof typeof CognitoErrorMessages
 
-  const GENERIC_ERROR_MESSAGE = 'An unexpected error occurred. Please try again later.'
+  const GENERIC_ERROR_MESSAGE =
+    'An unexpected error occurred. Please try again later.'
 
   // Check if there's already an active sign-in
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
@@ -61,7 +63,12 @@ const Login: React.FC = () => {
       return // Prevent form submission if loading
     }
 
-    if (!emailValid || !passwordValid || !formState.username || !formState.password) {
+    if (
+      !emailValid ||
+      !passwordValid ||
+      !formState.username ||
+      !formState.password
+    ) {
       // If any field is invalid or empty, prevent submission
       setErrorMessage('Please fill in all fields with valid information.')
       setShakeKey((prevKey) => prevKey + 1)
@@ -73,7 +80,7 @@ const Login: React.FC = () => {
       formState.username,
       setErrorMessage,
       setShakeKey,
-      setLoading,
+      setLoading
     )
     if (!usernameExists) {
       return
@@ -158,8 +165,15 @@ const Login: React.FC = () => {
     <AuthStyles.AuthPageWrapper>
       <AuthStyles.AuthContainerWrapper>
         <AuthStyles.FormContainerWrapper>
-          <AuthStyles.AuthCard key={shakeKey} style={authCardStyle} $shake={!!errorMessage}>
-            <AuthStyles.AuthCardContent $authFadeOut={isComplete} $authFadeIn={!isComplete}>
+          <AuthStyles.AuthCard
+            key={shakeKey}
+            style={authCardStyle}
+            $shake={!!errorMessage}
+          >
+            <AuthStyles.AuthCardContent
+              $authFadeOut={isComplete}
+              $authFadeIn={!isComplete}
+            >
               {!isComplete ? (
                 <>
                   <AuthStyles.LogoBox>
@@ -184,7 +198,14 @@ const Login: React.FC = () => {
                     onSubmit={handleSignIn}
                     noValidate
                     data-form-type="login"
-                    onKeyDown={(e) => handleKeyDown(e, setShowPassword, emailValid, passwordValid)}
+                    onKeyDown={(e) =>
+                      handleKeyDown(
+                        e,
+                        setShowPassword,
+                        emailValid,
+                        passwordValid
+                      )
+                    }
                   >
                     <AuthStyles.EntryWrapper>
                       <AuthStyles.EntryContainer
@@ -241,7 +262,9 @@ const Login: React.FC = () => {
                         <Popover
                           trigger="hover"
                           position="right"
-                          content={showPassword ? 'Hide password' : 'Show password'}
+                          content={
+                            showPassword ? 'Hide password' : 'Show password'
+                          }
                           showArrow={false}
                           color="dark"
                           padding="4px 8px"
@@ -252,7 +275,9 @@ const Login: React.FC = () => {
                             role="button"
                             className="password-reveal-button"
                             disabled={isLoading}
-                            ariaLabel={showPassword ? 'Hide password' : 'Show password'}
+                            ariaLabel={
+                              showPassword ? 'Hide password' : 'Show password'
+                            }
                           />
                         </Popover>
                       )}
@@ -282,13 +307,20 @@ const Login: React.FC = () => {
                         $isLoading={isLoading}
                         style={{ marginBottom: '24px' }}
                       >
-                        {isLoading ? <LoaderSpin isLoading={isLoading} /> : 'Sign in'}
+                        {isLoading ? (
+                          <LoaderSpin isLoading={isLoading} />
+                        ) : (
+                          'Sign in'
+                        )}
                       </AuthBtn>
                     </AuthStyles.EntryBtnWrapper>
                   </AuthStyles.FormContainer>
                   <AuthStyles.AuthLoginLinkBox>
                     <span>New to Threadly?</span>
-                    <AuthStyles.AuthLoginLink href="/signup" className="create-account-button">
+                    <AuthStyles.AuthLoginLink
+                      href="/signup"
+                      className="create-account-button"
+                    >
                       Create account
                     </AuthStyles.AuthLoginLink>
                   </AuthStyles.AuthLoginLinkBox>

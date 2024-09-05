@@ -1,6 +1,6 @@
 /* General Styles */
 
-@import "preflight.css";
+@import 'preflight.css';
 
 :root {
   --sc-color-text: #3c4257;
@@ -52,16 +52,16 @@
   --s1-top-shadow: 0px 1px 1px 0px rgba(16, 17, 26, 0.16);
   --s1-keyline: rgb(216, 222, 228);
   --s1-keyline-width: 1px;
-  --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, .36);
+  --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
   --s1-box-shadow: 0 0 0 0 transparent;
-  --sc-shadow-link-focus: 0 0 0 4px rgba(58, 151, 212, .28),
-    0 0 1px 1px rgba(7, 89, 150, .36);
+  --sc-shadow-link-focus: 0 0 0 4px rgba(58, 151, 212, 0.28),
+    0 0 1px 1px rgba(7, 89, 150, 0.36);
   --s1-padding-top: 4px;
   --s1-padding-right: 8px;
   --s1-padding-bottom: 4px;
   --s1-padding-left: 8px;
-  --sc-shadow-large: 0 15px 35px 0 rgba(60, 66, 87, .08),
-    0 5px 15px 0 rgba(0, 0, 0, .12);
+  --sc-shadow-large: 0 15px 35px 0 rgba(60, 66, 87, 0.08),
+    0 5px 15px 0 rgba(0, 0, 0, 0.12);
   --sc-shadow-link-focus: 0 0 0 4px rgba(58, 151, 212, 0.28),
     0 0 1px 1px rgba(7, 89, 150, 0.36);
   --sc-color-background-offset: var(--sc-color-gray-50);
@@ -79,12 +79,8 @@ button {
 
 html {
   font-size: 16px;
-  font-family: -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Roboto",
-    "Helvetica Neue",
-    "Ubuntu";
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Helvetica Neue', 'Ubuntu';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--sc-color-text);
@@ -98,7 +94,11 @@ html {
   /* Opt-out styling for all elements, does not override opt-in styles */
   --s-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
   outline: transparent solid 1px;
-  box-shadow: var(--s-top-shadow), var(--s-keyline) 0 0 0 var(--s-keyline-width), var(--s-focus-ring), var(--s-box-shadow);
+  box-shadow:
+    var(--s-top-shadow),
+    var(--s-keyline) 0 0 0 var(--s-keyline-width),
+    var(--s-focus-ring),
+    var(--s-box-shadow);
 }
 
 a {
@@ -114,7 +114,8 @@ a:hover {
 
 a:focus,
 a:focus-visible {
-  box-shadow: 0 0 0 2px #4d90fe,
+  box-shadow:
+    0 0 0 2px #4d90fe,
     inset 0 0 0 2px hsla(0, 0%, 100%, 0.9);
   border-radius: 2px;
 }
@@ -163,7 +164,9 @@ li:focus {
   /* Hide the arrow icon */
   transform: rotate(0deg);
   /* Initial rotation state + allows it to flip back*/
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 
   @media (max-width: 768px) {
     display: none;
@@ -285,11 +288,11 @@ li:focus {
 
 @keyframes fadeIn {
   0% {
-    opacity: 0
+    opacity: 0;
   }
 
   to {
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -316,77 +319,77 @@ li:focus {
 @keyframes placeload {
   0% {
     -webkit-transform: translateX(-100%);
-    transform: translateX(-100%)
+    transform: translateX(-100%);
   }
 
   to {
     -webkit-transform: translateX(100%);
-    transform: translateX(100%)
+    transform: translateX(100%);
   }
 }
 
 @keyframes enter {
   0% {
-    opacity: .1;
-    -webkit-transform: scale(.97);
-    transform: scale(.97)
+    opacity: 0.1;
+    -webkit-transform: scale(0.97);
+    transform: scale(0.97);
   }
 
   to {
     opacity: 1;
     -webkit-transform: scale(1);
-    transform: scale(1)
+    transform: scale(1);
   }
 }
 
 @keyframes exit {
   0% {
-    opacity: 1
+    opacity: 1;
   }
 
   to {
-    opacity: 0
+    opacity: 0;
   }
 }
 
 @keyframes enter-form-mobile {
   0% {
-    opacity: .1;
+    opacity: 0.1;
     -webkit-transform: translateY(1rem);
-    transform: translateY(1rem)
+    transform: translateY(1rem);
   }
 
   to {
     opacity: 1;
     -webkit-transform: none;
-    transform: none
+    transform: none;
   }
 }
 
 @keyframes enter-form-desktop {
   0% {
-    opacity: .1;
+    opacity: 0.1;
     -webkit-transform: translateX(1.5rem);
-    transform: translateX(1.5rem)
+    transform: translateX(1.5rem);
   }
 
   to {
     opacity: 1;
     -webkit-transform: none;
-    transform: none
+    transform: none;
   }
 }
 
 @keyframes enter-background-shadow {
   0% {
-    opacity: .1;
-    -webkit-transform: scaleX(.9);
-    transform: scaleX(.9)
+    opacity: 0.1;
+    -webkit-transform: scaleX(0.9);
+    transform: scaleX(0.9);
   }
 
   to {
     opacity: 1;
     -webkit-transform: scaleX(1);
-    transform: scaleX(1)
+    transform: scaleX(1);
   }
 }

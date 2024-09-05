@@ -16,23 +16,32 @@ import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 export interface CartItem {
   variant_id: number
   quantity: number
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface CartContextType {
   cart: CartItem[]
-  addToCart: (variantId: number, quantity?: number, isSyncing?: boolean) => Promise<void>
+  addToCart: (
+    variantId: number,
+    quantity?: number,
+    isSyncing?: boolean
+  ) => Promise<void>
   removeFromCart: (variantId: number) => Promise<void>
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>
   loadingSummary: boolean
   setLoadingSummary: React.Dispatch<React.SetStateAction<boolean>>
-  handleQuantityChange: (variantId: number, newQuantity: number) => Promise<void>
+  handleQuantityChange: (
+    variantId: number,
+    newQuantity: number
+  ) => Promise<void>
   clearCart: () => Promise<void>
 }
 
 export const CartContext = createContext<CartContextType | undefined>(undefined)
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const { showToast } = useToast()
   const [cart, setCart] = useState<CartItem[]>([])
   const { userAttributes, getToken } = useContext(UserContext)
@@ -50,7 +59,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.error('Error fetching cart:', error)
       }
     } else {
-      const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
+      const localCart = JSON.parse(
+        localStorage.getItem('cart') || '[]'
+      ) as CartItem[]
       if (localCart.length > 0) {
         setCart(localCart)
       }
@@ -93,8 +104,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             })
           }
         } else {
-          const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
-          const existingItem = localCart.find((item) => item.variant_id === variantId)
+          const localCart = JSON.parse(
+            localStorage.getItem('cart') || '[]'
+          ) as CartItem[]
+          const existingItem = localCart.find(
+            (item) => item.variant_id === variantId
+          )
 
           if (existingItem) {
             existingItem.quantity += quantity
@@ -122,7 +137,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setLoadingSummary(false)
       }
     },
-    [userAttributes, fetchCart, getToken, showToast],
+    [userAttributes, fetchCart, getToken, showToast]
   )
 
   const removeFromCart = async (variantId: number) => {
@@ -157,8 +172,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           type: 'success',
         })
       } else {
-        const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
-        const updatedCart = localCart.filter((item) => item.variant_id !== variantId)
+        const localCart = JSON.parse(
+          localStorage.getItem('cart') || '[]'
+        ) as CartItem[]
+        const updatedCart = localCart.filter(
+          (item) => item.variant_id !== variantId
+        )
 
         localStorage.setItem('cart', JSON.stringify(updatedCart))
         setCart(updatedCart)
@@ -177,7 +196,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }
 
-  const handleQuantityChange = async (variantId: number, newQuantity: number) => {
+  const handleQuantityChange = async (
+    variantId: number,
+    newQuantity: number
+  ) => {
     setLoadingSummary(true)
     try {
       if (userAttributes) {
@@ -210,9 +232,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           type: 'success',
         })
       } else {
-        const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
+        const localCart = JSON.parse(
+          localStorage.getItem('cart') || '[]'
+        ) as CartItem[]
         const updatedCart = localCart.map((item) =>
-          item.variant_id === variantId ? { ...item, quantity: newQuantity } : item,
+          item.variant_id === variantId
+            ? { ...item, quantity: newQuantity }
+            : item
         )
 
         localStorage.setItem('cart', JSON.stringify(updatedCart))
@@ -236,7 +262,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (userAttributes && !isSyncing) {
       setIsSyncing(true)
       try {
-        const localCart = JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]
+        const localCart = JSON.parse(
+          localStorage.getItem('cart') || '[]'
+        ) as CartItem[]
 
         const token = await getToken()
         if (!token) {

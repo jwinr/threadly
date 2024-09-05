@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react'
+import React, { FC } from 'react'
 import { usePathname } from 'next/navigation'
 import styled from 'styled-components'
 import BannerLogo from '@/public/images/logo.svg'
@@ -92,11 +92,6 @@ interface NavbarProps {
 const Header: FC<NavbarProps> = ({}) => {
   const pathname = usePathname()
   const isMobileView = useMobileView()
-  const [duration, setDuration] = useState(250)
-
-  const handleChange = (data: { duration: number }) => {
-    setDuration(data.duration)
-  }
 
   // Check if the current route is /login, /signup, /forgot-password or /404
   const isLoginPage = pathname === '/login'

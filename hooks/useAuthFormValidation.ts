@@ -24,13 +24,14 @@ export const useAuthFormValidation = (initialState: FormState) => {
     codeValid: true,
   })
 
-  const stringValidators: Record<keyof FormState, (value: string) => boolean> = {
-    username: validateEmailDomain,
-    password: validatePassword,
-    newPassword: validatePassword,
-    fullName: validateFullName,
-    code: validateCode,
-  }
+  const stringValidators: Record<keyof FormState, (value: string) => boolean> =
+    {
+      username: validateEmailDomain,
+      password: validatePassword,
+      newPassword: validatePassword,
+      fullName: validateFullName,
+      code: validateCode,
+    }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -46,7 +47,10 @@ export const useAuthFormValidation = (initialState: FormState) => {
 
     if (name in stringValidators) {
       const key = name as keyof FormState
-      const isValid = formState[key] === '' ? true : stringValidators[key](formState[key] as string)
+      const isValid =
+        formState[key] === ''
+          ? true
+          : stringValidators[key](formState[key] as string)
       setValidationState((prev) => ({ ...prev, [`${name}Valid`]: isValid }))
     }
   }

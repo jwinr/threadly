@@ -73,8 +73,9 @@ const ContactUs = () => {
           <CardDetails>
             <SubheaderText>Need help or support?</SubheaderText>
             <p>
-              Have an order related question, a technical issue or just want to say hi? Feel free to
-              reach out to us through email and we will get back to you shortly.
+              Have an order related question, a technical issue or just want to
+              say hi? Feel free to reach out to us through email and we will get
+              back to you shortly.
             </p>
             <EmailWrapper>
               <StyledEmail /> <EmailText>help@shopthreadly.com</EmailText>

@@ -1,13 +1,14 @@
 import debounce from 'lodash.debounce'
 
-const GENERIC_ERROR_MESSAGE = 'An unexpected error occurred. Please try again later.'
+const GENERIC_ERROR_MESSAGE =
+  'An unexpected error occurred. Please try again later.'
 
 export const debouncedCheckUsername = debounce(
   async (
     username: string,
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>,
     setShakeKey: React.Dispatch<React.SetStateAction<number>>,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
   ): Promise<boolean> => {
     try {
       const response = await fetch('/api/check-username', {
@@ -35,5 +36,5 @@ export const debouncedCheckUsername = debounce(
       return false
     }
   },
-  500,
+  500
 )

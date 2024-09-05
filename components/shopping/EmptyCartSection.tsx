@@ -4,7 +4,7 @@ import EmptyCartImg from '@/public/images/icons/EmptyCart.svg'
 import Button from '@/components/Elements/Button'
 
 interface EmptyCartSectionProps {
-  userAttributes: any // Adjust the type as needed based on the structure of userAttributes
+  userAttributes: unknown
 }
 
 const EmptyCartContainer = styled.div`
@@ -57,7 +57,9 @@ const EmptyWrapper = styled.div`
   }
 `
 
-const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({ userAttributes }) => {
+const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({
+  userAttributes,
+}) => {
   return (
     <EmptyCartContainer>
       <EmptyContents>
@@ -65,14 +67,25 @@ const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({ userAttributes }) =
         {userAttributes ? ( // User is logged in, but has an empty cart
           <>
             <span>Check out what we're featuring now!</span>
-            <Button href="/" target="_self" size="large" type="primary" aria-label="Go to homepage">
+            <Button
+              href="/"
+              target="_self"
+              size="large"
+              type="primary"
+              aria-label="Go to homepage"
+            >
               Go to homepage
             </Button>
           </>
         ) : (
           <>
             <span>Have an account? Sign in to see your cart</span>
-            <Button href="/login" type="primary" size="large" aria-label="Sign in">
+            <Button
+              href="/login"
+              type="primary"
+              size="large"
+              aria-label="Sign in"
+            >
               Sign in
             </Button>
           </>

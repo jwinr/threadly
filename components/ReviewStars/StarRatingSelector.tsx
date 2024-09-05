@@ -21,7 +21,10 @@ interface StarRatingSelectorProps {
   className?: string
 }
 
-const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRating }) => {
+const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({
+  rating,
+  setRating,
+}) => {
   const [hoverRating, setHoverRating] = useState(0)
   const starRefs = useRef<(HTMLSpanElement | null)[]>([])
 
@@ -37,7 +40,10 @@ const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRati
     setRating(index)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLSpanElement>,
+    index: number
+  ) => {
     if (e.key === 'ArrowRight') {
       e.preventDefault()
       const newStar = index === 5 ? 1 : index + 1
@@ -63,7 +69,7 @@ const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRati
       {[...Array(5)].map((_, index) => {
         const starIndex = index + 1
         return (
-          <span
+          <button
             tabIndex={starIndex === 1 ? 0 : -1}
             ref={(el) => {
               starRefs.current[index] = el
@@ -75,7 +81,7 @@ const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({ rating, setRati
             onKeyDown={(e) => handleKeyDown(e, starIndex)}
           >
             {renderStar(starIndex)}
-          </span>
+          </button>
         )
       })}
     </StarContainer>

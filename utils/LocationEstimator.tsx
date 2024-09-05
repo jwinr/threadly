@@ -9,11 +9,11 @@ function LocationEstimator() {
   // Get zip code from coordinates using Nominatim
   async function getZipCodeFromCoordinates(
     latitude: number,
-    longitude: number,
+    longitude: number
   ): Promise<string | null> {
     try {
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
       )
 
       if (response.status === 200) {
@@ -54,7 +54,9 @@ function LocationEstimator() {
       // Request geolocation information
       navigator.geolocation.getCurrentPosition(handleSuccess, handleError)
     } else {
-      console.error('Location services for shipping prices are not available in this browser.')
+      console.error(
+        'Location services for shipping prices are not available in this browser.'
+      )
     }
   }, [])
 

@@ -23,8 +23,6 @@ dist/
 # misc
 .DS_Store
 *.pem
-.prettierignore
-.prettierrc
 
 # debug
 npm-debug.log*
@@ -51,6 +49,7 @@ amplify/
 src/
 layout/navbar/Menu/
 middleware.ts
+app/api/
 .hintrc
 
 #amplify-do-not-edit-begin
@@ -74,10 +73,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-# next-video
-videos/*
-!videos/*.json
-!videos/*.js
-!videos/*.ts
-public/_next-video

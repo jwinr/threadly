@@ -48,8 +48,8 @@ interface SelectWrapperProps {
 const SelectWrapper = styled.select<SelectWrapperProps>`
   display: flex;
   width: 100%;
-  padding: var(--s1-padding-top) var(--s1-padding-right) var(--s1-padding-bottom)
-    var(--s1-padding-left);
+  padding: var(--s1-padding-top) var(--s1-padding-right)
+    var(--s1-padding-bottom) var(--s1-padding-left);
   --s1-padding-right: 26px;
   background-color: white;
   border: none;
@@ -210,7 +210,11 @@ const Select: FC<SelectProps> = ({
   value,
 }) => {
   // Extract valid options from children
-  const validOptions = React.Children.map(children, (child: any) => String(child.props.value))
+  const validOptions = React.Children.map(children, (child) => {
+    if (React.isValidElement<HTMLSelectElement>(child)) {
+      return String(child.props.value)
+    }
+  })
 
   /**
    * Handle change event for the select element.
@@ -219,7 +223,7 @@ const Select: FC<SelectProps> = ({
    */
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value
-    if (validOptions.includes(newValue)) {
+    if (validOptions?.includes(newValue)) {
       onChange?.(e)
     } else {
       console.warn(`Invalid value selected: ${newValue}`)
@@ -234,7 +238,9 @@ const Select: FC<SelectProps> = ({
         </Label>
       )}
       {description && !hiddenElements.includes('description') && (
-        <Description hidden={hiddenElements.includes('description')}>{description}</Description>
+        <Description hidden={hiddenElements.includes('description')}>
+          {description}
+        </Description>
       )}
       <GridWrapper>
         <SelectWrapper
@@ -260,12 +266,18 @@ const Select: FC<SelectProps> = ({
         </CustomArrow>
       </GridWrapper>
       {error && !hiddenElements.includes('error') && (
-        <ErrorText hidden={hiddenElements.includes('error')} id={`${name}-error`}>
+        <ErrorText
+          hidden={hiddenElements.includes('error')}
+          id={`${name}-error`}
+        >
           {error}
         </ErrorText>
       )}
       {description && !hiddenElements.includes('description') && (
-        <Description hidden={hiddenElements.includes('description')} id={`${name}-description`}>
+        <Description
+          hidden={hiddenElements.includes('description')}
+          id={`${name}-description`}
+        >
           {description}
         </Description>
       )}

@@ -13,7 +13,10 @@ interface UseProductDataReturn {
   categorySlug: string | null
 }
 
-const useProductData = (slug: string, variantSku: string): UseProductDataReturn => {
+const useProductData = (
+  slug: string,
+  variantSku: string
+): UseProductDataReturn => {
   const [product, setProduct] = useState<Product | null>(null)
   const [categoryName, setCategoryName] = useState<string | null>(null)
   const [categorySlug, setCategorySlug] = useState<string | null>(null)

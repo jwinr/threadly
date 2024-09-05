@@ -47,7 +47,8 @@ const LoadingDots = styled.div`
       border-radius: 50%;
       position: absolute;
       left: 14px;
-      animation: ${ellipsisOne} 1.6s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+      animation: ${ellipsisOne} 1.6s cubic-bezier(0, 0.5, 0.5, 1) infinite
+        forwards;
     }
 
     &:nth-child(1) > div {

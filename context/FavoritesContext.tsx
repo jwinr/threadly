@@ -1,11 +1,26 @@
 'use client'
 
-import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react'
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { UserContext } from '@/context/UserContext'
 
-// Define the types for the context
 interface Favorite {
   product_id: string
+  product_slug?: string
+  product_image_url?: string
+  product_name?: string
+  product_price?: number
+  product_sale_price?: number
+  reviews?: Array<{
+    rating: number
+    review_text: string
+  }>
 }
 
 interface FavoritesContextType {
@@ -15,7 +30,9 @@ interface FavoritesContextType {
 }
 
 // Initialize the context with a default value
-const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
+const FavoritesContext = createContext<FavoritesContextType | undefined>(
+  undefined
+)
 
 export const useFavorites = () => {
   const context = useContext(FavoritesContext)
@@ -29,7 +46,9 @@ interface FavoritesProviderProps {
   children: ReactNode
 }
 
-export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }) => {
+export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
+  children,
+}) => {
   const [favorites, setFavorites] = useState<Favorite[]>([])
   const { userAttributes } = useContext(UserContext)
   const hasFetchedFavorites = useRef(false)
@@ -45,11 +64,14 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
       ) {
         try {
           previousUserUuid.current = userAttributes.user_uuid
-          const response = await fetch(`/api/favorites?id=${userAttributes.user_uuid}`, {
-            headers: {
-              'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-            },
-          })
+          const response = await fetch(
+            `/api/favorites?id=${userAttributes.user_uuid}`,
+            {
+              headers: {
+                'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+              },
+            }
+          )
           const data = await response.json()
           setFavorites(Array.isArray(data) ? data : [])
           hasFetchedFavorites.current = true
@@ -75,7 +97,10 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
         },
         body: JSON.stringify({ id: userAttributes.user_uuid, productId }),
       })
-      setFavorites((prevFavorites) => [...prevFavorites, { product_id: productId }])
+      setFavorites((prevFavorites) => [
+        ...prevFavorites,
+        { product_id: productId },
+      ])
     } catch (error) {
       console.error('Error adding to favorites:', error)
     }
@@ -94,14 +119,18 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
         },
         body: JSON.stringify({ id: userAttributes.user_uuid, productId }),
       })
-      setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.product_id !== productId))
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((fav) => fav.product_id !== productId)
+      )
     } catch (error) {
       console.error('Error removing from favorites:', error)
     }
   }
 
   return (
-    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite }}>
+    <FavoritesContext.Provider
+      value={{ favorites, addFavorite, removeFavorite }}
+    >
       {children}
     </FavoritesContext.Provider>
   )

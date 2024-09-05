@@ -114,7 +114,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   loadingSummary,
 }) => {
   return (
-    <OrderSummaryContainer $isLoading={$isLoading} $loadingSummary={loadingSummary}>
+    <OrderSummaryContainer
+      $isLoading={$isLoading}
+      $loadingSummary={loadingSummary}
+    >
       {$isLoading ? null : (
         <>
           <h2>Order summary</h2>
@@ -147,7 +150,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </>
           ) : (
             <EmptyMessage>
-              When you have items in your cart, you'll see the pricing information here.
+              When you have items in your cart, you'll see the pricing
+              information here.
             </EmptyMessage>
           )}
           <CheckoutButton disabled={totalQuantity === 0} />

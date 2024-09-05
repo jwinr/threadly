@@ -5,10 +5,10 @@ import LoaderSpin from '@/components/Loaders/LoaderSpin'
 import Button from '@/components/Elements/Button'
 
 interface AddToCartButtonProps {
-  sizeVariantId: string
+  sizeVariantId: number
   quantity?: number
   productName: string
-  loading: boolean
+  loading?: boolean
 }
 
 const ButtonText = styled.span<{ loading: boolean }>`
@@ -25,7 +25,8 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   const { addToCart } = useContext(CartContext)!
   const [internalLoading, setInternalLoading] = useState<boolean>(false)
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleAddToCart = async () => {
     setInternalLoading(true)
@@ -47,7 +48,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       aria-label={`Add ${productName} to cart`}
     >
       <ButtonText loading={loading || internalLoading}>Add to cart</ButtonText>
-      {(loading || internalLoading) && <LoaderSpin loading={true} />}
+      {(loading || internalLoading) && <LoaderSpin isLoading={true} />}
     </Button>
   )
 }

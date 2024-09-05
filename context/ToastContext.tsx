@@ -1,6 +1,12 @@
 'use client'
 
-import React, { ReactNode, createContext, useContext, useRef, useState } from 'react'
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useRef,
+  useState,
+} from 'react'
 import ToastManager from '../components/Elements/Toast'
 
 interface ToastOptions {
@@ -24,7 +30,7 @@ interface Toast {
 interface ToastContextType {
   showToast: (
     message: string,
-    options?: ToastOptions,
+    options?: ToastOptions
   ) => Promise<{
     update: (updateMessage: string, updateOptions?: ToastOptions) => void
     dismiss: () => void
@@ -51,7 +57,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
 
   const showToast = (
     message: string,
-    options: ToastOptions = {},
+    options: ToastOptions = {}
   ): Promise<{
     update: (updateMessage: string, updateOptions?: ToastOptions) => void
     dismiss: () => void
@@ -71,11 +77,15 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
 
       const onDismiss = () => {
         setToasts((prevToasts) =>
-          prevToasts.map((toast) => (toast.id === id ? { ...toast, isVisible: false } : toast)),
+          prevToasts.map((toast) =>
+            toast.id === id ? { ...toast, isVisible: false } : toast
+          )
         )
 
         setTimeout(() => {
-          setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id))
+          setToasts((prevToasts) =>
+            prevToasts.filter((toast) => toast.id !== id)
+          )
         }, 200) // Allow time for the transition to complete
       }
 
@@ -101,8 +111,10 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
         update: (updateMessage, updateOptions = {}) => {
           setToasts((prevToasts) =>
             prevToasts.map((toast) =>
-              toast.id === id ? { ...toast, ...updateOptions, message: updateMessage } : toast,
-            ),
+              toast.id === id
+                ? { ...toast, ...updateOptions, message: updateMessage }
+                : toast
+            )
           )
         },
         dismiss: () => {

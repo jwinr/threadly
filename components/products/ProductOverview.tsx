@@ -1,5 +1,8 @@
 import styled from 'styled-components'
-import { ProductDescriptionProps, ProductOverviewProps } from '@/app/types/product'
+import {
+  ProductDescriptionProps,
+  ProductOverviewProps,
+} from '@/app/types/product'
 
 const ProductSpecifications = styled.div`
   display: grid;
@@ -101,13 +104,18 @@ const LoaderFeatures = styled.div`
   }
 `
 
-const ProductDescription: React.FC<ProductDescriptionProps> = ({ description }) => (
+const ProductDescription: React.FC<ProductDescriptionProps> = ({
+  description,
+}) => (
   <Section>
     <p>{description}</p>
   </Section>
 )
 
-const ProductOverview: React.FC<ProductOverviewProps> = ({ product, loading }) => {
+const ProductOverview: React.FC<ProductOverviewProps> = ({
+  product,
+  loading,
+}) => {
   if (loading) {
     return (
       <ProductSpecifications>

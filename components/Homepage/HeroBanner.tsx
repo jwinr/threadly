@@ -74,7 +74,9 @@ const HeroBannerContainer = styled.div`
   align-items: center;
   border-radius: 12px;
   overflow: hidden;
-  height: calc(100vh - 104px); // Viewport subtracted by the navbar height and section padding
+  height: calc(
+    100vh - 104px
+  ); // Viewport subtracted by the navbar height and section padding
   background-color: white;
   perspective: 1000px;
 
@@ -223,8 +225,8 @@ const HeroBanner: React.FC = () => {
         </Headline>
 
         <Subheadline>
-          Find the perfect blend of modern trends and classic style with our stylish, affordable
-          pieces—crafted to enhance your everyday look.
+          Find the perfect blend of modern trends and classic style with our
+          stylish, affordable pieces—crafted to enhance your everyday look.
         </Subheadline>
         <CtaButton>
           Explore now

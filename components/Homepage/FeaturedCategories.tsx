@@ -89,11 +89,13 @@ interface FeaturedCategoriesProps {
   className?: string
 }
 
-const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>((props, ref) => {
-  return (
-    <NavContainer ref={ref} className={props.className}>
-      {CategoriesConfig.filter((category: Category) => category.id !== 'accessories').map(
-        (category: Category) => (
+const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>(
+  (props, ref) => {
+    return (
+      <NavContainer ref={ref} className={props.className}>
+        {CategoriesConfig.filter(
+          (category: Category) => category.id !== 'accessories'
+        ).map((category: Category) => (
           <NavLink
             key={category.id}
             href={`/categories/${category.slug}`}
@@ -103,7 +105,12 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>((
             <NavItem>
               <NavIcon>
                 {category.icon ? (
-                  <Image src={category.icon} alt={''} width={200} height={200} />
+                  <Image
+                    src={category.icon}
+                    alt={''}
+                    width={200}
+                    height={200}
+                  />
                 ) : (
                   <FallbackIcon>?</FallbackIcon>
                 )}
@@ -111,11 +118,11 @@ const FeaturedCategories = forwardRef<HTMLDivElement, FeaturedCategoriesProps>((
               <NavTitle>{category.name}</NavTitle>
             </NavItem>
           </NavLink>
-        ),
-      )}
-    </NavContainer>
-  )
-})
+        ))}
+      </NavContainer>
+    )
+  }
+)
 
 FeaturedCategories.displayName = 'FeaturedCategories'
 

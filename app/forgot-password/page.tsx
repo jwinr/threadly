@@ -47,9 +47,9 @@ const ForgotPassword: React.FC = () => {
   const [showError, setShowError] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [passwordChanged, setPasswordChanged] = useState<boolean>(false)
-  const [currentStep, setCurrentStep] = useState<'initial' | 'resetPassword' | 'verifyCode'>(
-    'initial',
-  )
+  const [currentStep, setCurrentStep] = useState<
+    'initial' | 'resetPassword' | 'verifyCode'
+  >('initial')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [shakeKey, setShakeKey] = useState<number>(0)
   const { invalidStyle } = AuthStyles
@@ -59,7 +59,8 @@ const ForgotPassword: React.FC = () => {
 
   type CognitoErrorName = keyof typeof CognitoErrorMessages
 
-  const GENERIC_ERROR_MESSAGE = 'An unexpected error occurred. Please try again later.'
+  const GENERIC_ERROR_MESSAGE =
+    'An unexpected error occurred. Please try again later.'
 
   // Check if there's already an active sign-in
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
@@ -75,34 +76,6 @@ const ForgotPassword: React.FC = () => {
     }
     const obfuscatedLocalPart = localPart.slice(0, 3) + '*'.repeat(3)
     return `${obfuscatedLocalPart}@***`
-  }
-
-  const resetPasswordHandler = async (username: string): Promise<void> => {
-    try {
-      await resetPassword({ username })
-    } catch (error) {
-      console.error('Error resetting password:', error)
-    }
-  }
-
-  const confirmResetPasswordHandler = async ({
-    username,
-    confirmationCode,
-    newPassword,
-  }: {
-    username: string
-    confirmationCode: string
-    newPassword: string
-  }): Promise<void> => {
-    try {
-      await confirmResetPassword({
-        username,
-        confirmationCode,
-        newPassword,
-      })
-    } catch (error) {
-      console.error('Error completing password reset:', error)
-    }
   }
 
   const handleSendCode = async (event: FormEvent): Promise<void> => {
@@ -124,7 +97,7 @@ const ForgotPassword: React.FC = () => {
       formState.username,
       setErrorMessage,
       setShakeKey,
-      setLoading,
+      setLoading
     )
     if (!usernameExists) {
       return
@@ -136,44 +109,32 @@ const ForgotPassword: React.FC = () => {
       try {
         const output = await resetPassword({ username: formState.username })
         const { nextStep } = output
+
         if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
           setCurrentStep('resetPassword')
         }
-      } catch (error) {
-        let errorMessage = GENERIC_ERROR_MESSAGE
+      } catch (err) {
+        const error = err as Error
 
-        if (error instanceof Error) {
-          errorMessage =
-            CognitoErrorMessages[error.name as CognitoErrorName] || GENERIC_ERROR_MESSAGE
-        }
+        const errorMessage =
+          CognitoErrorMessages[error.name as CognitoErrorName] ||
+          GENERIC_ERROR_MESSAGE
+        const showError = errorMessage === GENERIC_ERROR_MESSAGE
 
         setErrorMessage(errorMessage)
         setShakeKey((prevKey) => prevKey + 1)
-
-        if (
-          (error instanceof Error && error.name === 'LimitExceededException') ||
-          errorMessage === GENERIC_ERROR_MESSAGE
-        ) {
-          setShowError(true)
-        }
+        setShowError(showError)
       } finally {
         setLoading(false)
       }
     }, 200)
   }
 
-  // Send the caret cursor to the end if the user tabs into the input field
-  const setCaretToEnd = (input: HTMLInputElement): void => {
-    if (input && input.value.length) {
-      input.setSelectionRange(input.value.length, input.value.length)
-    }
-  }
-
   const handleResetPassword = async (event: FormEvent): Promise<void> => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
-      return // Prevent form submission if loading
+      return
     }
 
     if (!formState.code || !formState.newPassword) {
@@ -192,22 +153,30 @@ const ForgotPassword: React.FC = () => {
         })
 
         // Sign the user in after a successful reset
-        await signIn({ username: formState.username, password: formState.newPassword })
+        await signIn({
+          username: formState.username,
+          password: formState.newPassword,
+        })
 
         setPasswordChanged(true)
         setErrorMessage('')
       } catch (error) {
         if (error instanceof Error) {
           if (error.name === 'CodeMismatchException') {
-            setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName])
+            setErrorMessage(
+              CognitoErrorMessages[error.name as CognitoErrorName]
+            )
             setShakeKey((prevKey) => prevKey + 1)
             setCurrentStep('verifyCode')
           } else if (error.name === 'LimitExceededException') {
             setShakeKey((prevKey) => prevKey + 1)
-            setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName])
+            setErrorMessage(
+              CognitoErrorMessages[error.name as CognitoErrorName]
+            )
           } else {
             setErrorMessage(
-              CognitoErrorMessages[error.name as CognitoErrorName] || GENERIC_ERROR_MESSAGE,
+              CognitoErrorMessages[error.name as CognitoErrorName] ||
+                GENERIC_ERROR_MESSAGE
             )
             setShakeKey((prevKey) => prevKey + 1)
           }
@@ -221,9 +190,9 @@ const ForgotPassword: React.FC = () => {
     }, 200)
   }
 
-  // Inline style for resetPassword stage
-  const resetPasswordStyle = {
-    padding: '50px 25px 50px 25px',
+  const authCardStyle = {
+    transition: 'height 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+    ...(passwordChanged && { height: '50%' }),
   }
 
   return (
@@ -237,29 +206,21 @@ const ForgotPassword: React.FC = () => {
               <AuthStyles.AuthCard
                 key={shakeKey}
                 $shake={!!errorMessage}
-                style={
-                  passwordChanged
-                    ? {
-                        height: '50%',
-                        transition: 'height 0.5s ease-in-out',
-                      }
-                    : currentStep === 'resetPassword'
-                      ? resetPasswordStyle
-                      : {
-                          transition: 'height 0.5s ease-in-out',
-                        }
-                }
+                style={authCardStyle}
               >
                 <AuthStyles.LogoBox>
                   <LogoSymbol />
                 </AuthStyles.LogoBox>
-                {currentStep === 'initial' && !passwordChanged && (
+                {currentStep === 'initial' && (
                   <>
-                    <AuthStyles.HeaderText>Reset your password</AuthStyles.HeaderText>
+                    <AuthStyles.HeaderText>
+                      Reset your password
+                    </AuthStyles.HeaderText>
                     <SubheaderText>
                       <span>
-                        In order to change your password, we need to verify your identity. Enter the
-                        email address associated with your Threadly account.
+                        In order to change your password, we need to verify your
+                        identity. Enter the email address associated with your
+                        Threadly account.
                       </span>
                     </SubheaderText>
                     <AuthStyles.FormContainer
@@ -303,23 +264,35 @@ const ForgotPassword: React.FC = () => {
                         data-form-type="action,forgot_password"
                         $isLoading={isLoading}
                       >
-                        {isLoading ? <LoaderSpin isLoading={isLoading} /> : 'Continue'}
+                        {isLoading ? (
+                          <LoaderSpin isLoading={isLoading} />
+                        ) : (
+                          'Continue'
+                        )}
                       </ContinueBtn>
-                      <AuthStyles.ResetText href="/login" className="forgot-password-button">
+                      <AuthStyles.ResetText
+                        href="/login"
+                        className="forgot-password-button"
+                      >
                         Return to sign in
                       </AuthStyles.ResetText>
                     </AuthStyles.FormContainer>
                     <AuthStyles.AuthLoginLinkBox>
                       <span>New to Threadly?</span>
-                      <AuthStyles.AuthLoginLink href="/signup" className="create-account-button">
+                      <AuthStyles.AuthLoginLink
+                        href="/signup"
+                        className="create-account-button"
+                      >
                         Create account
                       </AuthStyles.AuthLoginLink>
                     </AuthStyles.AuthLoginLinkBox>
                   </>
                 )}
-                {currentStep === 'resetPassword' && !passwordChanged && (
+                {currentStep === 'resetPassword' && (
                   <>
-                    <AuthStyles.HeaderText>Reset your password</AuthStyles.HeaderText>
+                    <AuthStyles.HeaderText>
+                      Reset your password
+                    </AuthStyles.HeaderText>
                     <SuccessMessage>
                       <span>
                         We’ve sent your code to{' '}
@@ -327,8 +300,8 @@ const ForgotPassword: React.FC = () => {
                       </span>
                       <br />
                       <SubheaderText>
-                        Enter the code below, and please change your password to something you
-                        haven’t used before.
+                        Enter the code below, and please change your password to
+                        something you haven’t used before.
                       </SubheaderText>
                     </SuccessMessage>
                     <AuthStyles.FormContainer
@@ -345,7 +318,6 @@ const ForgotPassword: React.FC = () => {
                           onChange={onChange}
                           style={getValidationStyle(!codeValid, invalidStyle)}
                           onBlur={onBlur}
-                          onFocus={(e) => setCaretToEnd(e.target)}
                         />
                         <AuthStyles.Label
                           htmlFor="code"
@@ -365,14 +337,20 @@ const ForgotPassword: React.FC = () => {
                           type={showPassword ? 'text' : 'password'}
                           placeholder=""
                           value={formState.newPassword}
-                          name="newPassword"
+                          name="new-password"
                           onChange={onChange}
-                          style={getValidationStyle(!passwordValid, invalidStyle)}
+                          style={getValidationStyle(
+                            !passwordValid,
+                            invalidStyle
+                          )}
                           onBlur={onBlur}
                         />
                         <AuthStyles.Label
                           htmlFor="password"
-                          style={getValidationStyle(!passwordValid, invalidStyle)}
+                          style={getValidationStyle(
+                            !passwordValid,
+                            invalidStyle
+                          )}
                         >
                           New password
                         </AuthStyles.Label>
@@ -380,7 +358,9 @@ const ForgotPassword: React.FC = () => {
                           <Popover
                             trigger="hover"
                             position="right"
-                            content={showPassword ? 'Hide password' : 'Show password'}
+                            content={
+                              showPassword ? 'Hide password' : 'Show password'
+                            }
                             showArrow={false}
                             color="dark"
                             padding="4px 8px"
@@ -391,7 +371,9 @@ const ForgotPassword: React.FC = () => {
                               role="button"
                               className="password-reveal-button"
                               disabled={isLoading}
-                              ariaLabel={showPassword ? 'Hide password' : 'Show password'}
+                              ariaLabel={
+                                showPassword ? 'Hide password' : 'Show password'
+                              }
                             />
                           </Popover>
                         )}

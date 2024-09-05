@@ -175,7 +175,7 @@ const IconContainer = styled.div`
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const { userAttributes } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)
+  const { setCart } = useContext(CartContext)!
   const { isSigningOut, setIsSigningOut } = useSignOut()
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -201,7 +201,10 @@ const UserDropdown = () => {
   }
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setIsOpen(false)
     }
   }
@@ -216,7 +219,10 @@ const UserDropdown = () => {
     setIsOpen(!isOpen)
   }
 
-  const handleMenuItemClick = (href?: string, onClick?: MouseEventHandler<HTMLLIElement>) => {
+  const handleMenuItemClick = (
+    href?: string,
+    onClick?: MouseEventHandler<HTMLLIElement>
+  ) => {
     if (onClick) {
       const event = new MouseEvent('click')
       onClick(event as unknown as React.MouseEvent<HTMLLIElement>)
@@ -249,7 +255,7 @@ const UserDropdown = () => {
 
   const dropdownContent = (
     <DropdownMenu
-      user={given_name}
+      user={given_name!}
       handleSignOut={signOutHandler}
       firstMenuItemRef={firstMenuItemRef}
       onMenuItemClick={handleMenuItemClick}
@@ -292,7 +298,10 @@ interface DropdownMenuProps {
   handleSignOut: MouseEventHandler<HTMLLIElement>
   user: string | null
   firstMenuItemRef: RefObject<HTMLLIElement>
-  onMenuItemClick: (href?: string, onClick?: MouseEventHandler<HTMLLIElement>) => void
+  onMenuItemClick: (
+    href?: string,
+    onClick?: MouseEventHandler<HTMLLIElement>
+  ) => void
   userButtonRef: RefObject<HTMLButtonElement>
 }
 
@@ -383,7 +392,10 @@ interface DropdownItemProps {
   href?: string
   onClick?: MouseEventHandler<HTMLLIElement>
   role: string
-  onMenuItemClick: (href?: string, onClick?: MouseEventHandler<HTMLLIElement>) => void
+  onMenuItemClick: (
+    href?: string,
+    onClick?: MouseEventHandler<HTMLLIElement>
+  ) => void
   userButtonRef: RefObject<HTMLButtonElement>
 }
 
@@ -394,52 +406,70 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
     }
 
     const handleKeyDown: KeyboardEventHandler<HTMLLIElement> = (event) => {
-      if (event.key === 'ArrowDown') {
+      const focusSibling = (
+        direction: 'nextSibling' | 'previousSibling',
+        fallback: 'firstChild' | 'lastChild'
+      ) => {
         event.preventDefault()
-        if (event.currentTarget.nextSibling) {
-          ;(event.currentTarget.nextSibling as HTMLElement).focus()
+        const sibling = event.currentTarget[direction]
+        if (sibling) {
+          ;(sibling as HTMLElement).focus()
         } else {
-          ;(event.currentTarget.parentNode!.firstChild as HTMLElement).focus()
+          ;(event.currentTarget.parentNode![fallback] as HTMLElement).focus()
         }
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault()
-        if (event.currentTarget.previousSibling) {
-          ;(event.currentTarget.previousSibling as HTMLElement).focus()
-        } else {
-          ;(event.currentTarget.parentNode!.lastChild as HTMLElement).focus()
-        }
-      } else if (event.key === 'Tab') {
-        event.preventDefault()
+      }
 
-        const focusableElements = document.querySelectorAll(
-          `a[href]:not([disabled]), button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])`,
-        )
+      switch (event.key) {
+        case 'ArrowDown':
+          focusSibling('nextSibling', 'firstChild')
+          break
+        case 'ArrowUp':
+          focusSibling('previousSibling', 'lastChild')
+          break
+        case 'Tab':
+          event.preventDefault()
 
-        const userButtonIndex = Array.prototype.indexOf.call(
-          focusableElements,
-          userButtonRef.current,
-        )
+          // Focus on either the search button or the cart icon
+          const focusableElements = document.querySelectorAll(
+            `button:not([disabled])`
+          )
 
-        if (event.shiftKey) {
-          if (userButtonIndex > 0) {
-            ;(focusableElements[userButtonIndex - 1] as HTMLElement).focus()
+          const userButtonIndex = Array.prototype.indexOf.call(
+            focusableElements,
+            userButtonRef.current
+          )
+
+          if (event.shiftKey) {
+            if (userButtonIndex > 0) {
+              ;(focusableElements[userButtonIndex - 1] as HTMLElement).focus()
+            }
+          } else {
+            if (userButtonIndex < focusableElements.length - 1) {
+              ;(focusableElements[userButtonIndex + 1] as HTMLElement).focus()
+            }
           }
-        } else {
-          if (userButtonIndex < focusableElements.length - 1) {
-            ;(focusableElements[userButtonIndex + 1] as HTMLElement).focus()
-          }
-        }
-      } else if (event.key === 'Enter' || event.key === ' ') {
-        handleClick()
+          break
+        case 'Enter':
+        case ' ':
+          handleClick()
+          break
+        default:
+          break
       }
     }
 
     return (
-      <MenuItem ref={ref} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={0} role={role}>
+      <MenuItem
+        ref={ref}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role={role}
+      >
         {children}
       </MenuItem>
     )
-  },
+  }
 )
 
 export default UserDropdown

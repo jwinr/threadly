@@ -73,7 +73,10 @@ interface AddToFavoritesButtonProps {
   productName: string
 }
 
-const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, productName }) => {
+const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
+  productId,
+  productName,
+}) => {
   const { userAttributes } = useContext(UserContext)
   const { favorites, addFavorite, removeFavorite } = useFavorites()
   const [loading, setLoading] = useState(false)
@@ -83,11 +86,14 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, 
   const router = useRouter()
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
     if (userAttributes && userAttributes.sub) {
-      const isAdded = favorites.some((item: FavoriteItem) => item.product_id === productId)
+      const isAdded = favorites.some(
+        (item: FavoriteItem) => item.product_id === productId
+      )
       setAdded(isAdded)
       if (!isAdded) {
         setTooltipContent('Favorite to keep tabs on it')
@@ -107,8 +113,9 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, 
       setLoading(false)
       setTooltipContent(
         <>
-          <span>Favorited! See all of your</span> <a href="/favorites">favorites</a>
-        </>,
+          <span>Favorited! See all of your</span>{' '}
+          <a href="/favorites">favorites</a>
+        </>
       )
     }
   }
@@ -153,7 +160,12 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, 
 
   return (
     <Container>
-      <Popover trigger="hover" position="top" content={tooltipContent} showArrow={true}>
+      <Popover
+        trigger="hover"
+        position="top"
+        content={tooltipContent}
+        showArrow={true}
+      >
         <Button
           ref={buttonRef}
           onClick={handleClick}
@@ -161,9 +173,17 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({ productId, 
           aria-label={getAriaLabel()}
         >
           {added ? (
-            <IconFilled loading={loading} isAdding={isAdding} aria-hidden="true" />
+            <IconFilled
+              loading={loading}
+              isAdding={isAdding}
+              aria-hidden="true"
+            />
           ) : (
-            <IconOutline loading={loading} isAdding={isAdding} aria-hidden="true" />
+            <IconOutline
+              loading={loading}
+              isAdding={isAdding}
+              aria-hidden="true"
+            />
           )}
         </Button>
       </Popover>

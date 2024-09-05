@@ -1,4 +1,11 @@
-import React, { ReactNode, RefObject, createContext, useCallback, useMemo, useState } from 'react'
+import React, {
+  ReactNode,
+  RefObject,
+  createContext,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 
 import styled from 'styled-components'
 
@@ -26,29 +33,34 @@ export const AccordionContext = createContext<AccordionContextProps>({
 
 const Accordion: React.FC<AccordionProps> = ({ children }) => {
   const [openIndices, setOpenIndices] = useState<number[]>([])
-  const [items, setItems] = useState<{ index: number; ref: RefObject<HTMLDivElement> }[]>([])
+  const [items, setItems] = useState<
+    { index: number; ref: RefObject<HTMLDivElement> }[]
+  >([])
 
-  const registerItem = useCallback((index: number, ref: RefObject<HTMLDivElement>) => {
-    setItems((prevItems) => {
-      if (!prevItems.some((item) => item.index === index)) {
-        return [...prevItems, { index, ref }]
-      }
-      return prevItems
-    })
-  }, [])
+  const registerItem = useCallback(
+    (index: number, ref: RefObject<HTMLDivElement>) => {
+      setItems((prevItems) => {
+        if (!prevItems.some((item) => item.index === index)) {
+          return [...prevItems, { index, ref }]
+        }
+        return prevItems
+      })
+    },
+    []
+  )
 
   const getItemIndex = useCallback(
     (key: number) => {
       return items.findIndex((item) => item.index === key)
     },
-    [items],
+    [items]
   )
 
   const setOpenIndex = useCallback((index: number) => {
     setOpenIndices((prevIndices) =>
       prevIndices.includes(index)
         ? prevIndices.filter((i) => i !== index)
-        : [...prevIndices, index],
+        : [...prevIndices, index]
     )
   }, [])
 
@@ -58,7 +70,7 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
       const nextIndex = (currentIndex + 1) % items.length
       items[nextIndex]?.ref.current?.focus()
     },
-    [items],
+    [items]
   )
 
   const focusPrevItem = useCallback(
@@ -67,7 +79,7 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
       const prevIndex = (currentIndex - 1 + items.length) % items.length
       items[prevIndex]?.ref.current?.focus()
     },
-    [items],
+    [items]
   )
 
   const value = useMemo(
@@ -79,7 +91,14 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
       focusNextItem,
       focusPrevItem,
     }),
-    [openIndices, setOpenIndex, registerItem, getItemIndex, focusNextItem, focusPrevItem],
+    [
+      openIndices,
+      setOpenIndex,
+      registerItem,
+      getItemIndex,
+      focusNextItem,
+      focusPrevItem,
+    ]
   )
 
   return (

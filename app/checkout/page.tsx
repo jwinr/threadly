@@ -1,12 +1,21 @@
 'use client'
 
-import React, { useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 
 import getStripe from '@/utils/get-stripejs'
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js'
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from '@stripe/react-stripe-js'
 
 import { CartContext } from '@/context/CartContext'
 import { UserContext } from '@/context/UserContext'

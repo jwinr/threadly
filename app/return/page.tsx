@@ -111,9 +111,6 @@ export default function Return() {
 
       fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
         method: 'GET',
-        headers: {
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
-        },
       })
         .then((res) => {
           console.log('Checkout session response status:', res.status)
@@ -166,8 +163,6 @@ export default function Return() {
               clearCart()
               setIsCartCleared(true)
             }
-          } else {
-            throw new Error('Fulfillment failed')
           }
         })
         .catch((error) => {
@@ -193,8 +188,8 @@ export default function Return() {
             <SuccessSection id="success">
               <SuccessCheckmark />
               <Message>
-                We appreciate your business! A confirmation email will be sent to {customerEmail}.
-                If you have any questions, please{' '}
+                We appreciate your business! A confirmation email will be sent
+                to {customerEmail}. If you have any questions, please{' '}
                 <ContactLink href="/contact-us">contact us</ContactLink>.
               </Message>
               <Button type="primary" size="large" href="/orders">
@@ -210,8 +205,9 @@ export default function Return() {
           <Container>
             <SuccessSection id="pending">
               <Message>
-                Your order is still being processed. Please check back later. If you have any
-                questions, please <ContactLink href="/contact-us">contact us</ContactLink>.
+                Your order is still being processed. Please check back later. If
+                you have any questions, please{' '}
+                <ContactLink href="/contact-us">contact us</ContactLink>.
               </Message>
             </SuccessSection>
           </Container>
@@ -224,7 +220,8 @@ export default function Return() {
             <ErrorSection id="failed">
               <Message>
                 We encountered an issue with your order. Please try again or{' '}
-                <ContactLink href="/contact-us">contact us</ContactLink> for assistance.
+                <ContactLink href="/contact-us">contact us</ContactLink> for
+                assistance.
               </Message>
             </ErrorSection>
           </Container>
@@ -237,7 +234,8 @@ export default function Return() {
             <ErrorSection id="session_not_found">
               <Message>
                 The session ID provided is invalid or does not exist. Please{' '}
-                <ContactLink href="/contact-us">contact us</ContactLink> for assistance.
+                <ContactLink href="/contact-us">contact us</ContactLink> for
+                assistance.
               </Message>
             </ErrorSection>
           </Container>
@@ -250,8 +248,8 @@ export default function Return() {
             <ErrorSection id="unauthorized">
               <Message>
                 You are not authorized to view this session. Please{' '}
-                <ContactLink href="/contact-us">contact us</ContactLink> if you believe this is a
-                mistake.
+                <ContactLink href="/contact-us">contact us</ContactLink> if you
+                believe this is a mistake.
               </Message>
             </ErrorSection>
           </Container>
@@ -264,7 +262,8 @@ export default function Return() {
             <ErrorSection id="error">
               <Message>
                 An unexpected error occurred. Please{' '}
-                <ContactLink href="/contact-us">contact us</ContactLink> for assistance.
+                <ContactLink href="/contact-us">contact us</ContactLink> for
+                assistance.
               </Message>
             </ErrorSection>
           </Container>

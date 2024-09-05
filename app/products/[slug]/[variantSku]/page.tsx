@@ -51,8 +51,14 @@ const AddCartWrapper = styled.div`
 `
 
 function ProductDetails() {
-  const { slug, variantSku } = useParams() as { slug: string; variantSku: string }
-  const { product, categoryName, categorySlug } = useProductData(slug, variantSku) as {
+  const { slug, variantSku } = useParams() as {
+    slug: string
+    variantSku: string
+  }
+  const { product, categoryName, categorySlug } = useProductData(
+    slug,
+    variantSku
+  ) as {
     product: Product | null
     categoryName: string | null
     categorySlug: string | null
@@ -60,7 +66,9 @@ function ProductDetails() {
   const { deliveryDate, dayOfWeek, returnDate } = ShippingInfo()
   const isMobileView = useMobileView()
   const [loading, setLoading] = useState<boolean>(true)
-  const [selectedSizeVariantId, setSelectedSizeVariantId] = useState<string | null>(null)
+  const [selectedSizeVariantId, setSelectedSizeVariantId] = useState<
+    string | null
+  >(null)
   const [hoveredImage, setHoveredImage] = useState<number>(0)
 
   useEffect(() => {
@@ -75,7 +83,11 @@ function ProductDetails() {
 
   return (
     <div>
-      <Breadcrumb loading={loading} categoryName={categoryName} categorySlug={categorySlug} />
+      <Breadcrumb
+        loading={loading}
+        categoryName={categoryName}
+        categorySlug={categorySlug}
+      />
       <PageWrapper>
         <MainSection>
           <ProductImageGallery

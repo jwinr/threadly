@@ -1,6 +1,12 @@
 'use client'
 
-import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from 'react'
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { Hub } from 'aws-amplify/utils'
 import debounce from 'lodash.debounce'
@@ -25,7 +31,7 @@ interface CognitoIdTokenPayload {
 interface UserContextType {
   userAttributes: UserAttributes | null
   fetchUserAttributes: () => Promise<void>
-  fetchPaymentMethods: (userUuid: string) => Promise<any[]>
+  fetchPaymentMethods: (userUuid: string) => Promise<unknown[]>
   getToken: () => Promise<object | null>
 }
 
@@ -43,8 +49,13 @@ interface UserProviderProps {
   initialUserAttributes: UserAttributes | null
 }
 
-export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUserAttributes }) => {
-  const [userAttributes, setUserAttributes] = useState<UserAttributes | null>(initialUserAttributes)
+export const UserProvider: React.FC<UserProviderProps> = ({
+  children,
+  initialUserAttributes,
+}) => {
+  const [userAttributes, setUserAttributes] = useState<UserAttributes | null>(
+    initialUserAttributes
+  )
   const [, setAuthChecked] = useState<boolean>(false)
 
   const debouncedFetchUserAttributes = useCallback(
@@ -72,13 +83,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
         console.error('Error updating user attributes:', error)
       }
     }, 300),
-    [],
+    []
   )
 
   const fetchUserAttributes = useCallback(async () => {
     try {
       const session = await fetchAuthSession()
-      if (session && session.tokens && session.tokens.idToken) {
+      if (session?.tokens?.idToken) {
         const payload = session.tokens.idToken.payload as CognitoIdTokenPayload
 
         const selectedAttributes: UserAttributes = {
@@ -100,7 +111,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
   const getToken = async (): Promise<object | null> => {
     try {
       const session = await fetchAuthSession()
-      if (session && session.tokens && session.tokens.accessToken) {
+      if (session?.tokens?.accessToken) {
         return session.tokens.accessToken
       } else {
         throw new Error(INVALID_JWT_TOKEN_ERROR)
@@ -115,6 +126,22 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
     fetchUserAttributes().then(() => setAuthChecked(true))
   }, [fetchUserAttributes])
 
+  const signOut = async () => {
+    try {
+      // Call the signout API route to clear cookies
+      await fetch('/api/user/signout', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      setUserAttributes(null)
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
+  }
+
   useEffect(() => {
     const hubListener = ({ payload }: { payload: { event: string } }) => {
       switch (payload.event) {
@@ -122,7 +149,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
           fetchUserAttributes()
           break
         case 'signedOut':
-          setUserAttributes(null)
+          signOut()
           break
         case 'tokenRefresh':
           fetchUserAttributes()
@@ -175,7 +202,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
               'Content-Type': 'application/json',
               'x-user-attributes': JSON.stringify(userAttributes),
             },
-          },
+          }
         )
 
         const paymentData = await paymentResponse.json()
@@ -190,7 +217,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children, initialUse
         return []
       }
     },
-    [getToken, userAttributes],
+    [getToken, userAttributes]
   )
 
   return (
