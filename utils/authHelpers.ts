@@ -62,9 +62,7 @@ export const handleKeyDown = (
       fullNameValid
     ) {
       event.preventDefault()
-      const formElement = activeElement.closest(
-        'form'
-      ) as HTMLFormElement | null
+      const formElement = activeElement.closest('form')
       formElement?.requestSubmit()
     }
   }

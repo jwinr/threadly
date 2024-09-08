@@ -31,13 +31,13 @@ interface ProductVariant {
 }
 
 interface Product {
-  slug: string
+  slug?: string
   selectedVariant?: ProductVariant
   variants?: ProductVariant[]
 }
 
 interface ProductAttributesProps {
-  product: Product | null
+  product: Product
   loading: boolean
   onSizeVariantSelected?: (sizeVariantId: string) => void
 }

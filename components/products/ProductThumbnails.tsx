@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import styled from 'styled-components'
-import { ProductImage } from '@/app/types/product'
 
-interface ProductThumbnailsProps {
-  hoveredImage: number
+interface ProductThumbnailProps {
+  hoveredImage: number | null
   onThumbnailHover: (index: number) => void
   loading: boolean
-  images: ProductImage[]
+  images: { image_url: string; alt_text: string }[]
 }
 
 const AdditionalImageContainer = styled.div`
@@ -44,7 +43,7 @@ const AdditionalImageThumbnail = styled.div`
   }
 `
 
-const ProductThumbnails: React.FC<ProductThumbnailsProps> = ({
+const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
   hoveredImage,
   onThumbnailHover,
   loading,
@@ -60,26 +59,24 @@ const ProductThumbnails: React.FC<ProductThumbnailsProps> = ({
 
   return (
     <AdditionalImageContainer>
-      {images.map(
-        (item: { image_url: string; alt_text: string }, index: number) => (
-          <AdditionalImageThumbnail
-            key={index}
-            className={hoveredImage === index ? 'additional-image-hovered' : ''}
-            onMouseOver={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onThumbnailHover(index)
-            }}
-          >
-            <Image
-              src={item.image_url}
-              width={100}
-              height={100}
-              alt={item.alt_text}
-            />
-          </AdditionalImageThumbnail>
-        )
-      )}
+      {images.map((item, index) => (
+        <AdditionalImageThumbnail
+          key={index}
+          className={hoveredImage === index ? 'additional-image-hovered' : ''}
+          onMouseOver={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onThumbnailHover(index)
+          }}
+        >
+          <Image
+            src={item.image_url}
+            width={100}
+            height={100}
+            alt={item.alt_text}
+          />
+        </AdditionalImageThumbnail>
+      ))}
     </AdditionalImageContainer>
   )
 }

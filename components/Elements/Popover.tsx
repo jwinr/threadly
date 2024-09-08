@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+// Note: Disabled rule since it does have key events
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'

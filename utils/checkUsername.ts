@@ -20,7 +20,7 @@ export const debouncedCheckUsername = debounce(
         body: JSON.stringify({ username }),
       })
 
-      const data = await response.json()
+      const data = (await response.json()) as { exists: boolean }
       if (!data.exists) {
         setErrorMessage('Invalid username or password.')
         setShakeKey((prevKey) => prevKey + 1)

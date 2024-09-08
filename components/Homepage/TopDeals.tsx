@@ -159,14 +159,14 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
             'x-api-key': apiKey,
           },
         })
-        const data = await response.json()
+        const data = (await response.json()) as Deal[]
         setDeals(data)
       } catch (error) {
         console.error('Error fetching deals:', error)
       }
     }
 
-    fetchDeals()
+    void fetchDeals()
   }, [])
 
   const loveDeals = deals.filter((deal) => deal.category === 'deals_love')

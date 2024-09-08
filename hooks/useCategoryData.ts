@@ -69,7 +69,7 @@ const useCategoryData = (
         )
 
         if (response.ok) {
-          const data: CategoryData = await response.json()
+          const data: CategoryData = (await response.json()) as CategoryData
           setCategoryData(data)
 
           setFilteredItems(data.products)
@@ -87,7 +87,7 @@ const useCategoryData = (
       }
     }
 
-    fetchCategoryData()
+    void fetchCategoryData()
   }, [slug, currentPage, filters])
 
   return { categoryData, loading, filteredItems, setFilteredItems, setLoading }

@@ -66,7 +66,7 @@ const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({
         <EmptyHeader>Your cart is empty</EmptyHeader>
         {userAttributes ? ( // User is logged in, but has an empty cart
           <>
-            <span>Check out what we're featuring now!</span>
+            <span>Check out what we&rsquo;re featuring now!</span>
             <Button
               href="/"
               target="_self"

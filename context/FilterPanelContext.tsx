@@ -40,7 +40,7 @@ const initialState: FilterState = {
 const loadState = (slug: string): FilterState => {
   if (typeof window !== 'undefined') {
     const sessionData = sessionStorage.getItem(`filterState_${slug}`)
-    return sessionData ? JSON.parse(sessionData) : initialState
+    return sessionData ? (JSON.parse(sessionData) as FilterState) : initialState
   }
   return initialState // Default initial state if not in browser
 }
@@ -80,9 +80,9 @@ export const FilterPanelProvider: React.FC<FilterPanelProviderProps> = ({
   // Sync filter state with URL query parameters
   useEffect(() => {
     if (router.query.filters) {
-      const queryFilters = JSON.parse(
+      const queryFilters: Record<string, string[]> = JSON.parse(
         decodeURIComponent(router.query.filters as string)
-      )
+      ) as Record<string, string[]>
 
       setFilterState((prev) => ({
         ...prev,

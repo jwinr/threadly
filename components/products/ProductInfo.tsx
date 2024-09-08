@@ -6,7 +6,7 @@ import Subscription from '@/public/images/icons/subscription.svg'
 import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
 import { useMobileView } from '@/context/MobileViewContext'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
-import { Product } from '@/app/types/product'
+import { Product } from '@/types/product'
 
 interface ProductInfoProps {
   product: Product
@@ -185,15 +185,13 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   const formatCurrency = useCurrencyFormatter()
 
   if (loading) {
-    return (
-      <>
-        <LoadingProduct />
-      </>
-    )
+    return <LoadingProduct />
   }
 
-  const selectedVariant = product?.variants?.[0]
-  const selectedSize = selectedVariant?.sizes?.[0]
+  // Access color variants
+  const selectedColorVariant = product.color_variants?.[0]
+  // Access size variants from the selected color variant
+  const selectedSize = selectedColorVariant?.sizes?.[0]
 
   const productPrice = selectedSize?.price || 0
   const productSalePrice = selectedSize?.sale_price || productPrice
@@ -201,28 +199,30 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   return (
     <>
       <ProductNameWrapper>
-        <h1>{product?.name}</h1>
+        <h1>{product.name}</h1>
         <AddFavsWrapper>
           <AddToFavoritesButton
-            productId={product?.product_id}
+            productId={product.product_id?.toString() || ''}
             productName={product?.name}
           />
         </AddFavsWrapper>
         <ReviewWrapper>
-          <StarRating reviews={product?.reviews} />
+          <StarRating reviews={product.reviews ?? []} />
           <button className="average-rating-text">
-            {product?.reviews.length === 0
+            {(product.reviews?.length === 0 ?? [])
               ? 'Be the first!'
-              : `(${product?.reviews.length} review${product?.reviews.length !== 1 ? 's' : ''})`}
+              : `(${product.reviews?.length} review${product.reviews?.length !== 1 ? 's' : ''})`}
           </button>
         </ReviewWrapper>
         {!isMobileView && (
           <ProductContainer>
-            <Price>{formatCurrency(productSalePrice)}</Price>
+            <Price>{formatCurrency(Number(productSalePrice))}</Price>
             {selectedSize?.sale_price && (
               <span>
                 reg{' '}
-                <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
+                <OriginalPrice>
+                  {formatCurrency(Number(productPrice))}
+                </OriginalPrice>
               </span>
             )}
             <ExchangeWrapper>
@@ -247,10 +247,13 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
       </ProductNameWrapper>
       {isMobileView && (
         <ProductContainer>
-          <Price>{formatCurrency(productSalePrice)}</Price>
+          <Price>{formatCurrency(Number(productSalePrice))}</Price>
           {selectedSize?.sale_price && (
             <span>
-              reg <OriginalPrice>{formatCurrency(productPrice)}</OriginalPrice>
+              reg{' '}
+              <OriginalPrice>
+                {formatCurrency(Number(productPrice))}
+              </OriginalPrice>
             </span>
           )}
           <ExchangeWrapper>
@@ -266,8 +269,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             </ExchangeContent>
           </ExchangeWrapper>
           <AddToFavoritesButton
-            productId={product.product_id}
-            productName={product.name}
+            productId={product.product_id?.toString() || ''}
+            productName={product?.name}
           />
           <DateWrapper>Get it by {deliveryDate}</DateWrapper>
           <ShipWrapper>

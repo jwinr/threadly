@@ -306,7 +306,7 @@ const AddReview: React.FC = () => {
       try {
         const response = await fetch(`/api/products/${slug}/add-review`)
         if (response.ok) {
-          const data: Product = await response.json()
+          const data = (await response.json()) as Product
           setProduct(data)
         }
       } catch (error) {
@@ -315,7 +315,7 @@ const AddReview: React.FC = () => {
     }
 
     if (slug) {
-      fetchProductDetails()
+      void fetchProductDetails()
     }
   }, [slug])
 
@@ -368,9 +368,11 @@ const AddReview: React.FC = () => {
 
       if (response.ok) {
         // Refresh reviews list..
-        router.push(`/products/${slug}`)
+        await router.push(`/products/${slug}`)
       } else {
-        const errorData = await response.json()
+        const errorData: { error: string } = (await response.json()) as {
+          error: string
+        }
         if (
           errorData.error ===
           'You have already submitted a review for this item!'
@@ -389,8 +391,8 @@ const AddReview: React.FC = () => {
     setRatingError('') // Clear the rating error message
   }
 
-  const handleCancel = (): void => {
-    router.push(`/products/${product?.slug}`)
+  const handleCancel = () => {
+    void router.push(`/products/${product?.slug}`)
   }
 
   const invalidStyle = {
@@ -426,7 +428,9 @@ const AddReview: React.FC = () => {
                   <p>{product.description}</p>
                 </div>
                 <ReviewForm
-                  onSubmit={handleReviewSubmit}
+                  onSubmit={(e) => {
+                    void handleReviewSubmit(e)
+                  }}
                   data-form-type="other"
                 >
                   {error && <ErrorMessage>{error}</ErrorMessage>}

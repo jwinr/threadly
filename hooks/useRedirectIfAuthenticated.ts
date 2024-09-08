@@ -18,7 +18,8 @@ const useRedirectIfAuthenticated = (
     const checkUserAuthentication = async () => {
       try {
         const session = await fetchAuthSession()
-        if (session && session.tokens && session.tokens.idToken) {
+        const hasSession = session && session.tokens && session.tokens.idToken
+        if (hasSession) {
           router.push('/')
         } else {
           setAuthChecked(true) // No authenticated user found
@@ -29,7 +30,7 @@ const useRedirectIfAuthenticated = (
       }
     }
 
-    checkUserAuthentication()
+    void checkUserAuthentication()
   }, [router, fetchUserAttributes])
 
   return authChecked

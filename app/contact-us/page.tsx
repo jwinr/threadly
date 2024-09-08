@@ -1,3 +1,5 @@
+'use client'
+
 import styled from 'styled-components'
 import Email from '@/public/images/icons/email.svg'
 

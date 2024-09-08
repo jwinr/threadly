@@ -66,7 +66,7 @@ const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({
 
   return (
     <StarContainer>
-      {[...Array(5)].map((_, index) => {
+      {Array.from(Array(5)).map((_, index) => {
         const starIndex = index + 1
         return (
           <button

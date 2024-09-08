@@ -150,7 +150,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </>
           ) : (
             <EmptyMessage>
-              When you have items in your cart, you'll see the pricing
+              When you have items in your cart, you&apos;ll see the pricing
               information here.
             </EmptyMessage>
           )}

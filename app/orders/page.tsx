@@ -101,7 +101,7 @@ const Orders: React.FC = () => {
               },
             }
           )
-          const data = await response.json()
+          const data: Order[] = (await response.json()) as Order[]
           setOrders(data)
         }
       } catch (error) {
@@ -111,7 +111,7 @@ const Orders: React.FC = () => {
       }
     }
 
-    fetchOrders()
+    void fetchOrders()
   }, [userAttributes])
 
   if (loading) {

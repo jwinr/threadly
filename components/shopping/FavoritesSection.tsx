@@ -363,7 +363,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
             )
           })}
           {!showAll && remainingFavoritesCount > 0 && (
-            <ShowMoreButton onClick={handleShowAll}>
+            <ShowMoreButton onClick={() => void handleShowAll}>
               Show remaining {remainingFavoritesCount} favorites
             </ShowMoreButton>
           )}

@@ -31,7 +31,7 @@ const useProductData = (
         })
 
         if (response.ok) {
-          const data: Product = await response.json()
+          const data: Product = (await response.json()) as Product
           setProduct(data)
           setCategoryName(data.category_name)
           setCategorySlug(data.category_slug)
@@ -42,7 +42,7 @@ const useProductData = (
     }
 
     if (slug) {
-      fetchProductDetails()
+      void fetchProductDetails()
     }
   }, [slug, variantSku])
 

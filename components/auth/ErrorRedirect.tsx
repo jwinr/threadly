@@ -42,7 +42,7 @@ const ErrorRedirect: React.FC<ErrorRedirectProps> = ({ message }) => {
   const router = useRouter()
 
   const handleRedirect = () => {
-    router.push('/')
+    void router.push('/')
   }
 
   return (

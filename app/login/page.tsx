@@ -89,6 +89,7 @@ const Login: React.FC = () => {
     setLoading(true)
 
     // Call signIn with username and password
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
         const response = await signIn({
@@ -188,14 +189,17 @@ const Login: React.FC = () => {
                     description="Skip registration and explore the full features by signing in to a demo account."
                     actions={
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <Button type="secondary" onPress={handleDemoSignIn}>
+                        <Button
+                          type="secondary"
+                          onPress={() => void handleDemoSignIn}
+                        >
                           Sign in to demo account
                         </Button>
                       </div>
                     }
                   />
                   <AuthStyles.FormContainer
-                    onSubmit={handleSignIn}
+                    onSubmit={() => void handleSignIn}
                     noValidate
                     data-form-type="login"
                     onKeyDown={(e) =>

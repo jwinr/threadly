@@ -94,7 +94,7 @@ const Payments: React.FC = () => {
 
   useEffect(() => {
     if (!checkingUser && userAttributes?.stripe_customer_id) {
-      fetchSavedPaymentMethods()
+      void fetchSavedPaymentMethods()
     }
   }, [checkingUser, userAttributes])
 
@@ -109,7 +109,7 @@ const Payments: React.FC = () => {
     setLoading(false)
   }
 
-  const removePaymentMethod = async (methodId: string) => {
+  const removePaymentMethod = (methodId: string) => {
     // TODO: Implement logic to perform after removing the card
     console.log('TODO: ', methodId)
   }

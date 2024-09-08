@@ -1,8 +1,14 @@
 import styled from 'styled-components'
-import {
-  ProductDescriptionProps,
-  ProductOverviewProps,
-} from '@/app/types/product'
+import { Product } from '@/types/product'
+
+interface ProductOverviewProps {
+  product: Product | null
+  loading: boolean
+}
+
+interface ProductDescriptionProps {
+  description: string
+}
 
 const ProductSpecifications = styled.div`
   display: grid;
@@ -128,16 +134,17 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
   return (
     <ProductSpecifications>
       <ProductOverviewSection>
-        <ProductDescription description={product?.description} />
+        <ProductDescription description={product?.description || ''} />
       </ProductOverviewSection>
       <ProductSpecs>
-        {product?.features.map((feature, idx) => (
+        {product?.features?.map((feature, idx) => (
           <Section key={idx}>
             <h1>{feature.feature_title}</h1>
             <ul>
-              {feature.feature_contents.map((content, contentIdx) => (
-                <li key={contentIdx}>{content}</li>
-              ))}
+              {Array.isArray(feature.feature_content) &&
+                feature.feature_content.map((content, contentIdx) => (
+                  <li key={contentIdx}>{content}</li>
+                ))}
             </ul>
           </Section>
         ))}

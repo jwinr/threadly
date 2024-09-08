@@ -12,12 +12,15 @@ function LocationEstimator() {
     longitude: number
   ): Promise<string | null> {
     try {
-      const response = await axios.get(
+      const response: {
+        status: number
+        data: { address: { postcode: string } }
+      } = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
       )
 
       if (response.status === 200) {
-        const address = response.data.address
+        const address: { postcode: string } = response.data.address
         return address.postcode
       }
     } catch (error) {

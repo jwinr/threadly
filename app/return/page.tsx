@@ -119,7 +119,7 @@ export default function Return() {
           }
           return res.json()
         })
-        .then((data: CheckoutSessionData) => {
+        .then(async (data: CheckoutSessionData) => {
           console.log('Checkout session data:', data)
           if (data.status === 'open' || !data.status) {
             throw new Error('Invalid session status')
@@ -131,7 +131,7 @@ export default function Return() {
           if (data.fulfilled) {
             setStatus('complete')
             if (!isCartCleared) {
-              clearCart()
+              await clearCart()
               setIsCartCleared(true)
             }
           } else {
@@ -155,17 +155,17 @@ export default function Return() {
           }
           return res.json()
         })
-        .then((fulfillmentData: { success: boolean }) => {
+        .then(async (fulfillmentData: { success: boolean }) => {
           console.log('Fulfillment data:', fulfillmentData)
           if (fulfillmentData.success) {
             setStatus('complete')
             if (!isCartCleared) {
-              clearCart()
+              await clearCart()
               setIsCartCleared(true)
             }
           }
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error('Error occurred:', error.message)
           if (error.message.includes('Invalid session')) {
             setStatus('session_not_found')

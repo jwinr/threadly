@@ -91,7 +91,12 @@ const VoteButton: React.FC<VoteButtonProps> = ({
   }
 
   return (
-    <Button onClick={handleClick} disabled={disabled || loading}>
+    <Button
+      onClick={() => {
+        void handleClick()
+      }}
+      disabled={disabled || loading}
+    >
       <ThumbsIcon loading={loading}>
         {type === 'upvote' ? <LiaThumbsUpSolid /> : <LiaThumbsDownSolid />}
       </ThumbsIcon>

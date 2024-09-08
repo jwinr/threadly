@@ -38,7 +38,9 @@ interface UserContextType {
 const defaultUserContext: UserContextType = {
   userAttributes: null,
   fetchUserAttributes: async () => {},
+  // eslint-disable-next-line @typescript-eslint/require-await
   fetchPaymentMethods: async () => [],
+  // eslint-disable-next-line @typescript-eslint/require-await
   getToken: async () => null,
 }
 
@@ -70,12 +72,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           body: JSON.stringify(attributes),
         })
 
-        const data = await response.json()
+        const data: unknown = await response.json()
 
-        if (data.userUuid) {
+        const userData = data as { userUuid?: string }
+        if (userData.userUuid) {
           const updatedAttributes = {
             ...attributes,
-            user_uuid: data.userUuid,
+            user_uuid: userData.userUuid,
           }
           setUserAttributes(updatedAttributes)
         }
@@ -101,7 +104,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
 
         setUserAttributes(selectedAttributes)
 
-        debouncedFetchUserAttributes(selectedAttributes)
+        await debouncedFetchUserAttributes(selectedAttributes)
       }
     } catch (error) {
       console.error('Error fetching user session:', error)
@@ -123,7 +126,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   }
 
   useEffect(() => {
-    fetchUserAttributes().then(() => setAuthChecked(true))
+    void fetchUserAttributes().then(() => setAuthChecked(true))
   }, [fetchUserAttributes])
 
   const signOut = async () => {
@@ -146,13 +149,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     const hubListener = ({ payload }: { payload: { event: string } }) => {
       switch (payload.event) {
         case 'signedIn':
-          fetchUserAttributes()
+          void fetchUserAttributes()
           break
         case 'signedOut':
-          signOut()
+          void signOut()
           break
         case 'tokenRefresh':
-          fetchUserAttributes()
+          void fetchUserAttributes()
           break
         default:
           break
@@ -178,12 +181,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({
         const response = await fetch(`/api/user/${userUuid}`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.stringify(token)}`,
             'Content-Type': 'application/json',
           },
         })
 
-        const data = await response.json()
+        const data: { stripeCustomerId?: string; error?: string } =
+          (await response.json()) as {
+            stripeCustomerId?: string
+            error?: string
+          }
 
         if (!response.ok || !data.stripeCustomerId) {
           console.error('Failed to fetch Stripe customer ID:', data.error)
@@ -198,18 +205,25 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           {
             method: 'GET',
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${JSON.stringify(token)}`,
               'Content-Type': 'application/json',
               'x-user-attributes': JSON.stringify(userAttributes),
             },
           }
         )
 
-        const paymentData = await paymentResponse.json()
+        const paymentData: { paymentMethods: unknown[]; error?: string } =
+          (await paymentResponse.json()) as {
+            paymentMethods: unknown[]
+            error?: string
+          }
         if (paymentResponse.ok) {
           return paymentData.paymentMethods
         } else {
-          console.error('Failed to fetch payment methods:', paymentData.error)
+          console.error(
+            'Failed to fetch payment methods:',
+            paymentData?.error || 'Unknown error'
+          )
           return []
         }
       } catch (error) {

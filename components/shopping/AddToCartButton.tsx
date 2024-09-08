@@ -43,7 +43,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     <Button
       type="primary"
       size="medium"
-      onPress={handleAddToCart}
+      onPress={() => void handleAddToCart()}
       disabled={loading || internalLoading}
       aria-label={`Add ${productName} to cart`}
     >

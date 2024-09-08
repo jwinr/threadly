@@ -145,8 +145,8 @@ export default function CategoryPage() {
 
   const page = parseInt(searchParams.get('page') || '1')
   const [currentPage, setCurrentPage] = useState<number>(page)
-  const [filterState, setFilterState] = useState(
-    JSON.parse(searchParams.get('filters') || '{}')
+  const [filterState, setFilterState] = useState<Record<string, string[]>>(
+    JSON.parse(searchParams.get('filters') || '{}') as Record<string, string[]>
   )
   const { categoryData, loading, filteredItems } = useCategoryData(
     slug,
@@ -207,7 +207,7 @@ export default function CategoryPage() {
   )
 
   const resetFilters = useCallback(() => {
-    setFilterState({})
+    setFilterState({ selectedAttributes: [] })
     updateURL({})
   }, [updateURL])
 
@@ -240,21 +240,27 @@ export default function CategoryPage() {
         ) : (
           <>
             <ProductFilters
-              inventoryItems={categoryData?.products}
+              inventoryItems={categoryData?.products || []}
               onFilterChange={handleFilterChange}
-              attributes={categoryData?.attributes || []}
+              attributes={(categoryData?.attributes as []) || []}
               resetFilters={resetFilters}
-              filterState={{ selectedAttributes: filterState }}
+              filterState={{
+                selectedAttributes: filterState,
+                selectedPriceRanges: [],
+              }}
               loading={loading}
               filtersVisible={filtersVisible}
             />
             <FixedFiltersContainer className={filtersVisible ? 'visible' : ''}>
               <ProductFilters
-                inventoryItems={categoryData?.products}
+                inventoryItems={categoryData?.products || []}
                 onFilterChange={handleFilterChange}
-                attributes={categoryData?.attributes || []}
+                attributes={(categoryData?.attributes as []) || []}
                 resetFilters={resetFilters}
-                filterState={{ selectedAttributes: filterState }}
+                filterState={{
+                  selectedAttributes: filterState,
+                  selectedPriceRanges: [],
+                }}
                 loading={loading}
                 filtersVisible={filtersVisible}
               />
@@ -268,9 +274,7 @@ export default function CategoryPage() {
               <LoadingCard key={index} $loading={loading} />
             ))}
           {paginatedItems.map((item) => {
-            console.log(item)
             return item.colors.map((color) => {
-              // Using the price and sale price from the first size
               const firstSize = color.sizes[0] as Size
               const price = firstSize.price
               const salePrice = firstSize.sale_price

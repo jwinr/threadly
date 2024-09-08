@@ -144,19 +144,24 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
         }),
       })
 
-      const data = await response.json()
+      const data: { updatedReview?: Partial<Review>; error?: string } =
+        (await response.json()) as {
+          updatedReview?: Partial<Review>
+          error?: string
+        }
       // console.log("Response data:", data)
 
       if (response.ok) {
         setReviews((prevReviews) =>
-          prevReviews.map((review) =>
-            review.review_id === reviewId
-              ? { ...review, ...data.updatedReview }
-              : review
+          prevReviews.map(
+            (review): Review =>
+              review.review_id === reviewId
+                ? { ...review, ...(data.updatedReview || {}) }
+                : review
           )
         )
       } else {
-        console.error('Failed to record vote:', data.error)
+        console.error('Failed to record vote:', data?.error || 'Unknown error')
       }
     } catch (error) {
       console.error('Error:', error)

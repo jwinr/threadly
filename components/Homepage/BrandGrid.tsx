@@ -50,7 +50,7 @@ const BrandGrid: React.FC = () => {
           },
         })
         if (response.ok) {
-          const data = await response.json()
+          const data: Brand[] = (await response.json()) as Brand[]
           setBrandsData(data)
         } else {
           throw new Error('Error fetching data')
@@ -60,7 +60,7 @@ const BrandGrid: React.FC = () => {
       }
     }
 
-    fetchData()
+    void fetchData()
   }, [])
 
   return (

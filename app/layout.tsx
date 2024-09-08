@@ -14,6 +14,7 @@ import cookie from 'cookie'
 import { headers } from 'next/headers'
 import Script from 'next/script'
 import { Metadata } from 'next'
+import { Customer } from '@/types/user'
 
 interface RootLayoutProps {
   children: ReactNode
@@ -28,8 +29,8 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const headersList = headers()
   const nonce = headers().get('x-nonce')
   const cookies = cookie.parse(headersList.get('cookie') || '')
-  const userAttributes = cookies.userAttributes
-    ? JSON.parse(cookies.userAttributes)
+  const userAttributes: Customer | null = cookies.userAttributes
+    ? (JSON.parse(cookies.userAttributes) as Customer)
     : null
 
   return (

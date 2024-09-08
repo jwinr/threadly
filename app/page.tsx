@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         </Section>
         <Section></Section>
         <Section>
-          <Title>Deals you'll love</Title>
+          <Title>Deals you&apos;ll love</Title>
         </Section>
         <Section>
           <FeatureHighlights />

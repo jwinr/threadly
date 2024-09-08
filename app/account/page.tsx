@@ -15,6 +15,7 @@ import Purchases from '@/public/images/icons/Purchases.svg'
 import Settings from '@/public/images/icons/Settings.svg'
 import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
+import { OrderDetail } from '@/types/order'
 
 const AccountContainer = styled.div`
   margin: 0 auto;
@@ -220,17 +221,6 @@ const TextWrapper = styled.div`
   text-align: start;
 `
 
-interface Order {
-  order_id: string
-  amount_total: number
-  created_at: string
-  line_items: Array<{
-    order_line_item_id: string
-    product_image_url: string
-    product_name: string
-  }>
-}
-
 const Account: React.FC = () => {
   const { userAttributes } = useContext(UserContext) as {
     userAttributes?: {
@@ -243,7 +233,7 @@ const Account: React.FC = () => {
   const checkingUser = useCheckLoggedInUser()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [orders, setOrders] = useState<Order[]>([])
+  const [orders, setOrders] = useState<OrderDetail[]>([])
   const formatCurrency = useCurrencyFormatter()
   const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(true)
@@ -255,7 +245,7 @@ const Account: React.FC = () => {
       const response = await fetch(
         `/api/orders?id=${userAttributes?.sub}&limit=${limit}&offset=${offset}`
       )
-      const data = await response.json()
+      const data = (await response.json()) as OrderDetail[]
       if (data.length < limit) {
         setHasMore(false)
       }
@@ -270,14 +260,14 @@ const Account: React.FC = () => {
 
   useEffect(() => {
     if (!checkingUser && userAttributes) {
-      fetchOrders()
+      void fetchOrders()
     }
   }, [checkingUser, userAttributes])
 
   const handleLoadMore = () => {
     setLoadingMore(true)
     setOffset((prevOffset) => prevOffset + limit)
-    fetchOrders(offset + limit)
+    void fetchOrders(offset + limit)
   }
 
   const handleFavorites = () => {
@@ -327,21 +317,21 @@ const Account: React.FC = () => {
                   <ViewOrders>View all orders</ViewOrders>
                 </CardWrapper>
                 {orders.length === 0 ? (
-                  <span>You don't have any recent orders to display.</span>
+                  <span>You don&apos;t have any recent orders to display.</span>
                 ) : (
                   <OrderListContainer>
                     <OrderList>
                       {orders.map((order) => (
-                        <OrderListItem key={order.order_id}>
+                        <OrderListItem key={order.order_detail_id}>
                           <ImageWrapper
-                            href={`/orders/${order.order_id}`}
-                            aria-label={`View details of order #${order.order_id}`}
+                            href={`/orders/${order.order_detail_id}`}
+                            aria-label={`View details of order #${order.order_detail_id}`}
                           >
-                            {order.line_items.map((item) => (
+                            {order.line_items!.map((item) => (
                               <Image
                                 key={item.order_line_item_id}
-                                src={item.product_image_url}
-                                alt={item.product_name}
+                                src={item.product_image_url!}
+                                alt={item.product_name!}
                                 width={80}
                                 height={80}
                                 priority={true}
@@ -349,11 +339,12 @@ const Account: React.FC = () => {
                             ))}
                           </ImageWrapper>
                           <div>
-                            <span>Order ID:</span> <span>{order.order_id}</span>
+                            <span>Order ID:</span>{' '}
+                            <span>{order.order_detail_id}</span>
                           </div>
                           <div>
                             <span>Amount:</span>{' '}
-                            {formatCurrency(order.amount_total, true)}
+                            {formatCurrency(order.amount_total!, true)}
                           </div>
                           <div>
                             <span>Order Date:</span>{' '}

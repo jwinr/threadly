@@ -256,7 +256,7 @@ const UserDropdown = () => {
   const dropdownContent = (
     <DropdownMenu
       user={given_name!}
-      handleSignOut={signOutHandler}
+      handleSignOut={() => void signOutHandler}
       firstMenuItemRef={firstMenuItemRef}
       onMenuItemClick={handleMenuItemClick}
       userButtonRef={userButtonRef}
@@ -399,6 +399,7 @@ interface DropdownItemProps {
   userButtonRef: RefObject<HTMLButtonElement>
 }
 
+// eslint-disable-next-line react/display-name
 const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
   ({ children, href, onClick, role, onMenuItemClick, userButtonRef }, ref) => {
     const handleClick = () => {

@@ -31,8 +31,8 @@ const generateBreadcrumbPart = (
   pathnames: string[],
   index: number,
   title?: string,
-  categorySlug?: string | '',
-  categoryName?: string | ''
+  categorySlug?: string,
+  categoryName?: string
 ) => {
   if (pathname === 'categories') {
     return null

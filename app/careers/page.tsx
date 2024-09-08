@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import styled from 'styled-components'
 import Head from 'next/head'
@@ -62,23 +64,27 @@ const Careers: React.FC = () => {
 
   const { showToast } = useToast()
 
-  const handleButtonClick = async () => {
+  const handleButtonClick: () => Promise<void> = async () => {
     if (!emailString) {
-      showToast('Email not available', { type: 'caution' })
+      await showToast('Email not available', { type: 'caution' })
       return
     }
 
     try {
       await navigator.clipboard.writeText(emailString)
-      showToast('Email copied to clipboard', {
+      await showToast('Email copied to clipboard', {
         type: 'success',
       })
     } catch (err) {
       console.error('Failed to copy email: ', err)
-      showToast('Failed to copy email', {
+      await showToast('Failed to copy email', {
         type: 'caution',
       })
     }
+  }
+
+  const handleButtonClickWrapper = (): void => {
+    void handleButtonClick()
   }
 
   return (
@@ -87,9 +93,9 @@ const Careers: React.FC = () => {
         <title>Hire Me | Threadly</title>
       </Head>
       <CareersContainer>
-        <Title>Let's work together</Title>
+        <Title>Let&quot;s work together</Title>
         <Description>
-          Interested in hiring me to join your team? I'm always looking for
+          Interested in hiring me to join your team? I&quot;m always looking for
           opportunities to grow and apply my skills. Drop me an email if you
           want to chat!
         </Description>
@@ -98,7 +104,7 @@ const Careers: React.FC = () => {
           target="_self"
           size="large"
           type="primary"
-          onPress={handleButtonClick}
+          onPress={handleButtonClickWrapper}
           aria-label="Contact Me"
         >
           Contact Me

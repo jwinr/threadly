@@ -140,9 +140,9 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
     }
 
     if (added) {
-      removeFromFavorites()
+      void removeFromFavorites()
     } else {
-      addToFavorites()
+      void addToFavorites()
     }
   }
 

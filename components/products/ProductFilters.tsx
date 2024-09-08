@@ -14,19 +14,23 @@ import FilterPanel from '@/components/Products/FilterPanel'
 import ActiveFilters from '@/components/Products/ActiveFilters'
 import Button from '@/components/Elements/Button'
 
+interface Product {
+  price: number
+}
+
 interface Attribute {
   attribute_type: string
   attribute_values: string[]
 }
 
 interface FilterState {
-  selectedPriceRanges?: string[]
-  selectedAttributes?: Record<string, string[]>
+  selectedPriceRanges: string[]
+  selectedAttributes: Record<string, string[]>
 }
 
 interface ProductFiltersProps {
-  inventoryItems?: { price: number }[]
-  onFilterChange: (filters: Record<string, string[] | string[]>) => void
+  inventoryItems: Product[]
+  onFilterChange: (filters: Record<string, string[]>) => void
   attributes: Attribute[]
   resetFilters: () => void
   filterState: FilterState
@@ -215,7 +219,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
   const [isPanelOpen, setIsPanelOpen] = useState(false)
 
   const dropdownAttributeRef = useRef<(RefObject<HTMLDivElement> | null)[]>(
-    Array(attributes.length).fill(null)
+    Array<RefObject<HTMLDivElement> | null>(attributes.length).fill(null)
   ).current.map(() => useRef<HTMLDivElement>(null))
   const dropdownPriceRef = useRef<HTMLDivElement>(null)
 
@@ -378,7 +382,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
   ]
 
   const isItemInPriceRange = useCallback(
-    (item: { price: number }, priceRange: string) => {
+    (item: Product, priceRange: string) => {
       if (!priceRange || typeof priceRange !== 'string') {
         return false
       }

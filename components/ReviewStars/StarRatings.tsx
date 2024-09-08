@@ -2,7 +2,7 @@ import React from 'react'
 import FilledStar from './FilledStar'
 import HalfFilledStar from './HalfFilledStar'
 import EmptyStar from './EmptyStar'
-import { Review } from '@/app/types/product'
+import { Review } from '@/types/product'
 
 interface StarRatingsProps {
   reviews: Review[] | number[] | number[][] | number
@@ -31,9 +31,9 @@ const StarRatings: React.FC<StarRatingsProps> = ({ reviews }) => {
           {reviews.length} {reviewCountText}
         </span>
       ) : (
-        <span>This product doesn't have any reviews</span>
+        <span>This product doesn&apos;t have any reviews</span>
       )}
-      {[...Array(totalStars)].map((_, i) => {
+      {Array.from({ length: totalStars }).map((_, i) => {
         if (i < filledStars) {
           // Filled star
           return <FilledStar key={i} />

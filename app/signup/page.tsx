@@ -102,7 +102,7 @@ const SignUp: React.FC = () => {
     }
   }
 
-  const handleSignUp = async (event: FormEvent): Promise<void> => {
+  const handleSignUp = (event: FormEvent) => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
@@ -117,6 +117,7 @@ const SignUp: React.FC = () => {
 
     setLoading(true)
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       const { firstName, lastName } = splitFullName(formState.fullName || '')
       try {
@@ -183,7 +184,7 @@ const SignUp: React.FC = () => {
                   Success! Your Nexari account has been created.
                 </AuthStyles.HeaderText>
                 <SubheaderText style={{ marginBottom: '30px' }}>
-                  You're ready to start shopping!
+                  You&apos;re ready to start shopping!
                 </SubheaderText>
                 <AuthStyles.AuthBtn onClick={handleRedirect} type="button">
                   Shop now
@@ -195,7 +196,7 @@ const SignUp: React.FC = () => {
                   Create your Threadly account
                 </AuthStyles.HeaderText>
                 <AuthStyles.FormContainer
-                  onSubmit={handleSignUp}
+                  onSubmit={() => void handleSignUp}
                   noValidate
                   data-form-type="register"
                   onKeyDown={(e) =>

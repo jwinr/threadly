@@ -5,10 +5,14 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import { useEffect, useState, useRef, MouseEvent } from 'react'
-import { Product } from '@/app/types/product'
+import { ProductImage } from '@/types/product'
+
+interface Product {
+  images?: ProductImage[]
+}
 
 interface ProductImageGalleryProps {
-  product: Pick<Product, 'images'>
+  product: Product
   isMobileView: boolean
   loading: boolean
   hoveredImage: number
@@ -186,13 +190,13 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
             modules={[Pagination]}
             spaceBetween={10}
           >
-            {product?.images.map((item, index) => (
+            {product?.images?.map((item, index) => (
               <SwiperSlide key={index}>
                 <Image
                   src={item.image_url}
                   width={250}
                   height={250}
-                  alt={item.alt_text}
+                  alt={item.alt_text!}
                   priority={index === 0}
                 />
               </SwiperSlide>
@@ -213,7 +217,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
               transform: `translate3d(${-100 * currentIndex}%, 0, 0)`,
             }}
           >
-            {product?.images.map((item, index) => (
+            {product?.images?.map((item, index) => (
               <div key={index} className="image-container">
                 <Image
                   ref={(el) => {
@@ -223,7 +227,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
                   width={880}
                   height={880}
                   quality={80}
-                  alt={item.alt_text}
+                  alt={item.alt_text!}
                   priority={index === 0}
                 />
               </div>
@@ -233,11 +237,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
             <Image
               className="zoomed-image"
               ref={zoomedImageRef}
-              src={product.images[currentIndex].image_url}
+              src={product.images?.[currentIndex]?.image_url || ''}
               width={2000}
               height={2000}
               quality={100}
-              alt={product.images[currentIndex].alt_text}
+              alt={product.images?.[currentIndex]?.alt_text || ''}
             />
           )}
         </MainImageContainer>

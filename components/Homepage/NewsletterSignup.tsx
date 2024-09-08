@@ -96,7 +96,7 @@ const NewsletterSignup: React.FC = () => {
     <NewsletterContainer>
       <NewsletterTitle>Stay updated</NewsletterTitle>
       <NewsletterSubtitle>
-        Be the first to know the latest deals and more. We won't spam.
+        Be the first to know the latest deals and more. We won&apos;t spam.
       </NewsletterSubtitle>
       {submitted ? (
         <SuccessMessage>

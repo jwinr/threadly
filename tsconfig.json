@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "@/app/*": ["./app/*"],
-      "@/types/*": ["app/types/*"],
+      "@/types/*": ["./types/*"],
       "@/reducers/*": ["./reducers/*"],
       "@/components/*": ["./components/*"],
       "@/context/*": ["./context/*"],
@@ -31,7 +31,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "typeRoots": ["node_modules/@types"]
   },
   "include": [
     "next-env.d.ts",

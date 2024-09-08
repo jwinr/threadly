@@ -23,6 +23,8 @@ dist/
 # misc
 .DS_Store
 *.pem
+.hintrc
+.vscode
 
 # debug
 npm-debug.log*
@@ -43,6 +45,9 @@ yarn-error.log*
 .serverless
 .serverless_nextjs
 
+# husky
+.husky
+
 # local content / private files
 public/images/products/
 public/images/hero_main.jpg
@@ -51,7 +56,7 @@ src/
 layout/navbar/Menu/
 middleware.ts
 app/api/
-.hintrc
+config.json
 
 #amplify-do-not-edit-begin
 amplify/#current-cloud-backend

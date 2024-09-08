@@ -14,8 +14,8 @@ import { useToast } from '@/context/ToastContext'
 import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 
 export interface CartItem {
-  product_stripe_sale_price_id: number
-  product_stripe_price_id: number
+  product_stripe_sale_price_id?: number
+  product_stripe_price_id?: number
   variant_id: number
   quantity: number
   product_id?: number
@@ -60,11 +60,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const [isSyncing, setIsSyncing] = useState<boolean>(false)
   const hasSyncedCart = useRef<boolean>(false)
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     if (userAttributes && userAttributes.user_uuid) {
       try {
         const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
-        const data = await response.json()
+        const data: CartItem[] = (await response.json()) as CartItem[]
         setCart(data)
       } catch (error) {
         console.error('Error fetching cart:', error)
@@ -77,7 +77,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         setCart(localCart)
       }
     }
-  }
+  }, [userAttributes, setCart])
 
   const addToCart = useCallback(
     async (variantId: number, quantity = 1, isSyncing = false) => {
@@ -93,7 +93,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${JSON.stringify(token)}`,
             },
             body: JSON.stringify({
               userId: userAttributes.user_uuid,
@@ -103,14 +103,16 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           })
 
           if (!response.ok) {
-            const errorData = await response.json()
+            const errorData: unknown = await response.json()
             console.error('Error adding to cart:', errorData)
-            throw new Error(`Error adding to cart: ${errorData.message}`)
+            throw new Error(
+              `Error adding to cart: ${(errorData as { message: string }).message}`
+            )
           }
 
           await fetchCart()
           if (!isSyncing) {
-            showToast(`Added ${quantity} item(s) to cart`, {
+            void showToast(`Added ${quantity} item(s) to cart`, {
               type: 'success',
             })
           }
@@ -136,14 +138,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           localStorage.setItem('cart', JSON.stringify(localCart))
           await fetchCart()
           if (!isSyncing) {
-            showToast(`Added ${quantity} item(s) to cart`, {
+            void showToast(`Added ${quantity} item(s) to cart`, {
               type: 'success',
             })
           }
         }
       } catch (error) {
         console.error('Error adding to cart:', error)
-        showToast('Failed to add product', {
+        void showToast('Failed to add product', {
           type: 'caution',
         })
       } finally {
@@ -166,7 +168,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.stringify(token)}`,
           },
           body: JSON.stringify({
             userId: userAttributes.user_uuid,
@@ -175,13 +177,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
+          const errorData: unknown = await response.json()
           console.error('Error removing from cart:', errorData)
-          throw new Error(`Error removing from cart: ${errorData.message}`)
+          const errorMessage = (errorData as { message: string }).message
+          throw new Error(`Error removing from cart: ${errorMessage}`)
         }
 
         await fetchCart()
-        showToast('Item removed from cart', {
+        await showToast('Item removed from cart', {
           type: 'success',
         })
       } else {
@@ -195,13 +198,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.setItem('cart', JSON.stringify(updatedCart))
         setCart(updatedCart)
 
-        showToast('Removed from cart.', {
+        await showToast('Removed from cart.', {
           type: 'success',
         })
       }
     } catch (error) {
       console.error('Error removing product from cart:', error)
-      showToast('Failed to remove product', {
+      await showToast('Failed to remove product', {
         type: 'caution',
       })
     } finally {
@@ -225,7 +228,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.stringify(token)}`,
           },
           body: JSON.stringify({
             userId: userAttributes.user_uuid,
@@ -235,13 +238,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
+          const errorData: unknown = await response.json()
           console.error('Error updating quantity:', errorData)
-          throw new Error(`Error updating quantity: ${errorData.message}`)
+          throw new Error(
+            `Error updating quantity: ${(errorData as { message: string }).message}`
+          )
         }
 
         await fetchCart()
-        showToast(`Item quantity updated to ${newQuantity}`, {
+        await showToast(`Item quantity updated to ${newQuantity}`, {
           type: 'success',
         })
       } else {
@@ -257,13 +262,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.setItem('cart', JSON.stringify(updatedCart))
         setCart(updatedCart)
 
-        showToast(`Item quantity updated to ${newQuantity}`, {
+        await showToast(`Item quantity updated to ${newQuantity}`, {
           type: 'success',
         })
       }
     } catch (error) {
       console.error('Error updating product quantity:', error)
-      showToast('Failed to update product quantity', {
+      await showToast('Failed to update product quantity', {
         type: 'caution',
       })
     } finally {
@@ -288,7 +293,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.stringify(token)}`,
           },
           body: JSON.stringify({ cart: localCart }),
         })
@@ -316,26 +321,28 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${JSON.stringify(token)}`,
           },
           body: JSON.stringify({ userId: userAttributes.user_uuid }),
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
+          const errorData: unknown = await response.json()
           console.error('Error clearing cart:', errorData)
-          throw new Error(`Error clearing cart: ${errorData.message}`)
+          throw new Error(
+            `Error clearing cart: ${(errorData as { message: string }).message}`
+          )
         }
       } else {
         localStorage.removeItem('cart')
       }
       setCart([]) // Clear the cart state
-      showToast('Cart cleared', {
+      await showToast('Cart cleared', {
         type: 'success',
       })
     } catch (error) {
       console.error('Error clearing cart:', error)
-      showToast('Failed to clear cart', {
+      await showToast('Failed to clear cart', {
         type: 'caution',
       })
     } finally {
@@ -345,7 +352,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (!hasSyncedCart.current) {
-      syncLocalCartWithServer()
+      void syncLocalCartWithServer()
       hasSyncedCart.current = true
     }
   }, [userAttributes, syncLocalCartWithServer])

@@ -25,15 +25,12 @@ import {
   Subtitle,
 } from '@/components/Shopping/CartStyles'
 import OrderSpinner from '@/components/Loaders/OrderSpinner'
+import { FavoriteItem } from '@/types/favorites'
 
 const StyledPoint = styled(Point)`
   width: 24px;
   height: 24px;
 `
-
-interface FavoriteItem {
-  variant_id: number
-}
 
 interface PreviousTotals {
   subtotal: string
@@ -77,29 +74,34 @@ const Cart: React.FC = () => {
           const response = await fetch(
             `/api/cart?id=${userAttributes.user_uuid}`
           )
-          const data = await response.json()
+          const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
 
           setCart(
-            data.map((item: CartItem) => ({
+            data.map((item: FavoriteItem) => ({
               ...item,
               quantity: item.quantity || 1,
-            }))
+              variant_id: item.variant_id || 0,
+            })) as CartItem[]
           )
         } else {
           console.error('user_uuid is null or undefined')
-          const localCart = JSON.parse(localStorage.getItem('cart') || '[]')
+          const localCart: CartItem[] = JSON.parse(
+            localStorage.getItem('cart') || '[]'
+          ) as CartItem[]
           if (localCart.length > 0) {
             const uniqueVariantIds = [
               ...new Set(localCart.map((item: CartItem) => item.variant_id)),
             ]
             const variantIds = uniqueVariantIds.join(',')
             const response = await fetch(`/api/cart?variantIds=${variantIds}`)
-            const data = await response.json()
+            const data: FavoriteItem[] =
+              (await response.json()) as FavoriteItem[]
 
             const detailedCart = localCart.map((item: CartItem) => ({
               ...item,
               ...data.find(
-                (product: CartItem) => product.variant_id === item.variant_id
+                (product: FavoriteItem) =>
+                  product.variant_id === item.variant_id
               ),
               quantity: item.quantity,
             }))
@@ -116,7 +118,7 @@ const Cart: React.FC = () => {
       }
     }
 
-    fetchCart()
+    void fetchCart()
   }, [userAttributes, setCart])
 
   const fetchFavorites = async (newOffset = 0) => {
@@ -129,8 +131,11 @@ const Cart: React.FC = () => {
       const response = await fetch(
         `/api/favorites?id=${userAttributes?.user_uuid}&limit=5&offset=${newOffset}`
       )
-      const data = await response.json()
-      setFavorites((prevFavorites) => [...prevFavorites, ...data])
+      const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
+      setFavorites((prevFavorites: FavoriteItem[]) => [
+        ...prevFavorites,
+        ...data,
+      ])
       setOffset(newOffset + 5)
     } catch (error) {
       console.error('Error fetching favorites:', error)
@@ -138,7 +143,7 @@ const Cart: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchFavorites()
+    void fetchFavorites()
   }, [userAttributes])
 
   const calculateTotal = (cart: CartItem[]) => {
@@ -218,8 +223,8 @@ const Cart: React.FC = () => {
                           }}
                           isMobileView={isMobileView}
                           deliveryDate={deliveryDate}
-                          handleQuantityChange={handleQuantityChange}
-                          removeFromCart={removeFromCart}
+                          handleQuantityChange={() => void handleQuantityChange}
+                          removeFromCart={() => void removeFromCart}
                           index={index}
                         />
                       ))

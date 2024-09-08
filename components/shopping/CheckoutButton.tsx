@@ -84,7 +84,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
       router.push('/checkout')
     } catch (error) {
       console.error('Failed to proceed to checkout', error)
-      showToast('Failed to proceed to checkout', { type: 'caution' })
+      await showToast('Failed to proceed to checkout', { type: 'caution' })
     } finally {
       setLoading(false)
     }
@@ -92,7 +92,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
 
   return (
     <Button
-      onClick={handleCheckout}
+      onClick={() => void handleCheckout()}
       $loading={loading}
       disabled={disabled}
       aria-label={

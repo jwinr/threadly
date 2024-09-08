@@ -72,7 +72,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
               },
             }
           )
-          const data = await response.json()
+          const data = (await response.json()) as Favorite[]
           setFavorites(Array.isArray(data) ? data : [])
           hasFetchedFavorites.current = true
         } catch (error) {
@@ -81,7 +81,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
       }
     }
 
-    fetchFavorites()
+    void fetchFavorites()
   }, [userAttributes])
 
   const addFavorite = async (userId: string, productId: string) => {

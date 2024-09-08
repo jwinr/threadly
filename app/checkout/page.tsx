@@ -79,21 +79,32 @@ export default function Checkout() {
         body: JSON.stringify({ cart: prices, customer }),
       })
 
-      const data = await response.json()
+      const data: {
+        error?: string
+        sessionId?: string
+        clientSecret?: string
+      } = (await response.json()) as {
+        error?: string
+        sessionId?: string
+        clientSecret?: string
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create checkout session')
       }
 
       router.push(`/checkout?session_id=${data.sessionId}`)
-      return data.clientSecret
+      return data.clientSecret ?? null
     } catch (error) {
       console.error('Error fetching client secret:', error)
       return null
     }
   }, [prices, isCartReady, userAttributes, router])
 
-  const options = useMemo(() => ({ fetchClientSecret }), [fetchClientSecret])
+  const options = useMemo(
+    () => ({ fetchClientSecret: fetchClientSecret as () => Promise<string> }),
+    [fetchClientSecret]
+  )
 
   return (
     <>

@@ -8,7 +8,7 @@ const useCurrencyFormatter = (): ((
   amount: number,
   isCents?: boolean
 ) => string) => {
-  return useCallback((amount: number, isCents: boolean = false) => {
+  return useCallback((amount: number, isCents = false) => {
     const adjustedAmount = isCents ? amount / 100 : amount
     return new Intl.NumberFormat('en-US', {
       style: 'currency',

@@ -13,7 +13,7 @@ import ProductOverview from '@/components/Products/ProductOverview'
 import AddToCartButton from '@/components/Shopping/AddToCartButton'
 import useProductData from '@/hooks/useProductData'
 import ProductThumbnails from '@/components/Products/ProductThumbnails'
-import { Product } from '@/app/types/product'
+import { Product } from '@/types/product'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -51,18 +51,11 @@ const AddCartWrapper = styled.div`
 `
 
 function ProductDetails() {
-  const { slug, variantSku } = useParams() as {
-    slug: string
-    variantSku: string
-  }
+  const { slug, variantSku } = useParams()
   const { product, categoryName, categorySlug } = useProductData(
-    slug,
-    variantSku
-  ) as {
-    product: Product | null
-    categoryName: string | null
-    categorySlug: string | null
-  }
+    slug as string,
+    variantSku as string
+  )
   const { deliveryDate, dayOfWeek, returnDate } = ShippingInfo()
   const isMobileView = useMobileView()
   const [loading, setLoading] = useState<boolean>(true)
@@ -92,20 +85,20 @@ function ProductDetails() {
         <MainSection>
           <ProductImageGallery
             loading={loading}
-            product={product!}
+            product={product as Product}
             isMobileView={isMobileView}
             hoveredImage={hoveredImage}
           />
           <InfoCardWrapper>
             <ProductInfo
               loading={loading}
-              product={product!}
+              product={product as Product}
               deliveryDate={deliveryDate}
               dayOfWeek={dayOfWeek}
               returnDate={returnDate}
             />
             <ProductAttributes
-              product={product}
+              product={product as Product}
               loading={loading}
               onSizeVariantSelected={setSelectedSizeVariantId}
             />
@@ -122,12 +115,17 @@ function ProductDetails() {
         {!isMobileView && (
           <ProductThumbnails
             loading={loading}
-            images={product?.images || []}
+            images={
+              (product && 'images' in product ? product.images : []) as {
+                image_url: string
+                alt_text: string
+              }[]
+            }
             hoveredImage={hoveredImage}
             onThumbnailHover={handleThumbnailHover}
           />
         )}
-        <ProductOverview loading={loading} product={product!} />
+        <ProductOverview loading={loading} product={product as Product} />
       </PageWrapper>
     </div>
   )

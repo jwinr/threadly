@@ -109,7 +109,7 @@ const ButtonWrapper = styled.button<ButtonProps>`
   outline: none;
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
-  ${(props) => props.type && types[props.type!]};
+  ${(props) => props.type && types[props.type]};
   ${(props) => props.disabled && 'pointer-events: none;'};
   ${(props) =>
     props.href &&

@@ -52,10 +52,13 @@ export default function NewPayment() {
         body: JSON.stringify({ customer }),
       })
 
-      const data = await response.json()
+      const data: { clientSecret?: string; error?: string } =
+        (await response.json()) as { clientSecret?: string; error?: string }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session')
+        throw new Error(
+          (data.error as string) || 'Failed to create checkout session'
+        )
       }
 
       return data.clientSecret || ''

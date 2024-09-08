@@ -247,6 +247,7 @@ const Select: FC<SelectProps> = ({
           id={name}
           name={name}
           autoComplete={autoComplete}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus={autoFocus}
           disabled={disabled}
           form={form}

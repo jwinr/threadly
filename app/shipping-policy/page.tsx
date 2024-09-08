@@ -1,3 +1,5 @@
+'use client'
+
 import styled from 'styled-components'
 
 const ShipPolicyPageWrapper = styled.div`
@@ -97,8 +99,8 @@ const ShippingPolicy = () => {
           If a carrier returns an undelivered package to us, we will contact you
           to resolve any issues and confirm a new shipment. If this occurs, a
           simulated full refund, including shipping charges, will be issued. For
-          undelivered packages due to the receiver's fault or a second return, a
-          refund excluding shipping charges will be issued.
+          undelivered packages due to the receiver&rsquo;s fault or a second
+          return, a refund excluding shipping charges will be issued.
         </p>
         <p>
           Please ensure your address information is accurate before confirming
@@ -110,7 +112,7 @@ const ShippingPolicy = () => {
         <p>
           Once your order ships, you will receive a Shipment Confirmation email
           with a tracking number. You can use this number to track your package
-          on the carrier's website.
+          on the carrier&rsquo;s website.
         </p>
         <SubheaderText>
           Can I change my shipping address after placing an order?

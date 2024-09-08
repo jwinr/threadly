@@ -273,8 +273,8 @@ const TermsService = () => {
             unlawful purpose, to violate any laws, to infringe on intellectual
             property rights, to harass or discriminate against others, to submit
             false information, or to introduce harmful code. Additionally, you
-            may not interfere with the site's security features or use the site
-            to collect personal information without consent.
+            may not interfere with the site&rsquo;s security features or use the
+            site to collect personal information without consent.
           </p>
           <p>
             We reserve the right to terminate your use of the site for violating
@@ -286,10 +286,11 @@ const TermsService = () => {
             12. Disclaimer of Warranties; Limitation of Liability.
           </SubheaderText>
           <p>
-            This site is provided "as is" and "as available," without any
-            warranties of any kind. We do not guarantee that your use of the
-            site will be uninterrupted, secure, or error-free, and we make no
-            warranties about the accuracy or reliability of the results.
+            This site is provided &quot;as is&quot; and &quot;as
+            available,&quot; without any warranties of any kind. We do not
+            guarantee that your use of the site will be uninterrupted, secure,
+            or error-free, and we make no warranties about the accuracy or
+            reliability of the results.
           </p>
           <p>
             You use this site at your own risk. We are not liable for any
@@ -305,9 +306,9 @@ const TermsService = () => {
           <SubheaderText>13. Indemnification.</SubheaderText>
           <p>
             You agree to indemnify and hold harmless Threadly and its owner from
-            any claims, damages, or expenses, including reasonable attorneys'
-            fees, arising from your breach of these Terms or your violation of
-            any law or third-party rights.
+            any claims, damages, or expenses, including reasonable
+            attorneys&apos; fees, arising from your breach of these Terms or
+            your violation of any law or third-party rights.
           </p>
         </section>
         <section>

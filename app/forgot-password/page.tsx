@@ -78,7 +78,7 @@ const ForgotPassword: React.FC = () => {
     return `${obfuscatedLocalPart}@***`
   }
 
-  const handleSendCode = async (event: FormEvent): Promise<void> => {
+  const handleSendCode = async (event: FormEvent) => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
@@ -105,6 +105,7 @@ const ForgotPassword: React.FC = () => {
 
     setLoading(true)
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
         const output = await resetPassword({ username: formState.username })
@@ -130,7 +131,7 @@ const ForgotPassword: React.FC = () => {
     }, 200)
   }
 
-  const handleResetPassword = async (event: FormEvent): Promise<void> => {
+  const handleResetPassword = (event: FormEvent): void => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
@@ -144,6 +145,7 @@ const ForgotPassword: React.FC = () => {
     }
 
     setLoading(true)
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
         await confirmResetPassword({
@@ -224,7 +226,7 @@ const ForgotPassword: React.FC = () => {
                       </span>
                     </SubheaderText>
                     <AuthStyles.FormContainer
-                      onSubmit={handleSendCode}
+                      onSubmit={() => void handleSendCode}
                       noValidate
                       data-form-type="forgot_password"
                     >
@@ -404,7 +406,7 @@ const ForgotPassword: React.FC = () => {
                 {passwordChanged && (
                   <>
                     <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
-                      You've successfully changed your password
+                      You&apos;ve successfully changed your password
                     </AuthStyles.HeaderText>
                     <ContinueBtn type="button" onClick={() => router.push('/')}>
                       Continue to Threadly
