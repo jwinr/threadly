@@ -14,7 +14,7 @@ import { useSignOut } from '@/context/SignOutContext'
 import styled from 'styled-components'
 import { signOut } from 'aws-amplify/auth'
 import { useRouter } from 'next/navigation'
-import SigningOutOverlay from '@/components/authlower/SigningOutOverlay'
+import SigningOutOverlay from '@/components/Auth/SigningOutOverlay'
 import Popover from '@/components/Elements/Popover'
 
 import Profile from '@/public/images/icons/account.svg'

@@ -7,12 +7,12 @@ import { CartContext, CartItem } from '@/context/CartContext'
 import { useMobileView } from '@/context/MobileViewContext'
 import Point from '@/public/images/icons/notdef.svg'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
-import ShippingInfo from '@/components/shoplower/ShippingInfo'
-import OrderSummary from '@/components/shoplower/OrderSummary'
-import CartProductCard from '@/components/shoplower/CartProductCard'
-import FavoritesSection from '@/components/shoplower/FavoritesSection'
-import EmptyCartSection from '@/components/shoplower/EmptyCartSection'
-import EmptyFavoritesSection from '@/components/shoplower/EmptyFavoritesSection'
+import ShippingInfo from '@/components/Shopping/ShippingInfo'
+import OrderSummary from '@/components/Shopping/OrderSummary'
+import CartProductCard from '@/components/Shopping/CartProductCard'
+import FavoritesSection from '@/components/Shopping/FavoritesSection'
+import EmptyCartSection from '@/components/Shopping/EmptyCartSection'
+import EmptyFavoritesSection from '@/components/Shopping/EmptyFavoritesSection'
 import {
   PageWrapper,
   MainContent,
@@ -23,7 +23,7 @@ import {
   CartContainer,
   CartWrapper,
   Subtitle,
-} from '@/components/shoplower/CartStyles'
+} from '@/components/Shopping/CartStyles'
 import OrderSpinner from '@/components/Loaders/OrderSpinner'
 import { FavoriteItem } from '@/types/favorites'
 
