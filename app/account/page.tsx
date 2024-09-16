@@ -12,7 +12,6 @@ import Favorites from '@/public/images/icons/Favorites.svg'
 import CreditCard from '@/public/images/icons/DefaultPayment.svg'
 import HomeAddress from '@/public/images/icons/HomeAddress.svg'
 import Purchases from '@/public/images/icons/Purchases.svg'
-import Settings from '@/public/images/icons/Settings.svg'
 import useCheckLoggedInUser from '@/hooks/useCheckLoggedInUser'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
 import { OrderDetail } from '@/types/order'
@@ -408,7 +407,6 @@ const Account: React.FC = () => {
               <SignInSecurityContainer>
                 <CardButton onClick={handleFavorites} type="button">
                   <CardWrapper>
-                    <Settings />
                     <div>
                       <Title>Settings</Title>
                       <InfoItem>Manage your name, email & password.</InfoItem>

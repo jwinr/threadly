@@ -89,7 +89,7 @@ interface NavbarProps {
   handleToggle: (dropdown: string) => void
 }
 
-const Header: FC<NavbarProps> = ({}) => {
+const Header: FC<NavbarProps> = () => {
   const pathname = usePathname()
   const isMobileView = useMobileView()
 
@@ -111,7 +111,7 @@ const Header: FC<NavbarProps> = ({}) => {
         <>
           <NavbarFlex>
             <Logo href="/" aria-label="Home">
-              <BannerLogo alt="Threadly Logo" />
+              <BannerLogo />
             </Logo>
             <Nav />
             <SearchBar />
@@ -123,7 +123,7 @@ const Header: FC<NavbarProps> = ({}) => {
       {isMobileView && (
         <MobileFlexContainer>
           <Logo href="/" aria-label="Home">
-            <BannerLogo alt="Threadly Logo" />
+            <BannerLogo />
           </Logo>
           <UserDropdown />
           <CartIcon aria-label="Shopping Cart" />

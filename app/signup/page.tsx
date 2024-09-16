@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext, FormEvent } from 'react'
 import { signUp, SignUpOutput } from 'aws-amplify/auth'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
-import PasswordReveal from '@/components/Auth/PasswordReveal'
+import PasswordReveal from '@/components/authlower/PasswordReveal'
 import LogoSymbol from '@/public/images/logo_solid.svg'
 import Popover from '@/components/Elements/Popover'
 import { CognitoErrorMessages } from '@/lib/constants'
@@ -199,7 +199,7 @@ const SignUp: React.FC = () => {
                   onSubmit={() => void handleSignUp}
                   noValidate
                   data-form-type="register"
-                  onKeyDown={(e) =>
+                  onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) =>
                     handleKeyDown(
                       e,
                       setShowPassword,

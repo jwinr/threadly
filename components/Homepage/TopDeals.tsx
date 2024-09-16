@@ -2,7 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
-import AddToCartButton from '@/components/Shopping/AddToCartButton'
+import AddToCartButton from '@/components/shoplower/AddToCartButton'
 import { useMobileView } from '@/context/MobileViewContext'
 
 const Container = styled.div`

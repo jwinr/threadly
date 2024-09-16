@@ -33,7 +33,7 @@ export const validateCode = (code: string): boolean => {
 
 /* Allow users to press enter to toggle the password reveal */
 export const handleKeyDown = (
-  event: React.KeyboardEvent,
+  event: React.KeyboardEvent<Element>,
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>,
   emailValid: boolean,
   passwordValid: boolean,
@@ -81,6 +81,6 @@ export const splitFullName = (
 export const getValidationStyle = (
   isValid: boolean,
   invalidStyle: React.CSSProperties
-) => {
-  return isValid ? {} : invalidStyle
+): React.CSSProperties => {
+  return isValid ? {} : invalidStyle || {}
 }

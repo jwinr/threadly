@@ -402,7 +402,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   }
 
   const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
+    event: React.KeyboardEvent<SVGElement>,
     direction: 'prev' | 'next'
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -471,7 +471,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             $hovered={imgHovered}
             $direction="left"
             onClick={handlePrevClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
+            onKeyDown={(e: React.KeyboardEvent<SVGElement>) =>
               handleKeyDown(e, 'next')
             }
             tabIndex={0}
@@ -489,7 +489,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             $hovered={hovered}
             $direction="right"
             onClick={handleNextClick}
-            onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) =>
+            onKeyDown={(e: React.KeyboardEvent<SVGElement>) =>
               handleKeyDown(e, 'next')
             }
             tabIndex={0}

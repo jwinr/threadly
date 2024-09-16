@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components'
 import StarRating from '@/components/ReviewStars/StarRatings'
 import Truck from '@/public/images/icons/truck.svg'
 import Subscription from '@/public/images/icons/subscription.svg'
-import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
+import AddToFavoritesButton from '@/components/shoplower/AddToFavoritesButton'
 import { useMobileView } from '@/context/MobileViewContext'
 import useCurrencyFormatter from '@/hooks/useCurrencyFormatter'
 import { Product } from '@/types/product'
@@ -209,7 +209,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         <ReviewWrapper>
           <StarRating reviews={product.reviews ?? []} />
           <button className="average-rating-text">
-            {(product.reviews?.length === 0 ?? [])
+            {product.reviews?.length === 0 || 0
               ? 'Be the first!'
               : `(${product.reviews?.length} review${product.reviews?.length !== 1 ? 's' : ''})`}
           </button>

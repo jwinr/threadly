@@ -1,9 +1,10 @@
 'use client'
 
+import { LegacyConfig, AmplifyOutputs } from 'aws-amplify/adapter-core'
 import config from '../src/amplifyconfiguration.json'
-import { Amplify } from 'aws-amplify'
+import { Amplify, ResourcesConfig } from 'aws-amplify'
 
-Amplify.configure(config, {
+Amplify.configure(config as ResourcesConfig | LegacyConfig | AmplifyOutputs, {
   ssr: true,
 })
 

@@ -14,7 +14,7 @@ import { useSignOut } from '@/context/SignOutContext'
 import styled from 'styled-components'
 import { signOut } from 'aws-amplify/auth'
 import { useRouter } from 'next/navigation'
-import SigningOutOverlay from '@/components/Auth/SigningOutOverlay'
+import SigningOutOverlay from '@/components/authlower/SigningOutOverlay'
 import Popover from '@/components/Elements/Popover'
 
 import Profile from '@/public/images/icons/account.svg'
@@ -399,7 +399,6 @@ interface DropdownItemProps {
   userButtonRef: RefObject<HTMLButtonElement>
 }
 
-// eslint-disable-next-line react/display-name
 const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
   ({ children, href, onClick, role, onMenuItemClick, userButtonRef }, ref) => {
     const handleClick = () => {
@@ -421,13 +420,15 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
       }
 
       switch (event.key) {
-        case 'ArrowDown':
+        case 'ArrowDown': {
           focusSibling('nextSibling', 'firstChild')
           break
-        case 'ArrowUp':
+        }
+        case 'ArrowUp': {
           focusSibling('previousSibling', 'lastChild')
           break
-        case 'Tab':
+        }
+        case 'Tab': {
           event.preventDefault()
 
           // Focus on either the search button or the cart icon
@@ -450,10 +451,12 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
             }
           }
           break
+        }
         case 'Enter':
-        case ' ':
+        case ' ': {
           handleClick()
           break
+        }
         default:
           break
       }

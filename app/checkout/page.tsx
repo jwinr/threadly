@@ -22,7 +22,7 @@ import { UserContext } from '@/context/UserContext'
 
 interface Price {
   product_id: number | undefined
-  stripe_price_id: number
+  stripe_price_id: number | undefined
   quantity: number
 }
 

@@ -3,7 +3,7 @@
 import React, { useState, useContext, FormEvent } from 'react'
 import { signIn } from 'aws-amplify/auth'
 import { useRouter } from 'next/navigation'
-import PasswordReveal from '@/components/Auth/PasswordReveal'
+import PasswordReveal from '@/components/authlower/PasswordReveal'
 import LogoSymbol from '@/public/images/logo_solid.svg'
 import { UserContext } from '@/context/UserContext'
 import { CognitoErrorMessages } from '@/lib/constants'
@@ -178,7 +178,7 @@ const Login: React.FC = () => {
               {!isComplete ? (
                 <>
                   <AuthStyles.LogoBox>
-                    <LogoSymbol alt="Threadly Logo" />
+                    <LogoSymbol />
                   </AuthStyles.LogoBox>
                   <AuthStyles.HeaderText style={{ marginBottom: '0' }}>
                     Sign in to Threadly
@@ -202,7 +202,7 @@ const Login: React.FC = () => {
                     onSubmit={() => void handleSignIn}
                     noValidate
                     data-form-type="login"
-                    onKeyDown={(e) =>
+                    onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) =>
                       handleKeyDown(
                         e,
                         setShowPassword,

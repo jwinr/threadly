@@ -35,6 +35,7 @@
     "typeRoots": ["node_modules/@types"]
   },
   "include": [
+    "svgr.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

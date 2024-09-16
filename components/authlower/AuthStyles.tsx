@@ -422,12 +422,12 @@ export const LogoBox = styled.div`
   }
 `
 
-export const invalidStyle = {
+export const invalidStyle: React.CSSProperties = {
   borderColor: 'var(--sc-color-red)',
   boxShadow:
     '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 1px var(--sc-color-red)',
   color: 'var(--sc-color-red)',
-} /* This one has to remain an object */
+}
 
 export const SpinnerWrapper = styled.div`
   display: flex;
