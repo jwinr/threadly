@@ -46,7 +46,6 @@ yarn-error.log*
 
 # local content / private files
 public/images/products/
-public/images/hero_main.jpg
 amplify/
 src/
 layout/navbar/Menu/

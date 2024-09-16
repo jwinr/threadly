@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import EmptyCartImg from '@/public/images/icons/EmptyCart.svg'
+import EmptyCartImg from '@/public/images/icons/emptyCart.svg'
 import Button from '@/components/Elements/Button'
 
 interface EmptyCartSectionProps {

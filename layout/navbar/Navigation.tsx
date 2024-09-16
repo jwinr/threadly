@@ -6,7 +6,7 @@ import SearchBar from './SearchBar'
 import CartIcon from './CartIcon'
 import UserDropdown from './UserDropdown'
 import { useMobileView } from '@/context/MobileViewContext'
-import { Nav } from './Menu/Nav'
+import { Nav } from '@/layout/navbar/Menu/Nav'
 
 const HeaderContainer = styled.header`
   font-size: 16px;
