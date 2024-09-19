@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import CartLogo from '@/public/images/icons/cart.svg'
+import { ShoppingCart } from 'lucide-react'
 import styled from 'styled-components'
 import { CartContext } from '@/context/CartContext'
 
@@ -35,14 +35,6 @@ const Button = styled.button`
   align-items: center;
   transition: background-color 0.2s;
 
-  svg {
-    height: 16px;
-
-    path {
-      fill: var(--sc-color-icon);
-    }
-  }
-
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
     box-shadow: none;
@@ -53,11 +45,6 @@ const Button = styled.button`
     width: 44px;
     padding: 0;
     justify-content: center;
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
   }
 `
 
@@ -107,7 +94,7 @@ const CartIcon: React.FC = () => {
     <Container href="/cart" tabIndex={-1} aria-label={ariaLabel}>
       {totalQuantity > 0 && <CartCircle>{totalQuantity}</CartCircle>}
       <Button aria-label={ariaLabel}>
-        <CartLogo />
+        <ShoppingCart size={18} />
       </Button>
     </Container>
   )

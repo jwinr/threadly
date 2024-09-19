@@ -17,6 +17,8 @@ import { useRouter } from 'next/navigation'
 import SigningOutOverlay from '@/components/Auth/SigningOutOverlay'
 import Popover from '@/components/Elements/Popover'
 
+import { User } from 'lucide-react'
+
 import Profile from '@/public/images/icons/account.svg'
 import Order from '@/public/images/icons/order.svg'
 import Favorite from '@/public/images/icons/favorite.svg'
@@ -40,8 +42,6 @@ const UserButton = styled.button<UserButtonProps>`
   display: flex;
 
   svg {
-    fill: var(--sc-color-icon);
-
     @media (max-width: 768px) {
       width: 20px;
       height: 20px;
@@ -152,24 +152,6 @@ const MenuItem = styled.li`
 const IconContainer = styled.div`
   justify-content: center;
   display: flex;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-
-    path {
-      fill: var(--sc-color-icon);
-    }
-  }
-
-  @media (max-width: 768px) {
-    svg {
-      width: 18px;
-      height: 18px;
-      margin-right: 0;
-    }
-  }
 `
 
 const UserDropdown = () => {
@@ -284,7 +266,7 @@ const UserDropdown = () => {
             aria-label={isOpen ? 'Close user dropdown' : 'Open user dropdown'}
           >
             <IconContainer>
-              <Profile />
+              <User size={20} />
             </IconContainer>
             <BtnText>{given_name ? `Hi, ${given_name}` : 'Sign in'}</BtnText>
           </UserButton>

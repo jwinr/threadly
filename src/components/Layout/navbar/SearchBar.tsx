@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
-import Search from '@/public/images/icons/search.svg'
-import Cancel from '@/public/images/icons/cancel.svg'
+import { Search, X } from 'lucide-react'
 
 const InputForm = styled.form`
   display: flex;
@@ -60,20 +59,15 @@ const SubmitButton = styled.button`
   border: 1px transparent;
 
   svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  svg > path {
-    fill: #6c7688;
+    stroke: #6c7688;
   }
 
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
   }
 
-  &:hover svg > path {
-    fill: #474e5a;
+  &:hover svg {
+    stroke: #474e5a;
   }
 
   @media (max-width: 768px) {
@@ -95,16 +89,11 @@ const ClearButton = styled.button`
   cursor: pointer;
 
   svg {
-    width: 14px;
-    height: 14px;
+    stroke: #6c7688;
   }
 
-  svg > path {
-    fill: #6c7688;
-  }
-
-  &:hover svg > path {
-    fill: #474e5a;
+  &:hover svg {
+    stroke: #474e5a;
   }
 
   &:focus:not(:focus-visible) {
@@ -157,11 +146,11 @@ const SearchBar: React.FC = () => {
         />
         {searchTerm && (
           <ClearButton onClick={clearSearch} aria-label="Clear search">
-            <Cancel />
+            <X size={20} />
           </ClearButton>
         )}
         <SubmitButton type="submit" aria-label="Submit search">
-          <Search />
+          <Search size={18} />
         </SubmitButton>
       </InputForm>
     </SearchContainer>

@@ -9,13 +9,13 @@ const sizes = {
 
 const types = {
   primary: css`
-    background-color: #f86251;
+    background-color: #ff4d45;
     color: white;
     --s1-keyline: #f44c3a;
 
     &:hover:not(:active) {
       --s1-keyline: #f44c3a;
-      border-color: #f86251;
+      border-color: #ff4d45;
       color: white;
     }
 

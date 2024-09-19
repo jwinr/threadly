@@ -1,14 +1,12 @@
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import styled from 'styled-components'
-
 import Facebook from '@/public/images/icons/facebook.svg'
 import TwitterX from '@/public/images/icons/twitter.svg'
 import Instagram from '@/public/images/icons/instagram.svg'
 import YouTube from '@/public/images/icons/youtube.svg'
-
 import LogoSymbol from '@/public/images/logo_dark.svg'
-import { GoChecklist, GoShieldCheck } from 'react-icons/go'
+import { ReceiptText, ShieldCheck } from 'lucide-react'
 import { useMobileView } from '@/context/MobileViewContext'
 import FooterAccordion from './FooterAccordion'
 
@@ -127,7 +125,6 @@ const FooterLinkBottom = styled.div`
 
   svg {
     margin-right: 5px;
-    font-size: 16px;
   }
 
   @media (max-width: 768px) {
@@ -276,13 +273,13 @@ const Footer = () => {
             <BottomLinksWrapper>
               <a href="/terms-of-service">
                 <FooterLinkBottom>
-                  <GoChecklist />
+                  <ReceiptText size={18} />
                   Terms Of Service
                 </FooterLinkBottom>
               </a>
               <a href="/privacy-policy">
                 <FooterLinkBottom>
-                  <GoShieldCheck />
+                  <ShieldCheck size={18} />
                   Privacy Policy
                 </FooterLinkBottom>
               </a>

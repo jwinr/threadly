@@ -3,6 +3,7 @@
 import styled from 'styled-components'
 import HeroBanner from '@/components/Homepage/HeroBanner'
 import FeatureHighlights from '@/components/Homepage/FeatureHighlights'
+import Sustainability from '@/components/Homepage/Sustainability'
 import NewsletterSignup from '@/components/Homepage/NewsletterSignup'
 
 const HomeContainer = styled.div`
@@ -50,6 +51,9 @@ const Home: React.FC = () => {
         <Categories>
           <Title>Featured categories</Title>
         </Categories>
+        <Section>
+          <Sustainability />
+        </Section>
         <Section>
           <NewsletterSignup />
         </Section>

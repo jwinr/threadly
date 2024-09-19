@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useRouter } from 'next/router'
 
-import LogoSymbol from '@/public/images/logo_n.svg'
+import LogoSymbol from '@/public/images/logo_solid.svg'
 import * as AuthStyles from './AuthStyles'
 import Button from '@/components/Elements/Button'
 

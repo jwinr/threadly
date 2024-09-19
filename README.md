@@ -5,9 +5,9 @@
 <div align="center">
 <a href="https://github.com/jwinr/threadly">
 <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="assets/logo_small_dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="assets/logo_small.png">
-      <img src="assets/logo_small.png" alt="Threadly Logo" width="400">
+      <source media="(prefers-color-scheme: dark)" srcset="src/assets/logo_small_dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="src/assets/logo_small.png">
+      <img src="src/assets/logo_small.png" alt="Threadly Logo" width="400">
     </picture>
     </a>
   <p align="center">
@@ -28,7 +28,7 @@
 
 <div align="center">
   <a href="https://github.com/jwinr/threadly">
-    <img src="assets/landing_page.png" alt="Threadly Landing Page" />
+    <img src="src/assets/landing_page.png" alt="Threadly Landing Page" />
   </a>
 </div>
 <br />
