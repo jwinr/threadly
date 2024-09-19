@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import PropFilter from 'src/utils/PropFilter'
 
 const spin = keyframes`
   0% {
@@ -21,17 +20,15 @@ const spinner = keyframes`
 `
 
 interface LoaderSpinnerProps {
-  isLoading: boolean
+  $isLoading: boolean
 }
 
-const LoaderSpinner = styled(
-  PropFilter('div')(['isLoading'])
-)<LoaderSpinnerProps>`
+const LoaderSpinner = styled.div<LoaderSpinnerProps>`
   position: absolute;
   justify-content: center;
   align-items: center;
-  opacity: ${({ isLoading }) => (isLoading ? 1 : 0)};
-  display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
+  opacity: ${({ $isLoading }) => ($isLoading ? 1 : 0)};
+  display: ${({ $isLoading }) => ($isLoading ? 'flex' : 'none')};
   transition: opacity 0.3s ease-in-out;
 
   & > div {
@@ -64,7 +61,7 @@ interface LoaderSpinProps {
 }
 
 const LoaderSpin: React.FC<LoaderSpinProps> = ({ isLoading }) => (
-  <LoaderSpinner isLoading={isLoading}>
+  <LoaderSpinner $isLoading={isLoading}>
     <InnerDiv>
       <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" x="0" y="0">
         <circle

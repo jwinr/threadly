@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 import styled, { keyframes } from 'styled-components'
 import Checkbox from '@/components/Elements/Checkbox'
-import PropFilter from 'src/utils/PropFilter'
 import Cancel from '@/public/images/icons/cancel.svg'
 import Accordion from '@/components/Elements/Accordion'
 import AccordionItem from '@/components/Elements/AccordionItem'
@@ -45,8 +44,8 @@ const slideOut = keyframes`
   }
 `
 
-const PanelContainer = styled(PropFilter('div')(['isOpen']))<{
-  isOpen: boolean
+const PanelContainer = styled.div<{
+  $isOpen: boolean
 }>`
   position: absolute;
   top: 0;
@@ -61,23 +60,24 @@ const PanelContainer = styled(PropFilter('div')(['isOpen']))<{
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  animation: ${({ isOpen }) => (isOpen ? slideIn : slideOut)} 0.3s ease forwards;
+  animation: ${({ $isOpen }) => ($isOpen ? slideIn : slideOut)} 0.3s ease
+    forwards;
 
   @media (max-width: 768px) {
     width: auto;
   }
 `
 
-const Backdrop = styled(PropFilter('div')(['isOpen']))<{ isOpen: boolean }>`
+const Backdrop = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   inset: 0;
   background-color: rgba(51, 51, 51, 0.8);
   backdrop-filter: blur(4px);
   z-index: 300;
   height: 100vh;
-  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+  opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   transition: opacity 0.3s ease-in-out;
-  pointer-events: ${({ isOpen }) => (isOpen ? 'auto' : 'none')};
+  pointer-events: ${({ $isOpen }) => ($isOpen ? 'auto' : 'none')};
 `
 
 const CloseButton = styled.button`
@@ -235,10 +235,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       {isMounted &&
         shouldRender &&
         ReactDOM.createPortal(
-          <Backdrop isOpen={isOpen} onClick={onClose}>
+          <Backdrop $isOpen={isOpen} onClick={onClose}>
             <PanelContainer
               ref={panelRef}
-              isOpen={isOpen}
+              $isOpen={isOpen}
               onClick={(e) => e.stopPropagation()}
             >
               <Header>

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
-import PropFilter from 'src/utils/PropFilter'
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -18,12 +17,10 @@ const PaginationWrapper = styled.div`
 `
 
 interface PaginationButtonProps {
-  isActive: boolean
+  $isActive: boolean
 }
 
-const PaginationButton = styled(
-  PropFilter('button')(['isActive'])
-)<PaginationButtonProps>`
+const PaginationButton = styled.button<PaginationButtonProps>`
   position: relative;
   border: none;
   display: flex;
@@ -33,7 +30,7 @@ const PaginationButton = styled(
   padding: 0.625rem 0.75rem;
   color: var(--sc-color-carnation);
   font-weight: 600;
-  cursor: ${(props) => (props.isActive ? 'default' : 'pointer')};
+  cursor: ${($isActive) => ($isActive ? 'default' : 'pointer')};
 
   &:hover::after {
     transition:
@@ -60,8 +57,8 @@ const PaginationButton = styled(
     opacity: 0;
   }
 
-  ${(props) =>
-    props.isActive &&
+  ${($isActive) =>
+    $isActive &&
     css`
       &:after {
         transition:
@@ -170,7 +167,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <PaginationButton
           key={i}
           onClick={() => handlePageChange(i)}
-          isActive={i === currentPage}
+          $isActive={i === currentPage}
         >
           {i}
         </PaginationButton>

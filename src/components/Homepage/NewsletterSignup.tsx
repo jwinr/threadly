@@ -2,10 +2,7 @@
 
 import React, { useState, ChangeEvent, FormEvent } from 'react'
 import styled, { keyframes } from 'styled-components'
-import PropFilter from 'src/utils/PropFilter'
 import Button from '@/components/Elements/Button'
-
-const formFilter = PropFilter('form')
 
 const NewsletterContainer = styled.div`
   text-align: center;
@@ -26,14 +23,14 @@ const NewsletterSubtitle = styled.p`
 `
 
 interface NewsletterFormProps {
-  isVisible: boolean
+  $isVisible: boolean
 }
 
-const NewsletterForm = styled(formFilter(['isVisible']))<NewsletterFormProps>`
+const NewsletterForm = styled.form<NewsletterFormProps>`
   display: flex;
   justify-content: center;
   gap: 10px;
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
+  opacity: ${($isVisible) => ($isVisible ? 1 : 0)};
   transition: opacity 0.5s ease;
 `
 
@@ -103,7 +100,7 @@ const NewsletterSignup: React.FC = () => {
           Thanks for subscribing to our newsletter!
         </SuccessMessage>
       ) : (
-        <NewsletterForm isVisible={!submitted} onSubmit={handleSubmit}>
+        <NewsletterForm $isVisible={!submitted} onSubmit={handleSubmit}>
           <NewsletterInput
             type="email"
             placeholder="Enter your email"

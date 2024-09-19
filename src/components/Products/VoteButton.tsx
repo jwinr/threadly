@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { LiaThumbsUpSolid, LiaThumbsDownSolid } from 'react-icons/lia'
 import LoaderSpin from '@/components/Loaders/LoaderSpin'
-import PropFilter from 'src/utils/PropFilter'
 
 interface VoteButtonProps {
   reviewId: string
@@ -41,18 +40,18 @@ const Button = styled.button`
   }
 `
 
-const ThumbsIcon = styled(PropFilter('div')(['loading']))<{
-  loading: boolean
+const ThumbsIcon = styled.div<{
+  $loading: boolean
 }>`
   font-size: 22px;
-  opacity: ${({ loading }) => (loading ? 0.2 : 1)};
+  opacity: ${({ $loading }) => ($loading ? 0.2 : 1)};
   transition: transform 0.3s;
 `
 
-const Count = styled(PropFilter('span')(['loading']))<{
-  loading: boolean
+const Count = styled.span<{
+  $loading: boolean
 }>`
-  opacity: ${({ loading }) => (loading ? 0.2 : 1)};
+  opacity: ${({ $loading }) => ($loading ? 0.2 : 1)};
   transition: transform 0.3s;
 `
 
@@ -97,10 +96,10 @@ const VoteButton: React.FC<VoteButtonProps> = ({
       }}
       disabled={disabled || loading}
     >
-      <ThumbsIcon loading={loading}>
+      <ThumbsIcon $loading={loading}>
         {type === 'upvote' ? <LiaThumbsUpSolid /> : <LiaThumbsDownSolid />}
       </ThumbsIcon>
-      <Count loading={loading}>{voteCount}</Count>
+      <Count $loading={loading}>{voteCount}</Count>
       <LoaderSpin isLoading={loading} />
     </Button>
   )

@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation'
 import { UserContext } from '@/context/UserContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import Popover from '@/components/Elements/Popover'
-import PropFilter from 'src/utils/PropFilter'
-
-const FilteredLiaHeart = PropFilter(LiaHeart)(['loading', 'isAdding'])
-const FilteredLiaHeartSolid = PropFilter(LiaHeartSolid)(['loading', 'isAdding'])
 
 const loadingAnimation = keyframes`
   0% {
@@ -42,23 +38,23 @@ const Button = styled.button`
 `
 
 interface IconProps {
-  loading?: boolean
-  isAdding?: boolean
+  $loading?: boolean
+  $isAdding?: boolean
 }
 
-const IconOutline = styled(FilteredLiaHeart)<IconProps>`
-  ${({ loading, isAdding }) =>
-    loading &&
-    isAdding &&
+const IconOutline = styled(LiaHeart)<IconProps>`
+  ${({ $loading, $isAdding }) =>
+    $loading &&
+    $isAdding &&
     css`
       animation: ${loadingAnimation} 0.5s ease-in-out;
     `}
 `
 
-const IconFilled = styled(FilteredLiaHeartSolid)<IconProps>`
-  ${({ loading, isAdding }) =>
-    loading &&
-    isAdding &&
+const IconFilled = styled(LiaHeartSolid)<IconProps>`
+  ${({ $loading, $isAdding }) =>
+    $loading &&
+    $isAdding &&
     css`
       animation: ${loadingAnimation} 0.5s ease-in-out;
     `}
@@ -174,14 +170,14 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
         >
           {added ? (
             <IconFilled
-              loading={loading}
-              isAdding={isAdding}
+              $loading={loading}
+              $isAdding={isAdding}
               aria-hidden="true"
             />
           ) : (
             <IconOutline
-              loading={loading}
-              isAdding={isAdding}
+              $loading={loading}
+              $isAdding={isAdding}
               aria-hidden="true"
             />
           )}
