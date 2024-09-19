@@ -34,6 +34,7 @@ export interface ProductSpecification {
 }
 
 export interface ProductSizeVariant {
+  size?: number
   size_variant_id: number
   color_variant_id: number
   waist_attribute_id?: number // Optional, based on references
@@ -66,6 +67,7 @@ export interface ProductImage {
 }
 
 export interface ProductFeature {
+  feature_contents?: string // We end up converting this to an array in the ProductOverview component
   feature_id: number
   product_id: number
   feature_title: string

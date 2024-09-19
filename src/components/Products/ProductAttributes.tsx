@@ -67,12 +67,10 @@ const LoaderAttributes = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  padding-bottom: 25%;
   border-radius: 8px;
   background-color: #d6d6d6;
-  animation:
-    enter-form-desktop 0.3s forwards,
-    loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 2s ease-in-out infinite;
   animation-fill-mode: forwards;
 `
 

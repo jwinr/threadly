@@ -141,8 +141,8 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
           <Section key={idx}>
             <h1>{feature.feature_title}</h1>
             <ul>
-              {Array.isArray(feature.feature_content) &&
-                feature.feature_content.map((content, contentIdx) => (
+              {Array.isArray(feature.feature_contents) &&
+                feature.feature_contents.map((content, contentIdx) => (
                   <li key={contentIdx}>{content}</li>
                 ))}
             </ul>

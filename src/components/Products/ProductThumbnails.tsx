@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 interface ProductThumbnailProps {
   hoveredImage: number | null
@@ -7,6 +7,18 @@ interface ProductThumbnailProps {
   loading: boolean
   images: { image_url: string; alt_text: string }[]
 }
+
+const loadingAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+`
 
 const AdditionalImageContainer = styled.div`
   display: flex;
@@ -24,8 +36,8 @@ const AdditionalImageThumbnail = styled.div`
   border: 1px solid var(--sc-color-border-gray);
   border-radius: 6px;
   cursor: pointer;
-  width: auto;
-  height: 70px;
+  width: 128px;
+  min-height: 128px;
   display: grid;
   align-content: center;
   overflow: hidden;
@@ -43,17 +55,28 @@ const AdditionalImageThumbnail = styled.div`
   }
 `
 
+const LoaderThumbnailContainer = styled.div`
+  width: 128px;
+  height: 128px;
+  border-radius: 6px;
+  background-color: #d6d6d6;
+  animation: ${loadingAnimation} 2s ease-in-out infinite;
+  animation-fill-mode: forwards;
+`
+
 const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
   hoveredImage,
   onThumbnailHover,
   loading,
   images,
 }) => {
-  if (loading) {
+  if (loading || !images) {
     return (
-      <>
-        <span>Loading...</span>
-      </>
+      <AdditionalImageContainer>
+        {[...Array(4)].map((_, index) => (
+          <LoaderThumbnailContainer key={index} />
+        ))}
+      </AdditionalImageContainer>
     )
   }
 
@@ -74,6 +97,7 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
             width={100}
             height={100}
             alt={item.alt_text}
+            priority={true}
           />
         </AdditionalImageThumbnail>
       ))}

@@ -31,12 +31,11 @@ const loadingAnimation = keyframes`
 const LoadingProduct = styled.div`
   position: relative;
   width: 100%;
+  padding-bottom: 50%;
   order: 0; // Make sure product details are at the top in mobile view
   border-radius: 8px;
   background-color: #d6d6d6;
-  animation:
-    enter-form-desktop 0.3s forwards,
-    ${loadingAnimation} 2s ease-in-out infinite;
+  animation: ${loadingAnimation} 2s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {

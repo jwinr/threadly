@@ -65,7 +65,7 @@ function ProductDetails() {
   const [hoveredImage, setHoveredImage] = useState<number>(0)
 
   useEffect(() => {
-    if (!product) {
+    if (product) {
       setLoading(false)
     }
   }, [product])
