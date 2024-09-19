@@ -2,16 +2,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/app/*": ["./app/*"],
-      "@/types/*": ["./types/*"],
-      "@/reducers/*": ["./reducers/*"],
-      "@/components/*": ["./components/*"],
-      "@/layout/*": ["./layout/*", "./threadly-backend/layout/*"],
-      "@/context/*": ["./context/*"],
-      "@/utils/*": ["./utils/*", "./threadly-backend/utils/*"],
+      "@/app/*": ["src/app/*"],
+      "@/types/*": ["src/types/*"],
+      "@/components/*": ["src/components/*"],
+      "@/layout/*": ["src/layout/*", "./threadly-backend/layout/*"],
+      "@/context/*": ["src/context/*"],
+      "@/utils/*": ["src/utils/*", "./threadly-backend/utils/*"],
       "@/public/*": ["./public/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/lib/*": ["./lib/*", "./threadly-backend/lib/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/lib/*": ["src/lib/*", "./threadly-backend/lib/*"],
       "@/api/*": ["./threadly-backend/services/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -41,7 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "eslint.config.mjs"
+    "*.mjs"
   ],
   "exclude": ["node_modules"]
 }

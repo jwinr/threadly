@@ -73,9 +73,6 @@
 [![GitHubActions][GitHubActions-img]][GitHubActions-url]
 [![Jest][Jest-img]][Jest-url]
 
-## Acquisition Opportunity
-
-<p>Interested in my project? I'm offering the opportunity to acquire full ownership of Threadly, including all source code, branding, and rights. This may also include ongoing support and consultation. If you're interested in acquiring Threadly or want to discuss the terms, please feel free to <a href="https://github.com/jwinr">contact me</a>. I'm open to negotiating the details to find a mutually beneficial arrangement.</p>
 <!-- LICENSE -->
 
 ## License

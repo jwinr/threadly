@@ -47,10 +47,9 @@ yarn-error.log*
 # local content / private files
 public/images/products/
 amplify/
-src/
-layout/navbar/Menu/
+src/app/api/
+src/components/Layout/navbar/Menu/
 middleware.ts
-app/api/
 
 #amplify-do-not-edit-begin
 amplify/#current-cloud-backend
