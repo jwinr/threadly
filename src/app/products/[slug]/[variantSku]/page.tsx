@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Breadcrumb from '@/components/Elements/Breadcrumb'
 import { useParams } from 'next/navigation'
@@ -14,11 +13,12 @@ import AddToCartButton from '@/components/Shopping/AddToCartButton'
 import useProductData from 'src/hooks/useProductData'
 import ProductThumbnails from '@/components/Products/ProductThumbnails'
 import { Product } from '@/types/product'
+import { useState } from 'react'
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 25px 15px 75px 15px; // Leave some room for the breadcrumb component on mobile view
+  padding: 25px 15px 75px 15px;
 
   @media (min-width: 768px) {
     padding: 45px 75px 75px 75px;
@@ -52,23 +52,16 @@ const AddCartWrapper = styled.div`
 
 function ProductDetails() {
   const { slug, variantSku } = useParams()
-  const { product, categoryName, categorySlug } = useProductData(
+  const { product, categoryName, categorySlug, isLoading } = useProductData(
     slug as string,
     variantSku as string
   )
   const { deliveryDate, dayOfWeek, returnDate } = ShippingInfo()
   const isMobileView = useMobileView()
-  const [loading, setLoading] = useState<boolean>(true)
   const [selectedSizeVariantId, setSelectedSizeVariantId] = useState<
     string | undefined
   >()
   const [hoveredImage, setHoveredImage] = useState<number>(0)
-
-  useEffect(() => {
-    if (product) {
-      setLoading(false)
-    }
-  }, [product])
 
   const handleThumbnailHover = (index: number) => {
     setHoveredImage(index)
@@ -77,21 +70,21 @@ function ProductDetails() {
   return (
     <div>
       <Breadcrumb
-        loading={loading}
+        loading={isLoading}
         categoryName={categoryName}
         categorySlug={categorySlug}
       />
       <PageWrapper>
         <MainSection>
           <ProductImageGallery
-            loading={loading}
+            loading={isLoading}
             product={product as Product}
             isMobileView={isMobileView}
             hoveredImage={hoveredImage}
           />
           <InfoCardWrapper>
             <ProductInfo
-              loading={loading}
+              loading={isLoading}
               product={product as Product}
               deliveryDate={deliveryDate}
               dayOfWeek={dayOfWeek}
@@ -99,12 +92,12 @@ function ProductDetails() {
             />
             <ProductAttributes
               product={product as Product}
-              loading={loading}
+              loading={isLoading}
               onSizeVariantSelected={setSelectedSizeVariantId}
             />
             <AddCartWrapper>
               <AddToCartButton
-                loading={loading}
+                loading={isLoading}
                 sizeVariantId={Number(selectedSizeVariantId) || 0}
                 quantity={1}
                 productName={product?.name || ''}
@@ -114,7 +107,7 @@ function ProductDetails() {
         </MainSection>
         {!isMobileView && (
           <ProductThumbnails
-            loading={loading}
+            loading={isLoading}
             images={
               (product && 'images' in product ? product.images : []) as {
                 image_url: string
@@ -125,7 +118,7 @@ function ProductDetails() {
             onThumbnailHover={handleThumbnailHover}
           />
         )}
-        <ProductOverview loading={loading} product={product as Product} />
+        <ProductOverview loading={isLoading} product={product as Product} />
       </PageWrapper>
     </div>
   )

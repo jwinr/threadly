@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 interface Product {
   id: string
@@ -8,45 +8,52 @@ interface Product {
 }
 
 interface UseProductDataReturn {
-  product: Product | null
-  categoryName: string | null
-  categorySlug: string | null
+  product: Product | undefined
+  categoryName: string | undefined
+  categorySlug: string | undefined
+}
+
+const fetchProductDetails = async (
+  slug: string,
+  variantSku: string
+): Promise<Product> => {
+  const response = await fetch(`/api/products/${slug}/${variantSku}`, {
+    headers: {
+      'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok')
+  }
+
+  return response.json()
 }
 
 const useProductData = (
   slug: string,
   variantSku: string
-): UseProductDataReturn => {
-  const [product, setProduct] = useState<Product | null>(null)
-  const [categoryName, setCategoryName] = useState<string | null>(null)
-  const [categorySlug, setCategorySlug] = useState<string | null>(null)
+): UseProductDataReturn & { isLoading: boolean; error: Error | null } => {
+  const {
+    data: product,
+    error,
+    isLoading,
+  } = useQuery<Product>({
+    queryKey: ['productData', slug, variantSku],
+    queryFn: () => fetchProductDetails(slug, variantSku),
+  })
 
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await fetch(`/api/products/${slug}/${variantSku}`, {
-          headers: {
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-          },
-        })
+  if (error) {
+    console.error('Error fetching product data:', error)
+  }
 
-        if (response.ok) {
-          const data: Product = (await response.json()) as Product
-          setProduct(data)
-          setCategoryName(data.category_name)
-          setCategorySlug(data.category_slug)
-        }
-      } catch (error) {
-        console.error('Error:', error)
-      }
-    }
-
-    if (slug) {
-      void fetchProductDetails()
-    }
-  }, [slug, variantSku])
-
-  return { product, categoryName, categorySlug }
+  return {
+    product,
+    categoryName: product?.category_name,
+    categorySlug: product?.category_slug,
+    isLoading,
+    error,
+  }
 }
 
 export default useProductData

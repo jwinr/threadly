@@ -80,9 +80,7 @@ const LoaderDescription = styled.div`
   min-height: 250px;
   width: 75%;
   background-color: #d6d6d6;
-  animation:
-    enter 0.3s forwards,
-    loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 2s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {
@@ -98,9 +96,7 @@ const LoaderFeatures = styled.div`
   min-height: 250px;
   width: 75%;
   background-color: #d6d6d6;
-  animation:
-    enter 0.3s forwards,
-    loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 2s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {
