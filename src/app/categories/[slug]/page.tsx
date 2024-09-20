@@ -155,6 +155,8 @@ export default function CategoryPage() {
   )
   const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
 
+  console.log('categoryData', categoryData)
+
   const handleFilterChange = useCallback(
     (selectedAttributes: Record<string, unknown>) => {
       const filters = { ...selectedAttributes }

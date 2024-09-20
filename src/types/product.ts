@@ -167,7 +167,7 @@ export interface Brand {
 
 export interface ProductRow {
   product_id?: number
-  name?: string
+  product_name?: string
   slug?: string
   sku?: string
   color_attribute_id?: number
@@ -183,8 +183,7 @@ export interface ProductRow {
   alt_text?: string
   image_order?: number
   rating?: number[]
-  brand_name?: string
-  brand?: Brand
+  brand_name?: Brand
   created_at?: string
   updated_at?: string
   all_colors?: {
