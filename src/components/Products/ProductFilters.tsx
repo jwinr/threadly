@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-  useCallback,
-  RefObject,
-} from 'react'
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import { RiArrowDownSLine } from 'react-icons/ri'
 import Checkbox from '@/components/Elements/Checkbox'
@@ -15,13 +8,17 @@ import ActiveFilters from '@/components/Products/ActiveFilters'
 import Button from '@/components/Elements/Button'
 
 interface Product {
+  colors: string[]
   price: number
 }
 
 interface Attribute {
   attribute_type: string
   attribute_values: string[]
+  attribute_name: string
 }
+
+type Color = unknown
 
 interface FilterState {
   selectedPriceRanges: string[]
@@ -29,7 +26,7 @@ interface FilterState {
 }
 
 interface ProductFiltersProps {
-  inventoryItems: Product[]
+  inventoryItems: Product[] | Color[]
   onFilterChange: (filters: Record<string, string[]>) => void
   attributes: Attribute[]
   resetFilters: () => void
@@ -208,7 +205,6 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 }) => {
   const maxVisibleFilters = 5
   const [isPanelMounted, setIsPanelMounted] = useState(false)
-
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>(
     filterState.selectedPriceRanges || []
   )
@@ -218,9 +214,10 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
   const [isPanelOpen, setIsPanelOpen] = useState(false)
 
-  const dropdownAttributeRef = useRef<(RefObject<HTMLDivElement> | null)[]>(
-    Array<RefObject<HTMLDivElement> | null>(attributes.length).fill(null)
-  ).current.map(() => useRef<HTMLDivElement>(null))
+  const dropdownAttributeRefs = useMemo(
+    () => attributes.map(() => React.createRef<HTMLDivElement>()),
+    [attributes]
+  )
   const dropdownPriceRef = useRef<HTMLDivElement>(null)
 
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false)
@@ -251,7 +248,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
       ) {
         setIsPriceDropdownOpen(false)
       }
-      dropdownAttributeRef.forEach((ref, index) => {
+      dropdownAttributeRefs.forEach((ref, index) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
           const attributeType = attributes[index].attribute_type
           setIsAttributeDropdownOpen((prev) => ({
@@ -265,7 +262,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [attributes, dropdownAttributeRef, dropdownPriceRef])
+  }, [attributes, dropdownAttributeRefs, dropdownPriceRef])
 
   useEffect(() => {
     const handleTabKey = (event: KeyboardEvent) => {
@@ -273,7 +270,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
         return
       }
 
-      const allRefs = [dropdownPriceRef, ...dropdownAttributeRef].map(
+      const allRefs = [dropdownPriceRef, ...dropdownAttributeRefs].map(
         (ref) => ref.current
       )
 
@@ -311,7 +308,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
     return () => {
       document.removeEventListener('keydown', handleTabKey)
     }
-  }, [attributes, dropdownAttributeRef, dropdownPriceRef])
+  }, [attributes, dropdownAttributeRefs, dropdownPriceRef])
 
   const applyFilters = useCallback(() => {
     setSelectedAttributes(tempSelectedAttributes)
@@ -367,18 +364,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
   )
 
   const predefinedPriceRanges = [
-    '$25 - $49.99',
-    '$50 - $74.99',
-    '$75 - $99.99',
+    '$10 - $19.99',
+    '$20 - $29.99',
+    '$30 - $39.99',
+    '$40 - $59.99',
+    '$60 - $79.99',
+    '$80 - $99.99',
     '$100 - $149.99',
     '$150 - $199.99',
-    '$200 - $249.99',
-    '$250 - $499.99',
-    '$500 - $749.99',
-    '$750 - $999.99',
-    '$1000 - $1249.99',
-    '$1250 - $1499.99',
-    '$1500 - $1749.99',
   ]
 
   const isItemInPriceRange = useCallback(
@@ -389,20 +382,35 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
       const [minPrice, maxPrice] = priceRange
         .split(' - ')
         .map((value) => parseFloat(value.replace('$', '')))
-      return item.price >= minPrice && item.price <= maxPrice
+
+      // Extract all prices from the nested structure and deduplicate
+      const prices = Array.from(
+        new Set(
+          item.colors.flatMap((color) =>
+            (color as unknown as { sizes: { price: string }[] }).sizes.map(
+              (size) => parseFloat(size.price)
+            )
+          )
+        )
+      )
+
+      //console.log(`Item prices: ${prices}, Range: ${minPrice} - ${maxPrice}`)
+
+      // Check if any price is within the range
+      return prices.some((price) => price >= minPrice && price <= maxPrice)
     },
     []
   )
 
   const availablePriceRanges = useMemo(() => {
     return predefinedPriceRanges.filter((range) =>
-      inventoryItems?.some((item) => isItemInPriceRange(item, range))
+      inventoryItems?.some((item) => isItemInPriceRange(item as Product, range))
     )
   }, [inventoryItems, isItemInPriceRange])
 
   const togglePriceDropdown = () => {
     setIsPriceDropdownOpen((prevState) => !prevState)
-    setTempSelectedPriceRanges(selectedAttributes.price || []) // Extract the price from the attribute result
+    setTempSelectedPriceRanges(selectedPriceRanges || [])
     setIsAttributeDropdownOpen({})
   }
 
@@ -469,8 +477,8 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
           <AllFiltersBtn
             onClick={() => {
               setIsPanelMounted(true)
-              setTempSelectedPriceRanges(selectedAttributes.price || [])
-              setTempSelectedAttributes(selectedAttributes)
+              setTempSelectedPriceRanges(selectedPriceRanges || [])
+              setIsAttributeDropdownOpen({})
               setTimeout(() => {
                 setIsPanelOpen(true)
               }, 50)
@@ -482,18 +490,18 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
           </AllFiltersBtn>
           {attributes.slice(0, maxVisibleFilters).map((attribute, index) => (
             <Container
-              key={attribute.attribute_type}
-              ref={dropdownAttributeRef[index]}
+              key={attribute.attribute_name}
+              ref={dropdownAttributeRefs[index]}
             >
               <DropdownButton
                 onClick={() => {
-                  toggleAttributeDropdown(attribute.attribute_type)
+                  toggleAttributeDropdown(attribute.attribute_name)
                   setIsPriceDropdownOpen(false)
                 }}
               >
-                <span>{attribute.attribute_type}</span>
+                <span>{attribute.attribute_name}</span>
                 <ArrowIcon>
-                  {isAttributeDropdownOpen[attribute.attribute_type] ? (
+                  {isAttributeDropdownOpen[attribute.attribute_name] ? (
                     <RiArrowDownSLine className="rotate-arrow" />
                   ) : (
                     <RiArrowDownSLine className="arrow-icon-visible" />
@@ -502,24 +510,23 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
               </DropdownButton>
               <DropdownContent
                 className={
-                  isAttributeDropdownOpen[attribute.attribute_type]
+                  isAttributeDropdownOpen[attribute.attribute_name]
                     ? 'fade-in'
                     : 'fade-out'
                 }
               >
                 <DropdownScrollWrapper>
-                  {attribute.attribute_values.map((value, valueIndex) => (
+                  {attribute.attribute_values.map((value) => (
                     <Checkbox
-                      key={valueIndex}
-                      id={`${attribute.attribute_type}-${value}`}
+                      key={value}
+                      id={`${attribute.attribute_name}-${value}`}
                       label={value}
                       checked={tempSelectedAttributes[
-                        attribute.attribute_type
+                        attribute.attribute_name
                       ]?.includes(value)}
                       onChange={() =>
-                        toggleSelection(attribute.attribute_type, value)
+                        toggleSelection(attribute.attribute_name, value)
                       }
-                      data-type={attribute.attribute_type}
                     />
                   ))}
                   <Button
@@ -557,7 +564,6 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                     onChange={() => {
                       toggleSelection(priceRange, priceRange, true)
                     }}
-                    data-type="price"
                   />
                 ))}
                 <Button

@@ -11,6 +11,7 @@ import useScrollControl from 'src/hooks/useScrollControl'
 interface Attribute {
   attribute_type: string
   attribute_values: string[]
+  attribute_name: string // Add the missing property
 }
 
 interface FilterPanelProps {
@@ -266,7 +267,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 {attributes.map((attribute, index) => (
                   <Accordion key={index}>
                     <AccordionItem
-                      title={attribute.attribute_type}
+                      title={attribute.attribute_name}
                       defaultOpen={false}
                     >
                       <div>

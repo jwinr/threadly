@@ -51,37 +51,37 @@ const ActionsContainer = styled.div`
   margin-left: 16px;
 `
 
-const ClippingDiv = styled.div<{ isOpen: boolean; height: number }>`
+const ClippingDiv = styled.div<{ $isOpen: boolean; height: number }>`
   transition:
     height 300ms ease,
     overflow 300ms ease,
     opacity 300ms ease;
-  overflow: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  overflow: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   height: ${({ height }) => height}px;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
 `
 
-const ContentDiv = styled.div<{ isOpen: boolean }>`
+const ContentDiv = styled.div<{ $isOpen: boolean }>`
   transition-property: transform;
   transition-duration: 300ms;
   transition-timing-function: ease;
-  transform: ${({ isOpen }) =>
-    isOpen ? 'translateY(0px)' : 'translateY(-15px)'};
+  transform: ${({ $isOpen }) =>
+    $isOpen ? 'translateY(0px)' : 'translateY(-15px)'};
 `
 
-const Content = styled.div<{ isOpen: boolean }>`
+const Content = styled.div<{ $isOpen: boolean }>`
   padding: 12px;
   transition: visibility 300ms ease;
-  visibility: ${({ isOpen }) =>
-    isOpen
+  visibility: ${({ $isOpen }) =>
+    $isOpen
       ? 'visible'
       : 'hidden'}; // Don't allow us to tab into contents that shouldn't be visible
 `
 
-const ChevronDiv = styled.div<{ isOpen: boolean }>`
+const ChevronDiv = styled.div<{ $isOpen: boolean }>`
   margin-right: 12px;
   transition: transform 0.3s ease;
-  transform: ${({ isOpen }) => (isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
 
   svg {
     width: 12px;
@@ -199,7 +199,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           aria-controls={`accordion-content-${itemRef.current}`}
           ref={headerRef}
         >
-          <ChevronDiv isOpen={isOpen}>
+          <ChevronDiv $isOpen={isOpen}>
             <Chevron />
           </ChevronDiv>
           {media && <MediaContainer>{media}</MediaContainer>}
@@ -210,14 +210,14 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           {actions && <ActionsContainer>{actions}</ActionsContainer>}
         </AccordionHeader>
         <ClippingDiv
-          isOpen={isOpen}
+          $isOpen={isOpen}
           id={`accordion-content-${itemRef.current}`}
           height={height}
           role="region"
           aria-labelledby={`accordion-header-${itemRef.current}`}
         >
-          <ContentDiv isOpen={isOpen}>
-            <Content isOpen={isOpen} ref={contentRef}>
+          <ContentDiv $isOpen={isOpen}>
+            <Content $isOpen={isOpen} ref={contentRef}>
               {React.Children.map(children, (child) =>
                 React.isValidElement(child)
                   ? React.cloneElement(child as React.ReactElement<unknown>)

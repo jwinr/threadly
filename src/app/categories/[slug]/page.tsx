@@ -9,11 +9,6 @@ import ProductFilters from '@/components/Products/ProductFilters'
 import Pagination from '@/components/Elements/Pagination'
 import useCategoryData from 'src/hooks/useCategoryData'
 
-interface Size {
-  price: number
-  sale_price?: number
-}
-
 const animationStyles = css`
   animation: loadingAnimation 2s infinite;
 `
@@ -137,16 +132,20 @@ const FixedFiltersContainer = styled.div`
 
 const MemoizedProductCard = React.memo(ProductCard)
 
+const MemoizedProductFilters = React.memo(ProductFilters)
+
 export default function CategoryPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const slug = pathname.split('/').pop() as string
-
   const page = parseInt(searchParams.get('page') || '1')
+
   const [currentPage, setCurrentPage] = useState<number>(page)
   const [filterState, setFilterState] = useState<Record<string, string[]>>(
-    JSON.parse(searchParams.get('filters') || '{}') as Record<string, string[]>
+    searchParams.get('filters')
+      ? JSON.parse(decodeURIComponent(searchParams.get('filters')!))
+      : {}
   )
   const { categoryData, loading, filteredItems } = useCategoryData(
     slug,
@@ -155,8 +154,7 @@ export default function CategoryPage() {
   )
   const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
 
-  console.log('categoryData', categoryData)
-
+  // Handle filter changes, push new filters to URL, and reset to page 1
   const handleFilterChange = useCallback(
     (selectedAttributes: Record<string, unknown>) => {
       const filters = { ...selectedAttributes }
@@ -166,13 +164,15 @@ export default function CategoryPage() {
         searchParams as URLSearchParams | string[][]
       )
       newQuery.set('filters', encodedFilters)
-      newQuery.set('page', '1')
+      newQuery.set('page', '1') // Reset to the first page when filters are applied
 
       router.push(`${pathname}?${newQuery.toString()}`)
+      setCurrentPage(1) // Reset currentPage in state
     },
-    [router, pathname, searchParams]
+    [router, pathname, searchParams, filteredItems]
   )
 
+  // Handle page change and push new page to URL
   const handlePageChange = useCallback(
     (newPage: number) => {
       const newQuery = new URLSearchParams(
@@ -181,11 +181,12 @@ export default function CategoryPage() {
       newQuery.set('page', newPage.toString())
 
       router.push(`${pathname}?${newQuery.toString()}`)
-      setCurrentPage(newPage)
+      setCurrentPage(newPage) // Update currentPage state
     },
     [router, pathname, searchParams]
   )
 
+  // Calculate paginated items based on current page and filtered items
   const paginatedItems = useMemo(() => {
     if (!filteredItems.length) {
       return []
@@ -198,6 +199,19 @@ export default function CategoryPage() {
     return filteredItems.length ? Math.ceil(filteredItems.length / 16) : 1
   }, [filteredItems])
 
+  // Sync filterState with URL when the URL changes (e.g., on back/forward browser actions)
+  useEffect(() => {
+    const filtersFromURL = searchParams.get('filters')
+    if (filtersFromURL) {
+      const decodedFilters = JSON.parse(decodeURIComponent(filtersFromURL))
+      setFilterState(decodedFilters)
+    }
+    const currentPageFromURL = parseInt(searchParams.get('page') || '1')
+    setCurrentPage(currentPageFromURL)
+  }, [searchParams])
+
+  console.log('Paginated items', paginatedItems)
+
   const updateURL = useCallback(
     (filters: Record<string, unknown>) => {
       const searchParams = new URLSearchParams(window.location.search)
@@ -208,6 +222,7 @@ export default function CategoryPage() {
     [router, pathname]
   )
 
+  //console.log(categoryData)
   const resetFilters = useCallback(() => {
     setFilterState({ selectedAttributes: [] })
     updateURL({})
@@ -241,7 +256,7 @@ export default function CategoryPage() {
           </>
         ) : (
           <>
-            <ProductFilters
+            <MemoizedProductFilters
               inventoryItems={categoryData?.products || []}
               onFilterChange={handleFilterChange}
               attributes={(categoryData?.attributes as []) || []}
@@ -254,7 +269,7 @@ export default function CategoryPage() {
               filtersVisible={filtersVisible}
             />
             <FixedFiltersContainer className={filtersVisible ? 'visible' : ''}>
-              <ProductFilters
+              <MemoizedProductFilters
                 inventoryItems={categoryData?.products || []}
                 onFilterChange={handleFilterChange}
                 attributes={(categoryData?.attributes as []) || []}
@@ -277,7 +292,7 @@ export default function CategoryPage() {
             ))}
           {paginatedItems.map((item) => {
             return item.colors.map((color) => {
-              const firstSize = color.sizes[0] as Size
+              const firstSize = color.sizes[0]
               const price = firstSize.price
               const salePrice = firstSize.sale_price
 
@@ -286,7 +301,7 @@ export default function CategoryPage() {
                   key={color.color_variant_id}
                   link={`/products/${item.slug}/${color.color_sku}`}
                   title={item.name}
-                  price={price}
+                  price={Number(price)}
                   discount={salePrice}
                   brand={item.brand}
                   rating={item.rating}

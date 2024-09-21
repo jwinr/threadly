@@ -88,12 +88,39 @@ const useCategoryData = (
     enabled: !!slug,
   })
 
-  // Update filteredItems once the categoryData is available
   useEffect(() => {
     if (categoryData) {
-      setFilteredItems(categoryData.products)
+      const applyFilters = (
+        products: Product[],
+        filters: Filter | null
+      ): Product[] => {
+        return products
+          .map((product) => {
+            // Filter color variants based on the selected color filters
+            const filteredColors = product.colors.filter((color) => {
+              // Check if the color matches the selected filters
+              const matchesColor =
+                !filters?.Color ||
+                (filters.Color as string[]).includes(color.color)
+              return matchesColor
+            })
+
+            // Only return the product if it has matching color variants
+            if (filteredColors.length > 0) {
+              return {
+                ...product,
+                colors: filteredColors, // Only include the filtered colors
+              }
+            }
+            return null // Return null if no matching color variants
+          })
+          .filter((product) => product !== null) as Product[] // Remove null products
+      }
+
+      const filtered = applyFilters(categoryData.products, filters)
+      setFilteredItems(filtered)
     }
-  }, [categoryData])
+  }, [categoryData, filters])
 
   if (error) {
     console.error('Error fetching category data:', error)

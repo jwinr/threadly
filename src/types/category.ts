@@ -22,8 +22,11 @@ export interface FilterAttributes {
 }
 
 export interface AttributeRow {
+  sku?: string[]
   attribute_name: string
   attribute_value: string
+  specification_name: string
+  specification_value: string
 }
 
 export interface PriceRange {
