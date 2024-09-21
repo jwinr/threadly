@@ -39,7 +39,7 @@ const Container = styled.div`
   position: relative;
 `
 
-const DropdownButton = styled.button`
+const DropdownButton = styled.button<{ $isOpen: boolean }>`
   font-size: 14px;
   font-weight: 600;
   color: #596171;
@@ -52,11 +52,19 @@ const DropdownButton = styled.button`
   height: 42px;
   width: max-content;
   border: 1px solid var(--sc-color-border-gray);
-  transition: all 240ms;
+  transition: background-color 240ms;
 
-  &:hover,
-  &:focus {
+  &[aria-expanded='true'] {
     background-color: #f5f6f8;
+  }
+
+  &:hover {
+    background-color: #f5f6f8;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
   }
 
   @media (max-width: 768px) {
@@ -76,16 +84,16 @@ const DropdownContent = styled.div`
   background-color: var(--sc-color-white);
   border: 1px solid var(--sc-color-border-gray);
   border-radius: 8px;
-  max-height: 275px;
+  box-shadow:
+    0px 5px 15px 0px rgba(0, 0, 0, 0.12),
+    0px 15px 35px 0px rgba(48, 49, 61, 0.08);
+  max-height: 325px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: max-content;
   top: 48px;
   z-index: 200;
 
-  box-shadow:
-    0px 5px 15px 0px rgba(0, 0, 0, 0.12),
-    0px 15px 35px 0px rgba(48, 49, 61, 0.08);
+  // Initial hidden state
   opacity: 0;
   transform: scale(0.85);
   transition:
@@ -116,7 +124,7 @@ const DropdownContent = styled.div`
 
 const DropdownScrollWrapper = styled.div`
   overflow-y: auto;
-  max-height: 275px;
+  max-height: 400px;
   padding: 12px;
   border-radius: 8px;
 `
@@ -242,73 +250,31 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownPriceRef.current &&
-        !dropdownPriceRef.current.contains(event.target as Node)
-      ) {
-        setIsPriceDropdownOpen(false)
-      }
-      dropdownAttributeRefs.forEach((ref, index) => {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
-          const attributeType = attributes[index].attribute_type
-          setIsAttributeDropdownOpen((prev) => ({
-            ...prev,
-            [attributeType]: false,
-          }))
-        }
-      })
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [attributes, dropdownAttributeRefs, dropdownPriceRef])
+      const target = event.target as Node
 
-  useEffect(() => {
-    const handleTabKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') {
+      // Check if the click is inside the price dropdown
+      if (dropdownPriceRef.current?.contains(target)) {
         return
       }
 
-      const allRefs = [dropdownPriceRef, ...dropdownAttributeRefs].map(
-        (ref) => ref.current
-      )
-
-      allRefs.forEach((dropdownRef, index) => {
-        if (!dropdownRef) {
+      // Check if the click is inside any attribute dropdowns
+      for (const ref of dropdownAttributeRefs) {
+        if (ref.current?.contains(target)) {
           return
         }
+      }
 
-        const focusableElements = dropdownRef.querySelectorAll(
-          'input[type="checkbox"], button'
-        )
-        const lastFocusableElement =
-          focusableElements[focusableElements.length - 1]
-
-        if (document.activeElement !== lastFocusableElement) {
-          return
-        }
-
-        // Close dropdowns if the last focusable element is reached
-        if (index === 0) {
-          setIsPriceDropdownOpen(false)
-        } else {
-          const attributeType = attributes[index - 1].attribute_type
-          setIsAttributeDropdownOpen((prev) => ({
-            ...prev,
-            [attributeType]: false,
-          }))
-          setTempSelectedAttributes({})
-        }
-      })
+      // If the click is not inside any dropdown, close all
+      setIsPriceDropdownOpen(false)
+      setIsAttributeDropdownOpen({})
     }
 
-    document.addEventListener('keydown', handleTabKey)
+    document.addEventListener('click', handleClickOutside)
 
     return () => {
-      document.removeEventListener('keydown', handleTabKey)
+      document.removeEventListener('click', handleClickOutside)
     }
-  }, [attributes, dropdownAttributeRefs, dropdownPriceRef])
+  }, [dropdownPriceRef, dropdownAttributeRefs])
 
   const applyFilters = useCallback(() => {
     setSelectedAttributes(tempSelectedAttributes)
@@ -494,6 +460,11 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
               ref={dropdownAttributeRefs[index]}
             >
               <DropdownButton
+                $isOpen={isAttributeDropdownOpen[attribute.attribute_name]}
+                aria-expanded={
+                  isAttributeDropdownOpen[attribute.attribute_name]
+                }
+                aria-controls={`dropdown-${attribute.attribute_name}`}
                 onClick={() => {
                   toggleAttributeDropdown(attribute.attribute_name)
                   setIsPriceDropdownOpen(false)
@@ -509,11 +480,15 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                 </ArrowIcon>
               </DropdownButton>
               <DropdownContent
+                id={`dropdown-${attribute.attribute_name}`}
+                aria-hidden={!isAttributeDropdownOpen[attribute.attribute_name]}
+                role="menu"
                 className={
                   isAttributeDropdownOpen[attribute.attribute_name]
                     ? 'fade-in'
                     : 'fade-out'
                 }
+                onClick={(e) => e.stopPropagation()}
               >
                 <DropdownScrollWrapper>
                   {attribute.attribute_values.map((value) => (
@@ -541,7 +516,12 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
             </Container>
           ))}
           <Container ref={dropdownPriceRef}>
-            <DropdownButton onClick={togglePriceDropdown}>
+            <DropdownButton
+              $isOpen={isPriceDropdownOpen}
+              aria-expanded={isPriceDropdownOpen}
+              aria-controls="dropdown-price"
+              onClick={togglePriceDropdown}
+            >
               <span>Price</span>
               <ArrowIcon>
                 {isPriceDropdownOpen ? (
@@ -552,6 +532,9 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
               </ArrowIcon>
             </DropdownButton>
             <DropdownContent
+              id="dropdown-price"
+              aria-hidden={!isPriceDropdownOpen}
+              role="menu"
               className={isPriceDropdownOpen ? 'fade-in' : 'fade-out'}
             >
               <DropdownScrollWrapper>

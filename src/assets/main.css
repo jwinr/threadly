@@ -177,8 +177,13 @@ li:focus {
   fill: var(--sc-color-gray-700);
 }
 
-.arrow-icon-visible svg {
+.arrow-icon-visible {
   transition: transform 0.3s ease;
+}
+
+.rotate-arrow {
+  transition: transform 0.3s;
+  transform: rotate(180deg);
 }
 
 .deal-box {
@@ -204,11 +209,6 @@ li:focus {
 
 .additional-image-hovered {
   outline: 2px solid var(--sc-color-text) !important;
-}
-
-.rotate-arrow svg {
-  transition: transform 0.3s;
-  transform: rotate(180deg);
 }
 
 @keyframes toastZoom {

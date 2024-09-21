@@ -22,7 +22,6 @@ const ActiveFilter = styled.button`
   height: 42px;
   padding: var(--s1-padding-top) var(--s1-padding-right)
     var(--s1-padding-bottom) var(--s1-padding-left);
-  position: relative;
   border-radius: 25px;
   align-items: center;
   display: flex;
@@ -60,7 +59,6 @@ const ResetBtn = styled.button`
   font-size: 15px;
   color: var(--sc-color-text);
   padding: 0 12px;
-  position: relative;
   align-items: center;
   text-decoration: underline;
   display: flex;

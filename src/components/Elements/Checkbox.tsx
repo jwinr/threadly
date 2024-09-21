@@ -15,21 +15,21 @@ const CheckboxWrapper = styled.label`
   position: relative;
   font-size: 14px;
   font-weight: 500;
-  color: var(--sc-color-carnation);
 
   input {
     position: absolute;
     opacity: 0;
     pointer-events: none;
 
-    &:focus + .cbx span:first-child {
+    &:focus-visible + .cbx span:first-child {
       --s-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
       outline: transparent solid 1px;
       box-shadow:
         var(--s-top-shadow),
         var(--s-keyline) 0 0 0 var(--s-keyline-width),
         var(--s-focus-ring),
-        var (--s-box-shadow);
+        var(--s-box-shadow);
+      animation: none;
     }
   }
 
@@ -93,16 +93,6 @@ const CheckboxWrapper = styled.label`
     background: var(--sc-color-carnation);
     border-color: var(--sc-color-carnation);
     animation: ${waveAnimation} 0.4s ease;
-
-    &:active {
-      --s-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
-      outline: transparent solid 1px;
-      box-shadow:
-        var(--s-top-shadow),
-        var(--s-keyline) 0 0 0 var(--s-keyline-width),
-        var(--s-focus-ring),
-        var(--s-box-shadow);
-    }
 
     svg {
       stroke-dashoffset: 0;
