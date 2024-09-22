@@ -1,13 +1,15 @@
 /** @type {import('next').NextConfig} */
-
-export function webpack(config) {
-  config.module.rules.push({
-    test: /\.svg$/,
-    use: ['@svgr/webpack'],
-  })
-
-  return config
+const nextConfig = {
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    })
+    return config
+  },
+  compiler: {
+    styledComponents: true,
+  },
 }
-export const compiler = {
-  styledComponents: true,
-}
+
+export default nextConfig
