@@ -15,7 +15,9 @@ const CardContainer = styled.div<{ $isLoading: boolean }>`
   margin-bottom: 10px;
   background-color: var(--sc-color-white);
   border-radius: 8px;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   height: 100%;
   width: 100%;
 
@@ -99,7 +101,7 @@ const Swatches = styled.div<{ $hovered: boolean }>`
 const SwatchWrapper = styled.div<{ $hovered: boolean }>`
   display: flex;
   padding: 16px 16px 0px 16px;
-  gap: 15px;
+  gap: 8px;
   opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
   transition: opacity 140ms ease;
 `
@@ -177,10 +179,10 @@ const SliderNav = styled.div<{ $hovered: boolean }>`
     bottom: 0;
     background: linear-gradient(
       0deg,
-      rgba(0, 0, 0, 0.8) -42.5%,
+      rgba(0, 0, 0, 0.95) -42.5%,
       rgba(0, 0, 0, 0) 100%
     );
-    opacity: ${({ $hovered }) => ($hovered ? '0.3' : '0')};
+    opacity: ${({ $hovered }) => ($hovered ? '0.4' : '0')};
     transition: opacity 0.25s ease;
     z-index: -1;
   }
@@ -221,7 +223,7 @@ const SliderCounter = styled.div<{ $hovered: boolean }>`
   bottom: 30px;
   color: #fff;
   font-size: 12px;
-  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.35);
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.8);
   margin: 0 10px;
   user-select: none;
   opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
@@ -243,7 +245,7 @@ const SliderDot = styled.div<{ $active: boolean; $hovered: boolean }>`
   &::before {
     content: '';
     position: absolute;
-    top: 0px; /* Adjust these values to control the clickable area */
+    top: 0px;
     bottom: 0px;
     left: -3px;
     right: -3px;

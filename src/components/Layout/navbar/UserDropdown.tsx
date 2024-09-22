@@ -40,6 +40,9 @@ const UserButton = styled.button<UserButtonProps>`
   align-items: center;
   background-color: ${({ $isOpen }) => ($isOpen ? '#f7f7f7' : '#fff')};
   display: flex;
+  flex-shrink: 0;
+  flex-grow: 1;
+  min-width: 105px;
 
   svg {
     @media (max-width: 768px) {

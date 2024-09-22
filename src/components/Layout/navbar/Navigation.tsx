@@ -43,6 +43,10 @@ const NavbarFlex = styled.div`
     flex-wrap: wrap;
     gap: 0;
   }
+
+  & > * {
+    flex-shrink: 0; /* Prevent shrinking of child elements */
+  }
 `
 
 const MobileFlexContainer = styled.div`

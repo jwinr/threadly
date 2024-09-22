@@ -228,6 +228,11 @@ export default function CategoryPage() {
     updateURL({})
   }, [updateURL])
 
+  // Get the total count of items based on the filtered items including individual color variants
+  const getTotalCount = useCallback(() => {
+    return filteredItems.reduce((acc, item) => acc + item.colors.length, 0)
+  }, [filteredItems])
+
   useEffect(() => {
     const handleScroll = () => {
       setFiltersVisible(window.scrollY > 175)
@@ -282,7 +287,9 @@ export default function CategoryPage() {
                 filtersVisible={filtersVisible}
               />
             </FixedFiltersContainer>
-            <ResultCount>{filteredItems.length} results</ResultCount>
+            <ResultCount>
+              {getTotalCount()} {getTotalCount() === 1 ? 'result' : 'results'}
+            </ResultCount>
           </>
         )}
         <CategorizedItemsContainer>
