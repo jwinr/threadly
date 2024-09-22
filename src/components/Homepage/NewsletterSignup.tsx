@@ -36,10 +36,17 @@ const NewsletterForm = styled.form<NewsletterFormProps>`
 
 const NewsletterInput = styled.input`
   padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
+  font-size: 15px;
+  color: #353a44;
+  background-color: #f5f6f8;
+  border-radius: 8px;
   border: 1px solid var(--sc-color-border-gray);
   min-width: 375px;
+  height: 40px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  transition: box-shadow 150ms ease;
 
   @media (max-width: 768px) {
     min-width: auto;

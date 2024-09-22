@@ -1,5 +1,6 @@
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 import '../assets/main.css'
+import { Inter } from 'next/font/google'
 import AmplifyConfig from '@/lib/awsConfig'
 import { MobileViewProvider } from '@/context/MobileViewContext'
 import { UserProvider } from '@/context/UserContext'
@@ -16,15 +17,17 @@ import Script from 'next/script'
 import { Metadata } from 'next'
 import { Customer } from '@/types/user'
 
-interface RootLayoutProps {
-  children: ReactNode
-}
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Threadly',
 }
 
-const RootLayout: FC<RootLayoutProps> = ({ children }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}): JSX.Element {
   // Access cookies from the request headers on the server side
   const headersList = headers()
   const nonce = headers().get('x-nonce')
@@ -43,7 +46,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
           data-nscript="afterInteractive"
         ></Script>
       </head>
-      <body>
+      <body className={inter.className}>
         <React.StrictMode>
           <AmplifyConfig>
             <Providers>
@@ -70,5 +73,3 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     </html>
   )
 }
-
-export default RootLayout

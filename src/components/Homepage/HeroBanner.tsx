@@ -161,13 +161,12 @@ const CtaButton = styled.button`
   color: var(--sc-color-white);
   margin-bottom: 16px;
   padding-left: 16px;
-  padding-top: 3px;
+  padding-top: 4px;
   padding-bottom: 6px;
   padding-right: 12px;
   border-radius: 16.5px;
   font-size: 15px;
   font-weight: 700;
-  line-height: 1.6;
   opacity: 0;
   transition:
     transform 0.3s ease,
@@ -175,7 +174,8 @@ const CtaButton = styled.button`
   animation: ${fadeInUpCta} 1.25s ease 0.75s forwards;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 12px;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background-color: #360b07;
 
     & ${HoverArrow} {
@@ -193,10 +193,6 @@ const CtaButton = styled.button`
         }
       }
     }
-  }
-
-  &:focus-visible {
-    background-color: var(--sc-color-white-highlight);
   }
 
   @media (max-width: 768px) {

@@ -4,7 +4,7 @@ import { Leaf } from 'lucide-react'
 import Arrow from '@/public/images/icons/ctaArrow.svg'
 
 const Container = styled.div`
-  background-color: #f6ebea;
+  background-color: #fff5f4;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,17 +66,18 @@ const Button = styled.a`
   color: var(--sc-color-white);
   margin-bottom: 16px;
   padding-left: 16px;
-  padding-top: 3px;
+  padding-top: 4px;
   padding-bottom: 6px;
   padding-right: 12px;
-  border-radius: 16.5px;
+  border-radius: 980px;
   font-size: 15px;
   font-weight: 700;
-  line-height: 1.6;
+  text-decoration: none;
   opacity: 1;
   transition: background-color 0.15s ease;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background-color: #360b07;
     color: var(--sc-color-white);
 
@@ -97,8 +98,10 @@ const Button = styled.a`
     }
   }
 
+  &:focus,
   &:focus-visible {
-    border-radius: 16.5px;
+    outline: none;
+    box-shadow: none;
   }
 
   @media (max-width: 768px) {
@@ -117,9 +120,9 @@ const Sustainability: React.FC = () => {
         eco-friendly materials, ethical manufacturing, and sustainable practices
         throughout our supply chain.
       </Description>
-      <Button href="#">
-        Learn More{' '}
-        <HoverArrow>
+      <Button href="#" aria-label="Learn more" className="button-wrapper">
+        <span aria-hidden="true">Learn&nbsp;more</span>
+        <HoverArrow aria-hidden="true">
           <Arrow />
         </HoverArrow>
       </Button>

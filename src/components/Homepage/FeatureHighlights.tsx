@@ -1,14 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Shirt, Scissors, Truck, Recycle } from 'lucide-react'
 
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-area: about;
   padding: 50px 20px;
   background-color: #f6f9fc;
+  border-radius: 8px;
 
   h1 {
     font-size: 34px;
@@ -37,8 +38,6 @@ const SecTitle = styled.h2`
   align-self: start;
 `
 
-const Subtitle = styled.p``
-
 const Column = styled.div`
   flex: 1;
   padding: 20px;
@@ -57,8 +56,8 @@ const Column = styled.div`
 const Outline = styled.div`
   border: 2px solid var(--sc-color-carnation);
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 55px;
+  height: 55px;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -66,7 +65,6 @@ const Outline = styled.div`
 `
 
 const Icon = styled.div`
-  font-size: 2.5rem;
   color: var(--sc-color-carnation);
 `
 
@@ -91,53 +89,61 @@ const FeatureHighlights: React.FC = () => {
   return (
     <Container>
       <SecTitle>Why choose Threadly?</SecTitle>
-      <Subtitle>
+      <p>
         United in a common goal, everything we do is focused on delivering the
-        best possible service and experience to you. We call this The Threadly
+        best possible service and experience to you. We call this the Threadly
         Difference – here’s what it looks like in action.
-      </Subtitle>
+      </p>
       <Wrapper>
         <Column>
           <Outline>
-            <Icon>🖥️</Icon>
+            <Icon>
+              <Shirt size={32} />
+            </Icon>
           </Outline>
-          <HeaderText>Wide Selection of Tech Products</HeaderText>
+          <HeaderText>Wide Selection of Styles</HeaderText>
           <p>
-            Shop top-tier tech, from powerful components to essential
-            accessories, for your custom builds and upgrades.
+            Browse a curated collection of clothing, from casual essentials to
+            trendsetting pieces, for every occasion.
           </p>
         </Column>
         <Divider />
         <Column>
           <Outline>
-            <Icon>🔧</Icon>
+            <Icon>
+              <Scissors size={32} />
+            </Icon>
           </Outline>
-          <HeaderText>Expert Guidance</HeaderText>
+          <HeaderText>Quality Craftsmanship</HeaderText>
           <p>
-            Our tech experts provide personalized advice and support to help you
-            choose and use the right gear.
+            Every item is made with high-quality materials, ensuring comfort,
+            durability, and timeless style.
           </p>
         </Column>
         <Divider />
         <Column>
           <Outline>
-            <Icon>🚚</Icon>
+            <Icon>
+              <Truck size={32} />
+            </Icon>
           </Outline>
-          <HeaderText>Fast, free shipping</HeaderText>
+          <HeaderText>Fast, Free Shipping</HeaderText>
           <p>
-            From mouse pads to full-sized computer cases, nearly everything
-            ships for free — no minimum purchase required.
+            From everyday basics to premium pieces, nearly everything ships for
+            free — no minimum purchase required.
           </p>
         </Column>
         <Divider />
         <Column>
           <Outline>
-            <Icon>💻</Icon>
+            <Icon>
+              <Recycle size={32} />
+            </Icon>
           </Outline>
-          <HeaderText>Latest Tech & Innovations</HeaderText>
+          <HeaderText>Sustainable Fashion</HeaderText>
           <p>
-            Discover the latest tech trends and innovations, from cutting-edge
-            GPUs to the newest peripherals.
+            We prioritize eco-friendly fabrics and responsible production
+            practices, so you can shop with peace of mind.
           </p>
         </Column>
       </Wrapper>

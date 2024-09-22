@@ -188,6 +188,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <ButtonWrapper
+      className="button-wrapper"
       size={size}
       type={type}
       disabled={disabled}
