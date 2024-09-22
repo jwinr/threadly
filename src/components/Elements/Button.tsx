@@ -14,7 +14,7 @@ const types = {
     --s1-keyline: #f44c3a;
 
     &:hover:not(:active) {
-      --s1-keyline: #f44c3a;
+      --s1-keyline: #cf200d;
       border-color: #ff4d45;
       color: white;
     }
@@ -121,10 +121,13 @@ const ButtonWrapper = styled.button<ButtonProps>`
     transition-duration: 0ms;
   }
 
-  &:focus-visible,
-  :focus {
-    --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
-    outline: 1px solid transparent;
+  /* This is to override the global <a> tag style */
+  &.button-wrapper {
+    &:focus-visible,
+    :focus {
+      --s1-focus-ring: 0 0 0 4px rgba(1, 150, 237, 0.36);
+      outline: 1px solid transparent;
+    }
   }
 `
 
@@ -162,6 +165,7 @@ const Button: React.FC<ButtonProps> = ({
   if (href) {
     return (
       <ButtonWrapper
+        className="button-wrapper"
         as="a"
         href={href}
         target={target}

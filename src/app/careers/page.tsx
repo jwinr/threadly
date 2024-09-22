@@ -93,9 +93,9 @@ const Careers: React.FC = () => {
         <title>Hire Me | Threadly</title>
       </Head>
       <CareersContainer>
-        <Title>Let&quot;s work together</Title>
+        <Title>Let's work together</Title>
         <Description>
-          Interested in hiring me to join your team? I&quot;m always looking for
+          Interested in hiring me to join your team? I'm always looking for
           opportunities to grow and apply my skills. Drop me an email if you
           want to chat!
         </Description>
@@ -105,9 +105,9 @@ const Careers: React.FC = () => {
           size="large"
           type="primary"
           onPress={handleButtonClickWrapper}
-          aria-label="Contact Me"
+          aria-label="Contact me"
         >
-          Contact Me
+          Contact me
         </Button>
         <Subtitle>... or feel free to connect with me</Subtitle>
         <ButtonContainer>

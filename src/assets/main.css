@@ -112,8 +112,8 @@ a:hover {
   text-decoration: none;
 }
 
-a:focus,
-a:focus-visible {
+a:focus:not(.button-wrapper),
+a:focus-visible:not(.button-wrapper) {
   box-shadow:
     0 0 0 2px #4d90fe,
     inset 0 0 0 2px hsla(0, 0%, 100%, 0.9);
