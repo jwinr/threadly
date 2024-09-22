@@ -73,7 +73,7 @@ const Logo = styled.a`
   padding: 2px;
 
   &:focus:not(:focus-visible) {
-    --s-focus-ring: 0;
+    box-shadow: none;
   }
 
   @media (max-width: 768px) {

@@ -39,6 +39,10 @@ const SearchInput = styled.input`
   height: 100%;
   max-width: 650px;
   background-color: #f5f6f8;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  padding-right: 85px;
 
   &:focus {
     --s-focus-ring: 0;
@@ -79,13 +83,13 @@ const SubmitButton = styled.button`
 
 const ClearButton = styled.button`
   position: absolute;
-  right: 80px;
+  right: 65px;
   top: 50%;
   height: 60%;
   transform: translateY(-50%);
   background: none;
-  border-right: 1px solid #c5cbd1;
-  padding: 0px 14px;
+  padding: 0px 2px;
+  margin-right: 7px;
   cursor: pointer;
 
   svg {
@@ -101,6 +105,16 @@ const ClearButton = styled.button`
   }
 `
 
+const Divider = styled.div`
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 20px;
+  right: 55px;
+  background-color: #c5cbd1;
+  margin: 0 10px;
+`
+
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const router = useRouter()
@@ -108,26 +122,12 @@ const SearchBar: React.FC = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (searchTerm.trim()) {
-      router.push(`/search?query=${searchTerm}`)
+      router.push(`/search?query=${encodeURIComponent(searchTerm)}`)
     }
   }
 
   const clearSearch = () => {
     setSearchTerm('')
-  }
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      clearSearch()
-    }
-  }
-
-  const handleFocus = () => {
-    document.addEventListener('keydown', handleKeyDown)
-  }
-
-  const handleBlur = () => {
-    document.removeEventListener('keydown', handleKeyDown)
   }
 
   return (
@@ -140,14 +140,19 @@ const SearchBar: React.FC = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSearchTerm(e.target.value)
           }
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           aria-label="Search for products"
         />
         {searchTerm && (
-          <ClearButton onClick={clearSearch} aria-label="Clear search">
-            <X size={20} />
-          </ClearButton>
+          <>
+            <ClearButton
+              type="button"
+              onClick={clearSearch}
+              aria-label="Clear search"
+            >
+              <X size={20} />
+            </ClearButton>
+            <Divider />
+          </>
         )}
         <SubmitButton type="submit" aria-label="Submit search">
           <Search size={18} />
