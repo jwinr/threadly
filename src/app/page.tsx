@@ -3,6 +3,7 @@
 import styled from 'styled-components'
 import HeroBanner from '@/components/Homepage/HeroBanner'
 import FeatureHighlights from '@/components/Homepage/FeatureHighlights'
+import FeaturedCategories from '@/components/Homepage/FeaturedCategories'
 import Sustainability from '@/components/Homepage/Sustainability'
 import NewsletterSignup from '@/components/Homepage/NewsletterSignup'
 
@@ -29,11 +30,6 @@ const Title = styled.h2`
   color: var(--sc-color-title);
 `
 
-const Categories = styled(Section)`
-  max-width: 1000px;
-  align-self: center;
-`
-
 const Home: React.FC = () => {
   return (
     <>
@@ -48,9 +44,7 @@ const Home: React.FC = () => {
         <Section>
           <FeatureHighlights />
         </Section>
-        <Categories>
-          <Title>Featured categories</Title>
-        </Categories>
+        <FeaturedCategories />
         <Section>
           <Sustainability />
         </Section>
