@@ -38,7 +38,7 @@ const SubheaderText = styled.div`
 const ForgotPassword: React.FC = () => {
   const { formState, emailValid, passwordValid, codeValid, onChange, onBlur } =
     useAuthFormValidation({
-      username: '',
+      email: '',
       password: '',
       newPassword: '',
       code: '',
@@ -86,7 +86,7 @@ const ForgotPassword: React.FC = () => {
     }
 
     // Validate the email before submitting the initial reset form
-    if (!emailValid || !formState.username) {
+    if (!emailValid || !formState.email) {
       setErrorMessage('Please fill in all fields with valid information.')
       setShakeKey((prevKey) => prevKey + 1)
       return
@@ -94,7 +94,7 @@ const ForgotPassword: React.FC = () => {
 
     // Check if the username exists in the database before we send a request to AWS
     const usernameExists = await debouncedCheckUsername(
-      formState.username,
+      formState.email,
       setErrorMessage,
       setShakeKey,
       setLoading
@@ -105,10 +105,9 @@ const ForgotPassword: React.FC = () => {
 
     setLoading(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
-        const output = await resetPassword({ username: formState.username })
+        const output = await resetPassword({ username: formState.email })
         const { nextStep } = output
 
         if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
@@ -131,7 +130,7 @@ const ForgotPassword: React.FC = () => {
     }, 200)
   }
 
-  const handleResetPassword = (event: FormEvent): void => {
+  const handleResetPassword = (event: FormEvent) => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
@@ -145,18 +144,17 @@ const ForgotPassword: React.FC = () => {
     }
 
     setLoading(true)
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
         await confirmResetPassword({
-          username: formState.username,
+          username: formState.email,
           confirmationCode: formState.code!,
           newPassword: formState.newPassword!,
         })
 
         // Sign the user in after a successful reset
         await signIn({
-          username: formState.username,
+          username: formState.email,
           password: formState.newPassword,
         })
 
@@ -226,7 +224,7 @@ const ForgotPassword: React.FC = () => {
                       </span>
                     </SubheaderText>
                     <AuthStyles.FormContainer
-                      onSubmit={() => void handleSendCode}
+                      onSubmit={handleSendCode}
                       noValidate
                       data-form-type="forgot_password"
                     >
@@ -234,16 +232,16 @@ const ForgotPassword: React.FC = () => {
                         <AuthStyles.EntryContainer
                           onChange={onChange}
                           onBlur={onBlur}
-                          name="username"
-                          id="username"
-                          type="username"
+                          name="email"
+                          id="email"
+                          type="email"
                           placeholder=""
-                          autoComplete="username"
+                          autoComplete="email"
                           style={getValidationStyle(!emailValid, invalidStyle)}
-                          value={formState.username}
+                          value={formState.email}
                         />
                         <AuthStyles.Label
-                          htmlFor="username"
+                          htmlFor="email"
                           style={getValidationStyle(!emailValid, invalidStyle)}
                         >
                           Email address
@@ -298,7 +296,7 @@ const ForgotPassword: React.FC = () => {
                     <SuccessMessage>
                       <span>
                         We’ve sent your code to{' '}
-                        <strong>{obfuscateEmail(formState.username)}</strong>
+                        <strong>{obfuscateEmail(formState.email)}</strong>
                       </span>
                       <br />
                       <SubheaderText>

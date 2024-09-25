@@ -88,6 +88,7 @@ export const AuthCardContent = styled.div<AuthCardContentProps>`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding: 0 20px;
   opacity: 1 !important;
   ${($authFadeOut) =>
     $authFadeOut &&
@@ -117,7 +118,7 @@ export const AuthCard = styled.div<AuthCardProps>`
   border-radius: 8px;
   align-items: center;
   min-height: 275px;
-  padding: 24px 48px 64px 48px;
+  padding: 56px 48px;
   position: relative;
   height: 100%;
   overflow: hidden;
@@ -129,11 +130,8 @@ export const AuthCard = styled.div<AuthCardProps>`
       animation: ${shake} 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     `}
 
-  @media (max-width: 1200px) {
-  }
-
   @media (max-width: 768px) {
-    padding: 24px 20px 64px 20px;
+    padding: 32px 0;
   }
 `
 
@@ -278,7 +276,7 @@ export const ResetText = styled.a`
 
 export const AuthLoginLinkBox = styled.div`
   display: flex;
-  bottom: 4px;
+  bottom: 0;
   position: absolute;
   background-color: var(--sc-color-register-background);
   width: calc(540px - 8px);
@@ -287,6 +285,11 @@ export const AuthLoginLinkBox = styled.div`
   justify-content: center;
   border-radius: 4px;
   font-size: 14px;
+  margin: -12px -16px -28px -15px;
+
+  @media only screen and (min-width: 881px) {
+    margin: -4px -64px -52px -63px;
+  }
 `
 
 export const AuthLoginLink = styled.a`
@@ -433,12 +436,11 @@ export const SpinnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
+  position: relative;
   height: 100%;
   width: max-content;
   font-size: 14px;
   color: var(--sc-color-gray-500);
-  transform: translateY(125%);
   animation: ${spinnerFadeIn} 0.7s ease-in-out;
 
   span {

@@ -7,7 +7,7 @@ import {
 } from 'src/utils/authHelpers'
 
 type FormState = {
-  username: string
+  email: string
   password: string
   newPassword?: string
   fullName?: string
@@ -26,7 +26,7 @@ export const useAuthFormValidation = (initialState: FormState) => {
 
   const stringValidators: Record<keyof FormState, (value: string) => boolean> =
     {
-      username: validateEmailDomain,
+      email: validateEmailDomain,
       password: validatePassword,
       newPassword: validatePassword,
       fullName: validateFullName,
@@ -43,14 +43,11 @@ export const useAuthFormValidation = (initialState: FormState) => {
   }
 
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = e.target
+    const { name, value } = e.target
 
     if (name in stringValidators) {
       const key = name as keyof FormState
-      const isValid =
-        formState[key] === ''
-          ? true
-          : stringValidators[key](formState[key] as string)
+      const isValid = value === '' ? true : stringValidators[key](value)
       setValidationState((prev) => ({ ...prev, [`${name}Valid`]: isValid }))
     }
   }

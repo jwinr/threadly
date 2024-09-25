@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
     onChange,
     onBlur,
   } = useAuthFormValidation({
-    username: '',
+    email: '',
     password: '',
     fullName: '',
   })
@@ -65,7 +65,7 @@ const SignUp: React.FC = () => {
       emailValid &&
       passwordValid &&
       fullNameValid &&
-      formState.username &&
+      formState.email &&
       formState.password &&
       formState.fullName
 
@@ -117,12 +117,11 @@ const SignUp: React.FC = () => {
 
     setLoading(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       const { firstName, lastName } = splitFullName(formState.fullName || '')
       try {
         const signUpResponse = await signUp({
-          username: formState.username,
+          username: formState.email,
           password: formState.password,
           options: {
             userAttributes: {
@@ -137,7 +136,7 @@ const SignUp: React.FC = () => {
         if (signUpResponse.userId) {
           await sendUserDetails({
             sub: signUpResponse.userId,
-            email: formState.username,
+            email: formState.email,
             given_name: firstName,
             family_name: lastName,
           })
@@ -196,7 +195,7 @@ const SignUp: React.FC = () => {
                   Create your Threadly account
                 </AuthStyles.HeaderText>
                 <AuthStyles.FormContainer
-                  onSubmit={() => void handleSignUp}
+                  onSubmit={handleSignUp}
                   noValidate
                   data-form-type="register"
                   onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) =>
@@ -213,18 +212,18 @@ const SignUp: React.FC = () => {
                     <AuthStyles.EntryContainer
                       onChange={onChange}
                       onBlur={onBlur}
-                      name="username"
-                      id="username"
+                      name="email"
+                      id="email"
                       required
                       type="email"
                       placeholder=""
                       autoComplete="off"
                       aria-label="Email address"
                       style={getValidationStyle(emailValid, invalidStyle)}
-                      value={formState.username}
+                      value={formState.email}
                     />
                     <AuthStyles.Label
-                      htmlFor="username"
+                      htmlFor="email"
                       style={getValidationStyle(emailValid, invalidStyle)}
                     >
                       Email address

@@ -24,7 +24,7 @@ import { debouncedCheckUsername } from 'src/utils/checkUsername'
 const Login: React.FC = () => {
   const { formState, emailValid, passwordValid, onChange, onBlur } =
     useAuthFormValidation({
-      username: '',
+      email: '',
       password: '',
     })
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
     setIsComplete((prevState) => !prevState)
   }
 
-  const handleSignIn = async (event: FormEvent): Promise<void> => {
+  const handleSignIn = async (event: FormEvent) => {
     event.preventDefault()
     if (isLoading) {
       setErrorMessage('')
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
     if (
       !emailValid ||
       !passwordValid ||
-      !formState.username ||
+      !formState.email ||
       !formState.password
     ) {
       // If any field is invalid or empty, prevent submission
@@ -77,7 +77,7 @@ const Login: React.FC = () => {
 
     // Check if the username exists in the database before we send a request to AWS
     const usernameExists = await debouncedCheckUsername(
-      formState.username,
+      formState.email,
       setErrorMessage,
       setShakeKey,
       setLoading
@@ -89,11 +89,10 @@ const Login: React.FC = () => {
     setLoading(true)
 
     // Call signIn with username and password
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     setTimeout(async () => {
       try {
         const response = await signIn({
-          username: formState.username,
+          username: formState.email,
           password: formState.password,
         })
 
@@ -138,7 +137,7 @@ const Login: React.FC = () => {
   }
 
   // Sign in to the demo account
-  const handleDemoSignIn = async (): Promise<void> => {
+  const handleDemoSignIn = async () => {
     try {
       const newResponse = await signIn({
         username: demoUsername,
@@ -189,17 +188,14 @@ const Login: React.FC = () => {
                     description="Skip registration and explore the full features by signing in to a demo account."
                     actions={
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <Button
-                          type="secondary"
-                          onPress={() => void handleDemoSignIn}
-                        >
+                        <Button type="secondary" onPress={handleDemoSignIn}>
                           Sign in to demo account
                         </Button>
                       </div>
                     }
                   />
                   <AuthStyles.FormContainer
-                    onSubmit={() => void handleSignIn}
+                    onSubmit={handleSignIn}
                     noValidate
                     data-form-type="login"
                     onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) =>
@@ -215,19 +211,19 @@ const Login: React.FC = () => {
                       <AuthStyles.EntryContainer
                         onChange={onChange}
                         onBlur={onBlur}
-                        name="username"
-                        id="username"
+                        name="email"
+                        id="email"
                         required
                         type="email"
                         placeholder=""
                         autoComplete="off"
                         aria-label="Email address"
                         style={getValidationStyle(emailValid, invalidStyle)}
-                        value={formState.username}
+                        value={formState.email}
                         $isLoading={isLoading}
                       />
                       <AuthStyles.Label
-                        htmlFor="username"
+                        htmlFor="email"
                         style={getValidationStyle(emailValid, invalidStyle)}
                         $isLoading={isLoading}
                       >

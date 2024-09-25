@@ -1,5 +1,5 @@
 export const validateEmailDomain = (email: string): boolean => {
-  const regex = /.+@\S+\.\S+$/
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
   return regex.test(email)
 }
 
