@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/navigation'
 import { UserContext } from '@/context/UserContext'
 import LoaderDots from '@/components/Loaders/LoaderDots'
 import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
@@ -84,26 +85,22 @@ const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const formatCurrency = useCurrencyFormatter()
+  const router = useRouter()
 
   useEffect(() => {
+    if (!userAttributes?.sub) {
+      // If the user is not signed in, redirect them to the login page
+      router.replace('/login')
+      return
+    }
+
     const fetchOrders = async () => {
       try {
-        if (userAttributes && userAttributes.sub) {
-          const apiKey = process.env.NEXT_PUBLIC_API_KEY
-          if (!apiKey) {
-            throw new Error('API key is missing')
-          }
-          const response = await fetch(
-            `/api/orders?cognitoSub=${userAttributes.sub}`,
-            {
-              headers: {
-                'x-api-key': apiKey,
-              },
-            }
-          )
-          const data: Order[] = (await response.json()) as Order[]
-          setOrders(data)
-        }
+        const response = await fetch(
+          `/api/orders?cognitoSub=${userAttributes.sub}`
+        )
+        const data: Order[] = (await response.json()) as Order[]
+        setOrders(data)
       } catch (error) {
         console.error('Error fetching orders:', error)
       } finally {
@@ -111,8 +108,8 @@ const Orders: React.FC = () => {
       }
     }
 
-    void fetchOrders()
-  }, [userAttributes])
+    fetchOrders()
+  }, [userAttributes, router])
 
   if (loading) {
     return <LoaderDots />

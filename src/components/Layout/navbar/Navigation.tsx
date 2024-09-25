@@ -76,6 +76,11 @@ const Logo = styled.a`
     box-shadow: none;
   }
 
+  & svg {
+    width: 100%;
+    height: 100%;
+  }
+
   @media (max-width: 768px) {
     position: absolute;
     top: 50%;
