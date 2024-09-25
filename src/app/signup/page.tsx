@@ -162,10 +162,6 @@ const SignUp: React.FC = () => {
     router.push('/')
   }
 
-  const forwardLogin = () => {
-    router.push('/login')
-  }
-
   return (
     <AuthStyles.AuthContainerWrapper>
       <AuthStyles.FormContainerWrapper>
@@ -335,18 +331,18 @@ const SignUp: React.FC = () => {
                     </AuthStyles.AuthBtn>
                   </AuthStyles.EntryBtnWrapper>
                 </AuthStyles.FormContainer>
-                <AuthStyles.AuthLoginLinkBox onClick={forwardLogin}>
-                  <span>Already have an account?</span>
-                  <AuthStyles.AuthLoginLink
-                    href="/login"
-                    className="create-account-button"
-                  >
-                    Sign in
-                  </AuthStyles.AuthLoginLink>
-                </AuthStyles.AuthLoginLinkBox>
               </>
             )}
           </AuthStyles.AuthCardContent>
+          <AuthStyles.AuthLoginLinkBox>
+            <span>Already have an account?</span>
+            <AuthStyles.AuthLoginLink
+              href="/login"
+              className="create-account-button"
+            >
+              Sign in
+            </AuthStyles.AuthLoginLink>
+          </AuthStyles.AuthLoginLinkBox>
         </AuthStyles.AuthCard>
       </AuthStyles.FormContainerWrapper>
     </AuthStyles.AuthContainerWrapper>

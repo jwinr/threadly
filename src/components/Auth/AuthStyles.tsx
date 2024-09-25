@@ -62,14 +62,14 @@ export const AuthPageWrapper = styled.div`
 `
 
 export const AuthContainerWrapper = styled.div`
-  height: 100%;
-  flex-direction: row;
-  width: 100%;
+  width: 1080px;
   margin: 0 auto;
-  display: flex;
-  position: relative;
   justify-content: center;
   padding-top: 56px;
+  height: 100%;
+  flex-direction: row;
+  display: flex;
+  position: relative;
 
   @media (max-width: 768px) {
     width: auto;
@@ -274,9 +274,13 @@ export const ResetText = styled.a`
   }
 `
 
-export const AuthLoginLinkBox = styled.div`
+interface AuthLoginLinkBoxProps {
+  $isLoading?: boolean
+}
+
+export const AuthLoginLinkBox = styled.div<AuthLoginLinkBoxProps>`
   display: flex;
-  bottom: 0;
+  bottom: 4px;
   position: absolute;
   background-color: var(--sc-color-register-background);
   width: calc(540px - 8px);
@@ -285,11 +289,7 @@ export const AuthLoginLinkBox = styled.div`
   justify-content: center;
   border-radius: 4px;
   font-size: 14px;
-  margin: -12px -16px -28px -15px;
-
-  @media only screen and (min-width: 881px) {
-    margin: -4px -64px -52px -63px;
-  }
+  visibility: ${({ $isLoading }) => ($isLoading ? 'hidden' : 'visible')};
 `
 
 export const AuthLoginLink = styled.a`

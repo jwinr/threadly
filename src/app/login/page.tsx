@@ -315,15 +315,6 @@ const Login: React.FC = () => {
                       </AuthBtn>
                     </AuthStyles.EntryBtnWrapper>
                   </AuthStyles.FormContainer>
-                  <AuthStyles.AuthLoginLinkBox>
-                    <span>New to Threadly?</span>
-                    <AuthStyles.AuthLoginLink
-                      href="/signup"
-                      className="create-account-button"
-                    >
-                      Create account
-                    </AuthStyles.AuthLoginLink>
-                  </AuthStyles.AuthLoginLinkBox>
                 </>
               ) : (
                 <AuthStyles.SpinnerWrapper>
@@ -332,6 +323,15 @@ const Login: React.FC = () => {
                 </AuthStyles.SpinnerWrapper>
               )}
             </AuthStyles.AuthCardContent>
+            <AuthStyles.AuthLoginLinkBox $isLoading={isComplete}>
+              <span>New to Threadly?</span>
+              <AuthStyles.AuthLoginLink
+                href="/signup"
+                className="create-account-button"
+              >
+                Create account
+              </AuthStyles.AuthLoginLink>
+            </AuthStyles.AuthLoginLinkBox>
           </AuthStyles.AuthCard>
         </AuthStyles.FormContainerWrapper>
       </AuthStyles.AuthContainerWrapper>
