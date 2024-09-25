@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useCallback,
   ReactNode,
+  useMemo,
 } from 'react'
 import { fetchAuthSession } from 'aws-amplify/auth'
 import { Hub } from 'aws-amplify/utils'
@@ -33,6 +34,7 @@ interface UserContextType {
   fetchUserAttributes: () => Promise<void>
   fetchPaymentMethods: (userUuid: string) => Promise<unknown[]>
   getToken: () => Promise<object | null>
+  loading: boolean
 }
 
 const defaultUserContext: UserContextType = {
@@ -42,6 +44,7 @@ const defaultUserContext: UserContextType = {
   fetchPaymentMethods: async () => [],
   // eslint-disable-next-line @typescript-eslint/require-await
   getToken: async () => null,
+  loading: true,
 }
 
 export const UserContext = createContext<UserContextType>(defaultUserContext)
@@ -58,7 +61,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>(
     initialUserAttributes
   )
-  const [, setAuthChecked] = useState<boolean>(false)
+  const [authChecked, setAuthChecked] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   const debouncedFetchUserAttributes = useCallback(
     debounce(async (attributes: UserAttributes) => {
@@ -105,9 +109,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({
         setUserAttributes(selectedAttributes)
 
         await debouncedFetchUserAttributes(selectedAttributes)
+      } else {
+        // No valid session; ensure userAttributes are cleared
+        setUserAttributes(null)
       }
     } catch (error) {
       console.error('Error fetching user session:', error)
+      setUserAttributes(null)
+    } finally {
+      setAuthChecked(true)
+      setLoading(false)
     }
   }, [debouncedFetchUserAttributes])
 
@@ -126,8 +137,21 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   }
 
   useEffect(() => {
-    void fetchUserAttributes().then(() => setAuthChecked(true))
-  }, [fetchUserAttributes])
+    // Only fetch user attributes if auth hasn't been checked yet
+    if (!authChecked) {
+      // If initialUserAttributes are present and complete, set authChecked to true
+      const hasCompleteAttributes =
+        initialUserAttributes && initialUserAttributes.user_uuid
+
+      if (hasCompleteAttributes) {
+        setAuthChecked(true)
+        setLoading(false)
+      } else {
+        // Fetch user attributes since initial data is missing or incomplete
+        void fetchUserAttributes()
+      }
+    }
+  }, [authChecked, fetchUserAttributes, initialUserAttributes])
 
   const signOut = async () => {
     try {
@@ -140,6 +164,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({
       })
 
       setUserAttributes(null)
+      setAuthChecked(true)
+      setLoading(false)
     } catch (error) {
       console.error('Error signing out:', error)
     }
@@ -234,16 +260,25 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     [getToken, userAttributes]
   )
 
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      userAttributes,
+      fetchUserAttributes,
+      fetchPaymentMethods,
+      getToken,
+      loading,
+    }),
+    [
+      userAttributes,
+      fetchUserAttributes,
+      fetchPaymentMethods,
+      getToken,
+      loading,
+    ]
+  )
+
   return (
-    <UserContext.Provider
-      value={{
-        userAttributes,
-        fetchUserAttributes,
-        fetchPaymentMethods,
-        getToken,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   )
 }

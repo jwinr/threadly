@@ -208,208 +208,217 @@ const ForgotPassword: React.FC = () => {
                 $shake={!!errorMessage}
                 style={authCardStyle}
               >
-                <AuthStyles.LogoBox>
-                  <LogoSymbol />
-                </AuthStyles.LogoBox>
-                {currentStep === 'initial' && (
-                  <>
-                    <AuthStyles.HeaderText>
-                      Reset your password
-                    </AuthStyles.HeaderText>
-                    <SubheaderText>
-                      <span>
-                        In order to change your password, we need to verify your
-                        identity. Enter the email address associated with your
-                        Threadly account.
-                      </span>
-                    </SubheaderText>
-                    <AuthStyles.FormContainer
-                      onSubmit={handleSendCode}
-                      noValidate
-                      data-form-type="forgot_password"
-                    >
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          onChange={onChange}
-                          onBlur={onBlur}
-                          name="email"
-                          id="email"
-                          type="email"
-                          placeholder=""
-                          autoComplete="email"
-                          style={getValidationStyle(!emailValid, invalidStyle)}
-                          value={formState.email}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="email"
-                          style={getValidationStyle(!emailValid, invalidStyle)}
-                        >
-                          Email address
-                        </AuthStyles.Label>
-                      </AuthStyles.EntryWrapper>
-                      {!emailValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid email address.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      {errorMessage && (
-                        <AuthStyles.ErrorMessage>
-                          <TiWarningOutline />
-                          {errorMessage}
-                        </AuthStyles.ErrorMessage>
-                      )}
-                      <ContinueBtn
-                        type="submit"
-                        data-form-type="action,forgot_password"
-                        $isLoading={isLoading}
-                      >
-                        {isLoading ? (
-                          <LoaderSpin isLoading={isLoading} />
-                        ) : (
-                          'Continue'
-                        )}
-                      </ContinueBtn>
-                      <AuthStyles.ResetText
-                        href="/login"
-                        className="forgot-password-button"
-                      >
-                        Return to sign in
-                      </AuthStyles.ResetText>
-                    </AuthStyles.FormContainer>
-                    <AuthStyles.AuthLoginLinkBox>
-                      <span>New to Threadly?</span>
-                      <AuthStyles.AuthLoginLink
-                        href="/signup"
-                        className="create-account-button"
-                      >
-                        Create account
-                      </AuthStyles.AuthLoginLink>
-                    </AuthStyles.AuthLoginLinkBox>
-                  </>
-                )}
-                {currentStep === 'resetPassword' && (
-                  <>
-                    <AuthStyles.HeaderText>
-                      Reset your password
-                    </AuthStyles.HeaderText>
-                    <SuccessMessage>
-                      <span>
-                        We’ve sent your code to{' '}
-                        <strong>{obfuscateEmail(formState.email)}</strong>
-                      </span>
-                      <br />
+                <AuthStyles.AuthCardContent>
+                  <AuthStyles.LogoBox>
+                    <LogoSymbol />
+                  </AuthStyles.LogoBox>
+                  {currentStep === 'initial' && (
+                    <>
+                      <AuthStyles.HeaderText>
+                        Reset your password
+                      </AuthStyles.HeaderText>
                       <SubheaderText>
-                        Enter the code below, and please change your password to
-                        something you haven’t used before.
+                        <span>
+                          In order to change your password, we need to verify
+                          your identity. Enter the email address associated with
+                          your Threadly account.
+                        </span>
                       </SubheaderText>
-                    </SuccessMessage>
-                    <AuthStyles.FormContainer
-                      onSubmit={handleResetPassword}
-                      noValidate
-                      data-form-type="change_password"
-                    >
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          placeholder=""
-                          type="tel"
-                          name="code"
-                          value={formState.code}
-                          onChange={onChange}
-                          style={getValidationStyle(!codeValid, invalidStyle)}
-                          onBlur={onBlur}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="code"
-                          style={getValidationStyle(!codeValid, invalidStyle)}
-                        >
-                          Enter your code
-                        </AuthStyles.Label>
-                      </AuthStyles.EntryWrapper>
-                      {!codeValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid six-digit code.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      <AuthStyles.EntryWrapper>
-                        <AuthStyles.EntryContainer
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder=""
-                          value={formState.newPassword}
-                          name="new-password"
-                          onChange={onChange}
-                          style={getValidationStyle(
-                            !passwordValid,
-                            invalidStyle
-                          )}
-                          onBlur={onBlur}
-                        />
-                        <AuthStyles.Label
-                          htmlFor="password"
-                          style={getValidationStyle(
-                            !passwordValid,
-                            invalidStyle
-                          )}
-                        >
-                          New password
-                        </AuthStyles.Label>
-                        {!isMobileView && (
-                          <Popover
-                            trigger="hover"
-                            position="right"
-                            content={
-                              showPassword ? 'Hide password' : 'Show password'
-                            }
-                            showArrow={false}
-                            color="dark"
-                            padding="4px 8px"
+                      <AuthStyles.FormContainer
+                        onSubmit={handleSendCode}
+                        noValidate
+                        data-form-type="forgot_password"
+                      >
+                        <AuthStyles.EntryWrapper>
+                          <AuthStyles.EntryContainer
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name="email"
+                            id="email"
+                            type="email"
+                            placeholder=""
+                            autoComplete="email"
+                            style={getValidationStyle(emailValid, invalidStyle)}
+                            value={formState.email}
+                          />
+                          <AuthStyles.Label
+                            htmlFor="email"
+                            style={getValidationStyle(emailValid, invalidStyle)}
                           >
-                            <PasswordReveal
-                              onClick={() => setShowPassword(!showPassword)}
-                              clicked={showPassword}
-                              role="button"
-                              className="password-reveal-button"
-                              disabled={isLoading}
-                              ariaLabel={
+                            Email address
+                          </AuthStyles.Label>
+                        </AuthStyles.EntryWrapper>
+                        {!emailValid && (
+                          <AuthStyles.ValidationMessage>
+                            <TiWarningOutline />
+                            Please enter a valid email address.
+                          </AuthStyles.ValidationMessage>
+                        )}
+                        {errorMessage && (
+                          <AuthStyles.ErrorMessage>
+                            <TiWarningOutline />
+                            {errorMessage}
+                          </AuthStyles.ErrorMessage>
+                        )}
+                        <ContinueBtn
+                          type="submit"
+                          data-form-type="action,forgot_password"
+                          $isLoading={isLoading}
+                        >
+                          {isLoading ? (
+                            <LoaderSpin isLoading={isLoading} />
+                          ) : (
+                            'Continue'
+                          )}
+                        </ContinueBtn>
+                        <AuthStyles.ResetText
+                          href="/login"
+                          className="forgot-password-button"
+                        >
+                          Return to sign in
+                        </AuthStyles.ResetText>
+                      </AuthStyles.FormContainer>
+                    </>
+                  )}
+                  {currentStep === 'resetPassword' && (
+                    <>
+                      <AuthStyles.HeaderText>
+                        Reset your password
+                      </AuthStyles.HeaderText>
+                      <SuccessMessage>
+                        <span>
+                          We’ve sent your code to{' '}
+                          <strong>{obfuscateEmail(formState.email)}</strong>
+                        </span>
+                        <br />
+                        <SubheaderText>
+                          Enter the code below, and please change your password
+                          to something you haven’t used before.
+                        </SubheaderText>
+                      </SuccessMessage>
+                      <AuthStyles.FormContainer
+                        onSubmit={handleResetPassword}
+                        noValidate
+                        data-form-type="change_password"
+                      >
+                        <AuthStyles.EntryWrapper>
+                          <AuthStyles.EntryContainer
+                            placeholder=""
+                            type="tel"
+                            name="code"
+                            value={formState.code}
+                            onChange={onChange}
+                            style={getValidationStyle(!codeValid, invalidStyle)}
+                            onBlur={onBlur}
+                          />
+                          <AuthStyles.Label
+                            htmlFor="code"
+                            style={getValidationStyle(!codeValid, invalidStyle)}
+                          >
+                            Enter your code
+                          </AuthStyles.Label>
+                        </AuthStyles.EntryWrapper>
+                        {!codeValid && (
+                          <AuthStyles.ValidationMessage>
+                            <TiWarningOutline />
+                            Please enter a valid six-digit code.
+                          </AuthStyles.ValidationMessage>
+                        )}
+                        <AuthStyles.EntryWrapper>
+                          <AuthStyles.EntryContainer
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder=""
+                            value={formState.newPassword}
+                            name="new-password"
+                            onChange={onChange}
+                            style={getValidationStyle(
+                              !passwordValid,
+                              invalidStyle
+                            )}
+                            onBlur={onBlur}
+                          />
+                          <AuthStyles.Label
+                            htmlFor="password"
+                            style={getValidationStyle(
+                              !passwordValid,
+                              invalidStyle
+                            )}
+                          >
+                            New password
+                          </AuthStyles.Label>
+                          {!isMobileView && (
+                            <Popover
+                              trigger="hover"
+                              position="right"
+                              content={
                                 showPassword ? 'Hide password' : 'Show password'
                               }
-                            />
-                          </Popover>
+                              showArrow={false}
+                              color="dark"
+                              padding="4px 8px"
+                            >
+                              <PasswordReveal
+                                onClick={() => setShowPassword(!showPassword)}
+                                clicked={showPassword}
+                                role="button"
+                                className="password-reveal-button"
+                                disabled={isLoading}
+                                ariaLabel={
+                                  showPassword
+                                    ? 'Hide password'
+                                    : 'Show password'
+                                }
+                              />
+                            </Popover>
+                          )}
+                        </AuthStyles.EntryWrapper>
+                        {!passwordValid && (
+                          <AuthStyles.ValidationMessage>
+                            <TiWarningOutline />
+                            Please enter a valid password.
+                          </AuthStyles.ValidationMessage>
                         )}
-                      </AuthStyles.EntryWrapper>
-                      {!passwordValid && (
-                        <AuthStyles.ValidationMessage>
-                          <TiWarningOutline />
-                          Please enter a valid password.
-                        </AuthStyles.ValidationMessage>
-                      )}
-                      {errorMessage && (
-                        <AuthStyles.ErrorMessage>
-                          <TiWarningOutline />
-                          {errorMessage}
-                        </AuthStyles.ErrorMessage>
-                      )}
-                      <AuthStyles.AuthBtn
-                        type="submit"
-                        data-form-type="action,change_password"
-                        disabled={!passwordValid}
-                        style={{ marginTop: '10px' }}
+                        {errorMessage && (
+                          <AuthStyles.ErrorMessage>
+                            <TiWarningOutline />
+                            {errorMessage}
+                          </AuthStyles.ErrorMessage>
+                        )}
+                        <AuthStyles.AuthBtn
+                          type="submit"
+                          data-form-type="action,change_password"
+                          disabled={!passwordValid}
+                          style={{ marginTop: '10px' }}
+                        >
+                          Create password
+                        </AuthStyles.AuthBtn>
+                      </AuthStyles.FormContainer>
+                    </>
+                  )}
+                  {passwordChanged && (
+                    <>
+                      <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
+                        You&apos;ve successfully changed your password
+                      </AuthStyles.HeaderText>
+                      <ContinueBtn
+                        type="button"
+                        onClick={() => router.push('/')}
                       >
-                        Create password
-                      </AuthStyles.AuthBtn>
-                    </AuthStyles.FormContainer>
-                  </>
-                )}
-                {passwordChanged && (
-                  <>
-                    <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
-                      You&apos;ve successfully changed your password
-                    </AuthStyles.HeaderText>
-                    <ContinueBtn type="button" onClick={() => router.push('/')}>
-                      Continue to Threadly
-                    </ContinueBtn>
-                  </>
+                        Continue to Threadly
+                      </ContinueBtn>
+                    </>
+                  )}
+                </AuthStyles.AuthCardContent>
+                {currentStep === 'initial' && (
+                  <AuthStyles.AuthLoginLinkBox>
+                    <span>New to Threadly?</span>
+                    <AuthStyles.AuthLoginLink
+                      href="/signup"
+                      className="create-account-button"
+                    >
+                      Create account
+                    </AuthStyles.AuthLoginLink>
+                  </AuthStyles.AuthLoginLinkBox>
                 )}
               </AuthStyles.AuthCard>
             </AuthStyles.FormContainerWrapper>

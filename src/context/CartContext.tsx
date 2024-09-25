@@ -12,6 +12,7 @@ import React, {
 import { UserContext } from '@/context/UserContext'
 import { useToast } from '@/context/ToastContext'
 import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
+import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
 
 export interface CartItem {
   product_stripe_sale_price_id?: number
@@ -81,6 +82,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   const addToCart = useCallback(
     async (variantId: number, quantity = 1, isSyncing = false) => {
+      console.log('addToCart called with:', { variantId, quantity, isSyncing })
       setLoadingSummary(true)
       try {
         if (userAttributes) {
@@ -89,7 +91,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             throw new Error(INVALID_JWT_TOKEN_ERROR)
           }
 
-          const response = await fetch('/api/cart', {
+          const payload = {
+            userId: userAttributes.user_uuid,
+            variantId,
+            quantity,
+          }
+          console.log('Sending payload to server:', payload)
+
+          const response = await fetchWithCsrf('/api/cart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -102,6 +111,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             }),
           })
 
+          console.log('Response status:', response.status)
+
           if (!response.ok) {
             const errorData: unknown = await response.json()
             console.error('Error adding to cart:', errorData)
@@ -111,6 +122,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           }
 
           await fetchCart()
+          console.log('Cart after adding item:', cart)
           if (!isSyncing) {
             void showToast(`Added ${quantity} item(s) to cart`, {
               type: 'success',
@@ -120,6 +132,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           const localCart = JSON.parse(
             localStorage.getItem('cart') || '[]'
           ) as CartItem[]
+          console.log('Local cart after addition:', localCart)
           const existingItem = localCart.find(
             (item) => item.variant_id === variantId
           )
@@ -224,7 +237,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        const response = await fetch('/api/cart', {
+        const response = await fetchWithCsrf('/api/cart', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -289,7 +302,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        await fetch('/api/cart/sync', {
+        await fetchWithCsrf('/api/cart', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

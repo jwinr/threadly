@@ -24,6 +24,7 @@ const CardImage = styled.div`
   transform: scale(1.3);
   transform-origin: 50% 0;
   transition: transform 0.6s cubic-bezier(0.7, 0, 0, 1);
+  position: relative;
 
   img {
     object-fit: cover;
@@ -99,6 +100,7 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_3.jpg'}
               alt="Best Sellers for Men"
               fill={true}
+              sizes={'300px'}
             />
           </CardImage>
           <CardText>Mens' Best Sellers</CardText>
@@ -114,6 +116,7 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_2.jpg'}
               alt="New Arrivals for Men"
               fill={true}
+              sizes={'300px'}
             />
           </CardImage>
           <CardText>Mens' New Arrivals</CardText>
@@ -129,6 +132,7 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_4.jpg'}
               alt="Best Sellers for Women"
               fill={true}
+              sizes={'300px'}
             />
           </CardImage>
           <CardText>Womens' Best Sellers</CardText>
@@ -144,6 +148,7 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_1.jpg'}
               alt="New Arrivals for Women"
               fill={true}
+              sizes={'300px'}
             />
           </CardImage>
           <CardText>Womens' New Arrivals</CardText>

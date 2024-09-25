@@ -36,6 +36,8 @@ export default function RootLayout({
     ? (JSON.parse(cookies.userAttributes) as Customer)
     : null
 
+  console.log('RootLayout - Parsed userAttributes:', userAttributes)
+
   return (
     <html lang="en">
       <head>

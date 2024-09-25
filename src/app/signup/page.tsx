@@ -176,7 +176,7 @@ const SignUp: React.FC = () => {
               // from the user, and call the confirmSignUp action.
               <>
                 <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
-                  Success! Your Nexari account has been created.
+                  Success! Your Threadly account has been created.
                 </AuthStyles.HeaderText>
                 <SubheaderText style={{ marginBottom: '30px' }}>
                   You&apos;re ready to start shopping!
@@ -188,7 +188,7 @@ const SignUp: React.FC = () => {
             ) : (
               <>
                 <AuthStyles.HeaderText>
-                  Create your Threadly account
+                  Create your account
                 </AuthStyles.HeaderText>
                 <AuthStyles.FormContainer
                   onSubmit={handleSignUp}
@@ -334,15 +334,17 @@ const SignUp: React.FC = () => {
               </>
             )}
           </AuthStyles.AuthCardContent>
-          <AuthStyles.AuthLoginLinkBox>
-            <span>Already have an account?</span>
-            <AuthStyles.AuthLoginLink
-              href="/login"
-              className="create-account-button"
-            >
-              Sign in
-            </AuthStyles.AuthLoginLink>
-          </AuthStyles.AuthLoginLinkBox>
+          {!(signUpResponse?.nextStep?.signUpStep === 'DONE') && (
+            <AuthStyles.AuthLoginLinkBox>
+              <span>Already have an account?</span>
+              <AuthStyles.AuthLoginLink
+                href="/login"
+                className="create-account-button"
+              >
+                Sign in
+              </AuthStyles.AuthLoginLink>
+            </AuthStyles.AuthLoginLinkBox>
+          )}
         </AuthStyles.AuthCard>
       </AuthStyles.FormContainerWrapper>
     </AuthStyles.AuthContainerWrapper>
