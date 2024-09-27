@@ -294,13 +294,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   const syncLocalCartWithServer = useCallback(async () => {
-    if (userAttributes && !isSyncing) {
+    const localCart = JSON.parse(
+      localStorage.getItem('cart') || '[]'
+    ) as CartItem[]
+
+    // Only proceed with syncing if the local cart has items
+    if (userAttributes && !isSyncing && localCart.length > 0) {
       setIsSyncing(true)
       try {
-        const localCart = JSON.parse(
-          localStorage.getItem('cart') || '[]'
-        ) as CartItem[]
-
         const token = await getToken()
         if (!token) {
           throw new Error(INVALID_JWT_TOKEN_ERROR)
@@ -324,6 +325,21 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   }, [userAttributes, isSyncing, fetchCart, getToken])
+
+  useEffect(() => {
+    const localCart = JSON.parse(
+      localStorage.getItem('cart') || '[]'
+    ) as CartItem[]
+
+    // Fetch the cart on component mount
+    void fetchCart()
+
+    // Sync local cart with server only if there are items
+    if (localCart.length > 0 && !hasSyncedCart.current) {
+      void syncLocalCartWithServer()
+      hasSyncedCart.current = true
+    }
+  }, [userAttributes, fetchCart, syncLocalCartWithServer])
 
   const clearCart = async () => {
     setLoadingSummary(true)

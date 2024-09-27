@@ -11,8 +11,8 @@ interface AddToCartButtonProps {
   loading?: boolean
 }
 
-const ButtonText = styled.span<{ loading: boolean }>`
-  opacity: ${({ loading }) => (loading ? 0 : 1)};
+const ButtonText = styled.span<{ $loading: boolean }>`
+  opacity: ${({ $loading }) => ($loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
 `
 
@@ -47,7 +47,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       disabled={loading || internalLoading}
       aria-label={`Add ${productName} to cart`}
     >
-      <ButtonText loading={loading || internalLoading}>Add to cart</ButtonText>
+      <ButtonText $loading={loading || internalLoading}>Add to cart</ButtonText>
       {(loading || internalLoading) && <LoaderSpin isLoading={true} />}
     </Button>
   )
