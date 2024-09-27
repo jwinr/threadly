@@ -115,16 +115,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
           if (!response.ok) {
             const errorData: unknown = await response.json()
-            console.error('Error adding to cart:', errorData)
-            throw new Error(
-              `Error adding to cart: ${(errorData as { message: string }).message}`
-            )
+            throw new Error(`${(errorData as { message: string }).message}`)
           }
 
           await fetchCart()
-          console.log('Cart after adding item:', cart)
+
           if (!isSyncing) {
-            void showToast(`Added ${quantity} item(s) to cart`, {
+            void showToast(`Added to cart`, {
               type: 'success',
             })
           }
@@ -150,17 +147,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
           localStorage.setItem('cart', JSON.stringify(localCart))
           await fetchCart()
+
           if (!isSyncing) {
-            void showToast(`Added ${quantity} item(s) to cart`, {
+            void showToast(`Added to cart`, {
               type: 'success',
             })
           }
         }
       } catch (error) {
-        console.error('Error adding to cart:', error)
-        void showToast('Failed to add product', {
-          type: 'caution',
-        })
+        const errorMessage = String(error)
+        if (errorMessage.includes("You've reached the limit for this item")) {
+          void showToast("You've reached the limit for this item", {
+            type: 'caution',
+          })
+        } else {
+          void showToast('Failed to update product quantity', {
+            type: 'caution',
+          })
+        }
       } finally {
         setLoadingSummary(false)
       }
@@ -241,7 +245,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${JSON.stringify(token)}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             userId: userAttributes.user_uuid,

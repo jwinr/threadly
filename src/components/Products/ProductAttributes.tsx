@@ -143,13 +143,31 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
 
   useEffect(() => {
     if (product && product.selectedVariant) {
-      setSelectedAttributes({
+      const defaultAttributes = {
         color: product.selectedVariant.color_sku,
         color_name: product.selectedVariant.color,
         waist: product.selectedVariant.waist || '',
         length: product.selectedVariant.length || '',
         size: product.selectedVariant.size || '',
-      })
+      }
+
+      // Find the default size variant
+      const defaultSizeVariant = product.variants?.find(
+        (variant) => variant.color_sku === defaultAttributes.color
+      )?.sizes[0]
+
+      if (defaultSizeVariant) {
+        defaultAttributes.waist = defaultSizeVariant.waist || ''
+        defaultAttributes.length = defaultSizeVariant.length || ''
+        defaultAttributes.size = defaultSizeVariant.size || ''
+      }
+
+      // Automatically default to a size variant if there's one available
+      setSelectedAttributes(defaultAttributes)
+
+      if (defaultSizeVariant && onSizeVariantSelected) {
+        onSizeVariantSelected(defaultSizeVariant.size_variant_id)
+      }
     }
   }, [product])
 
