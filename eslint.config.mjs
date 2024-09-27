@@ -38,6 +38,7 @@ export default tseslint.config(
       '@typescript-eslint/no-inferrable-types': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'error',
       'jsx-a11y/anchor-is-valid': 'off',
       'no-duplicate-imports': 'error',
       'prefer-const': 'error',

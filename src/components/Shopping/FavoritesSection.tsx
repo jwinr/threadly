@@ -253,7 +253,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                 >
                   <Image
                     src={item.product_image_url || '/default-image.jpg'}
-                    alt={item.product_name!}
+                    alt={item.product_name || 'Product Image'}
                     width={80}
                     height={80}
                   />

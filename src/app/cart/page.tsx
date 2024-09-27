@@ -47,8 +47,8 @@ const Cart: React.FC = () => {
     removeFromCart,
     loadingSummary,
     handleQuantityChange,
-  } = useContext(CartContext)!
-  const [isLoading, setIsLoading] = useState(true)
+  } = useContext(CartContext) ?? {}
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [offset, setOffset] = useState(0)
   const isMobileView = useMobileView()
   const [favorites, setFavorites] = useState<FavoriteItem[]>([])
@@ -76,7 +76,7 @@ const Cart: React.FC = () => {
           )
           const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
 
-          setCart(
+          setCart?.(
             data.map((item: FavoriteItem) => ({
               ...item,
               quantity: item.quantity || 1,
@@ -106,15 +106,13 @@ const Cart: React.FC = () => {
               quantity: item.quantity,
             }))
 
-            setCart(detailedCart)
+            setCart?.(detailedCart)
           }
         }
       } catch (error) {
         console.error('Error fetching cart:', error)
       } finally {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 750) // Delay to allow the skeleton loader UI
+        setIsLoading(false)
       }
     }
 
@@ -171,7 +169,7 @@ const Cart: React.FC = () => {
 
   useEffect(() => {
     if (!loadingSummary) {
-      const totals = calculateTotal(cart)
+      const totals = calculateTotal(cart || [])
       setPreviousTotals(totals)
     }
   }, [loadingSummary, cart])
@@ -201,8 +199,8 @@ const Cart: React.FC = () => {
                 </Subtitle>
                 <CartContainer $isLoading={isLoading}>
                   {!isLoading ? (
-                    cart.length > 0 ? (
-                      cart.map((item, index) => (
+                    (cart ?? []).length > 0 ? (
+                      (cart ?? []).map((item, index) => (
                         <CartProductCard
                           key={item.variant_id}
                           item={{
@@ -218,7 +216,8 @@ const Cart: React.FC = () => {
                             quantity: item.quantity,
                             color: item.color,
                             waist: item.waist,
-                            length: item.length || 'Unknown',
+                            length: item.length,
+                            size: item.size,
                             variant_id: item.variant_id,
                           }}
                           isMobileView={isMobileView}
@@ -242,7 +241,7 @@ const Cart: React.FC = () => {
                       totalQuantity={totalQuantity}
                       zipCode={zipCode}
                       $isLoading={isLoading}
-                      loadingSummary={loadingSummary}
+                      loadingSummary={loadingSummary ?? false}
                     />
                   </OrderSummaryWrapper>
                 )}
@@ -265,7 +264,7 @@ const Cart: React.FC = () => {
         </ContentWrapper>
         {!isMobileView && (
           <OrderSummaryWrapper>
-            <OrderSpinner $isLoading={loadingSummary} />
+            <OrderSpinner $isLoading={loadingSummary ?? false} />
             <OrderSummary
               subtotal={subtotal}
               estimatedTaxes={estimatedTaxes}
@@ -273,7 +272,7 @@ const Cart: React.FC = () => {
               totalQuantity={totalQuantity}
               zipCode={zipCode}
               $isLoading={isLoading}
-              loadingSummary={loadingSummary}
+              loadingSummary={loadingSummary ?? false}
             />
           </OrderSummaryWrapper>
         )}

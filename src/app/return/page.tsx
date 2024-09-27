@@ -8,6 +8,7 @@ import SuccessCheckmark from '@/components/Shopping/SuccessCheckmark'
 import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
 import Button from '@/components/Elements/Button'
 import LoaderDots from '@/components/Loaders/LoaderDots'
+import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
 
 const Container = styled.div`
   display: flex;
@@ -89,7 +90,13 @@ type CheckoutSessionData = {
 
 export default function Return() {
   const router = useRouter()
-  const { clearCart } = useContext(CartContext)!
+  const cartContext = useContext(CartContext)
+
+  if (!cartContext) {
+    throw new Error('CartContext is undefined')
+  }
+
+  const { clearCart } = cartContext
   const [status, setStatus] = useState<string | null>(null)
   const [customerEmail, setCustomerEmail] = useState<string>('')
   const [isCartCleared, setIsCartCleared] = useState<boolean>(false)
@@ -109,7 +116,7 @@ export default function Return() {
         return
       }
 
-      fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
+      fetchWithCsrf(`/api/checkout_sessions?session_id=${sessionId}`, {
         method: 'GET',
       })
         .then((res) => {
@@ -136,12 +143,13 @@ export default function Return() {
             }
           } else {
             // Trigger the fulfillment process
-            return fetch(`/api/checkout/fulfill?session_id=${sessionId}`, {
-              method: 'GET',
-              headers: {
-                'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
-              },
-            })
+            return fetchWithCsrf(
+              `/api/checkout/fulfill?session_id=${sessionId}`,
+              {
+                method: 'GET',
+                headers: {},
+              }
+            )
           }
         })
         .then((res) => {

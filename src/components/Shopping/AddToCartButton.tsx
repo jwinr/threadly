@@ -22,7 +22,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   productName,
   loading,
 }) => {
-  const { addToCart } = useContext(CartContext)!
+  const { addToCart } = useContext(CartContext) ?? {}
   const [internalLoading, setInternalLoading] = useState<boolean>(false)
 
   const delay = (ms: number) =>
@@ -31,7 +31,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   const handleAddToCart = async () => {
     setInternalLoading(true)
     try {
-      await Promise.all([addToCart(sizeVariantId, quantity), delay(750)])
+      await Promise.all([addToCart?.(sizeVariantId, quantity), delay(750)])
     } catch (error) {
       console.error('Failed to add to cart', error)
     } finally {

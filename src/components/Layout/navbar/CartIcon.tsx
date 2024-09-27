@@ -79,7 +79,7 @@ type CartItem = {
 }
 
 const CartIcon: React.FC = () => {
-  const { cart } = useContext(CartContext)!
+  const { cart } = useContext(CartContext) || { cart: [] }
 
   // Calculate total quantity
   const totalQuantity = cart.reduce(

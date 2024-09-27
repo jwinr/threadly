@@ -16,8 +16,9 @@ export interface CartProductItem {
   product_price: number
   product_sale_price?: number | null
   color?: string
-  waist?: string
-  length?: string
+  waist?: string | undefined
+  length?: string | undefined
+  size?: string | undefined
   quantity: number
   variant_id: number
 }
@@ -259,6 +260,8 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!item.product_sale_price
 
+  console.log(item)
+
   return (
     <ProductCard>
       <ImageWrapper
@@ -283,9 +286,11 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               {item.product_name}
             </Title>
             <VariantDetails>
-              <p>Color: {item.color || 'Unknown'}</p>
-              <p>Waist: {item.waist}</p>
-              <p>Length: {item.length}</p>
+              {item.waist && item.length ? (
+                <p>{`Waist: ${item.waist}, Length: ${item.length}`}</p>
+              ) : (
+                item.size && <p>{`Size: ${item.size}`}</p>
+              )}
             </VariantDetails>
           </TitleSection>
           <ShippingWrapper>
@@ -355,9 +360,10 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               {item.product_name}
             </Title>
             <VariantDetails>
-              <p>Color: {item.color || 'Unknown'}</p>
+              <p>Color: {item.color}</p>
               <p>Waist: {item.waist}</p>
               <p>Length: {item.length}</p>
+              <p>Size: {item.size}</p>
             </VariantDetails>
           </TitleSection>
           <ShippingWrapper>

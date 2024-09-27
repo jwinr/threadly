@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import LoaderDots from '@/components/Loaders/LoaderDots'
 import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
+import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
 
 const FavoritesContainer = styled.div`
   max-width: 800px;
@@ -72,11 +73,7 @@ const Favorites: React.FC = () => {
 
   useEffect(() => {
     if (!checkingUser) {
-      fetch(`/api/favorites?cognitoSub=${userAttributes?.sub}`, {
-        headers: {
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
-        },
-      })
+      fetch(`/api/favorites?cognitoSub=${userAttributes?.sub}`)
         .then((response) => response.json())
         .then((data: FavoriteItem[]) => {
           setFavorites(data)
@@ -91,11 +88,10 @@ const Favorites: React.FC = () => {
 
   const removeFromFavorites = (productId: string) => {
     if (userAttributes) {
-      fetch(`/api/favorites`, {
+      fetchWithCsrf(`/api/favorites`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
         },
         body: JSON.stringify({
           cognitoSub: userAttributes.sub,

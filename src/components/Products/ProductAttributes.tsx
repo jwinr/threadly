@@ -359,7 +359,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
                 <SizeOption
                   key={index}
                   selected={selectedAttributes.size === genericSize}
-                  onClick={() => handleSizeSelection('size', genericSize!)}
+                  onClick={() => handleSizeSelection('size', genericSize ?? '')}
                 >
                   {genericSize}
                 </SizeOption>

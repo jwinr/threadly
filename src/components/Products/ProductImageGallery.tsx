@@ -140,7 +140,12 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
 
   const handleImageClick = (e: MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } =
-      mainImageContainerRef.current!.getBoundingClientRect()
+      mainImageContainerRef.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0,
+      }
 
     const x = ((e.clientX - left) / width) * 100
     const y = ((e.clientY - top) / height) * 100
@@ -195,7 +200,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
                   src={item.image_url}
                   width={250}
                   height={250}
-                  alt={item.alt_text!}
+                  alt={item.alt_text ? item.alt_text : ''}
                   priority={index === 0}
                 />
               </SwiperSlide>
@@ -226,7 +231,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
                   width={880}
                   height={880}
                   quality={80}
-                  alt={item.alt_text!}
+                  alt={item.alt_text ? item.alt_text : ''}
                   priority={index === 0}
                 />
               </div>

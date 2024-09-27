@@ -160,7 +160,7 @@ const IconContainer = styled.div`
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const { userAttributes } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)!
+  const { setCart } = useContext(CartContext) ?? {}
   const { isSigningOut, setIsSigningOut } = useSignOut()
   const router = useRouter()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -176,7 +176,7 @@ const UserDropdown = () => {
       await signOut() // Sign out the user
       setTimeout(() => {
         router.push('/')
-        setCart([]) // Clear the cart state
+        setCart?.([]) // Clear the cart state
         setIsSigningOut(false)
       }, 1100)
     } catch (error) {
@@ -240,7 +240,7 @@ const UserDropdown = () => {
 
   const dropdownContent = (
     <DropdownMenu
-      user={given_name!}
+      user={given_name}
       handleSignOut={() => void signOutHandler}
       firstMenuItemRef={firstMenuItemRef}
       onMenuItemClick={handleMenuItemClick}
@@ -281,7 +281,7 @@ const UserDropdown = () => {
 
 interface DropdownMenuProps {
   handleSignOut: MouseEventHandler<HTMLLIElement>
-  user: string | null
+  user: string | null | undefined
   firstMenuItemRef: RefObject<HTMLLIElement>
   onMenuItemClick: (
     href?: string,
@@ -399,8 +399,8 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
         const sibling = event.currentTarget[direction]
         if (sibling) {
           ;(sibling as HTMLElement).focus()
-        } else {
-          ;(event.currentTarget.parentNode![fallback] as HTMLElement).focus()
+        } else if (event.currentTarget.parentNode) {
+          ;(event.currentTarget.parentNode[fallback] as HTMLElement).focus()
         }
       }
 

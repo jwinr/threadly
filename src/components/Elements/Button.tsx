@@ -101,7 +101,7 @@ const ButtonWrapper = styled.button<ButtonProps>`
   transition-property: background-color, box-shadow;
   transition-timing-function: cubic-bezier(0, 0.09, 0.4, 1);
   transition-duration: 150ms;
-  height: ${(props) => sizes[props.size!]};
+  height: ${(props) => sizes[props.size || 'medium']};
   font-size: ${(props) =>
     props.size === 'small' ? '12px' : props.size === 'large' ? '16px' : '14px'};
   border-radius: 6px;

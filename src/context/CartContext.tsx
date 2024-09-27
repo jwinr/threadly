@@ -15,6 +15,7 @@ import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
 import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
 
 export interface CartItem {
+  size?: string | undefined
   product_stripe_sale_price_id?: number
   product_stripe_price_id?: number
   variant_id: number

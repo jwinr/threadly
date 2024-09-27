@@ -326,16 +326,17 @@ const Account: React.FC = () => {
                             href={`/orders/${order.order_detail_id}`}
                             aria-label={`View details of order #${order.order_detail_id}`}
                           >
-                            {order.line_items!.map((item) => (
-                              <Image
-                                key={item.order_line_item_id}
-                                src={item.product_image_url!}
-                                alt={item.product_name!}
-                                width={80}
-                                height={80}
-                                priority={true}
-                              />
-                            ))}
+                            {order.line_items &&
+                              order.line_items.map((item) => (
+                                <Image
+                                  key={item.order_line_item_id}
+                                  src={item.product_image_url ?? ''}
+                                  alt={item.product_name ?? ''}
+                                  width={80}
+                                  height={80}
+                                  priority={true}
+                                />
+                              ))}
                           </ImageWrapper>
                           <div>
                             <span>Order ID:</span>{' '}
@@ -343,7 +344,7 @@ const Account: React.FC = () => {
                           </div>
                           <div>
                             <span>Amount:</span>{' '}
-                            {formatCurrency(order.amount_total!, true)}
+                            {formatCurrency(order.amount_total || 0, true)}
                           </div>
                           <div>
                             <span>Order Date:</span>{' '}

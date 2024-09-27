@@ -148,8 +148,8 @@ const ForgotPassword: React.FC = () => {
       try {
         await confirmResetPassword({
           username: formState.email,
-          confirmationCode: formState.code!,
-          newPassword: formState.newPassword!,
+          confirmationCode: formState.code ?? '',
+          newPassword: formState.newPassword ?? '',
         })
 
         // Sign the user in after a successful reset

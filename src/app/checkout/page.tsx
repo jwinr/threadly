@@ -7,18 +7,16 @@ import React, {
   useCallback,
   useMemo,
 } from 'react'
-
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
-
 import getStripe from 'src/utils/get-stripejs'
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from '@stripe/react-stripe-js'
-
 import { CartContext } from '@/context/CartContext'
 import { UserContext } from '@/context/UserContext'
+import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
 
 interface Price {
   product_id: number | undefined
@@ -27,15 +25,15 @@ interface Price {
 }
 
 export default function Checkout() {
-  const { cart } = useContext(CartContext)!
+  const { cart } = useContext(CartContext) ?? {}
   const { userAttributes } = useContext(UserContext)
   const router = useRouter()
   const [prices, setPrices] = useState<Price[]>([])
   const [isCartReady, setIsCartReady] = useState<boolean>(false)
 
   useEffect(() => {
-    if (cart.length > 0) {
-      const fetchedPrices = cart.map((item) => {
+    if ((cart ?? []).length > 0) {
+      const fetchedPrices = cart?.map((item) => {
         return {
           product_id: item.product_id,
           stripe_price_id: item.product_sale_price
@@ -45,7 +43,7 @@ export default function Checkout() {
         }
       })
 
-      setPrices(fetchedPrices)
+      setPrices(fetchedPrices || [])
     } else {
       setPrices([])
     }
@@ -70,11 +68,10 @@ export default function Checkout() {
         return null
       }
 
-      const response = await fetch('/api/checkout_sessions', {
+      const response = await fetchWithCsrf('/api/checkout_sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY!,
         },
         body: JSON.stringify({ cart: prices, customer }),
       })

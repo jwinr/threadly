@@ -144,7 +144,7 @@ export default function CategoryPage() {
   const [currentPage, setCurrentPage] = useState<number>(page)
   const [filterState, setFilterState] = useState<Record<string, string[]>>(
     searchParams.get('filters')
-      ? JSON.parse(decodeURIComponent(searchParams.get('filters')!))
+      ? JSON.parse(decodeURIComponent(searchParams.get('filters') || ''))
       : {}
   )
   const { categoryData, loading, filteredItems } = useCategoryData(
