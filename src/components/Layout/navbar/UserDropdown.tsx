@@ -16,13 +16,7 @@ import { signOut } from 'aws-amplify/auth'
 import { useRouter } from 'next/navigation'
 import SigningOutOverlay from '@/components/Auth/SigningOutOverlay'
 import Popover from '@/components/Elements/Popover'
-
-import { User } from 'lucide-react'
-
-import Profile from '@/public/images/icons/account.svg'
-import Order from '@/public/images/icons/order.svg'
-import Favorite from '@/public/images/icons/favorite.svg'
-import Logout from '@/public/images/icons/logout.svg'
+import { User, ShoppingBag, Heart, LogOut } from 'lucide-react'
 
 interface UserButtonProps {
   $isOpen: boolean
@@ -145,10 +139,7 @@ const MenuItem = styled.li`
     width: 16px;
     height: 16px;
     margin-right: 6px;
-
-    > path {
-      fill: var(--sc-color-icon);
-    }
+    stroke: var(--sc-color-icon);
   }
 `
 
@@ -173,7 +164,8 @@ const UserDropdown = () => {
     setIsSigningOut(true) // Show the overlay
 
     try {
-      await signOut() // Sign out the user
+      await signOut() // Sign out via the AWS API
+      await fetch('/api/logout') // Remove the cognito cookie
       setTimeout(() => {
         router.push('/')
         setCart?.([]) // Clear the cart state
@@ -241,7 +233,7 @@ const UserDropdown = () => {
   const dropdownContent = (
     <DropdownMenu
       user={given_name}
-      handleSignOut={() => void signOutHandler}
+      handleSignOut={signOutHandler}
       firstMenuItemRef={firstMenuItemRef}
       onMenuItemClick={handleMenuItemClick}
       userButtonRef={userButtonRef}
@@ -308,7 +300,7 @@ function DropdownMenu({
             onMenuItemClick={onMenuItemClick}
             userButtonRef={userButtonRef}
           >
-            <Profile />
+            <User />
             <span>Profile</span>
           </DropdownItem>
           <DropdownItem
@@ -317,7 +309,7 @@ function DropdownMenu({
             onMenuItemClick={onMenuItemClick}
             userButtonRef={userButtonRef}
           >
-            <Order />
+            <ShoppingBag />
             <span>Orders</span>
           </DropdownItem>
           <DropdownItem
@@ -326,7 +318,7 @@ function DropdownMenu({
             onMenuItemClick={onMenuItemClick}
             userButtonRef={userButtonRef}
           >
-            <Favorite />
+            <Heart />
             <span>Favorites</span>
           </DropdownItem>
           <DropdownItem
@@ -335,7 +327,7 @@ function DropdownMenu({
             onMenuItemClick={onMenuItemClick}
             userButtonRef={userButtonRef}
           >
-            <Logout />
+            <LogOut />
             <span>Logout</span>
           </DropdownItem>
         </>

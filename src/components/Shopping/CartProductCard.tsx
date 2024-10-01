@@ -33,7 +33,7 @@ interface CartProductCardProps {
 }
 
 interface PriceProps {
-  sale: boolean
+  $sale: boolean
 }
 
 const ProductCard = styled.li`
@@ -110,7 +110,7 @@ const VariantDetails = styled.div`
 const Price = styled.h1<PriceProps>`
   font-size: 19px;
   font-weight: bold;
-  color: ${(props) => (props.sale ? 'var(--sc-color-carnation)' : '#353a44')};
+  color: ${(props) => (props.$sale ? 'var(--sc-color-carnation)' : '#353a44')};
 `
 
 const SingleItemPrice = styled.span`
@@ -260,8 +260,6 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!item.product_sale_price
 
-  console.log(item)
-
   return (
     <ProductCard>
       <ImageWrapper
@@ -304,7 +302,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
           </ShippingWrapper>
           <Details>
             <PriceWrapper>
-              <Price sale={isOnSale}>
+              <Price $sale={isOnSale}>
                 {formatCurrency(
                   (item.product_sale_price || item.product_price) *
                     item.quantity
@@ -360,10 +358,12 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               {item.product_name}
             </Title>
             <VariantDetails>
-              <p>Color: {item.color}</p>
-              <p>Waist: {item.waist}</p>
-              <p>Length: {item.length}</p>
-              <p>Size: {item.size}</p>
+              <p>{`Color: ${item.color}`}</p>
+              {item.waist && item.length ? (
+                <p>{`Waist: ${item.waist}, Length: ${item.length}`}</p>
+              ) : item.size ? (
+                <p>{`Size: ${item.size}`}</p>
+              ) : null}
             </VariantDetails>
           </TitleSection>
           <ShippingWrapper>
@@ -377,7 +377,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
           </ShippingWrapper>
           <Details>
             <PriceWrapper>
-              <Price sale={isOnSale}>
+              <Price $sale={isOnSale}>
                 {formatCurrency(
                   (item.product_sale_price || item.product_price) *
                     item.quantity

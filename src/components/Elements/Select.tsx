@@ -42,7 +42,7 @@ const ErrorText = styled.p<WrapperProps>`
  */
 interface SelectWrapperProps {
   size: 'small' | 'medium' | 'large'
-  invalid: boolean
+  $invalid: boolean
 }
 
 const SelectWrapper = styled.select<SelectWrapperProps>`
@@ -255,7 +255,7 @@ const Select: FC<SelectProps> = ({
           required={required}
           size={size}
           value={value}
-          invalid={invalid ?? false}
+          $invalid={invalid ?? false}
           onChange={handleChange}
           aria-invalid={invalid}
           title={title}

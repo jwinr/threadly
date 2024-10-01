@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FavoriteNone from '@/public/images/icons/favorite_none.svg'
+import Heart from '@/public/images/icons/heart.svg'
 
 const EmptyFavoritesContainer = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ const EmptyFavoritesSection = () => {
       <EmptyFavoritesContainer>
         <EmptyContents>
           <EmptyWrapper>
-            <FavoriteNone />
+            <Heart />
           </EmptyWrapper>
           <EmptyHeader>Track your favorite items</EmptyHeader>
           <span>

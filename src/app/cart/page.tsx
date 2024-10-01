@@ -74,6 +74,7 @@ const Cart: React.FC = () => {
           const response = await fetch(
             `/api/cart?id=${userAttributes.user_uuid}`
           )
+
           const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
 
           setCart?.(
