@@ -328,16 +328,17 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   }, [userAttributes, isSyncing, fetchCart, getToken])
 
   useEffect(() => {
-    const localCart = JSON.parse(
-      localStorage.getItem('cart') || '[]'
-    ) as CartItem[]
+    if (userAttributes && !hasSyncedCart.current) {
+      fetchCart()
 
-    // Fetch the cart on component mount
-    void fetchCart()
+      const localCart = JSON.parse(
+        localStorage.getItem('cart') || '[]'
+      ) as CartItem[]
 
-    // Sync local cart with server only if there are items
-    if (localCart.length > 0 && !hasSyncedCart.current) {
-      void syncLocalCartWithServer()
+      if (localCart.length > 0) {
+        void syncLocalCartWithServer()
+      }
+
       hasSyncedCart.current = true
     }
   }, [userAttributes, fetchCart, syncLocalCartWithServer])
