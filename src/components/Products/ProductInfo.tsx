@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import StarRating from '@/components/ReviewStars/StarRatings'
 import Truck from '@/public/images/icons/truck.svg'
 import Subscription from '@/public/images/icons/subscription.svg'
@@ -16,32 +16,20 @@ interface ProductInfoProps {
   loading: boolean
 }
 
-const loadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
-
 const LoadingProduct = styled.div`
   position: relative;
   width: 100%;
   padding-bottom: 50%;
   order: 0; // Make sure product details are at the top in mobile view
   border-radius: 8px;
-  background-color: #d6d6d6;
-  animation: ${loadingAnimation} 2s ease-in-out infinite;
+  background-color: #ededed;
+  animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {
     animation:
       enter 0.3s 0.1s forwards,
-      ${loadingAnimation} 2s ease-in-out infinite;
+      loadingAnimation 1s ease-in-out infinite;
   }
 `
 

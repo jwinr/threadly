@@ -1,20 +1,8 @@
-import styled, { keyframes, css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface isLoadingProps {
   $isLoading: boolean
 }
-
-const isLoadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -71,7 +59,7 @@ export const Header = styled.h1`
 `
 
 export const Subtitle = styled.div<isLoadingProps>`
-  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
   border-radius: 6px;
   min-height: ${({ $isLoading }) => ($isLoading ? '28px' : '20px')};
   width: ${({ $isLoading }) => ($isLoading ? '300px' : 'fit-content')};
@@ -80,13 +68,13 @@ export const Subtitle = styled.div<isLoadingProps>`
     css`
       animation:
         enter 0.3s forwards,
-        ${isLoadingAnimation} 2s ease-in-out infinite;
+        loadingAnimation 1s ease-in-out infinite;
       animation-fill-mode: forwards, infinite;
 
       @media (max-width: 768px) {
         animation:
           enter 0.3s forwards,
-          ${isLoadingAnimation} 2s ease-in-out infinite;
+          loadingAnimation 1s ease-in-out infinite;
       }
     `}
 
@@ -101,7 +89,7 @@ export const Subtitle = styled.div<isLoadingProps>`
 export const CartContainer = styled.div<isLoadingProps>`
   border-radius: 6px;
   margin-top: 16px;
-  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
   height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
 
   ${({ $isLoading }) =>
@@ -109,13 +97,13 @@ export const CartContainer = styled.div<isLoadingProps>`
     css`
       animation:
         enter 0.3s 0s forwards,
-        ${isLoadingAnimation} 2s ease-in-out infinite;
+        loadingAnimation 1s ease-in-out infinite;
       animation-fill-mode: forwards, infinite;
 
       @media (max-width: 768px) {
         animation:
           enter-form-mobile 0.3s 0.1s forwards,
-          ${isLoadingAnimation} 2s ease-in-out infinite;
+          loadingAnimation 1s ease-in-out infinite;
       }
     `}
 

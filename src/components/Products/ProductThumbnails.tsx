@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 interface ProductThumbnailProps {
   hoveredImage: number | null
@@ -7,18 +7,6 @@ interface ProductThumbnailProps {
   loading: boolean
   images: { image_url: string; alt_text: string }[]
 }
-
-const loadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
 
 const AdditionalImageContainer = styled.div`
   display: flex;
@@ -59,8 +47,8 @@ const LoaderThumbnailContainer = styled.div`
   width: 128px;
   height: 128px;
   border-radius: 6px;
-  background-color: #d6d6d6;
-  animation: ${loadingAnimation} 2s ease-in-out infinite;
+  background-color: #ededed;
+  animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
 `
 

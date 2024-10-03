@@ -79,14 +79,14 @@ const LoaderDescription = styled.div`
   border-radius: 8px;
   min-height: 250px;
   width: 75%;
-  background-color: #d6d6d6;
-  animation: loadingAnimation 2s ease-in-out infinite;
+  background-color: #ededed;
+  animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {
     animation:
       enter 0.3s 0.1s forwards,
-      loadingAnimation 2s ease-in-out infinite;
+      loadingAnimation 1s ease-in-out infinite;
   }
 `
 
@@ -102,7 +102,7 @@ const LoaderFeatures = styled.div`
   @media (max-width: 768px) {
     animation:
       enter 0.3s 0.1s forwards,
-      loadingAnimation 2s ease-in-out infinite;
+      loadingAnimation 1s ease-in-out infinite;
   }
 `
 

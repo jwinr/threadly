@@ -10,7 +10,7 @@ import Pagination from '@/components/Elements/Pagination'
 import useCategoryData from 'src/hooks/useCategoryData'
 
 const animationStyles = css`
-  animation: loadingAnimation 2s infinite;
+  animation: loadingAnimation 1s infinite;
 `
 
 const CategoryPageContainer = styled.div`
@@ -44,9 +44,9 @@ const LoadingCard = styled.div<{ $loading: boolean }>`
   padding: 15px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   border-radius: 8px;
-  animation: loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 1s ease-in-out infinite;
   height: 462px;
 
   @media (max-width: 768px) {
@@ -58,18 +58,18 @@ const LoadingCard = styled.div<{ $loading: boolean }>`
 const LoadingFilter = styled.div`
   margin: 8px 16px;
   border-radius: 25px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   height: 42px;
-  animation: loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 1s ease-in-out infinite;
 `
 
 const LoadingCount = styled.div`
   margin: 8px 16px;
   border-radius: 8px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   height: 33px;
   max-width: 120px;
-  animation: loadingAnimation 2s ease-in-out infinite;
+  animation: loadingAnimation 1s ease-in-out infinite;
 `
 
 const TitleWrapper = styled.div<{ $loading: boolean }>`
@@ -78,7 +78,7 @@ const TitleWrapper = styled.div<{ $loading: boolean }>`
   justify-content: center;
   text-align: center;
   align-self: center;
-  background-color: ${({ $loading }) => ($loading ? '#d6d6d6' : 'initial')};
+  background-color: ${({ $loading }) => ($loading ? '#ededed' : 'initial')};
   height: ${({ $loading }) => ($loading ? '43.5px' : 'initial')};
   width: ${({ $loading }) => ($loading ? '400px' : 'initial')};
   border-radius: ${({ $loading }) => ($loading ? '6px' : 'initial')};

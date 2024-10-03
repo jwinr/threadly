@@ -16,9 +16,9 @@ const LoadingBreadcrumb = styled.div`
   margin: 10px 16px;
   width: 25%;
   height: 21px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   border-radius: 6px;
-  animation: loadingAnimation 2s infinite;
+  animation: loadingAnimation 1s infinite;
 `
 
 const capitalizeFirstLetter = (string: string) => {

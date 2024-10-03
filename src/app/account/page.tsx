@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { UserContext } from '@/context/UserContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import Image from 'next/image'
 import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
 import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
@@ -17,18 +17,6 @@ import {
   ShoppingBasket,
   Settings,
 } from 'lucide-react'
-
-const isLoadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
 
 const AccountContainer = styled.div`
   margin: 0 auto;
@@ -65,10 +53,10 @@ const CardLoader = styled.div`
   min-height: 220px;
   border-radius: 8px;
   padding: 20px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   flex-direction: column;
   gap: 20px;
-  animation: ${isLoadingAnimation} 2s ease-in-out infinite;
+  animation: loadingAnimation 1s ease-in-out infinite;
 `
 
 const LargeCardLoader = styled.div`
@@ -78,10 +66,10 @@ const LargeCardLoader = styled.div`
   min-height: 93px;
   border-radius: 8px;
   padding: 20px;
-  background-color: #d6d6d6;
+  background-color: #ededed;
   flex-direction: column;
   gap: 20px;
-  animation: ${isLoadingAnimation} 2s ease-in-out infinite;
+  animation: loadingAnimation 1s ease-in-out infinite;
 `
 
 const ProfileContainer = styled.div`
@@ -206,6 +194,7 @@ const Account: React.FC = () => {
       given_name: string
       family_name: string
       email: string
+      created_at: string
     }
   }
   const checkingUser = useCheckLoggedInUser()
@@ -300,6 +289,12 @@ const Account: React.FC = () => {
                         </InfoItem>
                         <InfoItem>
                           <span>Email:</span> {userAttributes.email}
+                        </InfoItem>
+                        <InfoItem>
+                          <span>Member since:</span>{' '}
+                          {new Date(
+                            userAttributes.created_at
+                          ).toLocaleDateString()}
                         </InfoItem>
                       </>
                     )}

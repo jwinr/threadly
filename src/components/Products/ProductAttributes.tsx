@@ -69,8 +69,8 @@ const LoaderAttributes = styled.div`
   width: 100%;
   min-height: 100px;
   border-radius: 8px;
-  background-color: #d6d6d6;
-  animation: loadingAnimation 2s ease-in-out infinite;
+  background-color: #ededed;
+  animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
 `
 

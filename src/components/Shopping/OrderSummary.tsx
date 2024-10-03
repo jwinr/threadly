@@ -1,18 +1,6 @@
 import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css } from 'styled-components'
 import CheckoutButton from './CheckoutButton'
-
-const loadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
 
 interface OrderSummaryContainerProps {
   $isLoading: boolean
@@ -22,7 +10,7 @@ interface OrderSummaryContainerProps {
 const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
   margin: 30px 16px;
   flex: 1 1 auto;
-  background-color: ${({ $isLoading }) => ($isLoading ? '#d6d6d6' : 'initial')};
+  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
   height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
   border-radius: ${({ $isLoading }) => ($isLoading ? '6px' : 'initial')};
   opacity: ${({ $loadingSummary }) => ($loadingSummary ? '0.5' : '1')};
@@ -33,13 +21,13 @@ const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
     css`
       animation:
         enter-form-desktop 0.3s forwards,
-        ${loadingAnimation} 2s ease-in-out infinite;
+        loadingAnimation 1s ease-in-out infinite;
       animation-fill-mode: forwards, infinite;
 
       @media (max-width: 768px) {
         animation:
           enter-form-mobile 0.3s 0.1s forwards,
-          ${loadingAnimation} 2s ease-in-out infinite;
+          loadingAnimation 1s ease-in-out infinite;
       }
     `}
 

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -18,18 +18,6 @@ interface ProductImageGalleryProps {
   hoveredImage: number
 }
 
-const loadingAnimation = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 1;
-  }
-`
-
 const CarouselContainer = styled.div`
   display: flex;
   width: 100%;
@@ -42,14 +30,14 @@ const LoaderImageContainer = styled.div`
   width: 100%;
   height: 500px;
   border-radius: 8px;
-  background-color: #d6d6d6;
-  animation: ${loadingAnimation} 2s ease-in-out infinite;
+  background-color: #ededed;
+  animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
 
   @media (max-width: 768px) {
     animation:
       enter 0.3s 0.1s forwards,
-      ${loadingAnimation} 2s ease-in-out infinite;
+      loadingAnimation 1s ease-in-out infinite;
   }
 `
 

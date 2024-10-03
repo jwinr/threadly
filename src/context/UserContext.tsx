@@ -20,6 +20,7 @@ interface UserAttributes {
   given_name?: string
   user_uuid?: string
   stripe_customer_id?: string
+  created_at?: string
 }
 
 interface CognitoIdTokenPayload {
@@ -104,6 +105,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           email: payload.email,
           family_name: payload.family_name,
           given_name: payload.given_name,
+          created_at: userAttributes?.created_at || '',
         }
 
         setUserAttributes(selectedAttributes)
