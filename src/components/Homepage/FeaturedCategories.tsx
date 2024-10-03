@@ -13,8 +13,15 @@ const Title = styled.h2`
 
 const CardContainer = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 20px;
+`
+
+const StackedCards = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   gap: 20px;
 `
 
@@ -37,20 +44,18 @@ const CardOverlay = styled.div`
   left: 0;
   right: 0;
   height: 100%;
-  background-color: #f1564f;
-  mask-image: linear-gradient(0deg, #000 15%, rgba(0, 0, 0, 0.5) 54.75%);
+  background: linear-gradient(0deg, #000 15%, rgba(0, 0, 0, 0.15) 50%);
   transform: scaleY(1.2);
   transform-origin: 50% 0;
   transition: transform 0.6s cubic-bezier(0.7, 0, 0, 1);
   z-index: 5;
 `
 
-const Card = styled(Link)`
-  background-color: #fe887d;
+const Card = styled(Link)<{ $isStacked?: boolean }>`
   border-radius: 16px;
   overflow: hidden;
-  width: 300px;
-  height: 400px;
+  width: ${({ $isStacked }) => ($isStacked ? '100%' : '425px')};
+  height: ${({ $isStacked }) => ($isStacked ? '255px' : '530px')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -90,22 +95,6 @@ const FeaturedCategories: React.FC = () => {
       <Title>What's new and trending</Title>
       <CardContainer>
         <Card
-          href="/categories/best-sellers-men"
-          passHref
-          className="button-wrapper"
-        >
-          <CardOverlay />
-          <CardImage>
-            <Image
-              src={'/images/model_3.jpg'}
-              alt="Best Sellers for Men"
-              fill={true}
-              sizes={'300px'}
-            />
-          </CardImage>
-          <CardText>Mens' Best Sellers</CardText>
-        </Card>
-        <Card
           href="/categories/new-arrivals-men"
           passHref
           className="button-wrapper"
@@ -116,27 +105,50 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_2.jpg'}
               alt="New Arrivals for Men"
               fill={true}
-              sizes={'300px'}
+              sizes={'500px'}
+              priority={true}
             />
           </CardImage>
           <CardText>Mens' New Arrivals</CardText>
         </Card>
-        <Card
-          href="/categories/best-sellers-women"
-          passHref
-          className="button-wrapper"
-        >
-          <CardOverlay />
-          <CardImage>
-            <Image
-              src={'/images/model_4.jpg'}
-              alt="Best Sellers for Women"
-              fill={true}
-              sizes={'300px'}
-            />
-          </CardImage>
-          <CardText>Womens' Best Sellers</CardText>
-        </Card>
+        <StackedCards>
+          <Card
+            href="/categories/best-sellers-men"
+            passHref
+            className="button-wrapper"
+            $isStacked
+          >
+            <CardOverlay />
+            <CardImage>
+              <Image
+                src={'/images/model_3.jpg'}
+                alt="Best Sellers for Men"
+                fill={true}
+                sizes={'500px'}
+                priority={true}
+              />
+            </CardImage>
+            <CardText>Mens' Best Sellers</CardText>
+          </Card>
+          <Card
+            href="/categories/best-sellers-women"
+            passHref
+            className="button-wrapper"
+            $isStacked
+          >
+            <CardOverlay />
+            <CardImage>
+              <Image
+                src={'/images/model_4.jpg'}
+                alt="Best Sellers for Women"
+                fill={true}
+                sizes={'500px'}
+                priority={true}
+              />
+            </CardImage>
+            <CardText>Womens' Best Sellers</CardText>
+          </Card>
+        </StackedCards>
         <Card
           href="/categories/new-arrivals-women"
           passHref
@@ -148,7 +160,8 @@ const FeaturedCategories: React.FC = () => {
               src={'/images/model_1.jpg'}
               alt="New Arrivals for Women"
               fill={true}
-              sizes={'300px'}
+              sizes={'500px'}
+              priority={true}
             />
           </CardImage>
           <CardText>Womens' New Arrivals</CardText>
