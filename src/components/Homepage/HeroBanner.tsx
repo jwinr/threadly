@@ -91,7 +91,6 @@ const ImageWrapper = styled.div`
   img {
     pointer-events: none;
     object-fit: cover;
-    max-width: 100%;
     height: 100%;
     border-radius: 12px;
   }
@@ -207,8 +206,8 @@ const HeroBanner: React.FC = () => {
       <ImageWrapper>
         <Image
           src={HeroImg}
-          width={1920}
-          height={1080}
+          width={1382}
+          height={825}
           quality={85}
           alt="Background"
           priority={true}

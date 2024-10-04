@@ -32,7 +32,6 @@ const UserButton = styled.button<UserButtonProps>`
   height: 40px;
   border-radius: 10px;
   align-items: center;
-  background-color: ${({ $isOpen }) => ($isOpen ? '#f7f7f7' : '#fff')};
   display: flex;
   flex-shrink: 0;
   flex-grow: 1;
@@ -157,6 +156,7 @@ const UserDropdown = () => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const firstMenuItemRef = useRef<HTMLLIElement>(null)
   const userButtonRef = useRef<HTMLButtonElement>(null)
+  const dropdownMenuRef = useRef<HTMLDivElement>(null)
 
   const given_name = userAttributes ? userAttributes.given_name : null
 
@@ -212,6 +212,17 @@ const UserDropdown = () => {
     setIsOpen(false)
   }
 
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    const relatedTarget = event.relatedTarget as Node | null
+
+    if (
+      !userButtonRef.current?.contains(relatedTarget) &&
+      !dropdownMenuRef.current?.contains(relatedTarget)
+    ) {
+      setIsOpen(false)
+    }
+  }
+
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
@@ -237,13 +248,14 @@ const UserDropdown = () => {
       firstMenuItemRef={firstMenuItemRef}
       onMenuItemClick={handleMenuItemClick}
       userButtonRef={userButtonRef}
+      dropdownMenuRef={dropdownMenuRef}
     />
   )
 
   return (
     <>
       <SigningOutOverlay visible={isSigningOut} />
-      <div ref={dropdownRef}>
+      <div ref={dropdownRef} onBlur={handleBlur}>
         <Popover
           trigger="click"
           content={dropdownContent}
@@ -280,6 +292,7 @@ interface DropdownMenuProps {
     onClick?: MouseEventHandler<HTMLLIElement>
   ) => void
   userButtonRef: RefObject<HTMLButtonElement>
+  dropdownMenuRef: RefObject<HTMLDivElement>
 }
 
 function DropdownMenu({
@@ -288,9 +301,10 @@ function DropdownMenu({
   firstMenuItemRef,
   onMenuItemClick,
   userButtonRef,
+  dropdownMenuRef,
 }: DropdownMenuProps) {
   return (
-    <Menu role="menu">
+    <Menu ref={dropdownMenuRef} role="menu">
       {user ? (
         <>
           <DropdownItem
