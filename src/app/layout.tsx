@@ -13,7 +13,6 @@ import Layout from '@/components/Layout/Layout'
 import StyledComponentsRegistry from '@/lib/registry'
 import cookie from 'cookie'
 import { headers } from 'next/headers'
-import Script from 'next/script'
 import { Metadata } from 'next'
 import { Customer } from '@/types/user'
 
@@ -38,14 +37,6 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <head>
-        <Script
-          src="https://js.stripe.com/v3/"
-          async
-          nonce={nonce || ''}
-          data-nscript="afterInteractive"
-        ></Script>
-      </head>
       <body className={inter.className}>
         <React.StrictMode>
           <AmplifyConfig>

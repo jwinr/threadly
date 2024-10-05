@@ -197,70 +197,67 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
   }, [fetchUserAttributes])
 
-  const fetchPaymentMethods = useCallback(
-    async (userUuid: string) => {
-      const token = await getToken()
-      if (!token) {
+  const fetchPaymentMethods = useCallback(async () => {
+    const token = await getToken()
+    if (!token) {
+      return []
+    }
+
+    try {
+      // Fetch the Stripe customer ID directly from /api/stripe-id
+      const response = await fetch('/api/stripe-id', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${JSON.stringify(token)}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data: { stripe_customer_id?: string; error?: string } =
+        (await response.json()) as {
+          stripe_customer_id?: string
+          error?: string
+        }
+
+      if (!response.ok || !data.stripe_customer_id) {
+        console.error('Failed to fetch Stripe customer ID:', data.error)
         return []
       }
 
-      try {
-        // Fetch the Stripe customer ID based on the userUuid
-        const response = await fetch(`/api/user/${userUuid}`, {
+      const stripeCustomerId = data.stripe_customer_id
+
+      // Now fetch the payment methods using the Stripe customer ID
+      const paymentResponse = await fetch(
+        `/api/account/payments?stripe_customer_id=${stripeCustomerId}`,
+        {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${JSON.stringify(token)}`,
             'Content-Type': 'application/json',
           },
-        })
+        }
+      )
 
-        const data: { stripeCustomerId?: string; error?: string } =
-          (await response.json()) as {
-            stripeCustomerId?: string
-            error?: string
-          }
-
-        if (!response.ok || !data.stripeCustomerId) {
-          console.error('Failed to fetch Stripe customer ID:', data.error)
-          return []
+      const paymentData: { paymentMethods: unknown[]; error?: string } =
+        (await paymentResponse.json()) as {
+          paymentMethods: unknown[]
+          error?: string
         }
 
-        const stripeCustomerId = data.stripeCustomerId
-
-        // Now fetch the payment methods using the Stripe customer ID
-        const paymentResponse = await fetch(
-          `/api/account/payments?stripe_customer_id=${stripeCustomerId}`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${JSON.stringify(token)}`,
-              'Content-Type': 'application/json',
-              'x-user-attributes': JSON.stringify(userAttributes),
-            },
-          }
+      if (paymentResponse.ok) {
+        return paymentData.paymentMethods
+      } else {
+        console.error(
+          'Failed to fetch payment methods:',
+          paymentData?.error || 'Unknown error'
         )
-
-        const paymentData: { paymentMethods: unknown[]; error?: string } =
-          (await paymentResponse.json()) as {
-            paymentMethods: unknown[]
-            error?: string
-          }
-        if (paymentResponse.ok) {
-          return paymentData.paymentMethods
-        } else {
-          console.error(
-            'Failed to fetch payment methods:',
-            paymentData?.error || 'Unknown error'
-          )
-          return []
-        }
-      } catch (error) {
-        console.error('Error fetching payment methods:', error)
         return []
       }
-    },
-    [getToken, userAttributes]
-  )
+    } catch (error) {
+      console.error('Error fetching payment methods:', error)
+      return []
+    }
+  }, [getToken])
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(

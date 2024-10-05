@@ -37,18 +37,27 @@ export default function NewPayment() {
         return ''
       }
 
-      const customer = userAttributes?.stripe_customer_id
+      // Fetch the Stripe customer ID from the backend
+      const customerResponse = await fetch('/api/stripe-id', {
+        method: 'GET',
+      })
+
+      if (!customerResponse.ok) {
+        console.log('Failed to fetch Stripe customer ID')
+        return ''
+      }
+
+      const { stripe_customer_id: customer } = await customerResponse.json()
+
       if (!customer) {
         console.log('Customer is not defined')
         return ''
       }
 
+      // Fetch the client secret using the customer ID
       const response = await fetch('/api/account/payments/new', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ customer }),
       })
 

@@ -84,8 +84,7 @@ interface PaymentMethod {
 }
 
 const Payments: React.FC = () => {
-  const { userAttributes, fetchPaymentMethods } = useContext(UserContext) as {
-    userAttributes?: { stripe_customer_id?: string }
+  const { fetchPaymentMethods } = useContext(UserContext) as {
     fetchPaymentMethods: (customerId: string) => Promise<PaymentMethod[]>
   }
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
@@ -93,19 +92,38 @@ const Payments: React.FC = () => {
   const checkingUser = useCheckLoggedInUser()
 
   useEffect(() => {
-    if (!checkingUser && userAttributes?.stripe_customer_id) {
-      void fetchSavedPaymentMethods()
+    if (!checkingUser) {
+      fetchSavedPaymentMethods()
     }
-  }, [checkingUser, userAttributes])
+  }, [checkingUser])
 
   const fetchSavedPaymentMethods = async () => {
     setLoading(true)
-    if (userAttributes?.stripe_customer_id) {
-      const methods = await fetchPaymentMethods(
-        userAttributes.stripe_customer_id
-      )
-      setPaymentMethods(methods)
+
+    try {
+      // Fetch the Stripe customer ID from the backend
+      const customerResponse = await fetch('/api/stripe-id', {
+        method: 'GET',
+      })
+
+      if (!customerResponse.ok) {
+        console.error('Failed to fetch Stripe customer ID')
+        setLoading(false)
+        return
+      }
+
+      const { stripe_customer_id: customer } = await customerResponse.json()
+
+      if (customer) {
+        const methods = await fetchPaymentMethods(customer)
+        setPaymentMethods(methods)
+      } else {
+        console.log('Customer is not defined')
+      }
+    } catch (error) {
+      console.error('Error fetching saved payment methods:', error)
     }
+
     setLoading(false)
   }
 
