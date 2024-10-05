@@ -7,7 +7,11 @@ import { useRouter } from 'next/navigation'
 import PasswordReveal from '@/components/Auth/PasswordReveal'
 import LogoSymbol from '@/public/images/logo_solid.svg'
 import Popover from '@/components/Elements/Popover'
-import { CognitoErrorMessages } from '@/lib/constants'
+import {
+  CognitoErrorMessages,
+  GENERIC_ERROR_MESSAGE,
+  LANGUAGE_PROFANITY_ERROR,
+} from '@/lib/constants'
 import * as AuthStyles from '@/components/Auth/AuthStyles'
 import {
   getValidationStyle,
@@ -21,6 +25,7 @@ import useRedirectIfAuthenticated from 'src/hooks/useRedirectIfAuthenticated'
 import { TiWarningOutline } from 'react-icons/ti'
 import { useMobileView } from '@/context/MobileViewContext'
 import { useAuthFormValidation } from 'src/hooks/useAuthFormValidation'
+import { containsProfanity } from 'src/utils/textFilter'
 
 const SubheaderText = styled.h1`
   font-weight: 500;
@@ -54,20 +59,25 @@ const SignUp: React.FC = () => {
 
   type CognitoErrorName = keyof typeof CognitoErrorMessages
 
-  const GENERIC_ERROR_MESSAGE =
-    'An unexpected error occurred. Please try again later.'
-
   // Check if there's already an active sign-in
   const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
 
+  // Check for profanity across all form fields
+  const checkForProfanity = (formData: Record<string, string>): boolean => {
+    return Object.values(formData).some((field) => containsProfanity(field))
+  }
+
   useEffect(() => {
+    const profanityDetected = checkForProfanity(formState)
+
     const isFormValid =
       emailValid &&
       passwordValid &&
       fullNameValid &&
       formState.email &&
       formState.password &&
-      formState.fullName
+      formState.fullName &&
+      !profanityDetected // Don't allow form to be valid if profanity is detected
 
     setIsInvalid(!isFormValid)
   }, [emailValid, passwordValid, fullNameValid, formState])
@@ -107,6 +117,12 @@ const SignUp: React.FC = () => {
     if (isLoading) {
       setErrorMessage('')
       return // Prevent form submission if loading
+    }
+
+    if (checkForProfanity(formState)) {
+      setErrorMessage(LANGUAGE_PROFANITY_ERROR)
+      setShakeKey((prevKey) => prevKey + 1)
+      return
     }
 
     if (isInvalid) {
@@ -179,7 +195,7 @@ const SignUp: React.FC = () => {
                   Success! Your Threadly account has been created.
                 </AuthStyles.HeaderText>
                 <SubheaderText style={{ marginBottom: '30px' }}>
-                  You&apos;re ready to start shopping!
+                  You're ready to start shopping!
                 </SubheaderText>
                 <AuthStyles.AuthBtn onClick={handleRedirect} type="button">
                   Shop now

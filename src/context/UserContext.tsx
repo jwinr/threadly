@@ -177,13 +177,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     const hubListener = ({ payload }: { payload: { event: string } }) => {
       switch (payload.event) {
         case 'signedIn':
-          void fetchUserAttributes()
+          fetchUserAttributes()
           break
         case 'signedOut':
-          void signOut()
+          signOut()
           break
         case 'tokenRefresh':
-          void fetchUserAttributes()
+          fetchUserAttributes()
           break
         default:
           break
