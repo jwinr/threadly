@@ -210,7 +210,7 @@ export default function CategoryPage() {
     setCurrentPage(currentPageFromURL)
   }, [searchParams])
 
-  console.log('Paginated items', paginatedItems)
+  // console.log('Paginated items', paginatedItems)
 
   const updateURL = useCallback(
     (filters: Record<string, unknown>) => {

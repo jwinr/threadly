@@ -1,11 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-
-interface Product {
-  id: string
-  name: string
-  category_name: string
-  category_slug: string
-}
+import { Product } from '@/types/product'
 
 interface UseProductDataReturn {
   product: Product | undefined
@@ -17,11 +11,7 @@ const fetchProductDetails = async (
   slug: string,
   variantSku: string
 ): Promise<Product> => {
-  const response = await fetch(`/api/products/${slug}/${variantSku}`, {
-    headers: {
-      'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-    },
-  })
+  const response = await fetch(`/api/products/${slug}/${variantSku}`)
 
   if (!response.ok) {
     throw new Error('Network response was not ok')
@@ -49,8 +39,8 @@ const useProductData = (
 
   return {
     product,
-    categoryName: product?.category_name,
-    categorySlug: product?.category_slug,
+    categoryName: product?.category?.name,
+    categorySlug: product?.category?.slug,
     isLoading,
     error,
   }

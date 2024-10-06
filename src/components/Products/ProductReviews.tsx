@@ -6,22 +6,23 @@ import StarRating from '../ReviewStars/StarRatings'
 import { UserContext } from '@/context/UserContext'
 
 interface Review {
-  review_id: string
-  title: string
+  review_id?: number
+  review_title?: string
   rating: number
-  first_name: string
-  last_initial: string
-  review_date: string
-  text: string
-  upvotes: number
-  downvotes: number
-  voteType: 'upvote' | 'downvote' | null
+  first_name?: string
+  last_initial?: string
+  review_date?: string
+  review_text?: string
+  upvotes?: number
+  downvotes?: number
+  voteType?: 'upvote' | 'downvote' | null
   updatedReview?: Partial<Review>
 }
 
 interface ProductReviewsProps {
   reviews: Review[]
-  productId: string
+  productId: number
+  loading: boolean
 }
 
 const Container = styled.div`
@@ -121,26 +122,46 @@ const NoReviews = styled.div`
   justify-content: center;
 `
 
+const LoaderReviews = styled.div`
+  border-radius: 8px;
+  min-height: 200px;
+  background-color: #d6d6d6;
+  animation: loadingAnimation 1s ease-in-out infinite;
+  animation-fill-mode: forwards;
+
+  @media (max-width: 768px) {
+    animation:
+      enter 0.3s 0.1s forwards,
+      loadingAnimation 1s ease-in-out infinite;
+  }
+`
+
 const ProductReviews: React.FC<ProductReviewsProps> = ({
   reviews: initialReviews,
   productId,
+  loading,
 }) => {
+  if (loading) {
+    return (
+      <Container>
+        <LoaderReviews />
+      </Container>
+    )
+  }
+
+  console.log('ProductReviews received reviews:', initialReviews)
   const { userAttributes } = useContext(UserContext)
   const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>(initialReviews)
 
-  const handleVote = async (reviewId: string, type: 'upvote' | 'downvote') => {
+  const handleVote = async (reviewId: number, type: 'upvote' | 'downvote') => {
     try {
       const response = await fetch('/api/reviews', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-        },
         body: JSON.stringify({
           reviewId,
           voteType: type,
-          cognitoSub: userAttributes?.sub,
+          userId: userAttributes?.user_uuid,
         }),
       })
 
@@ -155,7 +176,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
         setReviews((prevReviews) =>
           prevReviews.map(
             (review): Review =>
-              review.review_id === reviewId
+              review.review_id === Number(reviewId)
                 ? { ...review, ...(data.updatedReview || {}) }
                 : review
           )
@@ -181,33 +202,35 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           {reviews.map((review, index) => (
             <ReviewWrapper key={index}>
               <ReviewContent>
-                <ReviewTitle>{review.title}</ReviewTitle>
+                <ReviewTitle>{review.review_title}</ReviewTitle>
                 <StarRating reviews={review.rating} />
                 <ReviewUser>
                   <span>
                     {review.first_name} {review.last_initial} -{' '}
-                    {new Date(review.review_date).toLocaleDateString()}
+                    {review.review_date
+                      ? new Date(review.review_date).toLocaleDateString()
+                      : 'N/A'}
                   </span>
                 </ReviewUser>
-                <ReviewText>{review.text}</ReviewText>
+                <ReviewText>{review.review_text}</ReviewText>
               </ReviewContent>
               <VoteContainer>
                 <span>Did you find this review helpful?</span>
                 <VoteBtnContainer>
                   <VoteButton
-                    reviewId={review.review_id}
-                    count={review.upvotes}
+                    reviewId={review.review_id ?? 0}
+                    count={review.upvotes ?? 0}
                     type="upvote"
                     handleVote={handleVote}
-                    voteType={review.voteType}
+                    voteType={review.voteType ?? null}
                     disabled={review.voteType === 'upvote'}
                   />
                   <VoteButton
-                    reviewId={review.review_id}
-                    count={review.downvotes}
+                    reviewId={review.review_id ?? 0}
+                    count={review.downvotes ?? 0}
                     type="downvote"
                     handleVote={handleVote}
-                    voteType={review.voteType}
+                    voteType={review.voteType ?? null}
                     disabled={review.voteType === 'downvote'}
                   />
                 </VoteBtnContainer>

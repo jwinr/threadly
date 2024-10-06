@@ -8,8 +8,7 @@ import React, {
   ChangeEvent,
   FormEvent,
 } from 'react'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
+import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
@@ -216,7 +215,7 @@ const ButtonWrapper = styled.div`
 const AddReview: React.FC = () => {
   const { userAttributes } = useContext(UserContext)
   const router = useRouter()
-  const { slug } = router.query as { slug: string }
+  const { slug } = useParams() as { slug: string }
   const [reviewTitle, setReviewTitle] = useState<string>('')
   const [reviewText, setReviewText] = useState<string>('')
   const [rating, setRating] = useState<number>(0)
@@ -315,7 +314,7 @@ const AddReview: React.FC = () => {
     }
 
     if (slug) {
-      void fetchProductDetails()
+      fetchProductDetails()
     }
   }, [slug])
 
@@ -354,9 +353,6 @@ const AddReview: React.FC = () => {
     try {
       const response = await fetch('/api/reviews', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           title: reviewTitle,
           text: reviewText,
@@ -402,10 +398,6 @@ const AddReview: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <title>Write Review | TechNexus</title>
-        <meta name="description" content="Write a product review." />
-      </Head>
       <Container>
         {!product ? (
           <LoaderDots />

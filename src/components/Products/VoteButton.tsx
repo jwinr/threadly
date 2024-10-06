@@ -4,10 +4,10 @@ import { LiaThumbsUpSolid, LiaThumbsDownSolid } from 'react-icons/lia'
 import LoaderSpin from '@/components/Loaders/LoaderSpin'
 
 interface VoteButtonProps {
-  reviewId: string
+  reviewId: number
   count: number
   type: 'upvote' | 'downvote'
-  handleVote: (reviewId: string, type: 'upvote' | 'downvote') => Promise<void>
+  handleVote: (reviewId: number, type: 'upvote' | 'downvote') => Promise<void>
   voteType: 'upvote' | 'downvote' | null
   disabled?: boolean
 }

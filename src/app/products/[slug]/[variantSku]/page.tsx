@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import styled from 'styled-components'
 import Breadcrumb from '@/components/Elements/Breadcrumb'
 import { useParams } from 'next/navigation'
@@ -9,11 +10,11 @@ import ProductImageGallery from '@/components/Products/ProductImageGallery'
 import ProductInfo from '@/components/Products/ProductInfo'
 import ProductAttributes from '@/components/Products/ProductAttributes'
 import ProductOverview from '@/components/Products/ProductOverview'
+import ProductReviews from '@/components/Products/ProductReviews'
 import AddToCartButton from '@/components/Shopping/AddToCartButton'
 import useProductData from 'src/hooks/useProductData'
 import ProductThumbnails from '@/components/Products/ProductThumbnails'
 import { Product } from '@/types/product'
-import { useState } from 'react'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -119,6 +120,11 @@ function ProductDetails() {
           />
         )}
         <ProductOverview loading={isLoading} product={product as Product} />
+        <ProductReviews
+          loading={isLoading}
+          reviews={product?.reviews || []}
+          productId={product?.product_id || 0}
+        />
       </PageWrapper>
     </div>
   )

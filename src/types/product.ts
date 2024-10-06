@@ -21,7 +21,6 @@ export interface Product {
   promotions?: ProductPromotion[]
   tags?: ProductTag[]
   reviews?: Review[]
-  review_metadata?: ProductReviewsMetadata
   related_products?: RelatedProduct[]
 }
 
@@ -124,10 +123,16 @@ export interface Review {
   product_id?: number
   customer_id?: number
   rating: number // Integer between 1 and 5
+  review_title?: string
   review_text?: string // Optional, as some reviews might not have text
   review_date?: string // Timestamp as a string
   status?: string
   images?: ReviewImage[] // Optional relationship with review images
+  upvotes?: number
+  downvotes?: number
+  first_name?: string
+  last_initial?: string
+  voteType?: 'upvote' | 'downvote' | null
 }
 
 export interface ReviewImage {
@@ -135,13 +140,6 @@ export interface ReviewImage {
   review_id: number
   image_url: string
   alt_text?: string // Optional, as it can be nullable
-}
-
-export interface ProductReviewsMetadata {
-  product_id: number
-  average_rating: number // Numeric(3, 2) in the database
-  total_reviews: number
-  last_review_date?: string // Optional, if no reviews have been left
 }
 
 export interface TagCategory {
