@@ -316,6 +316,7 @@ export default function CategoryPage() {
                   id={color.color_variant_id}
                   swatch={color.color_swatch_url}
                   loading={loading}
+                  sku={color.color_sku.toString()}
                   allColors={item.colors.map((c) => ({
                     color_variant_id: c.color_variant_id,
                     color_sku: c.color_sku,

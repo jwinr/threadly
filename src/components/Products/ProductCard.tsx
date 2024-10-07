@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styled, { css } from 'styled-components'
@@ -6,6 +6,7 @@ import StarRatings from '@/components/ReviewStars/StarRatings'
 import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
 import Missing from '@/public/images/icons/block.svg'
 import Arrow from '@/public/images/icons/chevronLeft.svg'
+import { CartContext } from '@/context/CartContext'
 
 const CardContainer = styled.div<{ $isLoading: boolean }>`
   display: flex;
@@ -126,6 +127,7 @@ const SwatchButton = styled.button`
   svg {
     width: 24px;
     height: 24px;
+    pointer-events: none;
   }
 
   svg > path {
@@ -284,10 +286,10 @@ const PriceContainer = styled.div`
 `
 
 const Price = styled.h1<{ $sale?: boolean }>`
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 1;
-  margin-top: 8px;
+  margin-top: 9px;
   margin-bottom: 8px;
   margin-right: 5px;
   color: ${(props) => (props.$sale ? 'var(--sc-color-carnation)' : '#353a44')};
@@ -326,6 +328,7 @@ interface ProductCardProps {
   swatch: string
   allColors: ColorOption[]
   loading: boolean
+  sku: string
 }
 
 interface ColorOption {
@@ -345,6 +348,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   image,
   loading,
   allColors,
+  sku,
 }) => {
   const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!discount
@@ -356,6 +360,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [variantImages, setVariantImages] = useState(image)
   const cardRef = useRef<HTMLDivElement>(null)
+  const cartContext = useContext(CartContext)
+  const cart = cartContext ? cartContext.cart : []
+
+  // Check for any items already in the cart
+  const isInCart = cart.some((cartItem) => cartItem.sku === sku)
 
   useEffect(() => {
     if (image && image.length > 0) {
@@ -367,7 +376,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   }, [image])
 
-  const handleSwatchClick = (colorVariantId: string) => {
+  const handleSwatchClick = (
+    colorVariantId: string,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     const selectedColor = allColors.find(
       (colorOption: ColorOption) =>
         colorOption.color_variant_id === colorVariantId
@@ -383,6 +395,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         setVariantImages([])
       }
     }
+
+    // Remove focus from the button after click
+    event.currentTarget.blur()
   }
 
   const handleImageNavClick = (index: number) => {
@@ -465,7 +480,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         onBlur={handleBlur}
       >
         <Link
-          href={`${link}`}
+          href={link}
           aria-label={`View details of ${title}`}
           tabIndex={-1}
           onMouseEnter={() => setHovered(true)}
@@ -526,7 +541,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {allColors.map((colorOption: ColorOption) => (
               <SwatchButton
                 key={colorOption.color_variant_id}
-                onClick={() => handleSwatchClick(colorOption.color_variant_id)}
+                onClick={(e) =>
+                  handleSwatchClick(colorOption.color_variant_id, e)
+                }
                 aria-label={`Select ${colorOption.color}`}
               >
                 {colorOption.color_swatch_url ? (
@@ -546,7 +563,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         <Details>
           <Title
-            href={`${link}`}
+            href={link}
             aria-label={`View details of ${title}`}
             onFocus={() => setHovered(true)}
             onBlur={handleBlur}
@@ -566,6 +583,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
           </PriceContainer>
           {discount && <Sale>Sale</Sale>}
+          {isInCart && (
+            <span style={{ color: 'green', fontWeight: 'bold' }}>In cart</span>
+          )}
         </Details>
       </SlideWrapper>
     </CardContainer>
