@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import styled, { css } from 'styled-components'
@@ -207,6 +207,10 @@ const SliderArrow = styled(Arrow)<{
     opacity: 1;
   }
 
+  &:focus-visible {
+    opacity: 1;
+  }
+
   &:focus:not(:focus-visible) {
     box-shadow: none;
     outline: none;
@@ -351,6 +355,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [imgHovered, setImgHovered] = useState(false)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [variantImages, setVariantImages] = useState(image)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (image && image.length > 0) {
@@ -423,13 +428,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
   }
 
   const handleBlur = () => {
-    setHovered(false)
-    setImgHovered(false)
+    // Delay setting hovered to false to allow focus to move within the CardContainer
+    setTimeout(() => {
+      if (
+        cardRef.current &&
+        !cardRef.current.contains(document.activeElement)
+      ) {
+        setHovered(false)
+        setImgHovered(false)
+      }
+    }, 0)
   }
 
   const handleMouseLeave = () => {
-    setHovered(false)
-    setImgHovered(false)
+    // Only set hovered to false if no element inside is focused
+    if (cardRef.current && !cardRef.current.contains(document.activeElement)) {
+      setHovered(false)
+      setImgHovered(false)
+    }
   }
 
   if (loading || !currentImage) {
@@ -441,6 +457,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       $isLoading={loading}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={handleMouseLeave}
+      ref={cardRef}
     >
       <ImageWrapper
         onMouseEnter={() => setImgHovered(true)}
@@ -474,7 +491,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             $direction="left"
             onClick={handlePrevClick}
             onKeyDown={(e: React.KeyboardEvent<SVGElement>) =>
-              handleKeyDown(e, 'next')
+              handleKeyDown(e, 'prev')
             }
             tabIndex={0}
             role="button"
