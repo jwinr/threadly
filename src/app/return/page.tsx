@@ -84,7 +84,7 @@ const ErrorSection = styled(SuccessSection)`
 
 type CheckoutSessionData = {
   status: string
-  customer_email: string
+  customerEmail: string
   fulfilled: boolean
 }
 
@@ -132,7 +132,7 @@ export default function Return() {
             throw new Error('Invalid session status')
           }
 
-          setCustomerEmail(data.customer_email)
+          setCustomerEmail(data.customerEmail)
 
           // Check if the session has already been fulfilled
           if (data.fulfilled) {
