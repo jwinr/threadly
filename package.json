@@ -49,7 +49,7 @@
     "sharp": "^0.33.5",
     "stripe": "^16.10.0",
     "styled-components": "^6.1.13",
-    "swiper": "^11.1.12"
+    "swiper": "^11.1.14"
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.25.2",
