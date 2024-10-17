@@ -12,14 +12,14 @@
     "snyk:test": "snyk test"
   },
   "dependencies": {
-    "@aws-amplify/adapter-nextjs": "^1.2.19",
+    "@aws-amplify/adapter-nextjs": "^1.2.22",
     "@stripe/react-stripe-js": "^2.8.0",
     "@stripe/stripe-js": "^4.4.0",
     "@tanstack/react-query": "^5.56.2",
     "@types/amazon-cognito-auth-js": "^1.3.4",
     "@types/stripe-v3": "^3.1.33",
     "autoprefixer": "^10.4.20",
-    "aws-amplify": "^6.6.2",
+    "aws-amplify": "^6.6.0",
     "aws-jwt-verify": "^4.0.1",
     "aws-sdk": "^2.1691.0",
     "axios": "^1.7.7",
