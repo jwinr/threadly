@@ -56,6 +56,14 @@
 - Enables product favoriting so users can easily revisit and access preferred items.
 - Allows users to view and submit reviews on products, helping them make informed purchasing decisions.
 - Supports guest users by allowing them to add products to their cart without an account, and syncs their cart if they register later.
+<br>
+
+<div align="center">
+  <a href="https://github.com/jwinr/threadly">
+    <img src="https://i.imgur.com/3wFdt5w.gif" alt="Threadly Mega Menu" />
+  </a>
+</div>
+<br>
 
 <p>For an in-depth look at the implementation details and design decisions, please visit the Threadly project page on my portfolio website.</p>
 
