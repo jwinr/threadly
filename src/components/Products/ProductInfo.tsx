@@ -175,8 +175,10 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
     return <LoadingProduct />
   }
 
+  console.log(product)
+
   // Access color variants
-  const selectedColorVariant = product.color_variants?.[0]
+  const selectedColorVariant = product.variants?.[0]
   // Access size variants from the selected color variant
   const selectedSize = selectedColorVariant?.sizes?.[0]
 

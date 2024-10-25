@@ -20,11 +20,13 @@ interface SizeVariant {
   size?: string
 }
 
+// TODO: Pull the interfaces out from the shared product file
+
 interface ProductVariant {
   size: string
   length: string
   waist: string
-  color_sku: string
+  sku: string
   color: string
   color_swatch_url: string
   sizes: SizeVariant[]
@@ -144,7 +146,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
   useEffect(() => {
     if (product && product.selectedVariant) {
       const defaultAttributes = {
-        color: product.selectedVariant.color_sku,
+        color: product.selectedVariant.sku,
         color_name: product.selectedVariant.color,
         waist: product.selectedVariant.waist || '',
         length: product.selectedVariant.length || '',
@@ -153,7 +155,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
 
       // Find the default size variant
       const defaultSizeVariant = product.variants?.find(
-        (variant) => variant.color_sku === defaultAttributes.color
+        (variant) => variant.sku === defaultAttributes.color
       )?.sizes[0]
 
       if (defaultSizeVariant) {
@@ -183,11 +185,13 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }))
 
     if (attributeType === 'color') {
+      console.log('Selected color:', value)
       const selectedVariant = product?.variants?.find(
-        (variant: { color_sku: string }) => variant.color_sku === value
+        (variant: { sku: string }) => variant.sku === value
       )
       if (selectedVariant) {
-        router.push(`/products/${product?.slug}/${selectedVariant.color_sku}`)
+        console.log('Selected variant:', selectedVariant)
+        router.push(`/products/${product?.slug}/${selectedVariant.sku}`)
       }
     }
 
@@ -196,7 +200,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
 
   const availableSizes =
     product?.variants?.find(
-      (variant) => variant.color_sku === selectedAttributes.color
+      (variant) => variant.sku === selectedAttributes.color
     )?.sizes || []
 
   const handleSizeSelection = (attributeType: string, value: string) => {
@@ -215,7 +219,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }
 
     const selectedVariant = product?.variants?.find(
-      (variant) => variant.color_sku === attributes.color
+      (variant) => variant.sku === attributes.color
     )
 
     if (!selectedVariant) {
@@ -270,24 +274,18 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
             <div key={index}>
               <ColorSwatch
                 aria-label={`${option.color}${
-                  selectedAttributes.color === option.color_sku
+                  selectedAttributes.color === option.sku
                     ? ' currently selected'
                     : ''
                 }`}
-                selected={selectedAttributes.color === option.color_sku}
+                selected={selectedAttributes.color === option.sku}
                 onClick={() =>
-                  handleAttributeSelection(
-                    'color',
-                    option.color_sku,
-                    option.color
-                  )
+                  handleAttributeSelection('color', option.sku, option.color)
                 }
                 onMouseEnter={() => handleMouseEnter(option.color)}
                 onMouseLeave={handleMouseLeave}
                 className={
-                  selectedAttributes.color === option.color_sku
-                    ? 'selected'
-                    : ''
+                  selectedAttributes.color === option.sku ? 'selected' : ''
                 }
               >
                 {option.color_swatch_url && (

@@ -15,6 +15,7 @@ export interface Product {
   specifications?: ProductSpecification[]
   color_variants?: ProductColorVariant[]
   size_variants?: ProductSizeVariant[]
+  variants?: ProductVariant[]
   features?: ProductFeature[]
   questions?: ProductQuestion[]
   images?: ProductImage[]
@@ -22,6 +23,25 @@ export interface Product {
   tags?: ProductTag[]
   reviews?: Review[]
   related_products?: RelatedProduct[]
+}
+
+interface ProductVariant {
+  size: string
+  length: string
+  waist: string
+  sku: string
+  color: string
+  color_swatch_url: string
+  sizes: SizeVariant[]
+}
+
+interface SizeVariant {
+  size_variant_id: string
+  waist?: string
+  length?: string
+  size?: string
+  price?: number
+  sale_price?: number
 }
 
 export interface ProductSpecification {
