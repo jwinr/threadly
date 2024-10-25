@@ -62,10 +62,21 @@ export default function Checkout() {
         return null
       }
 
-      const customer = userAttributes?.stripe_customer_id
+      // Fetch the Stripe customer ID from the backend
+      const customerResponse = await fetch('/api/stripe-id', {
+        method: 'GET',
+      })
+
+      if (!customerResponse.ok) {
+        console.log('Failed to fetch Stripe customer ID')
+        return ''
+      }
+
+      const { stripe_customer_id: customer } = await customerResponse.json()
+
       if (!customer) {
         console.log('Customer is not defined')
-        return null
+        return ''
       }
 
       const response = await fetchWithCsrf('/api/checkout_sessions', {
