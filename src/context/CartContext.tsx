@@ -352,7 +352,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
           throw new Error(INVALID_JWT_TOKEN_ERROR)
         }
 
-        const response = await fetch('/api/cart', {
+        const response = await fetchWithCsrf('/api/cart', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

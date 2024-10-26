@@ -147,7 +147,9 @@ export default function Return() {
               `/api/checkout/fulfill?session_id=${sessionId}`,
               {
                 method: 'GET',
-                headers: {},
+                headers: {
+                  'Content-Type': 'application/json',
+                },
               }
             )
           }

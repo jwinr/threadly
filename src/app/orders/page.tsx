@@ -83,13 +83,15 @@ const ItemImage = styled.img`
 const Orders: React.FC = () => {
   const { userAttributes } = useContext(UserContext)
   const [orders, setOrders] = useState<Order[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setIsLoading] = useState(true)
   const formatCurrency = useCurrencyFormatter()
   const router = useRouter()
 
   useEffect(() => {
-    if (!userAttributes?.sub) {
+    if (!userAttributes || !userAttributes.user_uuid) {
       // If the user is not signed in, redirect them to the login page
+      // We'll also reset the loading state just in case there's a change to the user state
+      setIsLoading(true)
       router.replace('/login')
       return
     }
@@ -97,14 +99,14 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          `/api/orders?cognitoSub=${userAttributes.sub}`
+          `/api/orders?id=${userAttributes.user_uuid}`
         )
         const data: Order[] = (await response.json()) as Order[]
         setOrders(data)
       } catch (error) {
         console.error('Error fetching orders:', error)
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
