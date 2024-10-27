@@ -64,14 +64,11 @@ const Cart: React.FC = () => {
 
   useEffect(() => {
     const fetchCart = async () => {
-      console.log('userAttributes:', userAttributes)
-
       if (!userAttributes || !userAttributes.user_uuid) {
         // For guest users, load from localStorage and fetch additional details
         const localCart: CartItem[] = JSON.parse(
           localStorage.getItem('cart') || '[]'
         ) as CartItem[]
-        console.log('localCart:', localCart)
 
         if (localCart.length > 0) {
           // Get unique variantIds from the local cart items
@@ -94,7 +91,6 @@ const Cart: React.FC = () => {
             }))
 
             setCart?.(detailedCart)
-            console.log('Cart set with detailed items for guest:', detailedCart)
           } catch (error) {
             console.error(
               'Error fetching detailed cart items for guest:',
@@ -106,7 +102,6 @@ const Cart: React.FC = () => {
         }
 
         setIsLoading(false)
-        console.log('Loading state set to false for guest user')
         return
       }
 
@@ -239,8 +234,12 @@ const Cart: React.FC = () => {
                           }}
                           isMobileView={isMobileView}
                           deliveryDate={deliveryDate}
-                          handleQuantityChange={() => void handleQuantityChange}
-                          removeFromCart={() => void removeFromCart}
+                          handleQuantityChange={(variantId, quantity) =>
+                            handleQuantityChange?.(variantId, quantity)
+                          }
+                          removeFromCart={(variantId) =>
+                            removeFromCart?.(variantId)
+                          }
                           index={index}
                         />
                       ))
