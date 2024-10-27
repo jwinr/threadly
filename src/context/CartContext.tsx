@@ -63,7 +63,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const hasSyncedCart = useRef<boolean>(false)
 
   const fetchCart = useCallback(async () => {
-    if (userAttributes && userAttributes.user_uuid) {
+    if (userAttributes?.user_uuid) {
+      // Fetch from server for logged-in users
       try {
         const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
         const data: CartItem[] = (await response.json()) as CartItem[]
@@ -72,9 +73,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         console.error('Error fetching cart:', error)
       }
     } else {
+      // Fetch from localStorage for guest users
+      console.log('Fetching cart from local storage')
       const localCart = JSON.parse(
         localStorage.getItem('cart') || '[]'
       ) as CartItem[]
+
       if (localCart.length > 0) {
         setCart(localCart)
       }
@@ -141,8 +145,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             localCart.push({
               variant_id: variantId,
               quantity,
-              product_stripe_sale_price_id: 0,
-              product_stripe_price_id: 0,
             })
           }
 

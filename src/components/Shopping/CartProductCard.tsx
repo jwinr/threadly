@@ -125,7 +125,6 @@ const OriginalPrice = styled.span`
 
 const ShippingWrapper = styled.div`
   display: flex;
-  padding: 0px 32px;
   flex-basis: 33%;
   max-width: 33%;
   order: 2;
@@ -143,9 +142,15 @@ const ShippingWrapper = styled.div`
 const ShippingText = styled.div`
   display: flex;
   flex-direction: column;
+  color: #353a44;
 
   span {
     font-size: 14px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 600;
   }
 `
 
@@ -153,7 +158,7 @@ const ShipIconWrapper = styled.div`
   display: flex;
   align-items: center;
   height: fit-content;
-  gap: 5px;
+  gap: 10px;
 
   .svg {
     @media (max-width: 768px) {
@@ -208,7 +213,6 @@ const QuantityWrapper = styled.div`
   max-width: 25%;
   flex-flow: wrap;
   align-items: flex-start;
-  height: min-content;
   order: 3;
 
   @media (max-width: 768px) {
@@ -260,6 +264,8 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
   const formatCurrency = useCurrencyFormatter()
   const isOnSale = !!item.product_sale_price
 
+  console.log(item)
+
   return (
     <ProductCard>
       <ImageWrapper
@@ -295,7 +301,9 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
             <ShipIconWrapper>
               <ShipBox />
               <ShippingText>
-                <span>Free Shipping</span>
+                <span>
+                  <p>Free Shipping</p>
+                </span>
                 <span>Get it by {deliveryDate}</span>
               </ShippingText>
             </ShipIconWrapper>
@@ -370,7 +378,9 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
             <ShipIconWrapper>
               <ShipBox />
               <ShippingText>
-                <span>Free Shipping</span>
+                <span>
+                  <p>Free Shipping</p>
+                </span>
                 <span>Get it by {deliveryDate}</span>
               </ShippingText>
             </ShipIconWrapper>

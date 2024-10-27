@@ -64,52 +64,64 @@ const Cart: React.FC = () => {
 
   useEffect(() => {
     const fetchCart = async () => {
+      console.log('userAttributes:', userAttributes)
+
       if (!userAttributes || !userAttributes.user_uuid) {
-        // Wait until user_uuid is available before fetching
-        setIsLoading(true)
-        return
-      }
-      try {
-        if (userAttributes && userAttributes.user_uuid) {
-          const response = await fetch(
-            `/api/cart?id=${userAttributes.user_uuid}`
-          )
+        // For guest users, load from localStorage and fetch additional details
+        const localCart: CartItem[] = JSON.parse(
+          localStorage.getItem('cart') || '[]'
+        ) as CartItem[]
+        console.log('localCart:', localCart)
 
-          const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
+        if (localCart.length > 0) {
+          // Get unique variantIds from the local cart items
+          const uniqueVariantIds = [
+            ...new Set(localCart.map((item) => item.variant_id)),
+          ].join(',')
 
-          setCart?.(
-            data.map((item: FavoriteItem) => ({
-              ...item,
-              quantity: item.quantity || 1,
-              variant_id: item.variant_id || 0,
-            })) as CartItem[]
-          )
-        } else {
-          console.error('user_uuid is null or undefined')
-          const localCart: CartItem[] = JSON.parse(
-            localStorage.getItem('cart') || '[]'
-          ) as CartItem[]
-          if (localCart.length > 0) {
-            const uniqueVariantIds = [
-              ...new Set(localCart.map((item: CartItem) => item.variant_id)),
-            ]
-            const variantIds = uniqueVariantIds.join(',')
-            const response = await fetch(`/api/cart?variantIds=${variantIds}`)
+          try {
+            // Fetch detailed product information using variantIds
+            const response = await fetch(
+              `/api/cart?variantIds=${uniqueVariantIds}`
+            )
             const data: FavoriteItem[] =
               (await response.json()) as FavoriteItem[]
 
-            const detailedCart = localCart.map((item: CartItem) => ({
+            // Merge local cart items with fetched product details
+            const detailedCart = localCart.map((item) => ({
               ...item,
-              ...data.find(
-                (product: FavoriteItem) =>
-                  product.variant_id === item.variant_id
-              ),
-              quantity: item.quantity,
+              ...data.find((product) => product.variant_id === item.variant_id),
             }))
 
             setCart?.(detailedCart)
+            console.log('Cart set with detailed items for guest:', detailedCart)
+          } catch (error) {
+            console.error(
+              'Error fetching detailed cart items for guest:',
+              error
+            )
           }
+        } else {
+          setCart?.(localCart) // Set empty cart if nothing in localStorage
         }
+
+        setIsLoading(false)
+        console.log('Loading state set to false for guest user')
+        return
+      }
+
+      // For logged-in users, fetch the cart from the server
+      try {
+        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
+        const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
+
+        setCart?.(
+          data.map((item: FavoriteItem) => ({
+            ...item,
+            quantity: item.quantity || 1,
+            variant_id: item.variant_id || 0,
+          })) as CartItem[]
+        )
       } catch (error) {
         console.error('Error fetching cart:', error)
       } finally {
@@ -122,27 +134,31 @@ const Cart: React.FC = () => {
 
   const fetchFavorites = async (newOffset = 0) => {
     if (!userAttributes || !userAttributes.user_uuid) {
-      // Wait until user_uuid is available before fetching
-      setIsLoading(true)
+      // For guests, ensure favorites are empty
+      setFavorites([])
       return
     }
+
     try {
+      setIsLoading(true)
       const response = await fetch(
-        `/api/favorites?id=${userAttributes?.user_uuid}&limit=5&offset=${newOffset}`
+        `/api/favorites?id=${userAttributes.user_uuid}&limit=5&offset=${newOffset}`
       )
-      const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
-      setFavorites((prevFavorites: FavoriteItem[]) => [
-        ...prevFavorites,
-        ...data,
-      ])
+      const data = await response.json()
+      setFavorites((prevFavorites) => [...prevFavorites, ...data])
       setOffset(newOffset + 5)
     } catch (error) {
       console.error('Error fetching favorites:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    void fetchFavorites()
+    // Only call fetchFavorites if the user is signed in
+    if (userAttributes?.user_uuid) {
+      fetchFavorites()
+    }
   }, [userAttributes])
 
   const calculateTotal = (cart: CartItem[]) => {

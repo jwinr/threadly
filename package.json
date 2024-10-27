@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --experimental-https",
     "build": "GENERATE_SOURCEMAP=false next build",
     "start": "next start",
     "lint": "eslint .",
