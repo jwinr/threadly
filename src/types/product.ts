@@ -9,6 +9,8 @@ export interface Product {
   brand?: Brand // Optional relationship to the `Brand` interface
   category_id?: number // Foreign key to `categories`
   category?: Category // Optional relationship to the `Category` interface
+  category_name?: string // Optional, as it can be nullable
+  category_slug?: string // Optional, as it can be nullable
   stripe_product_id?: string
   created_at?: string
   updated_at?: string

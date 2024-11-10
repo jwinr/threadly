@@ -74,6 +74,7 @@ function ProductDetails() {
         loading={isLoading}
         categoryName={categoryName}
         categorySlug={categorySlug}
+        productName={product?.name}
       />
       <PageWrapper>
         <MainSection>

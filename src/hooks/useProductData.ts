@@ -39,8 +39,8 @@ const useProductData = (
 
   return {
     product,
-    categoryName: product?.category?.name,
-    categorySlug: product?.category?.slug,
+    categoryName: product?.category_name,
+    categorySlug: product?.category_slug,
     isLoading,
     error,
   }
