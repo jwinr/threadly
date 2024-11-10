@@ -13,13 +13,22 @@
   <p align="center">
     <br />
     <br />
-    <a href="https://github.com/jwinr/threadly"><strong>Explore the docs »</strong></a>
+    <a href="https://jwinters.tech/threadly"><strong>View case study »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/jwinr/threadly">View Demo</a>
-    ·
-    <a href="https://github.com/jwinr/threadly/issues">Report Bug</a>
   </p>
+
+[![React.js][React-img]][React-url]
+[![Next.js][Next-img]][Next-url]
+[![NodeJS][NodeJS-img]][NodeJS-url]
+[![React Query][ReactQuery-img]][ReactQuery-url]
+[![AWS][AWS-img]][AWS-url]
+[![PostgreSQL][Postgre-img]][Postgre-url]
+[![StyledComponents][StyledComponents-img]][StyledComponents-url]
+[![Stripe][Stripe-img]][Stripe-url]
+[![TypeScript][TypeScript-img]][TypeScript-url]
+[![GitHubActions][GitHubActions-img]][GitHubActions-url]
+[![Jest][Jest-img]][Jest-url]
 </div>
 
 <!-- ABOUT THE PROJECT -->
@@ -58,28 +67,15 @@
 - Supports guest users by allowing them to add products to their cart without an account, and syncs their cart if they register later.
 <br>
 
-<div align="center">
-  <a href="https://github.com/jwinr/threadly">
-    <img src="https://i.imgur.com/3wFdt5w.gif" alt="Threadly Mega Menu" />
-  </a>
-</div>
+> [!NOTE]
+> The following demonstration was recorded with a development build. It does not showcase every feature and is subject to change.
+<br>
+
+https://github.com/user-attachments/assets/76a820c4-d7f8-4d6b-9af1-e45e2b20ffc0
+
 <br>
 
 <p>For an in-depth look at the implementation details and design decisions, please visit the Threadly project page on my portfolio website.</p>
-
-### Built With
-
-[![React.js][React-img]][React-url]
-[![Next.js][Next-img]][Next-url]
-[![NodeJS][NodeJS-img]][NodeJS-url]
-[![React Query][ReactQuery-img]][ReactQuery-url]
-[![AWS][AWS-img]][AWS-url]
-[![PostgreSQL][Postgre-img]][Postgre-url]
-[![StyledComponents][StyledComponents-img]][StyledComponents-url]
-[![Stripe][Stripe-img]][Stripe-url]
-[![TypeScript][TypeScript-img]][TypeScript-url]
-[![GitHubActions][GitHubActions-img]][GitHubActions-url]
-[![Jest][Jest-img]][Jest-url]
 
 <!-- LICENSE -->
 
