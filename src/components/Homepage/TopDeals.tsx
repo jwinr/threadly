@@ -147,18 +147,8 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
 
   useEffect(() => {
     const fetchDeals = async () => {
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY
-      if (!apiKey) {
-        console.error('API key is missing')
-        return
-      }
-
       try {
-        const response = await fetch('/api/deals', {
-          headers: {
-            'x-api-key': apiKey,
-          },
-        })
+        const response = await fetch('/api/deals')
         const data = (await response.json()) as Deal[]
         setDeals(data)
       } catch (error) {
@@ -166,7 +156,7 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
       }
     }
 
-    void fetchDeals()
+    fetchDeals()
   }, [])
 
   const loveDeals = deals.filter((deal) => deal.category === 'deals_love')
@@ -175,77 +165,77 @@ const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
     <Container ref={ref} className={props.className}>
       {isMobileView
         ? loveDeals.map((deal, index) => (
-            <ItemContainer key={index}>
-              <Link
-                href={`products/${deal.slug}`}
-                aria-label={`View details of ${deal.name}`}
-              >
-                <ImgContainer>
-                  <Image
-                    alt={deal.name}
-                    src={deal.image_url || '/images/products/placeholder.jpg'}
-                    width={1540}
-                    height={649}
-                  />
-                </ImgContainer>
-                <DetailWrapper>
-                  <Title>{deal.name}</Title>
-                  <PriceContainer>
-                    <Price>
-                      ${(deal.price - deal.discount_amount).toFixed(2)}
-                    </Price>
-                    <PriceText>
-                      reg <OriginalPrice>${deal.price}</OriginalPrice>
-                    </PriceText>
-                    <SaleText>Sale</SaleText>
-                  </PriceContainer>
-                </DetailWrapper>
-              </Link>
-              <ButtonWrapper>
-                <AddToCartButton
-                  sizeVariantId={deal.product_id}
-                  quantity={1}
-                  productName={deal.name}
+          <ItemContainer key={index}>
+            <Link
+              href={`products/${deal.slug}`}
+              aria-label={`View details of ${deal.name}`}
+            >
+              <ImgContainer>
+                <Image
+                  alt={deal.name}
+                  src={deal.image_url || '/images/products/placeholder.jpg'}
+                  width={1540}
+                  height={649}
                 />
-              </ButtonWrapper>
-            </ItemContainer>
-          ))
+              </ImgContainer>
+              <DetailWrapper>
+                <Title>{deal.name}</Title>
+                <PriceContainer>
+                  <Price>
+                    ${(deal.price - deal.discount_amount).toFixed(2)}
+                  </Price>
+                  <PriceText>
+                    reg <OriginalPrice>${deal.price}</OriginalPrice>
+                  </PriceText>
+                  <SaleText>Sale</SaleText>
+                </PriceContainer>
+              </DetailWrapper>
+            </Link>
+            <ButtonWrapper>
+              <AddToCartButton
+                sizeVariantId={deal.product_id}
+                quantity={1}
+                productName={deal.name}
+              />
+            </ButtonWrapper>
+          </ItemContainer>
+        ))
         : loveDeals.map((deal, index) => (
-            <ItemContainer key={index}>
-              <Link
-                href={`products/${deal.slug}`}
-                aria-label={`View details of ${deal.name}`}
-              >
-                <ImgContainer>
-                  <Image
-                    alt={deal.name}
-                    src={deal.image_url || '/images/products/placeholder.jpg'}
-                    width={1540}
-                    height={649}
-                  />
-                </ImgContainer>
-                <DetailWrapper>
-                  <Title>{deal.name}</Title>
-                  <PriceContainer>
-                    <Price>
-                      ${(deal.price - deal.discount_amount).toFixed(2)}
-                    </Price>
-                    <PriceText>
-                      reg <OriginalPrice>${deal.price}</OriginalPrice>
-                    </PriceText>
-                    <SaleText>Sale</SaleText>
-                  </PriceContainer>
-                </DetailWrapper>
-              </Link>
-              <ButtonWrapper>
-                <AddToCartButton
-                  sizeVariantId={deal.product_id}
-                  quantity={1}
-                  productName={deal.name}
+          <ItemContainer key={index}>
+            <Link
+              href={`products/${deal.slug}`}
+              aria-label={`View details of ${deal.name}`}
+            >
+              <ImgContainer>
+                <Image
+                  alt={deal.name}
+                  src={deal.image_url || '/images/products/placeholder.jpg'}
+                  width={1540}
+                  height={649}
                 />
-              </ButtonWrapper>
-            </ItemContainer>
-          ))}
+              </ImgContainer>
+              <DetailWrapper>
+                <Title>{deal.name}</Title>
+                <PriceContainer>
+                  <Price>
+                    ${(deal.price - deal.discount_amount).toFixed(2)}
+                  </Price>
+                  <PriceText>
+                    reg <OriginalPrice>${deal.price}</OriginalPrice>
+                  </PriceText>
+                  <SaleText>Sale</SaleText>
+                </PriceContainer>
+              </DetailWrapper>
+            </Link>
+            <ButtonWrapper>
+              <AddToCartButton
+                sizeVariantId={deal.product_id}
+                quantity={1}
+                productName={deal.name}
+              />
+            </ButtonWrapper>
+          </ItemContainer>
+        ))}
     </Container>
   )
 })

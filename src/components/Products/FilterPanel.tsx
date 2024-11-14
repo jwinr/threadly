@@ -11,7 +11,7 @@ import useScrollControl from 'src/hooks/useScrollControl'
 interface Attribute {
   attribute_type: string
   attribute_values: string[]
-  attribute_name: string // Add the missing property
+  attribute_name: string
 }
 
 interface FilterPanelProps {
@@ -255,9 +255,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                           id={`price-${priceRange}`}
                           label={priceRange}
                           checked={selectedPriceRanges.includes(priceRange)}
-                          onChange={() =>
-                            toggleSelection('price', priceRange, true)
-                          }
+                          onChange={() => {
+                            toggleSelection(priceRange, priceRange, true)
+                          }}
                           data-type="price"
                         />
                       ))}
@@ -274,15 +274,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                         {attribute.attribute_values.map((value, valueIndex) => (
                           <Checkbox
                             key={valueIndex}
-                            id={`attribute-${attribute.attribute_type}-${value}`}
+                            id={`attribute-${attribute.attribute_name}-${value}`}
                             label={value}
                             checked={selectedAttributes[
-                              attribute.attribute_type
+                              attribute.attribute_name
                             ]?.includes(value)}
                             onChange={() =>
-                              toggleSelection(attribute.attribute_type, value)
+                              toggleSelection(attribute.attribute_name, value)
                             }
-                            data-type={attribute.attribute_type}
+                            data-type={attribute.attribute_name}
                           />
                         ))}
                       </div>

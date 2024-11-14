@@ -53,12 +53,7 @@ const fetchCategoryData = async (
     : ''
 
   const response = await fetch(
-    `/api/categories/${slug}?page=${currentPage}${filterQuery}`,
-    {
-      headers: {
-        'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-      },
-    }
+    `/api/categories/${slug}?page=${currentPage}${filterQuery}`
   )
 
   if (!response.ok) {

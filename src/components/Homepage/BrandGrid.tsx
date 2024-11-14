@@ -44,11 +44,7 @@ const BrandGrid: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/brands', {
-          headers: {
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY as string,
-          },
-        })
+        const response = await fetch('/api/brands')
         if (response.ok) {
           const data: Brand[] = (await response.json()) as Brand[]
           setBrandsData(data)

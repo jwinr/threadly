@@ -65,12 +65,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
         try {
           previousUserUuid.current = userAttributes.user_uuid
           const response = await fetch(
-            `/api/favorites?id=${userAttributes.user_uuid}`,
-            {
-              headers: {
-                'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-              },
-            }
+            `/api/favorites?id=${userAttributes.user_uuid}`
           )
           const data = (await response.json()) as Favorite[]
           setFavorites(Array.isArray(data) ? data : [])
@@ -112,10 +107,6 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
     try {
       await fetch('/api/favorites', {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
-        },
         body: JSON.stringify({ id: userAttributes.user_uuid, productId }),
       })
       setFavorites((prevFavorites) =>
