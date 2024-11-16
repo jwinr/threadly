@@ -62,15 +62,11 @@ const PopoverContainer = styled.div<{ color: string; $padding: string }>`
   max-width: 300px;
 `
 
-const Arrow = styled(PopArrow)<{ position: string; offset: number }>`
+const Arrow = styled(PopArrow) <{ color: string; position: string; offset: number }>`
   position: absolute;
   width: 21px;
   height: 9px;
-
-  & svg > path {
-    color: ${({ color }) =>
-      color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff'};
-  }
+  color: ${({ color }) => (color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff')};
 
   ${({ position, offset }) =>
     position === 'top' &&
@@ -214,16 +210,28 @@ const Popover: React.FC<PopoverProps> = ({
     const offset =
       position === 'top' || position === 'bottom'
         ? triggerRect.left +
-          triggerRect.width / 2 -
-          left -
-          wrapperRect.width / 2
+        triggerRect.width / 2 -
+        left -
+        wrapperRect.width / 2
         : triggerRect.top +
-          triggerRect.height / 2 -
-          top -
-          wrapperRect.height / 2
+        triggerRect.height / 2 -
+        top -
+        wrapperRect.height / 2
 
-    setCoords({ top, left })
-    setArrowOffset(offset)
+    // Only update state if values have actually changed
+    setCoords((prevCoords) => {
+      if (prevCoords.top !== top || prevCoords.left !== left) {
+        return { top, left }
+      }
+      return prevCoords
+    })
+
+    setArrowOffset((prevOffset) => {
+      if (prevOffset !== offset) {
+        return offset
+      }
+      return prevOffset
+    })
   }
 
   const isOutOfViewport = (rect: DOMRect) =>
@@ -240,12 +248,6 @@ const Popover: React.FC<PopoverProps> = ({
       (ref) => ref.current && !ref.current.contains(event.target as Node)
     )
   }
-
-  useLayoutEffect(() => {
-    if (visible) {
-      calculatePosition()
-    }
-  }, [visible, position, content, fixed])
 
   useLayoutEffect(() => {
     const handleScroll = () => {
@@ -284,6 +286,17 @@ const Popover: React.FC<PopoverProps> = ({
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [visible])
+
+  // Hack: Watch for dimension changes and recalculate the position
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      if (visible) calculatePosition();
+    });
+
+    if (wrapperRef.current) observer.observe(wrapperRef.current);
+
+    return () => observer.disconnect();
+  }, [visible]);
 
   useLayoutEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -366,7 +379,7 @@ const Popover: React.FC<PopoverProps> = ({
             >
               <PopoverTransitionContainer ref={nodeRef}>
                 {showArrow && (
-                  <Arrow position={position} offset={arrowOffset} />
+                  <Arrow color={color} position={position} offset={arrowOffset} />
                 )}
                 <PopoverContainer color={color} $padding={padding}>
                   {content}

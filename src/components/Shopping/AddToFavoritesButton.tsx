@@ -42,7 +42,7 @@ interface IconProps {
   $isAdding?: boolean
 }
 
-const IconOutline = styled(LiaHeart)<IconProps>`
+const IconOutline = styled(LiaHeart) <IconProps>`
   ${({ $loading, $isAdding }) =>
     $loading &&
     $isAdding &&
@@ -51,7 +51,7 @@ const IconOutline = styled(LiaHeart)<IconProps>`
     `}
 `
 
-const IconFilled = styled(LiaHeartSolid)<IconProps>`
+const IconFilled = styled(LiaHeartSolid) <IconProps>`
   ${({ $loading, $isAdding }) =>
     $loading &&
     $isAdding &&
