@@ -78,6 +78,19 @@ function ProductDetails() {
       />
       <PageWrapper>
         <MainSection>
+          {!isMobileView && (
+            <ProductThumbnails
+              loading={isLoading}
+              images={
+                (product && 'images' in product ? product.images : []) as {
+                  image_url: string
+                  alt_text: string
+                }[]
+              }
+              hoveredImage={hoveredImage}
+              onThumbnailHover={handleThumbnailHover}
+            />
+          )}
           <ProductImageGallery
             loading={isLoading}
             product={product as Product}
@@ -107,19 +120,6 @@ function ProductDetails() {
             </AddCartWrapper>
           </InfoCardWrapper>
         </MainSection>
-        {!isMobileView && (
-          <ProductThumbnails
-            loading={isLoading}
-            images={
-              (product && 'images' in product ? product.images : []) as {
-                image_url: string
-                alt_text: string
-              }[]
-            }
-            hoveredImage={hoveredImage}
-            onThumbnailHover={handleThumbnailHover}
-          />
-        )}
         <ProductOverview loading={isLoading} product={product as Product} />
         <ProductReviews
           loading={isLoading}

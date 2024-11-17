@@ -10,9 +10,8 @@ interface ProductThumbnailProps {
 
 const AdditionalImageContainer = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 20px;
-  margin-top: 20px;
-  width: 50%;
   order: 3; // Make sure additional images are below the main image in mobile view
 
   @media (min-width: 768px) {
@@ -21,7 +20,6 @@ const AdditionalImageContainer = styled.div`
 `
 
 const AdditionalImageThumbnail = styled.div`
-  border: 1px solid var(--sc-color-border-gray);
   border-radius: 6px;
   cursor: pointer;
   width: 128px;

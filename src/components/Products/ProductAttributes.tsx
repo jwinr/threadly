@@ -108,14 +108,16 @@ const ColorSwatch = styled.button<{ selected: boolean }>`
 
 const SizeOption = styled.button<{ selected: boolean }>`
   border: 1px solid ${({ selected }) => (selected ? 'black' : '#ddd')};
-  background-color: ${({ selected }) => (selected ? '#fff' : '#f7f7f7')};
   color: ${({ selected }) => (selected ? 'black' : '#555')};
-  padding: 5px 10px;
+  font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
+  font-size: 16px;
+  padding: 10px 15px;
   border-radius: 5px;
+  min-width: 45px;
   cursor: pointer;
   transition:
-    border-color 0.3s ease-in-out,
     background-color 0.3s ease-in-out;
+  box-shadow: ${({ selected }) => (selected ? '0 0 0 1px black' : 'none')};
 
   &:hover {
     border-color: black;
@@ -141,7 +143,6 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
       length: '',
       size: '',
     })
-  const [hoveredColorName, setHoveredColorName] = useState('')
 
   useEffect(() => {
     if (product && product.selectedVariant) {
@@ -248,14 +249,6 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     }
   }
 
-  const handleMouseEnter = (colorName: string) => {
-    setHoveredColorName(colorName)
-  }
-
-  const handleMouseLeave = () => {
-    setHoveredColorName('')
-  }
-
   if (loading) {
     return <LoaderAttributes />
   }
@@ -266,24 +259,21 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
         <h3>
           Color:{' '}
           <span className="color-name">
-            {hoveredColorName || selectedAttributes.color_name}
+            {selectedAttributes.color_name}
           </span>
         </h3>
         <AttributeOptions>
           {product?.variants?.map((option, index) => (
             <div key={index}>
               <ColorSwatch
-                aria-label={`${option.color}${
-                  selectedAttributes.color === option.sku
-                    ? ' currently selected'
-                    : ''
-                }`}
+                aria-label={`${option.color}${selectedAttributes.color === option.sku
+                  ? ' currently selected'
+                  : ''
+                  }`}
                 selected={selectedAttributes.color === option.sku}
                 onClick={() =>
                   handleAttributeSelection('color', option.sku, option.color)
                 }
-                onMouseEnter={() => handleMouseEnter(option.color)}
-                onMouseLeave={handleMouseLeave}
                 className={
                   selectedAttributes.color === option.sku ? 'selected' : ''
                 }

@@ -28,7 +28,7 @@ const CarouselContainer = styled.div`
 
 const LoaderImageContainer = styled.div`
   width: 100%;
-  height: 500px;
+  height: 650px;
   border-radius: 8px;
   background-color: #ededed;
   animation: loadingAnimation 1s ease-in-out infinite;
@@ -48,7 +48,7 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
   border-style: solid;
   border-width: 1px;
   border-color: ${({ $zoomed }) => ($zoomed ? '#000' : 'transparent')};
-  height: 500px;
+  height: 650px;
   background-color: var(--sc-color-white);
   overflow: hidden;
   position: relative;
@@ -62,7 +62,7 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
     width: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
     height: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
     transform-origin: ${({ $zoomed }) =>
-      $zoomed ? 'center center' : 'center center'};
+    $zoomed ? 'center center' : 'center center'};
     transform: ${({ $zoomed }) => ($zoomed ? 'scale(1.5)' : 'scale(1)')};
     transition: transform 0.3s ease;
     pointer-events: none;
@@ -80,7 +80,7 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
     width: 575px;
     flex-basis: 100%;
     min-width: 100%;
-    height: 500px;
+    height: 650px;
     display: flex;
     justify-content: center;
     align-items: center;
