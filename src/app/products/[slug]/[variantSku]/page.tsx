@@ -70,13 +70,13 @@ function ProductDetails() {
 
   return (
     <div>
-      <Breadcrumb
-        loading={isLoading}
-        categoryName={categoryName}
-        categorySlug={categorySlug}
-        productName={product?.name}
-      />
       <PageWrapper>
+        <Breadcrumb
+          loading={isLoading}
+          categoryName={categoryName}
+          categorySlug={categorySlug}
+          productName={product?.name}
+        />
         <MainSection>
           {!isMobileView && (
             <ProductThumbnails

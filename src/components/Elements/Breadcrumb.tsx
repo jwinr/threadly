@@ -6,14 +6,14 @@ import { useMobileView } from '@/context/MobileViewContext'
 
 const BreadWrapper = styled.nav`
   font-size: 14px;
-  margin: 10px 16px;
+  margin-bottom: 20px;
   display: inline-flex;
   align-items: center;
 `
 
 const LoadingBreadcrumb = styled.div`
   display: inline-flex;
-  margin: 10px 16px;
+  margin-bottom: 20px;
   width: 25%;
   height: 21px;
   background-color: #ededed;
@@ -36,7 +36,7 @@ const BreadcrumbLink = ({
     <Link href={href} aria-label={label}>
       {label}
     </Link>
-    {!isLast && <RiArrowDropRightLine />}
+    {!isLast && <RiArrowDropRightLine size={20} />}
   </span>
 )
 

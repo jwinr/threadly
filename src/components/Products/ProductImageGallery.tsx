@@ -28,6 +28,7 @@ const CarouselContainer = styled.div`
 
 const LoaderImageContainer = styled.div`
   width: 100%;
+  min-width: 50%;
   height: 650px;
   border-radius: 8px;
   background-color: #ededed;

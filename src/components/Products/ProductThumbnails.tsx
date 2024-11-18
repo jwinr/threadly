@@ -30,11 +30,6 @@ const AdditionalImageThumbnail = styled.div`
   position: relative;
   background-color: white;
 
-  &:focus-visible {
-    border: 2px solid var(--sc-color-blue-highlight);
-    padding: 2px; // Retain the image size when the border is present
-  }
-
   img {
     width: 100%;
     height: 100%;
@@ -72,11 +67,16 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
         <AdditionalImageThumbnail
           key={index}
           className={hoveredImage === index ? 'additional-image-hovered' : ''}
-          onMouseOver={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
+          onMouseOver={() => {
             onThumbnailHover(index)
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onThumbnailHover(index);
+            }
+          }}
+          tabIndex={0}
         >
           <Image
             src={item.image_url}

@@ -58,7 +58,7 @@ const AttributeSelection = styled.div`
   }
 
   .color-name {
-    margin-left: 10px;
+    margin-left: 5px;
     font-weight: normal;
     color: #333;
   }
@@ -84,9 +84,10 @@ const AttributeOptions = styled.div`
 `
 
 const ColorSwatch = styled.button<{ selected: boolean }>`
-  width: 24px;
-  height: 24px;
-  border: 2px solid ${({ selected }) => (selected ? 'black' : '#ddd')};
+  width: 28px;
+  height: 28px;
+  border: 2px solid transparent;
+  outline: 1px solid ${({ selected }) => (selected ? 'black' : 'transparent')};
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
@@ -94,10 +95,9 @@ const ColorSwatch = styled.button<{ selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: border-color 0.3s ease-in-out;
 
   &:hover {
-    border-color: black;
+    outline: 1px solid #c9c9c9;
   }
 
   &.disabled {
@@ -107,17 +107,18 @@ const ColorSwatch = styled.button<{ selected: boolean }>`
 `
 
 const SizeOption = styled.button<{ selected: boolean }>`
-  border: 1px solid ${({ selected }) => (selected ? 'black' : '#ddd')};
+  border: 2px solid ${({ selected }) => (selected ? 'black' : '#ddd')};
   color: ${({ selected }) => (selected ? 'black' : '#555')};
   font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
   font-size: 16px;
-  padding: 10px 15px;
   border-radius: 5px;
-  min-width: 45px;
+  width: 45px;
+  height: 45px;
   cursor: pointer;
-  transition:
-    background-color 0.3s ease-in-out;
-  box-shadow: ${({ selected }) => (selected ? '0 0 0 1px black' : 'none')};
+
+  &:focus-visible {
+    box-shadow: var(--s-top-shadow), var(--s-keyline) 0 0 0 var(--s-keyline-width), var(--s-focus-ring), var(--s-box-shadow);
+  }
 
   &:hover {
     border-color: black;

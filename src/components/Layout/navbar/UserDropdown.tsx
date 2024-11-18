@@ -362,7 +362,7 @@ function DropdownMenu({
             onMenuItemClick={onMenuItemClick}
             userButtonRef={userButtonRef}
           >
-            <span>Create Account</span>
+            <span>Create account</span>
           </DropdownItem>
           <DropdownItem
             href="/orders"
@@ -404,9 +404,9 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
         event.preventDefault()
         const sibling = event.currentTarget[direction]
         if (sibling) {
-          ;(sibling as HTMLElement).focus()
+          ; (sibling as HTMLElement).focus()
         } else if (event.currentTarget.parentNode) {
-          ;(event.currentTarget.parentNode[fallback] as HTMLElement).focus()
+          ; (event.currentTarget.parentNode[fallback] as HTMLElement).focus()
         }
       }
 
@@ -434,11 +434,11 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
 
           if (event.shiftKey) {
             if (userButtonIndex > 0) {
-              ;(focusableElements[userButtonIndex - 1] as HTMLElement).focus()
+              ; (focusableElements[userButtonIndex - 1] as HTMLElement).focus()
             }
           } else {
             if (userButtonIndex < focusableElements.length - 1) {
-              ;(focusableElements[userButtonIndex + 1] as HTMLElement).focus()
+              ; (focusableElements[userButtonIndex + 1] as HTMLElement).focus()
             }
           }
           break

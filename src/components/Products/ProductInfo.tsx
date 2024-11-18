@@ -37,12 +37,14 @@ const ProductNameWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  border-bottom: 1px solid var(--sc-color-border-gray);
   order: 0; // Make sure product details are at the top in mobile view
+`
 
-  h1 {
-    font-size: 18px;
-    margin-right: 45px;
-  }
+const ProductName = styled.h1`
+  font-size: 23px;
+  line-height: 0.9;
+  margin-bottom: 8px;
 `
 
 const ProductContainer = styled.div`
@@ -133,7 +135,6 @@ const ExchangeHeader = styled.p`
 
 const ExchangeBox = styled.div`
   display: flex;
-  align-items: center;
   margin-right: 8px;
 
   svg {
@@ -150,6 +151,7 @@ const ExchangeContent = styled.div`
 const ReviewWrapper = styled.div`
   display: flex;
   font-size: 14px;
+  margin: 5px 0;
 `
 
 const AddFavsWrapper = styled.div`
@@ -188,7 +190,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   return (
     <>
       <ProductNameWrapper>
-        <h1>{product.name}</h1>
+        <ProductName>{product.name}</ProductName>
         <AddFavsWrapper>
           <AddToFavoritesButton
             productId={product.product_id?.toString() || ''}
