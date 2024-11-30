@@ -217,7 +217,8 @@ const Login: React.FC = () => {
                         type="email"
                         placeholder=""
                         autoComplete="off"
-                        aria-label="Email address"
+                        aria-invalid={!emailValid}
+                        aria-describedby="email-error"
                         style={getValidationStyle(emailValid, invalidStyle)}
                         value={formState.email}
                         $isLoading={isLoading}
@@ -233,7 +234,7 @@ const Login: React.FC = () => {
                     {!emailValid && (
                       <AuthStyles.ValidationMessage>
                         <TiWarningOutline />
-                        Please enter a valid email address.
+                        <span id="email-error">Please enter a valid email address.</span>
                       </AuthStyles.ValidationMessage>
                     )}
                     <AuthStyles.EntryWrapper>
@@ -245,7 +246,8 @@ const Login: React.FC = () => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder=""
                         autoComplete="current-password"
-                        aria-label="Password"
+                        aria-invalid={!passwordValid}
+                        aria-describedby="password-error"
                         data-form-type="password"
                         style={getValidationStyle(passwordValid, invalidStyle)}
                         value={formState.password}
@@ -285,7 +287,7 @@ const Login: React.FC = () => {
                     {!passwordValid && (
                       <AuthStyles.ValidationMessage>
                         <TiWarningOutline />
-                        Please enter a valid password.
+                        <span id="password-error">Please enter a valid password.</span>
                       </AuthStyles.ValidationMessage>
                     )}
                     {errorMessage && (

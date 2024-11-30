@@ -230,7 +230,8 @@ const SignUp: React.FC = () => {
                       type="email"
                       placeholder=""
                       autoComplete="off"
-                      aria-label="Email address"
+                      aria-invalid={!emailValid}
+                      aria-describedby="email-error"
                       style={getValidationStyle(emailValid, invalidStyle)}
                       value={formState.email}
                     />
@@ -244,7 +245,7 @@ const SignUp: React.FC = () => {
                   {!emailValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      Please enter a valid email address.
+                      <span id="email-valid">Please enter a valid email address.</span>
                     </AuthStyles.ValidationMessage>
                   )}
                   <AuthStyles.EntryWrapper>
@@ -258,6 +259,8 @@ const SignUp: React.FC = () => {
                       required
                       autoComplete="off"
                       aria-required="true"
+                      aria-invalid={!fullNameValid}
+                      aria-describedby="name-error"
                       value={formState.fullName}
                       data-form-type="name,full"
                       style={getValidationStyle(fullNameValid, invalidStyle)}
@@ -272,7 +275,7 @@ const SignUp: React.FC = () => {
                   {!fullNameValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      Please enter a valid full name.
+                      <span id="name-error">Please enter a valid full name.</span>
                     </AuthStyles.ValidationMessage>
                   )}
                   <AuthStyles.EntryWrapper>
@@ -285,7 +288,8 @@ const SignUp: React.FC = () => {
                       placeholder=""
                       value={formState.password}
                       autoComplete="new-password"
-                      aria-label="Password"
+                      aria-invalid={!passwordValid}
+                      aria-describedby="password-error"
                       data-form-type="password,new"
                       style={getValidationStyle(passwordValid, invalidStyle)}
                     />
@@ -322,7 +326,7 @@ const SignUp: React.FC = () => {
                   {!passwordValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      Please enter a valid password.
+                      <span id="password-error">Please enter a valid password.</span>
                     </AuthStyles.ValidationMessage>
                   )}
                   {errorMessage && (

@@ -176,7 +176,7 @@ const ForgotPassword: React.FC = () => {
           } else {
             setErrorMessage(
               CognitoErrorMessages[error.name as CognitoErrorName] ||
-                GENERIC_ERROR_MESSAGE
+              GENERIC_ERROR_MESSAGE
             )
             setShakeKey((prevKey) => prevKey + 1)
           }
@@ -238,6 +238,8 @@ const ForgotPassword: React.FC = () => {
                             type="email"
                             placeholder=""
                             autoComplete="email"
+                            aria-invalid={!emailValid}
+                            aria-describedby="email-error"
                             style={getValidationStyle(emailValid, invalidStyle)}
                             value={formState.email}
                           />
@@ -251,7 +253,7 @@ const ForgotPassword: React.FC = () => {
                         {!emailValid && (
                           <AuthStyles.ValidationMessage>
                             <TiWarningOutline />
-                            Please enter a valid email address.
+                            <span id="email-error">Please enter a valid email address.</span>
                           </AuthStyles.ValidationMessage>
                         )}
                         {errorMessage && (
@@ -308,6 +310,8 @@ const ForgotPassword: React.FC = () => {
                             name="code"
                             value={formState.code}
                             onChange={onChange}
+                            aria-invalid={!codeValid}
+                            aria-describedby="code-error"
                             style={getValidationStyle(!codeValid, invalidStyle)}
                             onBlur={onBlur}
                           />
@@ -321,7 +325,7 @@ const ForgotPassword: React.FC = () => {
                         {!codeValid && (
                           <AuthStyles.ValidationMessage>
                             <TiWarningOutline />
-                            Please enter a valid six-digit code.
+                            <span id="code-error">Please enter a valid six-digit code.</span>
                           </AuthStyles.ValidationMessage>
                         )}
                         <AuthStyles.EntryWrapper>
@@ -330,6 +334,8 @@ const ForgotPassword: React.FC = () => {
                             placeholder=""
                             value={formState.newPassword}
                             name="new-password"
+                            aria-invalid={!passwordValid}
+                            aria-describedby="password-error"
                             onChange={onChange}
                             style={getValidationStyle(
                               !passwordValid,
@@ -375,7 +381,7 @@ const ForgotPassword: React.FC = () => {
                         {!passwordValid && (
                           <AuthStyles.ValidationMessage>
                             <TiWarningOutline />
-                            Please enter a valid password.
+                            <span id="password-error">Please enter a valid password.</span>
                           </AuthStyles.ValidationMessage>
                         )}
                         {errorMessage && (
