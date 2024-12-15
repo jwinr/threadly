@@ -1,11 +1,12 @@
 import Image from 'next/image'
 import styled from 'styled-components'
+import { ProductImage } from '@/types/product'
 
 interface ProductThumbnailProps {
   hoveredImage: number | null
   onThumbnailHover: (index: number) => void
   loading: boolean
-  images: { image_url: string; alt_text: string }[]
+  images: ProductImage[]
 }
 
 const AdditionalImageContainer = styled.div`
@@ -82,7 +83,7 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
             src={item.image_url}
             width={100}
             height={100}
-            alt={item.alt_text}
+            alt={item.alt_text || 'Product image'}
             priority={true}
           />
         </AdditionalImageThumbnail>

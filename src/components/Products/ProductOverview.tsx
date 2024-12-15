@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Product } from '@/types/product'
 
 interface ProductOverviewProps {
-  product: Product | null
+  product: Product
   loading: boolean
 }
 

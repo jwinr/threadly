@@ -27,7 +27,7 @@ export interface Product {
   related_products?: RelatedProduct[]
 }
 
-interface ProductVariant {
+export interface ProductVariant {
   size: string
   length: string
   waist: string
@@ -37,7 +37,7 @@ interface ProductVariant {
   sizes: SizeVariant[]
 }
 
-interface SizeVariant {
+export interface SizeVariant {
   size_variant_id: string
   waist?: string
   length?: string
@@ -101,7 +101,7 @@ export interface Attribute {
   attribute_name: string
   attribute_value?: string
   attribute_type: string
-  attribute_values: string
+  attribute_values: string[]
   color_swatch_url?: string // Optional, as it can be nullable
 }
 
@@ -218,6 +218,7 @@ export interface OrganizedProduct extends Product {
   colors: OrganizedColorVariant[]
   rating: Review[]
 }
+
 export interface OrganizedColorVariant {
   color_variant_id: number
   color_sku: string

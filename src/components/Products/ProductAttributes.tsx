@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import styled from 'styled-components'
+import { Product } from '@/types/product'
 
 interface SelectedAttributes {
   color: string
@@ -11,31 +12,6 @@ interface SelectedAttributes {
   waist: string
   length: string
   size: string
-}
-
-interface SizeVariant {
-  size_variant_id: string
-  waist?: string
-  length?: string
-  size?: string
-}
-
-// TODO: Pull the interfaces out from the shared product file
-
-interface ProductVariant {
-  size: string
-  length: string
-  waist: string
-  sku: string
-  color: string
-  color_swatch_url: string
-  sizes: SizeVariant[]
-}
-
-interface Product {
-  slug?: string
-  selectedVariant?: ProductVariant
-  variants?: ProductVariant[]
 }
 
 interface ProductAttributesProps {
@@ -146,13 +122,13 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     })
 
   useEffect(() => {
-    if (product && product.selectedVariant) {
+    if (product && product.variants) {
       const defaultAttributes = {
-        color: product.selectedVariant.sku,
-        color_name: product.selectedVariant.color,
-        waist: product.selectedVariant.waist || '',
-        length: product.selectedVariant.length || '',
-        size: product.selectedVariant.size || '',
+        color: product.variants[0].sku,
+        color_name: product.variants[0].color,
+        waist: product.variants[0].waist || '',
+        length: product.variants[0].length || '',
+        size: product.variants[0].size || '',
       }
 
       // Find the default size variant

@@ -6,6 +6,20 @@ import { UserContext } from '@/context/UserContext'
 import { useFavorites } from '@/context/FavoritesContext'
 import Popover from '@/components/Elements/Popover'
 
+interface IconProps {
+  $loading?: boolean
+  $isAdding?: boolean
+}
+
+interface FavoriteItem {
+  product_id: string
+}
+
+interface AddToFavoritesButtonProps {
+  productId: string
+  productName: string | undefined
+}
+
 const loadingAnimation = keyframes`
   0% {
     transform: scale(0);
@@ -37,11 +51,6 @@ const Button = styled.button`
   border: 1px solid var(--sc-color-border-gray);
 `
 
-interface IconProps {
-  $loading?: boolean
-  $isAdding?: boolean
-}
-
 const IconOutline = styled(LiaHeart) <IconProps>`
   ${({ $loading, $isAdding }) =>
     $loading &&
@@ -59,15 +68,6 @@ const IconFilled = styled(LiaHeartSolid) <IconProps>`
       animation: ${loadingAnimation} 0.5s ease-in-out;
     `}
 `
-
-interface FavoriteItem {
-  product_id: string
-}
-
-interface AddToFavoritesButtonProps {
-  productId: string
-  productName: string | undefined
-}
 
 const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
   productId,

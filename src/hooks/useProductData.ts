@@ -5,6 +5,8 @@ interface UseProductDataReturn {
   product: Product | undefined
   categoryName: string | undefined
   categorySlug: string | undefined
+  isLoading: boolean
+  error: Error | null
 }
 
 const fetchProductDetails = async (
@@ -23,7 +25,7 @@ const fetchProductDetails = async (
 const useProductData = (
   slug: string,
   variantSku: string
-): UseProductDataReturn & { isLoading: boolean; error: Error | null } => {
+): UseProductDataReturn => {
   const {
     data: product,
     error,

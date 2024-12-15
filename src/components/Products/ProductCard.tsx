@@ -190,7 +190,7 @@ const SliderNav = styled.div<{ $hovered: boolean }>`
   }
 `
 
-const SliderArrow = styled(Arrow)<{
+const SliderArrow = styled(Arrow) <{
   $direction: 'left' | 'right'
   $hovered: boolean
 }>`

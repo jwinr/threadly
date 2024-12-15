@@ -313,7 +313,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               <Price $sale={isOnSale}>
                 {formatCurrency(
                   (item.product_sale_price || item.product_price) *
-                    item.quantity
+                  item.quantity
                 )}
               </Price>
               {item.product_sale_price && (
@@ -390,7 +390,7 @@ const CartProductCard: React.FC<CartProductCardProps> = ({
               <Price $sale={isOnSale}>
                 {formatCurrency(
                   (item.product_sale_price || item.product_price) *
-                    item.quantity
+                  item.quantity
                 )}
               </Price>
               {item.product_sale_price && (

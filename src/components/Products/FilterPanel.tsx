@@ -7,12 +7,7 @@ import Accordion from '@/components/Elements/Accordion'
 import AccordionItem from '@/components/Elements/AccordionItem'
 import Button from '@/components/Elements/Button'
 import useScrollControl from 'src/hooks/useScrollControl'
-
-interface Attribute {
-  attribute_type: string
-  attribute_values: string[]
-  attribute_name: string
-}
+import { Attribute } from '@/types/product'
 
 interface FilterPanelProps {
   isOpen: boolean

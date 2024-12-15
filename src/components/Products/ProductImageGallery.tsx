@@ -5,11 +5,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
 import { useEffect, useState, useRef, MouseEvent } from 'react'
-import { ProductImage } from '@/types/product'
-
-interface Product {
-  images?: ProductImage[]
-}
+import { Product } from '@/types/product'
 
 interface ProductImageGalleryProps {
   product: Product

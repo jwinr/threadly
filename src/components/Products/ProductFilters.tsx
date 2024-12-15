@@ -6,19 +6,7 @@ import { PiSlidersHorizontalLight } from 'react-icons/pi'
 import FilterPanel from '@/components/Products/FilterPanel'
 import ActiveFilters from '@/components/Products/ActiveFilters'
 import Button from '@/components/Elements/Button'
-
-interface Product {
-  colors: string[]
-  price: number
-}
-
-interface Attribute {
-  attribute_type: string
-  attribute_values: string[]
-  attribute_name: string
-}
-
-type Color = unknown
+import { Product, Attribute } from '@/types/product'
 
 interface FilterState {
   selectedPriceRanges: string[]
@@ -26,7 +14,7 @@ interface FilterState {
 }
 
 interface ProductFiltersProps {
-  inventoryItems: Product[] | Color[]
+  inventoryItems: Product[]
   onFilterChange: (filters: Record<string, string[]>) => void
   attributes: Attribute[]
   resetFilters: () => void
@@ -352,7 +340,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
       // Extract all prices from the nested structure and deduplicate
       const prices = Array.from(
         new Set(
-          item.colors.flatMap((color) =>
+          item.color_variants?.flatMap((color) =>
             (color as unknown as { sizes: { price: string }[] }).sizes.map(
               (size) => parseFloat(size.price)
             )
