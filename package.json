@@ -12,7 +12,7 @@
     "snyk:test": "snyk test"
   },
   "dependencies": {
-    "@aws-amplify/adapter-nextjs": "^1.2.29",
+    "@aws-amplify/adapter-nextjs": "^1.2.30",
     "@stripe/react-stripe-js": "^2.9.0",
     "@stripe/stripe-js": "^4.9.0",
     "@tanstack/react-query": "^5.61.3",
