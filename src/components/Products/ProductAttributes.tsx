@@ -276,7 +276,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
             <AttributeOptions>
               {availableSizes
                 .map((size) => size.waist)
-                .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
+                .filter((value, index, self) => self.indexOf(value) === index) // TODO: prevent duplicates from backend
                 .map((waistSize, index) => (
                   <SizeOption
                     key={index}
