@@ -227,7 +227,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
   }
 
   if (loading) {
-    return <LoaderAttributes />
+    return <LoaderAttributes data-testid="loader-attributes" />
   }
 
   return (
