@@ -6,7 +6,7 @@ export interface Product {
   slug?: string
   description?: string
   brand_id?: number // Foreign key, but optional
-  brand?: Brand // Optional relationship to the `Brand` interface
+  brand?: Brand | string // Optional relationship to the `Brand` interface (or string if it's just the name)
   category_id?: number // Foreign key to `categories`
   category?: Category // Optional relationship to the `Category` interface
   category_name?: string // Optional, as it can be nullable
