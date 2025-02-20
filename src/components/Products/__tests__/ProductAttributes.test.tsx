@@ -2,25 +2,18 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { jest } from '@jest/globals'
 import '@testing-library/jest-dom';
 import ProductAttributes from '../ProductAttributes'
-import { useRouter } from 'next/navigation'
 import { Product } from '@/types/product'
-import { JSX, ClassAttributes, ImgHTMLAttributes } from 'react';
-
-// Mock next/navigation
-jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
-}))
-
-// Mock next/image
-jest.mock('next/image', () => ({
-    __esModule: true,
-    default: (props: JSX.IntrinsicAttributes & ClassAttributes<HTMLImageElement> & ImgHTMLAttributes<HTMLImageElement>) => {
-        // eslint-disable-next-line jsx-a11y/alt-text
-        return <img {...props} />
-    },
-}))
+import { useRouter } from 'next/navigation';
 
 describe('ProductAttributes', () => {
+    const mockRouter = {
+        push: jest.fn()
+    }
+
+    beforeEach(() => {
+        (useRouter as jest.Mock).mockReturnValue(mockRouter)
+    })
+
     const mockProduct: Product = {
         slug: 'test-product',
         variants: [
@@ -58,14 +51,6 @@ describe('ProductAttributes', () => {
             }
         ]
     }
-
-    const mockRouter = {
-        push: jest.fn()
-    }
-
-    beforeEach(() => {
-        (useRouter as jest.Mock).mockReturnValue(mockRouter)
-    })
 
     test('renders color swatches correctly', () => {
         render(<ProductAttributes product={mockProduct} loading={false} />)
