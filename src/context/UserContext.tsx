@@ -40,7 +40,7 @@ interface UserContextType {
 
 const defaultUserContext: UserContextType = {
   userAttributes: null,
-  fetchUserAttributes: async () => {},
+  fetchUserAttributes: async () => { },
   // eslint-disable-next-line @typescript-eslint/require-await
   fetchPaymentMethods: async () => [],
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -105,7 +105,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           email: payload.email,
           family_name: payload.family_name,
           given_name: payload.given_name,
-          created_at: userAttributes?.created_at || '',
+          created_at: userAttributes?.created_at,
         }
 
         setUserAttributes(selectedAttributes)

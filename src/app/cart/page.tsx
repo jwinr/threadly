@@ -9,7 +9,7 @@ import Point from '@/public/images/icons/notdef.svg'
 import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
 import ShippingInfo from '@/components/Shopping/ShippingInfo'
 import OrderSummary from '@/components/Shopping/OrderSummary'
-import CartProductCard from '@/components/Shopping/CartProductCard'
+import { CartItems } from '@/components/Shopping/CartItems'
 import FavoritesSection from '@/components/Shopping/FavoritesSection'
 import EmptyCartSection from '@/components/Shopping/EmptyCartSection'
 import EmptyFavoritesSection from '@/components/Shopping/EmptyFavoritesSection'
@@ -196,73 +196,46 @@ const Cart: React.FC = () => {
             <TitleWrapper>
               <Header>Cart</Header>
             </TitleWrapper>
-            {isLoading ? (
-              <>
-                <Subtitle $isLoading={isLoading} />
-                <CartContainer $isLoading={isLoading} />
-              </>
-            ) : (
-              <>
-                <Subtitle $isLoading={isLoading}>
+            <>
+              <Subtitle $isLoading={isLoading}>
+                {!isLoading && (
                   <h1>
                     {subtotal} subtotal <StyledPoint /> {totalQuantity}{' '}
                     {totalQuantity === 1 ? 'item' : 'items'}
                   </h1>
-                </Subtitle>
-                <CartContainer $isLoading={isLoading}>
-                  {!isLoading ? (
-                    (cart ?? []).length > 0 ? (
-                      (cart ?? []).map((item, index) => (
-                        <CartProductCard
-                          key={item.variant_id}
-                          item={{
-                            product_id: item.product_id || 0,
-                            product_name:
-                              item.product_name || 'Unknown Product',
-                            product_slug: item.product_slug || 'unknown-slug',
-                            sku: item.sku || 'unknown-sku',
-                            product_image_url:
-                              item.product_image_url || '/images/default.png',
-                            product_price: item.product_price || 0,
-                            product_sale_price: item.product_sale_price,
-                            quantity: item.quantity,
-                            color: item.color,
-                            waist: item.waist,
-                            length: item.length,
-                            size: item.size,
-                            variant_id: item.variant_id,
-                          }}
-                          isMobileView={isMobileView}
-                          deliveryDate={deliveryDate}
-                          handleQuantityChange={(variantId, quantity) =>
-                            handleQuantityChange?.(variantId, quantity)
-                          }
-                          removeFromCart={(variantId) =>
-                            removeFromCart?.(variantId)
-                          }
-                          index={index}
-                        />
-                      ))
+                )}
+              </Subtitle>
+              <CartContainer $isLoading={isLoading}>
+                {!isLoading && (
+                  <>
+                    {cart?.length ? (
+                      <CartItems
+                        cart={cart}
+                        isMobileView={isMobileView}
+                        deliveryDate={deliveryDate}
+                        handleQuantityChange={handleQuantityChange}
+                        removeFromCart={removeFromCart}
+                      />
                     ) : (
                       <EmptyCartSection userAttributes={userAttributes} />
-                    )
-                  ) : null}
-                </CartContainer>
-                {isMobileView && (
-                  <OrderSummaryWrapper>
-                    <OrderSummary
-                      subtotal={subtotal}
-                      estimatedTaxes={estimatedTaxes}
-                      total={total}
-                      totalQuantity={totalQuantity}
-                      zipCode={zipCode}
-                      $isLoading={isLoading}
-                      loadingSummary={loadingSummary ?? false}
-                    />
-                  </OrderSummaryWrapper>
+                    )}
+                  </>
                 )}
-              </>
-            )}
+              </CartContainer>
+              {isMobileView && (
+                <OrderSummaryWrapper>
+                  <OrderSummary
+                    subtotal={subtotal}
+                    estimatedTaxes={estimatedTaxes}
+                    total={total}
+                    totalQuantity={totalQuantity}
+                    zipCode={zipCode}
+                    $isLoading={isLoading}
+                    loadingSummary={loadingSummary ?? false}
+                  />
+                </OrderSummaryWrapper>
+              )}
+            </>
             <CartContainer $isLoading={isLoading}>
               {!isLoading ? (
                 favorites.length > 0 ? (
