@@ -198,7 +198,7 @@ const Cart: React.FC = () => {
             </TitleWrapper>
             <>
               <Subtitle $isLoading={isLoading}>
-                {!isLoading && (
+                {!isLoading && totalQuantity > 0 && (
                   <h1>
                     {subtotal} subtotal <StyledPoint /> {totalQuantity}{' '}
                     {totalQuantity === 1 ? 'item' : 'items'}
