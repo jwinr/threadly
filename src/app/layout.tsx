@@ -11,8 +11,7 @@ import { FavoritesProvider } from '@/context/FavoritesContext'
 import Providers from './providers'
 import Layout from '@/components/Layout/Layout'
 import StyledComponentsRegistry from '@/lib/registry'
-import cookie from 'cookie'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { Metadata } from 'next'
 import { Customer } from '@/types/user'
 
@@ -22,17 +21,19 @@ export const metadata: Metadata = {
   title: 'Threadly',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}): JSX.Element {
-  // Access cookies from the request headers on the server side
+export default async function RootLayout(
+  {
+    children,
+  }: {
+    children: React.ReactNode
+  }
+): Promise<JSX.Element> {
+  const cookieStore = cookies()
   const headersList = headers()
-  const nonce = headers().get('x-nonce')
-  const cookies = cookie.parse(headersList.get('cookie') || '')
-  const userAttributes: Customer | null = cookies.userAttributes
-    ? (JSON.parse(cookies.userAttributes) as Customer)
+  const nonce = (await headersList).get('x-nonce')
+  const userAttributesCookie = (await cookieStore).get('userAttributes')
+  const userAttributes: Customer | null = userAttributesCookie
+    ? (JSON.parse(userAttributesCookie.value) as Customer)
     : null
 
   return (

@@ -33,6 +33,7 @@ const useProductData = (
   } = useQuery<Product>({
     queryKey: ['productData', slug, variantSku],
     queryFn: () => fetchProductDetails(slug, variantSku),
+    retry: false,
   })
 
   if (error) {
