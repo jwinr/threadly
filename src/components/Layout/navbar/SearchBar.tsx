@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import styled from 'styled-components'
-import { Search, X } from 'lucide-react'
+import React, {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import styled from 'styled-components';
+import {Search, X} from 'lucide-react';
 
 const InputForm = styled.form`
   display: flex;
@@ -11,7 +11,7 @@ const InputForm = styled.form`
   @media (max-width: 768px) {
     width: 100%;
   }
-`
+`;
 
 const SearchContainer = styled.div`
   position: relative;
@@ -25,7 +25,7 @@ const SearchContainer = styled.div`
     margin: 0;
     order: 4;
   }
-`
+`;
 
 const SearchInput = styled.input`
   padding: 10px;
@@ -48,7 +48,7 @@ const SearchInput = styled.input`
     --s-focus-ring: 0;
     box-shadow: none;
   }
-`
+`;
 
 const SubmitButton = styled.button`
   right: 32px;
@@ -79,7 +79,7 @@ const SubmitButton = styled.button`
     top: 5px;
     position: absolute;
   }
-`
+`;
 
 const ClearButton = styled.button`
   position: absolute;
@@ -103,7 +103,7 @@ const ClearButton = styled.button`
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
   }
-`
+`;
 
 const Divider = styled.div`
   position: absolute;
@@ -113,22 +113,22 @@ const Divider = styled.div`
   right: 55px;
   background-color: #c5cbd1;
   margin: 0 10px;
-`
+`;
 
 const SearchBar: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const router = useRouter()
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const router = useRouter();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchTerm)}`)
+      router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
     }
-  }
+  };
 
   const clearSearch = () => {
-    setSearchTerm('')
-  }
+    setSearchTerm('');
+  };
 
   return (
     <SearchContainer>
@@ -159,7 +159,7 @@ const SearchBar: React.FC = () => {
         </SubmitButton>
       </InputForm>
     </SearchContainer>
-  )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;

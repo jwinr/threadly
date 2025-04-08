@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState, useContext, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { CartContext } from '@/context/CartContext'
-import styled from 'styled-components'
-import SuccessCheckmark from '@/components/Shopping/SuccessCheckmark'
-import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
-import Button from '@/components/Elements/Button'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
+import React, {useEffect, useState, useContext, useRef} from 'react';
+import {useRouter} from 'next/navigation';
+import {CartContext} from '@/context/CartContext';
+import styled from 'styled-components';
+import SuccessCheckmark from '@/components/Shopping/SuccessCheckmark';
+import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser';
+import Button from '@/components/Elements/Button';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const Container = styled.div`
   @media (max-width: 768px) {
     padding: 0 10px;
   }
-`
+`;
 
 const SuccessSection = styled.section`
   background: #ffffff;
@@ -51,7 +51,7 @@ const SuccessSection = styled.section`
       width: 75%;
     }
   }
-`
+`;
 
 const Message = styled.p`
   font-size: 16px;
@@ -61,7 +61,7 @@ const Message = styled.p`
     font-size: 14px;
     margin: 15px 0;
   }
-`
+`;
 
 const ContactLink = styled.a`
   color: var(--sc-color-blue);
@@ -74,72 +74,72 @@ const ContactLink = styled.a`
     box-shadow: var(--sc-shadow-link-focus);
     border-radius: 4px;
   }
-`
+`;
 
 const ErrorSection = styled(SuccessSection)`
   background: #f8d7da;
   border-color: #f5c6cb;
   color: #721c24;
-`
+`;
 
 type CheckoutSessionData = {
-  status: string
-  customerEmail: string
-  fulfilled: boolean
-}
+  status: string;
+  customerEmail: string;
+  fulfilled: boolean;
+};
 
 export default function Return() {
-  const router = useRouter()
-  const cartContext = useContext(CartContext)
+  const router = useRouter();
+  const cartContext = useContext(CartContext);
 
   if (!cartContext) {
-    throw new Error('CartContext is undefined')
+    throw new Error('CartContext is undefined');
   }
 
-  const { clearCart } = cartContext
-  const [status, setStatus] = useState<string | null>(null)
-  const [customerEmail, setCustomerEmail] = useState<string>('')
-  const [isCartCleared, setIsCartCleared] = useState<boolean>(false)
-  const checkingUser = useCheckLoggedInUser(5000, true)
-  const hasCheckedUser = useRef<boolean>(false)
+  const {clearCart} = cartContext;
+  const [status, setStatus] = useState<string | null>(null);
+  const [customerEmail, setCustomerEmail] = useState<string>('');
+  const [isCartCleared, setIsCartCleared] = useState<boolean>(false);
+  const checkingUser = useCheckLoggedInUser(5000, true);
+  const hasCheckedUser = useRef<boolean>(false);
 
   useEffect(() => {
     if (!hasCheckedUser.current && !checkingUser) {
-      hasCheckedUser.current = true
-      const queryString = window.location.search
-      const urlParams = new URLSearchParams(queryString)
-      const sessionId = urlParams.get('session_id')
+      hasCheckedUser.current = true;
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const sessionId = urlParams.get('session_id');
 
       if (!sessionId) {
-        console.log('No session ID found, redirecting to home.')
-        router.push('/')
-        return
+        console.log('No session ID found, redirecting to home.');
+        router.push('/');
+        return;
       }
 
       fetchWithCsrf(`/api/checkout_sessions?session_id=${sessionId}`, {
         method: 'GET',
       })
         .then((res) => {
-          console.log('Checkout session response status:', res.status)
+          console.log('Checkout session response status:', res.status);
           if (!res.ok) {
-            throw new Error('Invalid session')
+            throw new Error('Invalid session');
           }
-          return res.json()
+          return res.json();
         })
         .then(async (data: CheckoutSessionData) => {
-          console.log('Checkout session data:', data)
+          console.log('Checkout session data:', data);
           if (data.status === 'open' || !data.status) {
-            throw new Error('Invalid session status')
+            throw new Error('Invalid session status');
           }
 
-          setCustomerEmail(data.customerEmail)
+          setCustomerEmail(data.customerEmail);
 
           // Check if the session has already been fulfilled
           if (data.fulfilled) {
-            setStatus('complete')
+            setStatus('complete');
             if (!isCartCleared) {
-              await clearCart()
-              setIsCartCleared(true)
+              await clearCart();
+              setIsCartCleared(true);
             }
           } else {
             // Trigger the fulfillment process
@@ -151,44 +151,44 @@ export default function Return() {
                   'Content-Type': 'application/json',
                 },
               }
-            )
+            );
           }
         })
         .then((res) => {
           if (!res) {
-            throw new Error('Fulfillment response is undefined')
+            throw new Error('Fulfillment response is undefined');
           }
 
-          console.log('Fulfillment response status:', res.status)
+          console.log('Fulfillment response status:', res.status);
           if (!res.ok) {
-            throw new Error('Fulfillment failed')
+            throw new Error('Fulfillment failed');
           }
-          return res.json()
+          return res.json();
         })
-        .then(async (fulfillmentData: { success: boolean }) => {
-          console.log('Fulfillment data:', fulfillmentData)
+        .then(async (fulfillmentData: {success: boolean}) => {
+          console.log('Fulfillment data:', fulfillmentData);
           if (fulfillmentData.success) {
-            setStatus('complete')
+            setStatus('complete');
             if (!isCartCleared) {
-              await clearCart()
-              setIsCartCleared(true)
+              await clearCart();
+              setIsCartCleared(true);
             }
           }
         })
         .catch((error: Error) => {
-          console.error('Error occurred:', error.message)
+          console.error('Error occurred:', error.message);
           if (error.message.includes('Invalid session')) {
-            setStatus('session_not_found')
+            setStatus('session_not_found');
           } else if (error.message.includes('Invalid session status')) {
-            setStatus('unauthorized')
+            setStatus('unauthorized');
           } else if (error.message.includes('Fulfillment failed')) {
-            setStatus('failed')
+            setStatus('failed');
           } else {
-            setStatus('error')
+            setStatus('error');
           }
-        })
+        });
     }
-  }, [router, checkingUser, clearCart, isCartCleared])
+  }, [router, checkingUser, clearCart, isCartCleared]);
 
   switch (status) {
     case 'complete':
@@ -208,7 +208,7 @@ export default function Return() {
             </SuccessSection>
           </Container>
         </>
-      )
+      );
     case 'pending':
       return (
         <>
@@ -222,7 +222,7 @@ export default function Return() {
             </SuccessSection>
           </Container>
         </>
-      )
+      );
     case 'failed':
       return (
         <>
@@ -236,7 +236,7 @@ export default function Return() {
             </ErrorSection>
           </Container>
         </>
-      )
+      );
     case 'session_not_found':
       return (
         <>
@@ -250,7 +250,7 @@ export default function Return() {
             </ErrorSection>
           </Container>
         </>
-      )
+      );
     case 'unauthorized':
       return (
         <>
@@ -264,7 +264,7 @@ export default function Return() {
             </ErrorSection>
           </Container>
         </>
-      )
+      );
     case 'error':
       return (
         <>
@@ -278,12 +278,12 @@ export default function Return() {
             </ErrorSection>
           </Container>
         </>
-      )
+      );
     default:
       return (
         <>
           <LoaderDots />
         </>
-      )
+      );
   }
 }

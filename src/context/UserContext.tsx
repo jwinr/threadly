@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {
   createContext,
@@ -7,52 +7,52 @@ import React, {
   useCallback,
   ReactNode,
   useMemo,
-} from 'react'
-import { fetchAuthSession } from 'aws-amplify/auth'
-import { Hub } from 'aws-amplify/utils'
-import debounce from 'lodash.debounce'
-import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
+} from 'react';
+import {fetchAuthSession} from 'aws-amplify/auth';
+import {Hub} from 'aws-amplify/utils';
+import debounce from 'lodash.debounce';
+import {INVALID_JWT_TOKEN_ERROR} from '@/lib/constants';
 
 interface UserAttributes {
-  sub?: string
-  email?: string
-  family_name?: string
-  given_name?: string
-  user_uuid?: string
-  stripe_customer_id?: string
-  created_at?: string
+  sub?: string;
+  email?: string;
+  family_name?: string;
+  given_name?: string;
+  user_uuid?: string;
+  stripe_customer_id?: string;
+  created_at?: string;
 }
 
 interface CognitoIdTokenPayload {
-  sub?: string
-  email?: string
-  family_name?: string
-  given_name?: string
+  sub?: string;
+  email?: string;
+  family_name?: string;
+  given_name?: string;
 }
 
 interface UserContextType {
-  userAttributes: UserAttributes | null
-  fetchUserAttributes: () => Promise<void>
-  fetchPaymentMethods: (userUuid: string) => Promise<unknown[]>
-  getToken: () => Promise<object | null>
-  loading: boolean
+  userAttributes: UserAttributes | null;
+  fetchUserAttributes: () => Promise<void>;
+  fetchPaymentMethods: (userUuid: string) => Promise<unknown[]>;
+  getToken: () => Promise<object | null>;
+  loading: boolean;
 }
 
 const defaultUserContext: UserContextType = {
   userAttributes: null,
-  fetchUserAttributes: async () => { },
+  fetchUserAttributes: async () => {},
   // eslint-disable-next-line @typescript-eslint/require-await
   fetchPaymentMethods: async () => [],
   // eslint-disable-next-line @typescript-eslint/require-await
   getToken: async () => null,
   loading: true,
-}
+};
 
-export const UserContext = createContext<UserContextType>(defaultUserContext)
+export const UserContext = createContext<UserContextType>(defaultUserContext);
 
 interface UserProviderProps {
-  children: ReactNode
-  initialUserAttributes: UserAttributes | null
+  children: ReactNode;
+  initialUserAttributes: UserAttributes | null;
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({
@@ -61,9 +61,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({
 }) => {
   const [userAttributes, setUserAttributes] = useState<UserAttributes | null>(
     initialUserAttributes
-  )
-  const [authChecked, setAuthChecked] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
+  );
+  const [authChecked, setAuthChecked] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const debouncedFetchUserAttributes = useCallback(
     debounce(async (attributes: UserAttributes) => {
@@ -75,30 +75,30 @@ export const UserProvider: React.FC<UserProviderProps> = ({
             'x-user-attributes': JSON.stringify(attributes),
           },
           body: JSON.stringify(attributes),
-        })
+        });
 
-        const data: unknown = await response.json()
+        const data: unknown = await response.json();
 
-        const userData = data as { userUuid?: string }
+        const userData = data as {userUuid?: string};
         if (userData.userUuid) {
           const updatedAttributes = {
             ...attributes,
             user_uuid: userData.userUuid,
-          }
-          setUserAttributes(updatedAttributes)
+          };
+          setUserAttributes(updatedAttributes);
         }
       } catch (error) {
-        console.error('Error updating user attributes:', error)
+        console.error('Error updating user attributes:', error);
       }
     }, 300),
     []
-  )
+  );
 
   const fetchUserAttributes = useCallback(async () => {
     try {
-      const session = await fetchAuthSession()
+      const session = await fetchAuthSession();
       if (session?.tokens?.idToken) {
-        const payload = session.tokens.idToken.payload as CognitoIdTokenPayload
+        const payload = session.tokens.idToken.payload as CognitoIdTokenPayload;
 
         const selectedAttributes: UserAttributes = {
           sub: payload.sub,
@@ -106,54 +106,54 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           family_name: payload.family_name,
           given_name: payload.given_name,
           created_at: userAttributes?.created_at,
-        }
+        };
 
-        setUserAttributes(selectedAttributes)
+        setUserAttributes(selectedAttributes);
 
-        await debouncedFetchUserAttributes(selectedAttributes)
+        await debouncedFetchUserAttributes(selectedAttributes);
       } else {
         // No valid session; ensure userAttributes are cleared
-        setUserAttributes(null)
+        setUserAttributes(null);
       }
     } catch (error) {
-      console.error('Error fetching user session:', error)
-      setUserAttributes(null)
+      console.error('Error fetching user session:', error);
+      setUserAttributes(null);
     } finally {
-      setAuthChecked(true)
-      setLoading(false)
+      setAuthChecked(true);
+      setLoading(false);
     }
-  }, [debouncedFetchUserAttributes])
+  }, [debouncedFetchUserAttributes]);
 
   const getToken = async (): Promise<object | null> => {
     try {
-      const session = await fetchAuthSession()
+      const session = await fetchAuthSession();
       if (session?.tokens?.accessToken) {
-        return session.tokens.accessToken
+        return session.tokens.accessToken;
       } else {
-        throw new Error(INVALID_JWT_TOKEN_ERROR)
+        throw new Error(INVALID_JWT_TOKEN_ERROR);
       }
     } catch (error) {
-      console.error('Error fetching auth session:', error)
-      return null
+      console.error('Error fetching auth session:', error);
+      return null;
     }
-  }
+  };
 
   useEffect(() => {
     // Only fetch user attributes if auth hasn't been checked yet
     if (!authChecked) {
       // If initialUserAttributes are present and complete, set authChecked to true
       const hasCompleteAttributes =
-        initialUserAttributes && initialUserAttributes.user_uuid
+        initialUserAttributes && initialUserAttributes.user_uuid;
 
       if (hasCompleteAttributes) {
-        setAuthChecked(true)
-        setLoading(false)
+        setAuthChecked(true);
+        setLoading(false);
       } else {
         // Fetch user attributes since initial data is missing or incomplete
-        void fetchUserAttributes()
+        void fetchUserAttributes();
       }
     }
-  }, [authChecked, fetchUserAttributes, initialUserAttributes])
+  }, [authChecked, fetchUserAttributes, initialUserAttributes]);
 
   const signOut = async () => {
     try {
@@ -163,44 +163,44 @@ export const UserProvider: React.FC<UserProviderProps> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-      })
+      });
 
-      setUserAttributes(null)
-      setAuthChecked(true)
-      setLoading(false)
+      setUserAttributes(null);
+      setAuthChecked(true);
+      setLoading(false);
     } catch (error) {
-      console.error('Error signing out:', error)
+      console.error('Error signing out:', error);
     }
-  }
+  };
 
   useEffect(() => {
-    const hubListener = ({ payload }: { payload: { event: string } }) => {
+    const hubListener = ({payload}: {payload: {event: string}}) => {
       switch (payload.event) {
         case 'signedIn':
-          fetchUserAttributes()
-          break
+          fetchUserAttributes();
+          break;
         case 'signedOut':
-          signOut()
-          break
+          signOut();
+          break;
         case 'tokenRefresh':
-          fetchUserAttributes()
-          break
+          fetchUserAttributes();
+          break;
         default:
-          break
+          break;
       }
-    }
+    };
 
-    const listener = Hub.listen('auth', hubListener)
+    const listener = Hub.listen('auth', hubListener);
 
     return () => {
-      listener()
-    }
-  }, [fetchUserAttributes])
+      listener();
+    };
+  }, [fetchUserAttributes]);
 
   const fetchPaymentMethods = useCallback(async () => {
-    const token = await getToken()
+    const token = await getToken();
     if (!token) {
-      return []
+      return [];
     }
 
     try {
@@ -211,20 +211,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({
           Authorization: `Bearer ${JSON.stringify(token)}`,
           'Content-Type': 'application/json',
         },
-      })
+      });
 
-      const data: { stripe_customer_id?: string; error?: string } =
+      const data: {stripe_customer_id?: string; error?: string} =
         (await response.json()) as {
-          stripe_customer_id?: string
-          error?: string
-        }
+          stripe_customer_id?: string;
+          error?: string;
+        };
 
       if (!response.ok || !data.stripe_customer_id) {
-        console.error('Failed to fetch Stripe customer ID:', data.error)
-        return []
+        console.error('Failed to fetch Stripe customer ID:', data.error);
+        return [];
       }
 
-      const stripeCustomerId = data.stripe_customer_id
+      const stripeCustomerId = data.stripe_customer_id;
 
       // Now fetch the payment methods using the Stripe customer ID
       const paymentResponse = await fetch(
@@ -236,28 +236,28 @@ export const UserProvider: React.FC<UserProviderProps> = ({
             'Content-Type': 'application/json',
           },
         }
-      )
+      );
 
-      const paymentData: { paymentMethods: unknown[]; error?: string } =
+      const paymentData: {paymentMethods: unknown[]; error?: string} =
         (await paymentResponse.json()) as {
-          paymentMethods: unknown[]
-          error?: string
-        }
+          paymentMethods: unknown[];
+          error?: string;
+        };
 
       if (paymentResponse.ok) {
-        return paymentData.paymentMethods
+        return paymentData.paymentMethods;
       } else {
         console.error(
           'Failed to fetch payment methods:',
           paymentData?.error || 'Unknown error'
-        )
-        return []
+        );
+        return [];
       }
     } catch (error) {
-      console.error('Error fetching payment methods:', error)
-      return []
+      console.error('Error fetching payment methods:', error);
+      return [];
     }
-  }, [getToken])
+  }, [getToken]);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(
@@ -275,9 +275,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({
       getToken,
       loading,
     ]
-  )
+  );
 
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
-  )
-}
+  );
+};

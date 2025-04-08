@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 interface HalfFilledStarProps {
-  fractionalPart: number
-  className?: string
+  fractionalPart: number;
+  className?: string;
 }
 
-const HalfFilledStar: React.FC<HalfFilledStarProps> = ({ fractionalPart }) => {
-  const clipWidth = 34 * fractionalPart // Calculate the width of the clip path based on the fractional part
+const HalfFilledStar: React.FC<HalfFilledStarProps> = ({fractionalPart}) => {
+  const clipWidth = 34 * fractionalPart; // Calculate the width of the clip path based on the fractional part
 
   return (
     <>
@@ -41,7 +41,7 @@ const HalfFilledStar: React.FC<HalfFilledStarProps> = ({ fractionalPart }) => {
         />
       </svg>
     </>
-  )
-}
+  );
+};
 
-export default HalfFilledStar
+export default HalfFilledStar;

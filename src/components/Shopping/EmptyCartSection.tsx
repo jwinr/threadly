@@ -1,10 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
-import EmptyCartImg from '@/public/images/icons/emptyCart.svg'
-import Button from '@/components/Elements/Button'
+import React from 'react';
+import styled from 'styled-components';
+import EmptyCartImg from '@/public/images/icons/emptyCart.svg';
+import Button from '@/components/Elements/Button';
 
 interface EmptyCartSectionProps {
-  userAttributes: unknown
+  userAttributes: unknown;
 }
 
 const EmptyCartContainer = styled.div`
@@ -19,7 +19,7 @@ const EmptyCartContainer = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const EmptyContents = styled.div`
   display: flex;
@@ -37,14 +37,14 @@ const EmptyContents = styled.div`
   button {
     width: 250px;
   }
-`
+`;
 
 const EmptyHeader = styled.h1`
   font-size: 29px;
   font-weight: bold;
   color: var(--sc-color-title);
   margin: 8px 0;
-`
+`;
 
 const EmptyWrapper = styled.div`
   display: flex;
@@ -55,7 +55,7 @@ const EmptyWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
-`
+`;
 
 const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({
   userAttributes,
@@ -95,7 +95,7 @@ const EmptyCartSection: React.FC<EmptyCartSectionProps> = ({
         </EmptyWrapper>
       </EmptyContents>
     </EmptyCartContainer>
-  )
-}
+  );
+};
 
-export default EmptyCartSection
+export default EmptyCartSection;

@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Leaf } from 'lucide-react'
-import Arrow from '@/public/images/icons/ctaArrow.svg'
+import React from 'react';
+import styled from 'styled-components';
+import {Leaf} from 'lucide-react';
+import Arrow from '@/public/images/icons/ctaArrow.svg';
 
 const Container = styled.div`
   background-color: #fff5f4;
@@ -11,25 +11,25 @@ const Container = styled.div`
   padding: 40px;
   text-align: center;
   border-radius: 8px;
-`
+`;
 
 const LeafIcon = styled(Leaf)`
   color: var(--sc-color-carnation);
   margin-bottom: 16px;
-`
+`;
 
 const Heading = styled.h2`
   font-size: 26px;
   font-weight: bold;
   color: var(--sc-color-title);
   margin-bottom: 16px;
-`
+`;
 
 const Description = styled.p`
   font-size: 18px;
   max-width: 600px;
   margin: 0 auto 24px;
-`
+`;
 
 const HoverArrow = styled.div`
   --arrowSpacing: 5px;
@@ -57,7 +57,7 @@ const HoverArrow = styled.div`
       transform: translateX(0);
     }
   }
-`
+`;
 
 const Button = styled.a`
   display: flex;
@@ -108,7 +108,7 @@ const Button = styled.a`
     padding: 10px 20px;
     font-size: 16px;
   }
-`
+`;
 
 const Sustainability: React.FC = () => {
   return (
@@ -127,7 +127,7 @@ const Sustainability: React.FC = () => {
         </HoverArrow>
       </Button>
     </Container>
-  )
-}
+  );
+};
 
-export default Sustainability
+export default Sustainability;

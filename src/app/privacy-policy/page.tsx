@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
-import Link from 'next/link'
+import styled from 'styled-components';
+import Link from 'next/link';
 
 const PrivacyPageWrapper = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const PrivacyPageWrapper = styled.div`
     max-width: 100%;
     padding: 30px;
   }
-`
+`;
 
 const HeaderText = styled.h1`
   font-weight: 700;
@@ -61,7 +61,7 @@ const HeaderText = styled.h1`
   @media (max-width: 768px) {
     font-size: 42px;
   }
-`
+`;
 
 const SubheaderText = styled.h2`
   font-weight: 600;
@@ -71,7 +71,7 @@ const SubheaderText = styled.h2`
   @media (max-width: 768px) {
     font-size: 18px;
   }
-`
+`;
 
 const ListWrapper = styled.ul`
   padding-left: 40px;
@@ -104,10 +104,10 @@ const ListWrapper = styled.ul`
       height: 7px;
     }
   }
-`
+`;
 
 const PrivacyPolicy = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ''
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
 
   return (
     <>
@@ -375,7 +375,7 @@ const PrivacyPolicy = () => {
         </section>
       </PrivacyPageWrapper>
     </>
-  )
-}
+  );
+};
 
-export default PrivacyPolicy
+export default PrivacyPolicy;

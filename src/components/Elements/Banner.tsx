@@ -1,18 +1,18 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import Info from '@/public/images/icons/info.svg'
-import Warning from '@/public/images/icons/warning.svg'
-import Close from '@/public/images/icons/cancel.svg'
+import React from 'react';
+import styled, {css} from 'styled-components';
+import Info from '@/public/images/icons/info.svg';
+import Warning from '@/public/images/icons/warning.svg';
+import Close from '@/public/images/icons/cancel.svg';
 
 interface BannerProps {
-  type?: 'default' | 'caution' | 'critical'
-  onDismiss?: () => void
-  title: string
-  description?: string
-  actions?: React.ReactNode
+  type?: 'default' | 'caution' | 'critical';
+  onDismiss?: () => void;
+  title: string;
+  description?: string;
+  actions?: React.ReactNode;
 }
 
-const BannerWrapper = styled.div<{ type: 'default' | 'caution' | 'critical' }>`
+const BannerWrapper = styled.div<{type: 'default' | 'caution' | 'critical'}>`
   display: flex;
   align-items: center;
   padding: 16px;
@@ -27,25 +27,25 @@ const BannerWrapper = styled.div<{ type: 'default' | 'caution' | 'critical' }>`
           background-color: #fdf8c9;
           color: #b13600;
           border: 1px solid #fbd992;
-        `
+        `;
       case 'critical':
         return css`
           background-color: #fef4f6;
           color: #c0123c;
           border: 1px solid #fbd3dc;
-        `
+        `;
       case 'default':
       default:
         return css`
           background-color: #ffffff;
           color: #353a44;
           border: 1px solid #d8dee4;
-        `
+        `;
     }
   }}
-`
+`;
 
-const IconWrapper = styled.div<{ type: string }>`
+const IconWrapper = styled.div<{type: string}>`
   display: flex;
   align-items: center;
   align-self: flex-start;
@@ -61,42 +61,42 @@ const IconWrapper = styled.div<{ type: string }>`
           case 'caution':
             return css`
               fill: #b13600;
-            `
+            `;
           case 'critical':
             return css`
               fill: #c0123c;
-            `
+            `;
           case 'default':
           default:
             return css`
               fill: #353a44;
-            `
+            `;
         }
       }}
     }
   }
-`
+`;
 
 const ContentWrapper = styled.div`
   flex: 1;
-`
+`;
 
 const Title = styled.span`
   margin: 0;
   font-weight: 700;
   font-size: 16px;
-`
+`;
 
 const Description = styled.p`
   font-size: 14px;
   margin: 4px 0 0 0;
-`
+`;
 
 const ActionsWrapper = styled.div`
   margin-top: 8px;
   display: flex;
   gap: 8px;
-`
+`;
 
 const DismissButton = styled.button`
   align-self: flex-start;
@@ -107,7 +107,7 @@ const DismissButton = styled.button`
   font-size: 1em;
   margin-left: auto;
   box-shadow: none;
-`
+`;
 
 /**
  * Displays a message with an optional icon, description, and actions.
@@ -146,7 +146,7 @@ const Banner: React.FC<BannerProps> = ({
         </DismissButton>
       )}
     </BannerWrapper>
-  )
-}
+  );
+};
 
-export default Banner
+export default Banner;

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, forwardRef } from 'react'
-import styled from 'styled-components'
-import Image from 'next/image'
-import Link from 'next/link'
-import AddToCartButton from '@/components/Shopping/AddToCartButton'
-import { useMobileView } from '@/context/MobileViewContext'
+import React, {useState, useEffect, forwardRef} from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import Link from 'next/link';
+import AddToCartButton from '@/components/Shopping/AddToCartButton';
+import {useMobileView} from '@/context/MobileViewContext';
 
 const Container = styled.div`
   background-color: #dff3ff;
@@ -19,7 +19,7 @@ const Container = styled.div`
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
-`
+`;
 
 const ItemContainer = styled.div`
   padding: 8px;
@@ -45,7 +45,7 @@ const ItemContainer = styled.div`
     min-width: 60%;
     scroll-snap-align: center;
   }
-`
+`;
 
 const ImgContainer = styled.div`
   display: flex;
@@ -64,40 +64,40 @@ const ImgContainer = styled.div`
     height: 117px;
     width: auto;
   }
-`
+`;
 
 const DetailWrapper = styled.div`
   padding: 5px;
   margin-bottom: 20px;
-`
+`;
 
 const PriceContainer = styled.div`
   display: flex;
   line-height: 1.4;
   flex-direction: column;
-`
+`;
 
 const PriceText = styled.span`
   font-size: 12px;
   color: var(--sc-color-deal-text);
-`
+`;
 
 const OriginalPrice = styled.span`
   font-size: 12px;
   color: var(--sc-color-deal-text);
   text-decoration: line-through;
-`
+`;
 
 const Price = styled.h1`
   font-size: 14px;
   font-weight: bold;
   color: var(--sc-color-carnation);
-`
+`;
 
 const SaleText = styled.span`
   font-size: 12px;
   color: var(--sc-color-carnation);
-`
+`;
 
 const ButtonWrapper = styled.div`
   font-size: 12px;
@@ -113,7 +113,7 @@ const ButtonWrapper = styled.div`
       height: 32px;
     }
   }
-`
+`;
 
 const Title = styled.span`
   font-size: 14px;
@@ -125,121 +125,121 @@ const Title = styled.span`
   @media (max-width: 768px) {
     -webkit-line-clamp: 3;
   }
-`
+`;
 
 interface Deal {
-  category: string
-  slug: string
-  name: string
-  image_url: string
-  price: number
-  discount_amount: number
-  product_id: number
+  category: string;
+  slug: string;
+  name: string;
+  image_url: string;
+  price: number;
+  discount_amount: number;
+  product_id: number;
 }
 
 interface TopDealsProps {
-  className?: string
+  className?: string;
 }
 
 const TopDeals = forwardRef<HTMLDivElement, TopDealsProps>((props, ref) => {
-  const [deals, setDeals] = useState<Deal[]>([])
-  const isMobileView = useMobileView()
+  const [deals, setDeals] = useState<Deal[]>([]);
+  const isMobileView = useMobileView();
 
   useEffect(() => {
     const fetchDeals = async () => {
       try {
-        const response = await fetch('/api/deals')
-        const data = (await response.json()) as Deal[]
-        setDeals(data)
+        const response = await fetch('/api/deals');
+        const data = (await response.json()) as Deal[];
+        setDeals(data);
       } catch (error) {
-        console.error('Error fetching deals:', error)
+        console.error('Error fetching deals:', error);
       }
-    }
+    };
 
-    fetchDeals()
-  }, [])
+    fetchDeals();
+  }, []);
 
-  const loveDeals = deals.filter((deal) => deal.category === 'deals_love')
+  const loveDeals = deals.filter((deal) => deal.category === 'deals_love');
 
   return (
     <Container ref={ref} className={props.className}>
       {isMobileView
         ? loveDeals.map((deal, index) => (
-          <ItemContainer key={index}>
-            <Link
-              href={`products/${deal.slug}`}
-              aria-label={`View details of ${deal.name}`}
-            >
-              <ImgContainer>
-                <Image
-                  alt={deal.name}
-                  src={deal.image_url || '/images/products/placeholder.jpg'}
-                  width={1540}
-                  height={649}
+            <ItemContainer key={index}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
+                <ImgContainer>
+                  <Image
+                    alt={deal.name}
+                    src={deal.image_url || '/images/products/placeholder.jpg'}
+                    width={1540}
+                    height={649}
+                  />
+                </ImgContainer>
+                <DetailWrapper>
+                  <Title>{deal.name}</Title>
+                  <PriceContainer>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
+                    <PriceText>
+                      reg <OriginalPrice>${deal.price}</OriginalPrice>
+                    </PriceText>
+                    <SaleText>Sale</SaleText>
+                  </PriceContainer>
+                </DetailWrapper>
+              </Link>
+              <ButtonWrapper>
+                <AddToCartButton
+                  sizeVariantId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
                 />
-              </ImgContainer>
-              <DetailWrapper>
-                <Title>{deal.name}</Title>
-                <PriceContainer>
-                  <Price>
-                    ${(deal.price - deal.discount_amount).toFixed(2)}
-                  </Price>
-                  <PriceText>
-                    reg <OriginalPrice>${deal.price}</OriginalPrice>
-                  </PriceText>
-                  <SaleText>Sale</SaleText>
-                </PriceContainer>
-              </DetailWrapper>
-            </Link>
-            <ButtonWrapper>
-              <AddToCartButton
-                sizeVariantId={deal.product_id}
-                quantity={1}
-                productName={deal.name}
-              />
-            </ButtonWrapper>
-          </ItemContainer>
-        ))
+              </ButtonWrapper>
+            </ItemContainer>
+          ))
         : loveDeals.map((deal, index) => (
-          <ItemContainer key={index}>
-            <Link
-              href={`products/${deal.slug}`}
-              aria-label={`View details of ${deal.name}`}
-            >
-              <ImgContainer>
-                <Image
-                  alt={deal.name}
-                  src={deal.image_url || '/images/products/placeholder.jpg'}
-                  width={1540}
-                  height={649}
+            <ItemContainer key={index}>
+              <Link
+                href={`products/${deal.slug}`}
+                aria-label={`View details of ${deal.name}`}
+              >
+                <ImgContainer>
+                  <Image
+                    alt={deal.name}
+                    src={deal.image_url || '/images/products/placeholder.jpg'}
+                    width={1540}
+                    height={649}
+                  />
+                </ImgContainer>
+                <DetailWrapper>
+                  <Title>{deal.name}</Title>
+                  <PriceContainer>
+                    <Price>
+                      ${(deal.price - deal.discount_amount).toFixed(2)}
+                    </Price>
+                    <PriceText>
+                      reg <OriginalPrice>${deal.price}</OriginalPrice>
+                    </PriceText>
+                    <SaleText>Sale</SaleText>
+                  </PriceContainer>
+                </DetailWrapper>
+              </Link>
+              <ButtonWrapper>
+                <AddToCartButton
+                  sizeVariantId={deal.product_id}
+                  quantity={1}
+                  productName={deal.name}
                 />
-              </ImgContainer>
-              <DetailWrapper>
-                <Title>{deal.name}</Title>
-                <PriceContainer>
-                  <Price>
-                    ${(deal.price - deal.discount_amount).toFixed(2)}
-                  </Price>
-                  <PriceText>
-                    reg <OriginalPrice>${deal.price}</OriginalPrice>
-                  </PriceText>
-                  <SaleText>Sale</SaleText>
-                </PriceContainer>
-              </DetailWrapper>
-            </Link>
-            <ButtonWrapper>
-              <AddToCartButton
-                sizeVariantId={deal.product_id}
-                quantity={1}
-                productName={deal.name}
-              />
-            </ButtonWrapper>
-          </ItemContainer>
-        ))}
+              </ButtonWrapper>
+            </ItemContainer>
+          ))}
     </Container>
-  )
-})
+  );
+});
 
-TopDeals.displayName = 'TopDeals'
+TopDeals.displayName = 'TopDeals';
 
-export default TopDeals
+export default TopDeals;

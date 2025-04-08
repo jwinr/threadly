@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const spin = keyframes`
   0% {
@@ -8,7 +8,7 @@ const spin = keyframes`
   100% {
     transform: rotate(360deg);
   }
-`
+`;
 
 const spinner = keyframes`
   0% {
@@ -17,18 +17,18 @@ const spinner = keyframes`
   100% {
     stroke-dashoffset: 0;
   }
-`
+`;
 
 interface LoaderSpinnerProps {
-  $isLoading: boolean
+  $isLoading: boolean;
 }
 
 const LoaderSpinner = styled.div<LoaderSpinnerProps>`
   position: absolute;
   justify-content: center;
   align-items: center;
-  opacity: ${({ $isLoading }) => ($isLoading ? 1 : 0)};
-  display: ${({ $isLoading }) => ($isLoading ? 'flex' : 'none')};
+  opacity: ${({$isLoading}) => ($isLoading ? 1 : 0)};
+  display: ${({$isLoading}) => ($isLoading ? 'flex' : 'none')};
   transition: opacity 0.3s ease-in-out;
 
   & > div {
@@ -48,19 +48,19 @@ const LoaderSpinner = styled.div<LoaderSpinnerProps>`
       animation: 1750ms linear 0s infinite normal none running ${spinner};
     }
   }
-`
+`;
 
 const InnerDiv = styled.div`
   --ofset: 138.23007675795088;
   width: 18px;
   height: 18px;
-`
+`;
 
 interface LoaderSpinProps {
-  isLoading: boolean
+  isLoading: boolean;
 }
 
-const LoaderSpin: React.FC<LoaderSpinProps> = ({ isLoading }) => (
+const LoaderSpin: React.FC<LoaderSpinProps> = ({isLoading}) => (
   <LoaderSpinner $isLoading={isLoading}>
     <InnerDiv>
       <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" x="0" y="0">
@@ -77,6 +77,6 @@ const LoaderSpin: React.FC<LoaderSpinProps> = ({ isLoading }) => (
       <slot></slot>
     </InnerDiv>
   </LoaderSpinner>
-)
+);
 
-export default LoaderSpin
+export default LoaderSpin;

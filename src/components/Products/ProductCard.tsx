@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import styled, { css } from 'styled-components'
-import StarRatings from '@/components/ReviewStars/StarRatings'
-import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
-import Missing from '@/public/images/icons/block.svg'
-import Arrow from '@/public/images/icons/chevronLeft.svg'
-import { CartContext } from '@/context/CartContext'
+import React, {useState, useEffect, useRef, useContext} from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import styled, {css} from 'styled-components';
+import StarRatings from '@/components/ReviewStars/StarRatings';
+import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter';
+import Missing from '@/public/images/icons/block.svg';
+import Arrow from '@/public/images/icons/chevronLeft.svg';
+import {CartContext} from '@/context/CartContext';
 
-const CardContainer = styled.div<{ $isLoading: boolean }>`
+const CardContainer = styled.div<{$isLoading: boolean}>`
   display: flex;
   position: relative;
   flex-direction: column;
@@ -22,7 +22,7 @@ const CardContainer = styled.div<{ $isLoading: boolean }>`
   height: 100%;
   width: 100%;
 
-  ${({ $isLoading }) =>
+  ${({$isLoading}) =>
     !$isLoading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
@@ -33,7 +33,7 @@ const CardContainer = styled.div<{ $isLoading: boolean }>`
     flex-direction: row;
     flex-wrap: wrap;
   }
-`
+`;
 
 const ImageWrapper = styled.div`
   display: flex;
@@ -55,7 +55,7 @@ const ImageWrapper = styled.div`
     width: 45%; /* Leaving some room for the add cart button on small displays */
     height: auto;
   }
-`
+`;
 
 const Title = styled(Link)`
   font-size: 14px;
@@ -72,40 +72,40 @@ const Title = styled(Link)`
     order: 1;
     width: 100%;
   }
-`
+`;
 
 const Brand = styled.span`
   font-size: 14px;
   margin-bottom: 4px;
   position: relative;
-`
+`;
 
 const SlideWrapper = styled.div`
   position: relative;
   padding: 16px;
   z-index: 2;
-`
+`;
 
-const Swatches = styled.div<{ $hovered: boolean }>`
+const Swatches = styled.div<{$hovered: boolean}>`
   position: absolute;
   width: 100%;
   left: 0;
   right: 0;
-  top: ${({ $hovered }) => ($hovered ? '-40px' : '0')};
-  visibility: ${({ $hovered }) => ($hovered ? 'visible' : 'hidden')};
+  top: ${({$hovered}) => ($hovered ? '-40px' : '0')};
+  visibility: ${({$hovered}) => ($hovered ? 'visible' : 'hidden')};
   background-color: white;
   height: 100%;
   line-height: 18px;
   transition: all 0.25s ease;
-`
+`;
 
-const SwatchWrapper = styled.div<{ $hovered: boolean }>`
+const SwatchWrapper = styled.div<{$hovered: boolean}>`
   display: flex;
   padding: 16px 16px 0px 16px;
   gap: 8px;
-  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
+  opacity: ${({$hovered}) => ($hovered ? '1' : '0')};
   transition: opacity 140ms ease;
-`
+`;
 
 const SwatchButton = styled.button`
   background: none;
@@ -133,20 +133,20 @@ const SwatchButton = styled.button`
   svg > path {
     fill: var(--sc-color-icon);
   }
-`
+`;
 
 const MissingSwatch = styled(Missing)`
   width: 24px;
   height: 24px;
-`
+`;
 
-const ImageSlider = styled.div<{ $activeIndex: number }>`
+const ImageSlider = styled.div<{$activeIndex: number}>`
   display: flex;
   transition: transform 0.3s ease;
-  transform: ${({ $activeIndex }) => `translateX(-${$activeIndex * 100}%)`};
+  transform: ${({$activeIndex}) => `translateX(-${$activeIndex * 100}%)`};
   width: 100%;
   height: 100%;
-`
+`;
 
 const SliderImage = styled(Image)`
   flex-shrink: 0;
@@ -157,11 +157,11 @@ const SliderImage = styled(Image)`
   @media (max-width: 768px) {
     height: auto;
   }
-`
+`;
 
-const SliderNav = styled.div<{ $hovered: boolean }>`
+const SliderNav = styled.div<{$hovered: boolean}>`
   position: absolute;
-  bottom: ${({ $hovered }) => ($hovered ? '40px' : '0')};
+  bottom: ${({$hovered}) => ($hovered ? '40px' : '0')};
   left: 0;
   right: 0;
   display: flex;
@@ -184,23 +184,23 @@ const SliderNav = styled.div<{ $hovered: boolean }>`
       rgba(0, 0, 0, 0.95) -42.5%,
       rgba(0, 0, 0, 0) 100%
     );
-    opacity: ${({ $hovered }) => ($hovered ? '0.4' : '0')};
+    opacity: ${({$hovered}) => ($hovered ? '0.4' : '0')};
     transition: opacity 0.25s ease;
     z-index: -1;
   }
-`
+`;
 
-const SliderArrow = styled(Arrow) <{
-  $direction: 'left' | 'right'
-  $hovered: boolean
+const SliderArrow = styled(Arrow)<{
+  $direction: 'left' | 'right';
+  $hovered: boolean;
 }>`
-  transform: ${({ $direction }) =>
+  transform: ${({$direction}) =>
     $direction === 'left' ? 'none' : 'rotate(180deg)'};
   margin-top: 17px;
   width: 15px;
   height: 15px;
   cursor: pointer;
-  opacity: ${({ $hovered }) => ($hovered ? '0.5' : '0')};
+  opacity: ${({$hovered}) => ($hovered ? '0.5' : '0')};
   transition: opacity 140ms ease;
   z-index: 2;
   user-select: none;
@@ -221,9 +221,9 @@ const SliderArrow = styled(Arrow) <{
   > path {
     fill: #fff;
   }
-`
+`;
 
-const SliderCounter = styled.div<{ $hovered: boolean }>`
+const SliderCounter = styled.div<{$hovered: boolean}>`
   position: absolute;
   left: 0;
   bottom: 30px;
@@ -232,18 +232,18 @@ const SliderCounter = styled.div<{ $hovered: boolean }>`
   text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.8);
   margin: 0 10px;
   user-select: none;
-  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
+  opacity: ${({$hovered}) => ($hovered ? '1' : '0')};
   z-index: 2;
-`
+`;
 
-const SliderDot = styled.div<{ $active: boolean; $hovered: boolean }>`
+const SliderDot = styled.div<{$active: boolean; $hovered: boolean}>`
   width: 15%;
   height: 2px;
-  background-color: ${({ $active }) =>
+  background-color: ${({$active}) =>
     $active ? '#fff' : 'rgba(255, 255, 255, 0.3)'};
   border: none;
   margin: 17px 4px 0px 4px;
-  opacity: ${({ $hovered }) => ($hovered ? '1' : '0')};
+  opacity: ${({$hovered}) => ($hovered ? '1' : '0')};
   cursor: default;
   user-select: none;
   transition: background-color 0.3s ease;
@@ -257,7 +257,7 @@ const SliderDot = styled.div<{ $active: boolean; $hovered: boolean }>`
     right: -3px;
     z-index: 1;
   }
-`
+`;
 
 const Details = styled.div`
   display: flex;
@@ -270,22 +270,22 @@ const Details = styled.div`
     order: 3;
     width: 55%; /* Leaving some room for the add cart button on small displays */
   }
-`
+`;
 
 const Rating = styled.h1`
   font-size: 14px;
   color: rgb(102, 102, 102);
   position: relative;
-`
+`;
 
 const PriceContainer = styled.div`
   display: flex;
   align-items: baseline;
   color: var(--sc-color-deal-text);
   position: relative;
-`
+`;
 
-const Price = styled.h1<{ $sale?: boolean }>`
+const Price = styled.h1<{$sale?: boolean}>`
   font-size: 15px;
   font-weight: 500;
   line-height: 1;
@@ -298,14 +298,14 @@ const Price = styled.h1<{ $sale?: boolean }>`
   @media (max-width: 768px) {
     font-size: 16px;
   }
-`
+`;
 
 const OriginalPrice = styled.span`
   font-size: 16px;
   font-weight: 400;
   color: var(--sc-color-deal-text);
   text-decoration: line-through;
-`
+`;
 
 const Sale = styled.span`
   display: flex;
@@ -314,28 +314,28 @@ const Sale = styled.span`
   margin-bottom: 8px;
   color: var(--sc-color-carnation);
   position: relative;
-`
+`;
 
 interface ProductCardProps {
-  link: string
-  title: string
-  price: number
-  discount?: number
-  brand: string
-  rating: number
-  image: { image_url: string }[]
-  id: string
-  swatch: string
-  allColors: ColorOption[]
-  loading: boolean
-  sku: string
+  link: string;
+  title: string;
+  price: number;
+  discount?: number;
+  brand: string;
+  rating: number;
+  image: {image_url: string}[];
+  id: string;
+  swatch: string;
+  allColors: ColorOption[];
+  loading: boolean;
+  sku: string;
 }
 
 interface ColorOption {
-  color_variant_id: string
-  color_swatch_url?: string
-  color: string
-  images: { image_url: string }[]
+  color_variant_id: string;
+  color_swatch_url?: string;
+  color: string;
+  images: {image_url: string}[];
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -350,31 +350,31 @@ const ProductCard: React.FC<ProductCardProps> = ({
   allColors,
   sku,
 }) => {
-  const formatCurrency = useCurrencyFormatter()
-  const isOnSale = !!discount
+  const formatCurrency = useCurrencyFormatter();
+  const isOnSale = !!discount;
   const [currentImage, setCurrentImage] = useState<{
-    image_url: string
-  } | null>(null)
-  const [hovered, setHovered] = useState(false)
-  const [imgHovered, setImgHovered] = useState(false)
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
-  const [variantImages, setVariantImages] = useState(image)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const cartContext = useContext(CartContext)
-  const cart = cartContext ? cartContext.cart : []
+    image_url: string;
+  } | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const [imgHovered, setImgHovered] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [variantImages, setVariantImages] = useState(image);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const cartContext = useContext(CartContext);
+  const cart = cartContext ? cartContext.cart : [];
 
   // Check for any items already in the cart
-  const isInCart = cart.some((cartItem) => cartItem.sku === sku)
+  const isInCart = cart.some((cartItem) => cartItem.sku === sku);
 
   useEffect(() => {
     if (image && image.length > 0) {
-      setCurrentImage(image[0]) // Using the first image as the main one
-      setActiveImageIndex(0)
-      setVariantImages(image) // Initially setting variantImages to the default images
+      setCurrentImage(image[0]); // Using the first image as the main one
+      setActiveImageIndex(0);
+      setVariantImages(image); // Initially setting variantImages to the default images
     } else {
-      setCurrentImage(null)
+      setCurrentImage(null);
     }
-  }, [image])
+  }, [image]);
 
   const handleSwatchClick = (
     colorVariantId: string,
@@ -383,64 +383,64 @@ const ProductCard: React.FC<ProductCardProps> = ({
     const selectedColor = allColors.find(
       (colorOption: ColorOption) =>
         colorOption.color_variant_id === colorVariantId
-    )
+    );
     if (selectedColor) {
-      const colorImages = selectedColor.images || []
+      const colorImages = selectedColor.images || [];
       if (colorImages.length > 0) {
-        setCurrentImage(colorImages[0]) // Update with the first image of the selected color
-        setActiveImageIndex(0)
-        setVariantImages(colorImages) // Update the variantImages to the selected color's images
+        setCurrentImage(colorImages[0]); // Update with the first image of the selected color
+        setActiveImageIndex(0);
+        setVariantImages(colorImages); // Update the variantImages to the selected color's images
       } else {
-        setCurrentImage(null)
-        setVariantImages([])
+        setCurrentImage(null);
+        setVariantImages([]);
       }
     }
 
     // Remove focus from the button after click
-    event.currentTarget.blur()
-  }
+    event.currentTarget.blur();
+  };
 
   const handleImageNavClick = (index: number) => {
     if (index >= 0 && index < variantImages.length) {
-      setActiveImageIndex(index)
-      setCurrentImage(variantImages[index])
+      setActiveImageIndex(index);
+      setCurrentImage(variantImages[index]);
     }
-  }
+  };
 
   const handlePrevClick = () => {
     if (activeImageIndex > 0) {
-      handleImageNavClick(activeImageIndex - 1)
+      handleImageNavClick(activeImageIndex - 1);
     } else {
-      handleImageNavClick(variantImages.length - 1) // Loop back to the last image
+      handleImageNavClick(variantImages.length - 1); // Loop back to the last image
     }
-  }
+  };
 
   const handleNextClick = () => {
     if (activeImageIndex < variantImages.length - 1) {
-      handleImageNavClick(activeImageIndex + 1)
+      handleImageNavClick(activeImageIndex + 1);
     } else {
-      handleImageNavClick(0) // Loop back to the first image
+      handleImageNavClick(0); // Loop back to the first image
     }
-  }
+  };
 
   const handleKeyDown = (
     event: React.KeyboardEvent<SVGElement>,
     direction: 'prev' | 'next'
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
+      event.preventDefault();
       if (direction === 'prev') {
-        handlePrevClick()
+        handlePrevClick();
       } else {
-        handleNextClick()
+        handleNextClick();
       }
     }
-  }
+  };
 
   const handleFocus = () => {
-    setHovered(true)
-    setImgHovered(true)
-  }
+    setHovered(true);
+    setImgHovered(true);
+  };
 
   const handleBlur = () => {
     // Delay setting hovered to false to allow focus to move within the CardContainer
@@ -449,22 +449,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
         cardRef.current &&
         !cardRef.current.contains(document.activeElement)
       ) {
-        setHovered(false)
-        setImgHovered(false)
+        setHovered(false);
+        setImgHovered(false);
       }
-    }, 0)
-  }
+    }, 0);
+  };
 
   const handleMouseLeave = () => {
     // Only set hovered to false if no element inside is focused
     if (cardRef.current && !cardRef.current.contains(document.activeElement)) {
-      setHovered(false)
-      setImgHovered(false)
+      setHovered(false);
+      setImgHovered(false);
     }
-  }
+  };
 
   if (loading || !currentImage) {
-    return null
+    return null;
   }
 
   return (
@@ -584,12 +584,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </PriceContainer>
           {discount && <Sale>Sale</Sale>}
           {isInCart && (
-            <span style={{ color: 'green', fontWeight: 'bold' }}>In cart</span>
+            <span style={{color: 'green', fontWeight: 'bold'}}>In cart</span>
           )}
         </Details>
       </SlideWrapper>
     </CardContainer>
-  )
-}
+  );
+};
 
-export default ProductCard
+export default ProductCard;

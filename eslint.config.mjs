@@ -1,9 +1,9 @@
 // @ts-check
 
-import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
@@ -51,4 +51,4 @@ export default tseslint.config(
     ...tseslint.configs.disableTypeChecked,
   },
   eslintConfigPrettier
-)
+);

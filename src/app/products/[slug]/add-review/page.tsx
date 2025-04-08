@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {
   useContext,
@@ -7,20 +7,20 @@ import React, {
   useRef,
   ChangeEvent,
   FormEvent,
-} from 'react'
-import { useRouter, useParams } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
-import styled from 'styled-components'
-import { UserContext } from '@/context/UserContext'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import StarRatingSelector from '@/components/ReviewStars/StarRatingSelector'
+} from 'react';
+import {useRouter, useParams} from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import styled from 'styled-components';
+import {UserContext} from '@/context/UserContext';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import StarRatingSelector from '@/components/ReviewStars/StarRatingSelector';
 
 interface Product {
-  slug: string
-  name: string
-  description: string
-  image: string
+  slug: string;
+  name: string;
+  description: string;
+  image: string;
 }
 
 const Container = styled.div`
@@ -38,7 +38,7 @@ const Container = styled.div`
   p {
     font-size: 14px;
   }
-`
+`;
 
 const ReviewForm = styled.form`
   display: flex;
@@ -59,12 +59,12 @@ const ReviewForm = styled.form`
   textarea {
     height: 150px;
   }
-`
+`;
 
 const ErrorMessage = styled.span`
   color: var(--sc-color-red-dark);
   font-size: 14px;
-`
+`;
 
 const ProductDetailsContainer = styled.div`
   display: flex;
@@ -75,7 +75,7 @@ const ProductDetailsContainer = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
   }
-`
+`;
 
 const ProductImage = styled(Link)`
   width: 100%;
@@ -95,7 +95,7 @@ const ProductImage = styled(Link)`
     width: 100%;
     height: auto;
   }
-`
+`;
 
 const ProductInfo = styled.div`
   flex: 1;
@@ -112,7 +112,7 @@ const ProductInfo = styled.div`
       color: #555;
     }
   }
-`
+`;
 
 const EntryWrapper = styled.div`
   position: relative;
@@ -121,7 +121,7 @@ const EntryWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin: 5px 0;
-`
+`;
 
 const EntryContainer = styled.input`
   border: 1px solid var(--sc-color-border-gray);
@@ -142,7 +142,7 @@ const EntryContainer = styled.input`
     font-size: 12px;
     color: var(--sc-color-text);
   }
-`
+`;
 
 const Label = styled.label`
   position: absolute;
@@ -166,7 +166,7 @@ const Label = styled.label`
   ${EntryWrapper} textarea + & {
     top: 10%;
   }
-`
+`;
 
 const SubmitBtn = styled.button`
   position: relative;
@@ -197,74 +197,74 @@ const SubmitBtn = styled.button`
     cursor: not-allowed;
     opacity: 0.6;
   }
-`
+`;
 
 const ValidationMessage = styled.div`
   color: var(--sc-color-red-dark);
   font-size: 12px;
   align-self: flex-start;
   margin-bottom: 10px;
-`
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 75px;
   margin-top: 35px;
-`
+`;
 
 const AddReview: React.FC = () => {
-  const { userAttributes } = useContext(UserContext)
-  const router = useRouter()
-  const { slug } = useParams() as { slug: string }
-  const [reviewTitle, setReviewTitle] = useState<string>('')
-  const [reviewText, setReviewText] = useState<string>('')
-  const [rating, setRating] = useState<number>(0)
-  const [error, setError] = useState<string>('')
-  const [product, setProduct] = useState<Product | null>(null)
-  const [titleValid, setTitleValid] = useState<boolean>(true)
-  const [descriptionValid, setDescriptionValid] = useState<boolean>(true)
-  const [titleErrorMessage, setTitleErrorMessage] = useState<string>('')
+  const {userAttributes} = useContext(UserContext);
+  const router = useRouter();
+  const {slug} = useParams() as {slug: string};
+  const [reviewTitle, setReviewTitle] = useState<string>('');
+  const [reviewText, setReviewText] = useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+  const [error, setError] = useState<string>('');
+  const [product, setProduct] = useState<Product | null>(null);
+  const [titleValid, setTitleValid] = useState<boolean>(true);
+  const [descriptionValid, setDescriptionValid] = useState<boolean>(true);
+  const [titleErrorMessage, setTitleErrorMessage] = useState<string>('');
   const [descriptionErrorMessage, setDescriptionErrorMessage] =
-    useState<string>('')
-  const [ratingError, setRatingError] = useState<string>('')
-  const [hasSubmittedReview, setHasSubmittedReview] = useState<boolean>(false)
+    useState<string>('');
+  const [ratingError, setRatingError] = useState<string>('');
+  const [hasSubmittedReview, setHasSubmittedReview] = useState<boolean>(false);
 
-  const titleRef = useRef<HTMLInputElement | null>(null)
-  const descriptionRef = useRef<HTMLTextAreaElement | null>(null)
+  const titleRef = useRef<HTMLInputElement | null>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
   const validateTitle = (title: string): boolean => {
-    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/
+    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/;
     if (title.length < 5) {
-      setTitleErrorMessage('Title must be at least 5 characters long.')
-      return false
+      setTitleErrorMessage('Title must be at least 5 characters long.');
+      return false;
     } else if (title.length > 75) {
-      setTitleErrorMessage('Title must be no more than 75 characters long.')
-      return false
+      setTitleErrorMessage('Title must be no more than 75 characters long.');
+      return false;
     } else if (!regex.test(title)) {
-      setTitleErrorMessage('Title contains invalid characters.')
-      return false
+      setTitleErrorMessage('Title contains invalid characters.');
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const validateDescription = (description: string): boolean => {
-    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/
+    const regex = /^[\d\s!"#$%&()*,.:<>?@A-Z^a-z{|}]+$/;
     if (description.length < 10) {
       setDescriptionErrorMessage(
         'Description must be at least 10 characters long.'
-      )
-      return false
+      );
+      return false;
     } else if (description.length > 500) {
       setDescriptionErrorMessage(
         'Description must be no more than 500 characters long.'
-      )
-      return false
+      );
+      return false;
     } else if (!regex.test(description)) {
-      setDescriptionErrorMessage('Description contains invalid characters.')
-      return false
+      setDescriptionErrorMessage('Description contains invalid characters.');
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const handleBlur = (
     value: string,
@@ -272,82 +272,82 @@ const AddReview: React.FC = () => {
     setValid: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     if (value.trim().length === 0) {
-      setValid(true)
+      setValid(true);
     } else {
-      setValid(validator(value))
+      setValid(validator(value));
     }
-  }
+  };
 
   const handleTitleBlur = (): void => {
-    handleBlur(reviewTitle, validateTitle, setTitleValid)
-  }
+    handleBlur(reviewTitle, validateTitle, setTitleValid);
+  };
 
   const handleDescriptionBlur = (): void => {
-    handleBlur(reviewText, validateDescription, setDescriptionValid)
-  }
+    handleBlur(reviewText, validateDescription, setDescriptionValid);
+  };
 
   const onChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
-    const { name, value } = e.target
+    const {name, value} = e.target;
     if (name === 'reviewTitle') {
-      setReviewTitle(value)
+      setReviewTitle(value);
       // Reset the title validity state to true when user starts editing
-      setTitleValid(true)
+      setTitleValid(true);
     } else if (name === 'reviewText') {
-      setReviewText(value)
-      setDescriptionValid(true)
+      setReviewText(value);
+      setDescriptionValid(true);
     }
-  }
+  };
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch(`/api/products/${slug}/add-review`)
+        const response = await fetch(`/api/products/${slug}/add-review`);
         if (response.ok) {
-          const data = (await response.json()) as Product
-          setProduct(data)
+          const data = (await response.json()) as Product;
+          setProduct(data);
         }
       } catch (error) {
-        console.error('Error fetching product details:', error)
+        console.error('Error fetching product details:', error);
       }
-    }
+    };
 
     if (slug) {
-      fetchProductDetails()
+      fetchProductDetails();
     }
-  }, [slug])
+  }, [slug]);
 
   const handleReviewSubmit = async (e: FormEvent): Promise<void> => {
-    e.preventDefault()
-    setError('') // Reset error message
+    e.preventDefault();
+    setError(''); // Reset error message
 
     // Check if user has already submitted a review
     if (hasSubmittedReview) {
-      setError('You have already submitted a review for this item!')
-      return
+      setError('You have already submitted a review for this item!');
+      return;
     }
 
     // Validate the rating before making the API call
     if (rating === 0) {
-      setRatingError('Please select a rating.')
-      return
+      setRatingError('Please select a rating.');
+      return;
     }
 
     // Validate the title before making the API call
-    const isTitleValid = validateTitle(reviewTitle)
-    setTitleValid(isTitleValid)
+    const isTitleValid = validateTitle(reviewTitle);
+    setTitleValid(isTitleValid);
     if (!isTitleValid) {
-      titleRef.current?.focus()
-      return
+      titleRef.current?.focus();
+      return;
     }
 
     // Validate the description before making the API call
-    const isDescriptionValid = validateDescription(reviewText)
-    setDescriptionValid(isDescriptionValid)
+    const isDescriptionValid = validateDescription(reviewText);
+    setDescriptionValid(isDescriptionValid);
     if (!isDescriptionValid) {
-      descriptionRef.current?.focus()
-      return
+      descriptionRef.current?.focus();
+      return;
     }
 
     try {
@@ -360,41 +360,41 @@ const AddReview: React.FC = () => {
           cognitoSub: userAttributes?.sub,
           productId: slug,
         }),
-      })
+      });
 
       if (response.ok) {
         // Refresh reviews list..
-        await router.push(`/products/${slug}`)
+        await router.push(`/products/${slug}`);
       } else {
-        const errorData: { error: string } = (await response.json()) as {
-          error: string
-        }
+        const errorData: {error: string} = (await response.json()) as {
+          error: string;
+        };
         if (
           errorData.error ===
           'You have already submitted a review for this item!'
         ) {
-          setHasSubmittedReview(true)
+          setHasSubmittedReview(true);
         }
-        setError(errorData.error)
+        setError(errorData.error);
       }
     } catch (error) {
-      console.error('Error submitting review:', error)
+      console.error('Error submitting review:', error);
     }
-  }
+  };
 
   const handleRatingChange = (newRating: number): void => {
-    setRating(newRating)
-    setRatingError('') // Clear the rating error message
-  }
+    setRating(newRating);
+    setRatingError(''); // Clear the rating error message
+  };
 
   const handleCancel = () => {
-    void router.push(`/products/${product?.slug}`)
-  }
+    void router.push(`/products/${product?.slug}`);
+  };
 
   const invalidStyle = {
     borderColor: 'var(--sc-color-red-dark)',
     color: 'var(--sc-color-red-dark)',
-  }
+  };
 
   return (
     <>
@@ -421,7 +421,7 @@ const AddReview: React.FC = () => {
                 </div>
                 <ReviewForm
                   onSubmit={(e) => {
-                    void handleReviewSubmit(e)
+                    void handleReviewSubmit(e);
                   }}
                   data-form-type="other"
                 >
@@ -505,7 +505,7 @@ const AddReview: React.FC = () => {
         )}
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default AddReview
+export default AddReview;

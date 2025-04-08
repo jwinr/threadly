@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import React, { useContext, useEffect, useState } from 'react'
-import Head from 'next/head'
-import { UserContext } from '@/context/UserContext'
-import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
-import styled from 'styled-components'
-import getStripe from 'src/utils/get-stripejs'
-import { Elements } from '@stripe/react-stripe-js'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import Breadcrumb from '@/components/Elements/Breadcrumb'
-import Button from '@/components/Elements/Button'
+import React, {useContext, useEffect, useState} from 'react';
+import Head from 'next/head';
+import {UserContext} from '@/context/UserContext';
+import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser';
+import styled from 'styled-components';
+import getStripe from 'src/utils/get-stripejs';
+import {Elements} from '@stripe/react-stripe-js';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import Breadcrumb from '@/components/Elements/Breadcrumb';
+import Button from '@/components/Elements/Button';
 
 const PaymentPageContainer = styled.div`
   margin: 0 auto;
@@ -17,7 +17,7 @@ const PaymentPageContainer = styled.div`
   gap: 20px;
   display: flex;
   flex-direction: column;
-`
+`;
 
 const Container = styled.div`
   margin: 0 auto;
@@ -26,20 +26,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const Header = styled.h1`
   color: var(--sc-color-title);
   font-size: 29px;
   font-weight: bold;
   margin-bottom: 8px;
-`
+`;
 
 const PaymentMethodsList = styled.ul`
   list-style: none;
   padding: 0;
   width: 100%;
-`
+`;
 
 const PaymentMethodItem = styled.li`
   background: #f9f9f9;
@@ -49,7 +49,7 @@ const PaymentMethodItem = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const NoSavedMethodsCard = styled.div`
   background: #ffffff;
@@ -59,7 +59,7 @@ const NoSavedMethodsCard = styled.div`
   text-align: center;
   width: 100%;
   margin-bottom: 20px;
-`
+`;
 
 const RemoveCard = styled.button`
   padding: 10px 20px;
@@ -73,64 +73,64 @@ const RemoveCard = styled.button`
     background-color: #c0c0c0;
     cursor: not-allowed;
   }
-`
+`;
 
 interface PaymentMethod {
-  id: string
+  id: string;
   card: {
-    brand: string
-    last4: string
-  }
+    brand: string;
+    last4: string;
+  };
 }
 
 const Payments: React.FC = () => {
-  const { fetchPaymentMethods } = useContext(UserContext) as {
-    fetchPaymentMethods: (customerId: string) => Promise<PaymentMethod[]>
-  }
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const checkingUser = useCheckLoggedInUser()
+  const {fetchPaymentMethods} = useContext(UserContext) as {
+    fetchPaymentMethods: (customerId: string) => Promise<PaymentMethod[]>;
+  };
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const checkingUser = useCheckLoggedInUser();
 
   useEffect(() => {
     if (!checkingUser) {
-      fetchSavedPaymentMethods()
+      fetchSavedPaymentMethods();
     }
-  }, [checkingUser])
+  }, [checkingUser]);
 
   const fetchSavedPaymentMethods = async () => {
-    setLoading(true)
+    setLoading(true);
 
     try {
       // Fetch the Stripe customer ID from the backend
       const customerResponse = await fetch('/api/stripe-id', {
         method: 'GET',
-      })
+      });
 
       if (!customerResponse.ok) {
-        console.error('Failed to fetch Stripe customer ID')
-        setLoading(false)
-        return
+        console.error('Failed to fetch Stripe customer ID');
+        setLoading(false);
+        return;
       }
 
-      const { stripe_customer_id: customer } = await customerResponse.json()
+      const {stripe_customer_id: customer} = await customerResponse.json();
 
       if (customer) {
-        const methods = await fetchPaymentMethods(customer)
-        setPaymentMethods(methods)
+        const methods = await fetchPaymentMethods(customer);
+        setPaymentMethods(methods);
       } else {
-        console.log('Customer is not defined')
+        console.log('Customer is not defined');
       }
     } catch (error) {
-      console.error('Error fetching saved payment methods:', error)
+      console.error('Error fetching saved payment methods:', error);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const removePaymentMethod = (methodId: string) => {
     // TODO: Implement logic to perform after removing the card
-    console.log('TODO: ', methodId)
-  }
+    console.log('TODO: ', methodId);
+  };
 
   return (
     <>
@@ -179,13 +179,13 @@ const Payments: React.FC = () => {
         </>
       )}
     </>
-  )
-}
+  );
+};
 
 const WrappedPayments: React.FC = () => (
   <Elements stripe={getStripe()}>
     <Payments />
   </Elements>
-)
+);
 
-export default WrappedPayments
+export default WrappedPayments;

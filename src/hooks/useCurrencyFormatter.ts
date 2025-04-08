@@ -11,13 +11,13 @@ const formatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
-})
+});
 
 const useCurrencyFormatter = () => {
   return (amount: number, isCents = false) => {
-    const adjustedAmount = isCents ? amount / 100 : amount
-    return formatter.format(adjustedAmount)
-  }
-}
+    const adjustedAmount = isCents ? amount / 100 : amount;
+    return formatter.format(adjustedAmount);
+  };
+};
 
-export default useCurrencyFormatter
+export default useCurrencyFormatter;

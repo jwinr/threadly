@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const spin = keyframes`
   0% {
@@ -8,7 +8,7 @@ const spin = keyframes`
   100% {
     transform: rotate(360deg);
   }
-`
+`;
 
 const spinner = keyframes`
   0% {
@@ -17,10 +17,10 @@ const spinner = keyframes`
   100% {
     stroke-dashoffset: 0;
   }
-`
+`;
 
 interface SpinProps {
-  $isLoading: boolean
+  $isLoading: boolean;
 }
 
 const Spin = styled.div<SpinProps>`
@@ -31,8 +31,8 @@ const Spin = styled.div<SpinProps>`
   left: 50%;
   transform: scale(2.5);
   padding-right: 16px;
-  opacity: ${({ $isLoading }) => ($isLoading ? 1 : 0)};
-  visibility: ${({ $isLoading }) => ($isLoading ? 'visible' : 'hidden')};
+  opacity: ${({$isLoading}) => ($isLoading ? 1 : 0)};
+  visibility: ${({$isLoading}) => ($isLoading ? 'visible' : 'hidden')};
   transition:
     opacity 0.3s ease-in-out,
     visibility 0.3s ease-in-out;
@@ -54,19 +54,19 @@ const Spin = styled.div<SpinProps>`
       animation: 1750ms linear 0s infinite normal none running ${spinner};
     }
   }
-`
+`;
 
 const InnerDiv = styled.div`
   --offset: 138.23007675795088;
   width: 18px;
   height: 18px;
-`
+`;
 
 interface OrderSpinnerProps {
-  $isLoading: boolean
+  $isLoading: boolean;
 }
 
-const OrderSpinner: React.FC<OrderSpinnerProps> = ({ $isLoading }) => (
+const OrderSpinner: React.FC<OrderSpinnerProps> = ({$isLoading}) => (
   <Spin $isLoading={$isLoading}>
     <InnerDiv>
       <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" x="0" y="0">
@@ -83,6 +83,6 @@ const OrderSpinner: React.FC<OrderSpinnerProps> = ({ $isLoading }) => (
       <slot></slot>
     </InnerDiv>
   </Spin>
-)
+);
 
-export default OrderSpinner
+export default OrderSpinner;

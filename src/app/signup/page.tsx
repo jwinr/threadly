@@ -1,37 +1,37 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useContext, FormEvent } from 'react'
-import { signUp, SignUpOutput } from 'aws-amplify/auth'
-import styled from 'styled-components'
-import { useRouter } from 'next/navigation'
-import PasswordReveal from '@/components/Auth/PasswordReveal'
-import LogoSymbol from '@/public/images/logo_solid.svg'
-import Popover from '@/components/Elements/Popover'
+import React, {useState, useEffect, useContext, FormEvent} from 'react';
+import {signUp, SignUpOutput} from 'aws-amplify/auth';
+import styled from 'styled-components';
+import {useRouter} from 'next/navigation';
+import PasswordReveal from '@/components/Auth/PasswordReveal';
+import LogoSymbol from '@/public/images/logo_solid.svg';
+import Popover from '@/components/Elements/Popover';
 import {
   CognitoErrorMessages,
   GENERIC_ERROR_MESSAGE,
   LANGUAGE_PROFANITY_ERROR,
-} from '@/lib/constants'
-import * as AuthStyles from '@/components/Auth/AuthStyles'
+} from '@/lib/constants';
+import * as AuthStyles from '@/components/Auth/AuthStyles';
 import {
   getValidationStyle,
   handleKeyDown,
   splitFullName,
-} from 'src/utils/authHelpers'
-import { UserContext } from '@/context/UserContext'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import LoaderSpin from '@/components/Loaders/LoaderSpin'
-import useRedirectIfAuthenticated from 'src/hooks/useRedirectIfAuthenticated'
-import { TiWarningOutline } from 'react-icons/ti'
-import { useMobileView } from '@/context/MobileViewContext'
-import { useAuthFormValidation } from 'src/hooks/useAuthFormValidation'
-import { containsProfanity } from 'src/utils/textFilter'
+} from 'src/utils/authHelpers';
+import {UserContext} from '@/context/UserContext';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import LoaderSpin from '@/components/Loaders/LoaderSpin';
+import useRedirectIfAuthenticated from 'src/hooks/useRedirectIfAuthenticated';
+import {TiWarningOutline} from 'react-icons/ti';
+import {useMobileView} from '@/context/MobileViewContext';
+import {useAuthFormValidation} from 'src/hooks/useAuthFormValidation';
+import {containsProfanity} from 'src/utils/textFilter';
 
 const SubheaderText = styled.h1`
   font-weight: 500;
   font-size: 18px;
   padding: 5px;
-`
+`;
 
 const SignUp: React.FC = () => {
   const {
@@ -45,30 +45,30 @@ const SignUp: React.FC = () => {
     email: '',
     password: '',
     fullName: '',
-  })
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isLoading, setLoading] = useState<boolean>(false)
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [signUpResponse, setSignUpResponse] = useState<SignUpOutput>()
-  const { fetchUserAttributes } = useContext(UserContext)
-  const [shakeKey, setShakeKey] = useState<number>(0)
-  const [isInvalid, setIsInvalid] = useState<boolean>(true)
-  const isMobileView = useMobileView()
-  const { invalidStyle } = AuthStyles
+  });
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [signUpResponse, setSignUpResponse] = useState<SignUpOutput>();
+  const {fetchUserAttributes} = useContext(UserContext);
+  const [shakeKey, setShakeKey] = useState<number>(0);
+  const [isInvalid, setIsInvalid] = useState<boolean>(true);
+  const isMobileView = useMobileView();
+  const {invalidStyle} = AuthStyles;
 
-  type CognitoErrorName = keyof typeof CognitoErrorMessages
+  type CognitoErrorName = keyof typeof CognitoErrorMessages;
 
   // Check if there's already an active sign-in
-  const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
+  const authChecked = useRedirectIfAuthenticated(fetchUserAttributes);
 
   // Check for profanity across all form fields
   const checkForProfanity = (formData: Record<string, string>): boolean => {
-    return Object.values(formData).some((field) => containsProfanity(field))
-  }
+    return Object.values(formData).some((field) => containsProfanity(field));
+  };
 
   useEffect(() => {
-    const profanityDetected = checkForProfanity(formState)
+    const profanityDetected = checkForProfanity(formState);
 
     const isFormValid =
       emailValid &&
@@ -77,21 +77,21 @@ const SignUp: React.FC = () => {
       formState.email &&
       formState.password &&
       formState.fullName &&
-      !profanityDetected // Don't allow form to be valid if profanity is detected
+      !profanityDetected; // Don't allow form to be valid if profanity is detected
 
-    setIsInvalid(!isFormValid)
-  }, [emailValid, passwordValid, fullNameValid, formState])
+    setIsInvalid(!isFormValid);
+  }, [emailValid, passwordValid, fullNameValid, formState]);
 
   if (!authChecked) {
-    return <LoaderDots />
+    return <LoaderDots />;
   }
 
   // Send the AWS user details to the backend for Stripe & Postgres creation
   const sendUserDetails = async (user: {
-    sub: string
-    email: string
-    given_name: string
-    family_name: string
+    sub: string;
+    email: string;
+    given_name: string;
+    family_name: string;
   }) => {
     try {
       const response = await fetch('/api/user', {
@@ -100,41 +100,41 @@ const SignUp: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to send user details.')
+        throw new Error('Failed to send user details.');
       }
     } catch (error) {
-      console.error('Error sending user details:', error)
-      setErrorMessage(GENERIC_ERROR_MESSAGE)
-      setShakeKey((prevKey) => prevKey + 1)
+      console.error('Error sending user details:', error);
+      setErrorMessage(GENERIC_ERROR_MESSAGE);
+      setShakeKey((prevKey) => prevKey + 1);
     }
-  }
+  };
 
   const handleSignUp = (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
     if (isLoading) {
-      setErrorMessage('')
-      return // Prevent form submission if loading
+      setErrorMessage('');
+      return; // Prevent form submission if loading
     }
 
     if (checkForProfanity(formState)) {
-      setErrorMessage(LANGUAGE_PROFANITY_ERROR)
-      setShakeKey((prevKey) => prevKey + 1)
-      return
+      setErrorMessage(LANGUAGE_PROFANITY_ERROR);
+      setShakeKey((prevKey) => prevKey + 1);
+      return;
     }
 
     if (isInvalid) {
-      setErrorMessage('Please fill in all fields with valid information.')
-      setShakeKey((prevKey) => prevKey + 1)
-      return
+      setErrorMessage('Please fill in all fields with valid information.');
+      setShakeKey((prevKey) => prevKey + 1);
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     setTimeout(async () => {
-      const { firstName, lastName } = splitFullName(formState.fullName || '')
+      const {firstName, lastName} = splitFullName(formState.fullName || '');
       try {
         const signUpResponse = await signUp({
           username: formState.email,
@@ -145,8 +145,8 @@ const SignUp: React.FC = () => {
               family_name: lastName,
             },
           },
-        })
-        setSignUpResponse(signUpResponse)
+        });
+        setSignUpResponse(signUpResponse);
 
         // Prepare the AWS user details for the backend
         if (signUpResponse.userId) {
@@ -155,28 +155,28 @@ const SignUp: React.FC = () => {
             email: formState.email,
             given_name: firstName,
             family_name: lastName,
-          })
+          });
         }
       } catch (err) {
-        const error = err as Error
-        console.error(error)
+        const error = err as Error;
+        console.error(error);
 
         // Check if error.name is a key in CognitoErrorMessages
         if (error.name in CognitoErrorMessages) {
-          setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName])
+          setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName]);
         } else {
-          setErrorMessage(GENERIC_ERROR_MESSAGE)
+          setErrorMessage(GENERIC_ERROR_MESSAGE);
         }
-        setShakeKey((prevKey) => prevKey + 1)
+        setShakeKey((prevKey) => prevKey + 1);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }, 250)
-  }
+    }, 250);
+  };
 
   const handleRedirect = () => {
-    router.push('/')
-  }
+    router.push('/');
+  };
 
   return (
     <AuthStyles.AuthContainerWrapper>
@@ -191,10 +191,10 @@ const SignUp: React.FC = () => {
               // In a production environment, we would use the "CONFIRM_SIGN_UP" step, collect a code
               // from the user, and call the confirmSignUp action.
               <>
-                <AuthStyles.HeaderText style={{ textAlign: 'center' }}>
+                <AuthStyles.HeaderText style={{textAlign: 'center'}}>
                   Success! Your Threadly account has been created.
                 </AuthStyles.HeaderText>
-                <SubheaderText style={{ marginBottom: '30px' }}>
+                <SubheaderText style={{marginBottom: '30px'}}>
                   You're ready to start shopping!
                 </SubheaderText>
                 <AuthStyles.AuthBtn onClick={handleRedirect} type="button">
@@ -245,7 +245,9 @@ const SignUp: React.FC = () => {
                   {!emailValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      <span id="email-valid">Please enter a valid email address.</span>
+                      <span id="email-valid">
+                        Please enter a valid email address.
+                      </span>
                     </AuthStyles.ValidationMessage>
                   )}
                   <AuthStyles.EntryWrapper>
@@ -275,7 +277,9 @@ const SignUp: React.FC = () => {
                   {!fullNameValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      <span id="name-error">Please enter a valid full name.</span>
+                      <span id="name-error">
+                        Please enter a valid full name.
+                      </span>
                     </AuthStyles.ValidationMessage>
                   )}
                   <AuthStyles.EntryWrapper>
@@ -326,7 +330,9 @@ const SignUp: React.FC = () => {
                   {!passwordValid && (
                     <AuthStyles.ValidationMessage>
                       <TiWarningOutline />
-                      <span id="password-error">Please enter a valid password.</span>
+                      <span id="password-error">
+                        Please enter a valid password.
+                      </span>
                     </AuthStyles.ValidationMessage>
                   )}
                   {errorMessage && (
@@ -340,7 +346,7 @@ const SignUp: React.FC = () => {
                       type="submit"
                       data-form-type="action,register"
                       $isLoading={isLoading}
-                      style={{ marginTop: '10px' }}
+                      style={{marginTop: '10px'}}
                       $isInvalid={isInvalid}
                     >
                       {isLoading ? (
@@ -368,7 +374,7 @@ const SignUp: React.FC = () => {
         </AuthStyles.AuthCard>
       </AuthStyles.FormContainerWrapper>
     </AuthStyles.AuthContainerWrapper>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

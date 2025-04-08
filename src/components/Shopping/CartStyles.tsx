@@ -1,21 +1,21 @@
-import styled, { css } from 'styled-components'
+import styled, {css} from 'styled-components';
 
 interface isLoadingProps {
-  $isLoading: boolean
+  $isLoading: boolean;
 }
 
 export const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-`
+`;
 
 export const MainContent = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   margin: 0 16px;
-`
+`;
 
 export const ContentWrapper = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ export const ContentWrapper = styled.div`
     max-width: 100%;
     flex-basis: 100%;
   }
-`
+`;
 
 export const OrderSummaryWrapper = styled.div`
   display: flex;
@@ -43,27 +43,27 @@ export const OrderSummaryWrapper = styled.div`
     margin-left: 0;
     border-bottom: 1px solid #d8dee4;
   }
-`
+`;
 
 export const TitleWrapper = styled.div`
   min-height: 49px;
   width: 100%;
   margin-top: 24px;
-`
+`;
 
 export const Header = styled.h1`
   font-size: 29px;
   font-weight: bold;
   margin-bottom: 20px;
   color: var(--sc-color-title);
-`
+`;
 
 export const Subtitle = styled.div<isLoadingProps>`
-  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
+  background-color: ${({$isLoading}) => ($isLoading ? '#ededed' : 'initial')};
   border-radius: 6px;
-  min-height: ${({ $isLoading }) => ($isLoading ? '28px' : '20px')};
-  width: ${({ $isLoading }) => ($isLoading ? '300px' : 'fit-content')};
-  ${({ $isLoading }) =>
+  min-height: ${({$isLoading}) => ($isLoading ? '28px' : '20px')};
+  width: ${({$isLoading}) => ($isLoading ? '300px' : 'fit-content')};
+  ${({$isLoading}) =>
     $isLoading &&
     css`
       animation:
@@ -79,20 +79,20 @@ export const Subtitle = styled.div<isLoadingProps>`
     `}
 
   h1 {
-    display: ${({ $isLoading }) => ($isLoading ? 'none' : 'flex')};
+    display: ${({$isLoading}) => ($isLoading ? 'none' : 'flex')};
     font-size: 19px;
     font-weight: 700;
     align-items: center;
   }
-`
+`;
 
 export const CartContainer = styled.div<isLoadingProps>`
   border-radius: 6px;
   margin-top: 16px;
-  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
-  height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
+  background-color: ${({$isLoading}) => ($isLoading ? '#ededed' : 'initial')};
+  height: ${({$isLoading}) => ($isLoading ? '300px' : 'initial')};
 
-  ${({ $isLoading }) =>
+  ${({$isLoading}) =>
     $isLoading &&
     css`
       animation:
@@ -107,16 +107,16 @@ export const CartContainer = styled.div<isLoadingProps>`
       }
     `}
 
-  ${({ $isLoading }) =>
+  ${({$isLoading}) =>
     !$isLoading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
     `}
-`
+`;
 
 export const CartWrapper = styled.div`
   margin-left: initial;
   flex-basis: 100%;
   max-width: 100%;
   margin-bottom: 24px;
-`
+`;

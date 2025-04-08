@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { LiaThumbsUpSolid, LiaThumbsDownSolid } from 'react-icons/lia'
-import LoaderSpin from '@/components/Loaders/LoaderSpin'
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {LiaThumbsUpSolid, LiaThumbsDownSolid} from 'react-icons/lia';
+import LoaderSpin from '@/components/Loaders/LoaderSpin';
 
 interface VoteButtonProps {
-  reviewId: number
-  count: number
-  type: 'upvote' | 'downvote'
-  handleVote: (reviewId: number, type: 'upvote' | 'downvote') => Promise<void>
-  voteType: 'upvote' | 'downvote' | null
-  disabled?: boolean
+  reviewId: number;
+  count: number;
+  type: 'upvote' | 'downvote';
+  handleVote: (reviewId: number, type: 'upvote' | 'downvote') => Promise<void>;
+  voteType: 'upvote' | 'downvote' | null;
+  disabled?: boolean;
 }
 
 const Button = styled.button`
@@ -38,22 +38,22 @@ const Button = styled.button`
     cursor: not-allowed;
     opacity: 0.6;
   }
-`
+`;
 
 const ThumbsIcon = styled.div<{
-  $loading: boolean
+  $loading: boolean;
 }>`
   font-size: 22px;
-  opacity: ${({ $loading }) => ($loading ? 0.2 : 1)};
+  opacity: ${({$loading}) => ($loading ? 0.2 : 1)};
   transition: transform 0.3s;
-`
+`;
 
 const Count = styled.span<{
-  $loading: boolean
+  $loading: boolean;
 }>`
-  opacity: ${({ $loading }) => ($loading ? 0.2 : 1)};
+  opacity: ${({$loading}) => ($loading ? 0.2 : 1)};
   transition: transform 0.3s;
-`
+`;
 
 const VoteButton: React.FC<VoteButtonProps> = ({
   reviewId,
@@ -63,36 +63,36 @@ const VoteButton: React.FC<VoteButtonProps> = ({
   voteType,
   disabled,
 }) => {
-  const [loading, setLoading] = useState(false)
-  const [voteCount, setVoteCount] = useState(count)
+  const [loading, setLoading] = useState(false);
+  const [voteCount, setVoteCount] = useState(count);
 
   useEffect(() => {
-    setVoteCount(count)
-  }, [count])
+    setVoteCount(count);
+  }, [count]);
 
   const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleClick = async () => {
     if (voteType === type) {
-      return // Prevent multiple votes of the same type
+      return; // Prevent multiple votes of the same type
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
-      await handleVote(reviewId, type)
-      await delay(1000) // Ensure the loading state is visible for a short period
+      await handleVote(reviewId, type);
+      await delay(1000); // Ensure the loading state is visible for a short period
     } catch (error) {
-      console.error('Failed to vote', error)
+      console.error('Failed to vote', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Button
       onClick={() => {
-        void handleClick()
+        void handleClick();
       }}
       disabled={disabled || loading}
     >
@@ -102,7 +102,7 @@ const VoteButton: React.FC<VoteButtonProps> = ({
       <Count $loading={loading}>{voteCount}</Count>
       <LoaderSpin isLoading={loading} />
     </Button>
-  )
-}
+  );
+};
 
-export default VoteButton
+export default VoteButton;

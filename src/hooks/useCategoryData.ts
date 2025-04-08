@@ -1,46 +1,46 @@
-import { useQuery } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
-import { Attribute } from '@/types/product'
+import {useQuery} from '@tanstack/react-query';
+import {useState, useEffect} from 'react';
+import {Attribute} from '@/types/product';
 
 interface Filter {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 interface Size {
-  price: number
-  sale_price?: number
+  price: number;
+  sale_price?: number;
 }
 
 interface Color {
-  color: string
-  sizes: Size[]
-  color_variant_id: string
-  color_sku: number
-  images: Array<{ image_url: string }>
-  color_swatch_url: string
+  color: string;
+  sizes: Size[];
+  color_variant_id: string;
+  color_sku: number;
+  images: Array<{image_url: string}>;
+  color_swatch_url: string;
 }
 
 interface Product {
-  slug: string
-  brand: string
-  rating: number
-  id: string
-  name: string
-  price: number
-  colors: Color[]
+  slug: string;
+  brand: string;
+  rating: number;
+  id: string;
+  name: string;
+  price: number;
+  colors: Color[];
 }
 
 interface CategoryData {
-  name: string
-  products: Product[]
-  attributes?: Attribute[]
+  name: string;
+  products: Product[];
+  attributes?: Attribute[];
 }
 
 interface UseCategoryDataReturn {
-  categoryData: CategoryData | undefined
-  loading: boolean
-  filteredItems: Product[]
-  setFilteredItems: React.Dispatch<React.SetStateAction<Product[]>>
+  categoryData: CategoryData | undefined;
+  loading: boolean;
+  filteredItems: Product[];
+  setFilteredItems: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 const fetchCategoryData = async (
@@ -50,28 +50,28 @@ const fetchCategoryData = async (
 ): Promise<CategoryData> => {
   const filterQuery = filters
     ? `&filters=${encodeURIComponent(JSON.stringify(filters))}`
-    : ''
+    : '';
 
   const response = await fetch(
     `/api/categories/${slug}?page=${currentPage}${filterQuery}`
-  )
+  );
 
   if (!response.ok) {
     if (response.status === 404) {
-      throw new Error('Category not found')
+      throw new Error('Category not found');
     }
-    throw new Error('An unexpected error occurred.')
+    throw new Error('An unexpected error occurred.');
   }
 
-  return response.json()
-}
+  return response.json();
+};
 
 const useCategoryData = (
   slug: string | undefined,
   currentPage: number,
   filters: Filter | null
 ): UseCategoryDataReturn => {
-  const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  const [filteredItems, setFilteredItems] = useState<Product[]>([]);
 
   const {
     data: categoryData,
@@ -81,7 +81,7 @@ const useCategoryData = (
     queryKey: ['categoryData', slug, currentPage, filters],
     queryFn: () => fetchCategoryData(slug as string, currentPage, filters),
     enabled: !!slug,
-  })
+  });
 
   useEffect(() => {
     if (categoryData) {
@@ -96,29 +96,29 @@ const useCategoryData = (
               // Check if the color matches the selected filters
               const matchesColor =
                 !filters?.Color ||
-                (filters.Color as string[]).includes(color.color)
-              return matchesColor
-            })
+                (filters.Color as string[]).includes(color.color);
+              return matchesColor;
+            });
 
             // Only return the product if it has matching color variants
             if (filteredColors.length > 0) {
               return {
                 ...product,
                 colors: filteredColors, // Only include the filtered colors
-              }
+              };
             }
-            return null // Return null if no matching color variants
+            return null; // Return null if no matching color variants
           })
-          .filter((product) => product !== null) as Product[] // Remove null products
-      }
+          .filter((product) => product !== null) as Product[]; // Remove null products
+      };
 
-      const filtered = applyFilters(categoryData.products, filters)
-      setFilteredItems(filtered)
+      const filtered = applyFilters(categoryData.products, filters);
+      setFilteredItems(filtered);
     }
-  }, [categoryData, filters])
+  }, [categoryData, filters]);
 
   if (error) {
-    console.error('Error fetching category data:', error)
+    console.error('Error fetching category data:', error);
   }
 
   return {
@@ -126,7 +126,7 @@ const useCategoryData = (
     loading: isLoading,
     filteredItems,
     setFilteredItems,
-  }
-}
+  };
+};
 
-export default useCategoryData
+export default useCategoryData;

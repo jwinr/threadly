@@ -1,33 +1,33 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import styled, { css } from 'styled-components'
-import { RiArrowDownSLine } from 'react-icons/ri'
-import Checkbox from '@/components/Elements/Checkbox'
-import { PiSlidersHorizontalLight } from 'react-icons/pi'
-import FilterPanel from '@/components/Products/FilterPanel'
-import ActiveFilters from '@/components/Products/ActiveFilters'
-import Button from '@/components/Elements/Button'
-import { Product, Attribute } from '@/types/product'
+import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
+import styled, {css} from 'styled-components';
+import {RiArrowDownSLine} from 'react-icons/ri';
+import Checkbox from '@/components/Elements/Checkbox';
+import {PiSlidersHorizontalLight} from 'react-icons/pi';
+import FilterPanel from '@/components/Products/FilterPanel';
+import ActiveFilters from '@/components/Products/ActiveFilters';
+import Button from '@/components/Elements/Button';
+import {Product, Attribute} from '@/types/product';
 
 interface FilterState {
-  selectedPriceRanges: string[]
-  selectedAttributes: Record<string, string[]>
+  selectedPriceRanges: string[];
+  selectedAttributes: Record<string, string[]>;
 }
 
 interface ProductFiltersProps {
-  inventoryItems: Product[]
-  onFilterChange: (filters: Record<string, string[]>) => void
-  attributes: Attribute[]
-  resetFilters: () => void
-  filterState: FilterState
-  loading: boolean
-  filtersVisible: boolean
+  inventoryItems: Product[];
+  onFilterChange: (filters: Record<string, string[]>) => void;
+  attributes: Attribute[];
+  resetFilters: () => void;
+  filterState: FilterState;
+  loading: boolean;
+  filtersVisible: boolean;
 }
 
 const Container = styled.div`
   position: relative;
-`
+`;
 
-const DropdownButton = styled.button<{ $isOpen: boolean }>`
+const DropdownButton = styled.button<{$isOpen: boolean}>`
   font-size: 14px;
   font-weight: 600;
   color: #596171;
@@ -59,13 +59,13 @@ const DropdownButton = styled.button<{ $isOpen: boolean }>`
     height: 36px;
     min-width: max-content;
   }
-`
+`;
 
 const ArrowIcon = styled.div`
   font-size: 18px;
   color: var(--sc-color-text);
   transition: transform 0.3s ease;
-`
+`;
 
 const DropdownContent = styled.div`
   position: absolute;
@@ -108,21 +108,21 @@ const DropdownContent = styled.div`
   label:last-of-type {
     margin-bottom: 8px;
   }
-`
+`;
 
 const DropdownScrollWrapper = styled.div`
   overflow-y: auto;
   max-height: 400px;
   padding: 12px;
   border-radius: 8px;
-`
+`;
 
-const FilterWrapper = styled.div<{ $loading: boolean }>`
+const FilterWrapper = styled.div<{$loading: boolean}>`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 
-  ${({ $loading }) =>
+  ${({$loading}) =>
     !$loading &&
     css`
       animation: fadeIn 0.2s ease-in-out forwards;
@@ -134,7 +134,7 @@ const FilterWrapper = styled.div<{ $loading: boolean }>`
     overflow-y: hidden;
     padding: 16px 0px;
   }
-`
+`;
 
 const AllFiltersBtn = styled.button`
   font-size: 14px;
@@ -165,12 +165,12 @@ const AllFiltersBtn = styled.button`
   @media (max-width: 768px) {
     height: 36px;
   }
-`
+`;
 
 const FilterContainer = styled.div`
   display: flex;
   gap: 10px;
-`
+`;
 
 const ProductFilterContainer = styled.div`
   background-color: var(--sc-color-white);
@@ -188,7 +188,7 @@ const ProductFilterContainer = styled.div`
   @media (max-width: 768px) {
     top: 108px;
   }
-`
+`;
 
 const ProductFilters: React.FC<ProductFiltersProps> = ({
   inventoryItems,
@@ -199,123 +199,123 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
   loading,
   filtersVisible,
 }) => {
-  const maxVisibleFilters = 5
-  const [isPanelMounted, setIsPanelMounted] = useState(false)
+  const maxVisibleFilters = 5;
+  const [isPanelMounted, setIsPanelMounted] = useState(false);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>(
     filterState.selectedPriceRanges || []
-  )
+  );
   const [selectedAttributes, setSelectedAttributes] = useState<
     Record<string, string[]>
-  >(filterState.selectedAttributes || {})
+  >(filterState.selectedAttributes || {});
 
-  const [isPanelOpen, setIsPanelOpen] = useState(false)
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const dropdownAttributeRefs = useMemo(
     () => attributes.map(() => React.createRef<HTMLDivElement>()),
     [attributes]
-  )
-  const dropdownPriceRef = useRef<HTMLDivElement>(null)
+  );
+  const dropdownPriceRef = useRef<HTMLDivElement>(null);
 
-  const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false)
+  const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
   const [isAttributeDropdownOpen, setIsAttributeDropdownOpen] = useState<
     Record<string, boolean>
-  >({})
+  >({});
 
   const [tempSelectedAttributes, setTempSelectedAttributes] = useState<
     Record<string, string[]>
-  >({})
+  >({});
   const [tempSelectedPriceRanges, setTempSelectedPriceRanges] = useState<
     string[]
-  >([])
+  >([]);
 
   // Close any open dropdown menus when the fixed filter container state changes (both visible or hidden)
   useEffect(() => {
     if (filtersVisible || !filtersVisible) {
-      setIsPriceDropdownOpen(false)
-      setIsAttributeDropdownOpen({})
+      setIsPriceDropdownOpen(false);
+      setIsAttributeDropdownOpen({});
     }
-  }, [filtersVisible])
+  }, [filtersVisible]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node
+      const target = event.target as Node;
 
       // Check if the click is inside the price dropdown
       if (dropdownPriceRef.current?.contains(target)) {
-        return
+        return;
       }
 
       // Check if the click is inside any attribute dropdowns
       for (const ref of dropdownAttributeRefs) {
         if (ref.current?.contains(target)) {
-          return
+          return;
         }
       }
 
       // If the click is not inside any dropdown, close all
-      setIsPriceDropdownOpen(false)
-      setIsAttributeDropdownOpen({})
-    }
+      setIsPriceDropdownOpen(false);
+      setIsAttributeDropdownOpen({});
+    };
 
-    document.addEventListener('click', handleClickOutside)
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [dropdownPriceRef, dropdownAttributeRefs])
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [dropdownPriceRef, dropdownAttributeRefs]);
 
   const applyFilters = useCallback(() => {
-    setSelectedAttributes(tempSelectedAttributes)
-    setSelectedPriceRanges(tempSelectedPriceRanges)
+    setSelectedAttributes(tempSelectedAttributes);
+    setSelectedPriceRanges(tempSelectedPriceRanges);
     const allFilters = {
       ...tempSelectedAttributes,
       price: tempSelectedPriceRanges, // We're destructuring this later in the togglePriceDropdown function
-    }
-    onFilterChange(allFilters) // Necessary to push the attribute to the URL
-    setIsAttributeDropdownOpen({})
-    setIsPriceDropdownOpen(false)
-  }, [tempSelectedAttributes, tempSelectedPriceRanges, onFilterChange])
+    };
+    onFilterChange(allFilters); // Necessary to push the attribute to the URL
+    setIsAttributeDropdownOpen({});
+    setIsPriceDropdownOpen(false);
+  }, [tempSelectedAttributes, tempSelectedPriceRanges, onFilterChange]);
 
   const handleResetFilters = useCallback(() => {
-    setSelectedAttributes({})
-    setSelectedPriceRanges([])
-    setTempSelectedAttributes({})
-    setTempSelectedPriceRanges([])
-    resetFilters()
-  }, [resetFilters])
+    setSelectedAttributes({});
+    setSelectedPriceRanges([]);
+    setTempSelectedAttributes({});
+    setTempSelectedPriceRanges([]);
+    resetFilters();
+  }, [resetFilters]);
 
   const removeFilter = useCallback(
     (type: string, value: string, isPrice = false) => {
       if (isPrice) {
         setSelectedPriceRanges((prev) => {
-          const updatedRanges = prev.filter((range) => range !== value)
+          const updatedRanges = prev.filter((range) => range !== value);
           if (
             updatedRanges.length === 0 &&
             Object.keys(selectedAttributes).length === 0
           ) {
-            applyFilters()
+            applyFilters();
           }
-          return updatedRanges
-        })
+          return updatedRanges;
+        });
       } else {
         setSelectedAttributes((prev) => {
-          const updated = { ...prev }
-          updated[type] = updated[type].filter((val) => val !== value)
+          const updated = {...prev};
+          updated[type] = updated[type].filter((val) => val !== value);
           if (updated[type].length === 0) {
-            delete updated[type]
+            delete updated[type];
           }
           if (
             Object.keys(updated).length === 0 &&
             selectedPriceRanges.length === 0
           ) {
-            applyFilters()
+            applyFilters();
           }
-          return updated
-        })
+          return updated;
+        });
       }
     },
     [applyFilters, selectedAttributes, selectedPriceRanges]
-  )
+  );
 
   const predefinedPriceRanges = [
     '$10 - $19.99',
@@ -326,103 +326,103 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
     '$80 - $99.99',
     '$100 - $149.99',
     '$150 - $199.99',
-  ]
+  ];
 
   const isItemInPriceRange = useCallback(
     (item: Product, priceRange: string) => {
       if (!priceRange || typeof priceRange !== 'string') {
-        return false
+        return false;
       }
       const [minPrice, maxPrice] = priceRange
         .split(' - ')
-        .map((value) => parseFloat(value.replace('$', '')))
+        .map((value) => parseFloat(value.replace('$', '')));
 
       // Extract all prices from the nested structure and deduplicate
       const prices = Array.from(
         new Set(
           item.color_variants?.flatMap((color) =>
-            (color as unknown as { sizes: { price: string }[] }).sizes.map(
-              (size) => parseFloat(size.price)
+            (color as unknown as {sizes: {price: string}[]}).sizes.map((size) =>
+              parseFloat(size.price)
             )
           )
         )
-      )
+      );
 
       //console.log(`Item prices: ${prices}, Range: ${minPrice} - ${maxPrice}`)
 
       // Check if any price is within the range
-      return prices.some((price) => price >= minPrice && price <= maxPrice)
+      return prices.some((price) => price >= minPrice && price <= maxPrice);
     },
     []
-  )
+  );
 
   const availablePriceRanges = useMemo(() => {
     return predefinedPriceRanges.filter((range) =>
       inventoryItems?.some((item) => isItemInPriceRange(item as Product, range))
-    )
-  }, [inventoryItems, isItemInPriceRange])
+    );
+  }, [inventoryItems, isItemInPriceRange]);
 
   const togglePriceDropdown = () => {
-    setIsPriceDropdownOpen((prevState) => !prevState)
-    setTempSelectedPriceRanges(selectedPriceRanges || [])
-    setIsAttributeDropdownOpen({})
-  }
+    setIsPriceDropdownOpen((prevState) => !prevState);
+    setTempSelectedPriceRanges(selectedPriceRanges || []);
+    setIsAttributeDropdownOpen({});
+  };
 
   const toggleAttributeDropdown = (attributeType: string) => {
     setIsAttributeDropdownOpen((prevState) => {
-      const updatedState = { ...prevState }
+      const updatedState = {...prevState};
 
       // Close all other dropdowns
       Object.keys(updatedState).forEach((key) => {
         if (key !== attributeType) {
-          updatedState[key] = false
+          updatedState[key] = false;
         }
-      })
+      });
 
       // Toggle the state for the clicked attribute
-      updatedState[attributeType] = !updatedState[attributeType]
+      updatedState[attributeType] = !updatedState[attributeType];
 
       // Reset tempSelectedAttributes to the current selectedAttributes when opening the dropdown
       if (updatedState[attributeType]) {
-        setTempSelectedAttributes(selectedAttributes)
+        setTempSelectedAttributes(selectedAttributes);
       }
 
-      return updatedState
-    })
-  }
+      return updatedState;
+    });
+  };
 
   const toggleSelection = (type: string, value: string, isPrice = false) => {
     if (isPrice) {
       setTempSelectedPriceRanges((prevSelected) => {
         return prevSelected.includes(value)
           ? prevSelected.filter((item) => item !== value)
-          : [...prevSelected, value]
-      })
+          : [...prevSelected, value];
+      });
     } else {
       setTempSelectedAttributes((prevSelected) => {
-        const updatedAttributes = { ...prevSelected }
+        const updatedAttributes = {...prevSelected};
         if (updatedAttributes[type]) {
           updatedAttributes[type] = updatedAttributes[type].includes(value)
             ? updatedAttributes[type].filter((val) => val !== value)
-            : [...updatedAttributes[type], value]
+            : [...updatedAttributes[type], value];
         } else {
-          updatedAttributes[type] = [value]
+          updatedAttributes[type] = [value];
         }
-        return updatedAttributes
-      })
+        return updatedAttributes;
+      });
     }
-  }
+  };
 
   const handleActiveFilterClick = (filter: {
-    isPrice: boolean
-    type: string
+    isPrice: boolean;
+    type: string;
   }) => {
     if (filter.isPrice) {
-      togglePriceDropdown()
+      togglePriceDropdown();
     } else {
-      toggleAttributeDropdown(filter.type)
+      toggleAttributeDropdown(filter.type);
     }
-  }
+  };
 
   return (
     <>
@@ -430,12 +430,12 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
         <FilterWrapper $loading={loading}>
           <AllFiltersBtn
             onClick={() => {
-              setIsPanelMounted(true)
-              setTempSelectedPriceRanges(selectedPriceRanges || [])
-              setIsAttributeDropdownOpen({})
+              setIsPanelMounted(true);
+              setTempSelectedPriceRanges(selectedPriceRanges || []);
+              setIsAttributeDropdownOpen({});
               setTimeout(() => {
-                setIsPanelOpen(true)
-              }, 50)
+                setIsPanelOpen(true);
+              }, 50);
             }}
             aria-label="Display all filters"
           >
@@ -454,8 +454,8 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                 }
                 aria-controls={`dropdown-${attribute.attribute_name}`}
                 onClick={() => {
-                  toggleAttributeDropdown(attribute.attribute_name)
-                  setIsPriceDropdownOpen(false)
+                  toggleAttributeDropdown(attribute.attribute_name);
+                  setIsPriceDropdownOpen(false);
                 }}
               >
                 <span>{attribute.attribute_name}</span>
@@ -533,7 +533,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                     label={priceRange}
                     checked={tempSelectedPriceRanges.includes(priceRange)}
                     onChange={() => {
-                      toggleSelection(priceRange, priceRange, true)
+                      toggleSelection(priceRange, priceRange, true);
                     }}
                   />
                 ))}
@@ -571,7 +571,7 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
         isMounted={isPanelMounted}
       />
     </>
-  )
-}
+  );
+};
 
-export default ProductFilters
+export default ProductFilters;

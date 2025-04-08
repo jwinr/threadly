@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Shirt, Scissors, Truck, Recycle } from 'lucide-react'
+import React from 'react';
+import styled from 'styled-components';
+import {Shirt, Scissors, Truck, Recycle} from 'lucide-react';
 
 const Container = styled.div`
   width: 100%;
@@ -15,7 +15,7 @@ const Container = styled.div`
     font-size: 34px;
     font-weight: 600;
   }
-`
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 20px;
   }
-`
+`;
 
 const SecTitle = styled.h2`
   font-size: 38px;
@@ -36,7 +36,7 @@ const SecTitle = styled.h2`
   margin-bottom: 20px;
   color: var(--sc-color-title);
   align-self: start;
-`
+`;
 
 const Column = styled.div`
   flex: 1;
@@ -51,7 +51,7 @@ const Column = styled.div`
     margin: 8px 0;
     color: var(--sc-color-body);
   }
-`
+`;
 
 const Outline = styled.div`
   border: 2px solid var(--sc-color-carnation);
@@ -62,18 +62,18 @@ const Outline = styled.div`
   align-items: center;
   margin-bottom: 20px;
   justify-content: center;
-`
+`;
 
 const Icon = styled.div`
   color: var(--sc-color-carnation);
-`
+`;
 
 const HeaderText = styled.div`
   font-size: 20px;
   font-weight: 600;
   color: var(--sc-color-title);
   margin-bottom: 8px;
-`
+`;
 
 const Divider = styled.div`
   border-left: 1px solid var(--sc-color-gray-300);
@@ -83,7 +83,7 @@ const Divider = styled.div`
   @media (max-width: 768px) {
     display: none;
   }
-`
+`;
 
 const FeatureHighlights: React.FC = () => {
   return (
@@ -148,7 +148,7 @@ const FeatureHighlights: React.FC = () => {
         </Column>
       </Wrapper>
     </Container>
-  )
-}
+  );
+};
 
-export default FeatureHighlights
+export default FeatureHighlights;

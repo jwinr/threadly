@@ -1,39 +1,39 @@
-import React, { FC, ChangeEvent } from 'react'
-import styled from 'styled-components'
-import ArrowUpDown from '@/public/images/icons/arrowUpDown.svg'
+import React, {FC, ChangeEvent} from 'react';
+import styled from 'styled-components';
+import ArrowUpDown from '@/public/images/icons/arrowUpDown.svg';
 
 /**
  * WrapperProps - Interface for wrapper properties.
  * @property {boolean} [hidden] - Specifies whether the element should be hidden.
  */
 interface WrapperProps {
-  hidden?: boolean
+  hidden?: boolean;
 }
 
 const Wrapper = styled.div`
   margin-bottom: 1rem;
-`
+`;
 
 const Label = styled.label<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
+  display: ${({hidden}) => (hidden ? 'none' : 'flex')};
   color: #353a44;
   margin-bottom: 4px;
   font-weight: 600;
   font-size: 14px;
-`
+`;
 
 const Description = styled.p<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? 'none' : 'block')};
+  display: ${({hidden}) => (hidden ? 'none' : 'block')};
   margin-top: -0.5rem;
   margin-bottom: 0.5rem;
   color: gray;
-`
+`;
 
 const ErrorText = styled.p<WrapperProps>`
-  display: ${({ hidden }) => (hidden ? 'none' : 'block')};
+  display: ${({hidden}) => (hidden ? 'none' : 'block')};
   margin-top: 0.5rem;
   color: red;
-`
+`;
 
 /**
  * SelectWrapperProps - Interface for select wrapper properties.
@@ -41,8 +41,8 @@ const ErrorText = styled.p<WrapperProps>`
  * @property {boolean} invalid - Indicates if the select input is in an invalid state.
  */
 interface SelectWrapperProps {
-  size: 'small' | 'medium' | 'large'
-  $invalid: boolean
+  size: 'small' | 'medium' | 'large';
+  $invalid: boolean;
 }
 
 const SelectWrapper = styled.select<SelectWrapperProps>`
@@ -115,7 +115,7 @@ const SelectWrapper = styled.select<SelectWrapperProps>`
     --s1-keyline: rgb(64 68 82 / 8%);
     --s1-top-shadow: 0px 1px 1px 0px rgba(16, 17, 26, 0.16);
   }
-`
+`;
 
 const CustomArrow = styled.div`
   position: absolute;
@@ -129,7 +129,7 @@ const CustomArrow = styled.div`
   pointer-events: none;
   transition-property: fill;
   transition-duration: 240ms;
-`
+`;
 
 const GridWrapper = styled.div`
   display: grid;
@@ -140,7 +140,7 @@ const GridWrapper = styled.div`
   &:hover {
     fill: rgb(26, 27, 37);
   }
-`
+`;
 
 /**
  * SelectProps - Interface for the Select component properties.
@@ -164,24 +164,24 @@ const GridWrapper = styled.div`
  * @property {string} [value] - Controls which option is selected.
  */
 interface SelectProps {
-  autoComplete?: string
-  autoFocus?: boolean
-  children: React.ReactNode
-  defaultValue?: string | string[]
-  description?: string
-  disabled?: boolean
-  error?: string
-  form?: string
-  hiddenElements?: ('label' | 'description' | 'error')[]
-  invalid?: boolean
-  label?: React.ReactNode
-  multiple?: boolean
-  name?: string
-  title?: string
-  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void
-  required?: boolean
-  size?: 'small' | 'medium' | 'large'
-  value?: string | number
+  autoComplete?: string;
+  autoFocus?: boolean;
+  children: React.ReactNode;
+  defaultValue?: string | string[];
+  description?: string;
+  disabled?: boolean;
+  error?: string;
+  form?: string;
+  hiddenElements?: ('label' | 'description' | 'error')[];
+  invalid?: boolean;
+  label?: React.ReactNode;
+  multiple?: boolean;
+  name?: string;
+  title?: string;
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+  required?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  value?: string | number;
 }
 
 /**
@@ -212,9 +212,9 @@ const Select: FC<SelectProps> = ({
   // Extract valid options from children
   const validOptions = React.Children.map(children, (child) => {
     if (React.isValidElement<HTMLSelectElement>(child)) {
-      return String(child.props.value)
+      return String(child.props.value);
     }
-  })
+  });
 
   /**
    * Handle change event for the select element.
@@ -222,13 +222,13 @@ const Select: FC<SelectProps> = ({
    * @param {ChangeEvent<HTMLSelectElement>} e - The change event.
    */
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value
+    const newValue = e.target.value;
     if (validOptions?.includes(newValue)) {
-      onChange?.(e)
+      onChange?.(e);
     } else {
-      console.warn(`Invalid value selected: ${newValue}`)
+      console.warn(`Invalid value selected: ${newValue}`);
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -283,7 +283,7 @@ const Select: FC<SelectProps> = ({
         </Description>
       )}
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Select
+export default Select;

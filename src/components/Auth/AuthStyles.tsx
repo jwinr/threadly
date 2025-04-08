@@ -1,4 +1,4 @@
-import styled, { keyframes, css } from 'styled-components'
+import styled, {keyframes, css} from 'styled-components';
 
 /* Shared Styles */
 export const fadeIn = keyframes`
@@ -10,7 +10,7 @@ export const fadeIn = keyframes`
     opacity: 1;
     transform: translateX(45%);
   }
-`
+`;
 
 const shake = keyframes`
   0%, 100% {
@@ -25,7 +25,7 @@ const shake = keyframes`
   80% {
     transform: translateX(5px);
   }
-`
+`;
 
 export const spinnerFadeIn = keyframes`
   from {
@@ -34,7 +34,7 @@ export const spinnerFadeIn = keyframes`
   to {
     opacity: 1;
   }
-`
+`;
 
 const authFadeIn = keyframes`
   from {
@@ -43,7 +43,7 @@ const authFadeIn = keyframes`
   to {
     opacity: 1;
   }
-`
+`;
 
 const authFadeOut = keyframes`
   from {
@@ -52,14 +52,14 @@ const authFadeOut = keyframes`
   to {
     opacity: 0;
   }
-`
+`;
 
 export const AuthPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100%;
   height: 100%;
-`
+`;
 
 export const AuthContainerWrapper = styled.div`
   width: 1080px;
@@ -75,12 +75,12 @@ export const AuthContainerWrapper = styled.div`
     width: auto;
     margin: 0 16px;
   }
-`
+`;
 
 // Wrapper for the content inside AuthCard
 interface AuthCardContentProps {
-  $authFadeIn?: boolean
-  $authFadeOut?: boolean
+  $authFadeIn?: boolean;
+  $authFadeOut?: boolean;
 }
 
 export const AuthCardContent = styled.div<AuthCardContentProps>`
@@ -103,10 +103,10 @@ export const AuthCardContent = styled.div<AuthCardContentProps>`
     css`
       animation: ${authFadeIn} 0.3s forwards;
     `}
-`
+`;
 
 interface AuthCardProps {
-  $shake?: boolean
+  $shake?: boolean;
 }
 export const AuthCard = styled.div<AuthCardProps>`
   display: flex;
@@ -124,7 +124,7 @@ export const AuthCard = styled.div<AuthCardProps>`
   overflow: hidden;
   justify-content: center;
 
-  ${({ $shake }) =>
+  ${({$shake}) =>
     $shake &&
     css`
       animation: ${shake} 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
@@ -133,7 +133,7 @@ export const AuthCard = styled.div<AuthCardProps>`
   @media (max-width: 768px) {
     padding: 32px 0;
   }
-`
+`;
 
 export const FormContainerWrapper = styled.div`
   width: 540px;
@@ -146,13 +146,13 @@ export const FormContainerWrapper = styled.div`
     width: 382px;
     min-width: auto;
   }
-`
+`;
 
 export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-`
+`;
 
 export const EntryWrapper = styled.div`
   position: relative;
@@ -161,10 +161,10 @@ export const EntryWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin: 10px 0;
-`
+`;
 
 interface EntryContainerProps {
-  $isLoading?: boolean
+  $isLoading?: boolean;
 }
 
 export const EntryContainer = styled.input<EntryContainerProps>`
@@ -189,9 +189,9 @@ export const EntryContainer = styled.input<EntryContainerProps>`
     border 0.15s ease,
     box-shadow 0.15s ease,
     color 0.15s ease;
-  cursor: ${({ $isLoading }) => ($isLoading ? 'default' : 'text')};
-  pointer-events: ${({ $isLoading }) => ($isLoading ? 'none' : 'auto')};
-  background-color: ${({ $isLoading }) =>
+  cursor: ${({$isLoading}) => ($isLoading ? 'default' : 'text')};
+  pointer-events: ${({$isLoading}) => ($isLoading ? 'none' : 'auto')};
+  background-color: ${({$isLoading}) =>
     $isLoading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
 
   &:focus + label,
@@ -215,10 +215,10 @@ export const EntryContainer = styled.input<EntryContainerProps>`
     outline: none;
     transition: box-shadow 240ms;
   }
-`
+`;
 
 interface LabelProps {
-  $isLoading?: boolean
+  $isLoading?: boolean;
 }
 
 export const Label = styled.label<LabelProps>`
@@ -241,17 +241,17 @@ export const Label = styled.label<LabelProps>`
     left: 0;
     width: 100%;
     height: 50%;
-    background-color: ${({ $isLoading }) =>
+    background-color: ${({$isLoading}) =>
       $isLoading ? 'var(--sc-color-entry-disabled)' : 'var(--sc-color-white)'};
     z-index: -1;
   }
-`
+`;
 
 export const HeaderText = styled.h1`
   font-weight: 600;
   font-size: 24px;
   margin: 20px 0;
-`
+`;
 
 export const ResetText = styled.a`
   display: inline-block;
@@ -272,10 +272,10 @@ export const ResetText = styled.a`
     box-shadow: var(--sc-shadow-link-focus);
     border-radius: 4px;
   }
-`
+`;
 
 interface AuthLoginLinkBoxProps {
-  $isLoading?: boolean
+  $isLoading?: boolean;
 }
 
 export const AuthLoginLinkBox = styled.div<AuthLoginLinkBoxProps>`
@@ -289,8 +289,8 @@ export const AuthLoginLinkBox = styled.div<AuthLoginLinkBoxProps>`
   justify-content: center;
   border-radius: 4px;
   font-size: 14px;
-  visibility: ${({ $isLoading }) => ($isLoading ? 'hidden' : 'visible')};
-`
+  visibility: ${({$isLoading}) => ($isLoading ? 'hidden' : 'visible')};
+`;
 
 export const AuthLoginLink = styled.a`
   margin: 4px;
@@ -305,15 +305,15 @@ export const AuthLoginLink = styled.a`
     box-shadow: var(--sc-shadow-link-focus);
     border-radius: 4px;
   }
-`
+`;
 
 interface AuthBtnProps {
-  $isLoading?: boolean
-  $isInvalid?: boolean
+  $isLoading?: boolean;
+  $isInvalid?: boolean;
 }
 
 export const AuthBtn = styled.button.attrs<AuthBtnProps>(
-  ({ $isLoading, $isInvalid }) => ({
+  ({$isLoading, $isInvalid}) => ({
     tabIndex: $isLoading || $isInvalid ? -1 : 0,
   })
 )<AuthBtnProps>`
@@ -337,11 +337,11 @@ export const AuthBtn = styled.button.attrs<AuthBtnProps>(
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   background-color: var(--sc-color-carnation);
   transition: all 240ms;
-  cursor: ${({ $isLoading, $isInvalid }) =>
+  cursor: ${({$isLoading, $isInvalid}) =>
     $isLoading || $isInvalid ? 'default' : 'pointer'};
-  opacity: ${({ $isLoading, $isInvalid }) =>
+  opacity: ${({$isLoading, $isInvalid}) =>
     $isLoading || $isInvalid ? '0.5' : '1'};
-  pointer-events: ${({ $isLoading, $isInvalid }) =>
+  pointer-events: ${({$isLoading, $isInvalid}) =>
     $isLoading || $isInvalid ? 'none' : 'auto'};
 
   &:focus {
@@ -354,7 +354,7 @@ export const AuthBtn = styled.button.attrs<AuthBtnProps>(
       rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   }
-`
+`;
 
 export const ErrorMessage = styled.div`
   display: flex;
@@ -365,7 +365,7 @@ export const ErrorMessage = styled.div`
   padding: 10px 0;
   align-items: center;
   gap: 5px;
-`
+`;
 
 export const EntryBtnWrapper = styled.div`
   display: flex;
@@ -373,7 +373,7 @@ export const EntryBtnWrapper = styled.div`
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
-`
+`;
 
 export const ValidationMessage = styled.div`
   display: inline-flex;
@@ -383,7 +383,7 @@ export const ValidationMessage = styled.div`
   align-self: flex-start;
   gap: 5px;
   align-items: center;
-`
+`;
 
 export const PolicyContainer = styled.div`
   display: flex;
@@ -412,7 +412,7 @@ export const PolicyContainer = styled.div`
   a:focus-visible {
     text-decoration: underline;
   }
-`
+`;
 
 export const LogoBox = styled.div`
   display: flex;
@@ -423,14 +423,14 @@ export const LogoBox = styled.div`
     width: 100%;
     height: 100%;
   }
-`
+`;
 
 export const invalidStyle: React.CSSProperties = {
   borderColor: 'var(--sc-color-red)',
   boxShadow:
     '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(0, 0, 0, 0.02), 0 0 0 1px var(--sc-color-red)',
   color: 'var(--sc-color-red)',
-}
+};
 
 export const SpinnerWrapper = styled.div`
   display: flex;
@@ -446,4 +446,4 @@ export const SpinnerWrapper = styled.div`
   span {
     margin-top: 25px;
   }
-`
+`;

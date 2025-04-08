@@ -1,12 +1,12 @@
-import Image from 'next/image'
-import styled from 'styled-components'
-import { ProductImage } from '@/types/product'
+import Image from 'next/image';
+import styled from 'styled-components';
+import {ProductImage} from '@/types/product';
 
 interface ProductThumbnailProps {
-  hoveredImage: number | null
-  onThumbnailHover: (index: number) => void
-  loading: boolean
-  images: ProductImage[]
+  hoveredImage: number | null;
+  onThumbnailHover: (index: number) => void;
+  loading: boolean;
+  images: ProductImage[];
 }
 
 const AdditionalImageContainer = styled.div`
@@ -18,7 +18,7 @@ const AdditionalImageContainer = styled.div`
   @media (min-width: 768px) {
     order: 0; // Reset order in desktop view
   }
-`
+`;
 
 const AdditionalImageThumbnail = styled.div`
   border-radius: 6px;
@@ -35,7 +35,7 @@ const AdditionalImageThumbnail = styled.div`
     width: 100%;
     height: 100%;
   }
-`
+`;
 
 const LoaderThumbnailContainer = styled.div`
   width: 128px;
@@ -44,7 +44,7 @@ const LoaderThumbnailContainer = styled.div`
   background-color: #ededed;
   animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
-`
+`;
 
 const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
   hoveredImage,
@@ -59,7 +59,7 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
           <LoaderThumbnailContainer key={index} />
         ))}
       </AdditionalImageContainer>
-    )
+    );
   }
 
   return (
@@ -69,7 +69,7 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
           key={index}
           className={hoveredImage === index ? 'additional-image-hovered' : ''}
           onMouseOver={() => {
-            onThumbnailHover(index)
+            onThumbnailHover(index);
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -89,7 +89,7 @@ const ProductThumbnails: React.FC<ProductThumbnailProps> = ({
         </AdditionalImageThumbnail>
       ))}
     </AdditionalImageContainer>
-  )
-}
+  );
+};
 
-export default ProductThumbnails
+export default ProductThumbnails;

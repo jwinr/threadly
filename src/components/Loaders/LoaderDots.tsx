@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const bounceDelay = keyframes`
   0%,100%,80% {
@@ -11,7 +11,7 @@ const bounceDelay = keyframes`
     -webkit-transform: scale(1);
     transform: scale(1)
   }
-`
+`;
 
 const LoadingContent = styled.div`
   -webkit-transform: translate(-50%, -50%);
@@ -25,7 +25,7 @@ const LoadingContent = styled.div`
   height: 100px;
   font-size: 0;
   text-align: center;
-`
+`;
 
 const LoadingDots = styled.div`
   transform: translateY(-50%);
@@ -33,7 +33,7 @@ const LoadingDots = styled.div`
   top: 50%;
   right: 0;
   left: 0;
-`
+`;
 
 const LoadingDot = styled.div`
   display: inline-block;
@@ -53,7 +53,7 @@ const LoadingDot = styled.div`
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
   }
-`
+`;
 
 const LoaderDots: React.FC = () => (
   <LoadingContent>
@@ -63,6 +63,6 @@ const LoaderDots: React.FC = () => (
       <LoadingDot />
     </LoadingDots>
   </LoadingContent>
-)
+);
 
-export default LoaderDots
+export default LoaderDots;

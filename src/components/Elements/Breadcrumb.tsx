@@ -1,15 +1,15 @@
-import Link from 'next/link'
-import { RiArrowDropRightLine } from 'react-icons/ri'
-import styled from 'styled-components'
-import { usePathname } from 'next/navigation'
-import { useMobileView } from '@/context/MobileViewContext'
+import Link from 'next/link';
+import {RiArrowDropRightLine} from 'react-icons/ri';
+import styled from 'styled-components';
+import {usePathname} from 'next/navigation';
+import {useMobileView} from '@/context/MobileViewContext';
 
 const BreadWrapper = styled.nav`
   font-size: 14px;
   margin-bottom: 20px;
   display: inline-flex;
   align-items: center;
-`
+`;
 
 const LoadingBreadcrumb = styled.div`
   display: inline-flex;
@@ -19,18 +19,19 @@ const LoadingBreadcrumb = styled.div`
   background-color: #ededed;
   border-radius: 6px;
   animation: loadingAnimation 1s infinite;
-`
+`;
 
-const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+const capitalize = (text: string) =>
+  text.charAt(0).toUpperCase() + text.slice(1);
 
 const BreadcrumbLink = ({
   href,
   label,
   isLast,
 }: {
-  href: string
-  label: string
-  isLast: boolean
+  href: string;
+  label: string;
+  isLast: boolean;
 }) => (
   <span className="breadcrumb-part">
     <Link href={href} aria-label={label}>
@@ -38,16 +39,16 @@ const BreadcrumbLink = ({
     </Link>
     {!isLast && <RiArrowDropRightLine size={20} />}
   </span>
-)
+);
 
 const generateBreadcrumbPart = (
   pathname: string,
   isLast: boolean,
   pathnames: string[],
   index: number,
-  { title, categorySlug, categoryName }: Partial<BreadcrumbProps>
+  {title, categorySlug, categoryName}: Partial<BreadcrumbProps>
 ) => {
-  if (pathname === 'categories') return null
+  if (pathname === 'categories') return null;
 
   if (pathname === 'products' && categorySlug && categoryName) {
     return (
@@ -57,10 +58,10 @@ const generateBreadcrumbPart = (
         label={capitalize(categoryName)}
         isLast={isLast}
       />
-    )
+    );
   }
 
-  const label = capitalize(title || pathname)
+  const label = capitalize(title || pathname);
   return isLast ? (
     <span key={index} className="breadcrumb-part">
       {label}
@@ -72,15 +73,15 @@ const generateBreadcrumbPart = (
       label={label}
       isLast={isLast}
     />
-  )
-}
+  );
+};
 
 interface BreadcrumbProps {
-  title?: string
-  categoryName?: string | null
-  categorySlug?: string | null
-  productName?: string | null
-  loading?: boolean
+  title?: string;
+  categoryName?: string | null;
+  categorySlug?: string | null;
+  productName?: string | null;
+  loading?: boolean;
 }
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
@@ -90,28 +91,34 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   productName,
   loading,
 }) => {
-  const isMobileView = useMobileView()
-  if (isMobileView) return null
+  const isMobileView = useMobileView();
+  if (isMobileView) return null;
 
-  const pathname = usePathname()
-  if (!pathname) return null
+  const pathname = usePathname();
+  if (!pathname) return null;
 
-  const pathnames = pathname.split('/').filter((x) => x && x !== 'categories')
-  const productsIndex = pathnames.indexOf('products')
+  const pathnames = pathname.split('/').filter((x) => x && x !== 'categories');
+  const productsIndex = pathnames.indexOf('products');
 
-  if (loading) return <LoadingBreadcrumb />
+  if (loading) return <LoadingBreadcrumb />;
 
   return (
     <BreadWrapper>
       <BreadcrumbLink href="/" label="Home" isLast={false} />
       {pathnames
         .map((segment, index) =>
-          generateBreadcrumbPart(segment, index === pathnames.length - 1, pathnames, index, {
-            title,
-            categorySlug,
-            categoryName,
-            productName,
-          })
+          generateBreadcrumbPart(
+            segment,
+            index === pathnames.length - 1,
+            pathnames,
+            index,
+            {
+              title,
+              categorySlug,
+              categoryName,
+              productName,
+            }
+          )
         )
         .slice(0, productsIndex === -1 ? pathnames.length : productsIndex + 1)}
       {/* Render the product name explicitly as the last breadcrumb if it exists */}
@@ -121,7 +128,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         </>
       )}
     </BreadWrapper>
-  )
-}
+  );
+};
 
-export default Breadcrumb
+export default Breadcrumb;

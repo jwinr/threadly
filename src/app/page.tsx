@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
-import HeroBanner from '@/components/Homepage/HeroBanner'
-import FeatureHighlights from '@/components/Homepage/FeatureHighlights'
-import FeaturedCategories from '@/components/Homepage/FeaturedCategories'
-import Sustainability from '@/components/Homepage/Sustainability'
-import NewsletterSignup from '@/components/Homepage/NewsletterSignup'
+import styled from 'styled-components';
+import HeroBanner from '@/components/Homepage/HeroBanner';
+import FeatureHighlights from '@/components/Homepage/FeatureHighlights';
+import FeaturedCategories from '@/components/Homepage/FeaturedCategories';
+import Sustainability from '@/components/Homepage/Sustainability';
+import NewsletterSignup from '@/components/Homepage/NewsletterSignup';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -16,11 +16,11 @@ const HomeContainer = styled.div`
   @media (max-width: 768px) {
     margin: 0;
   }
-`
+`;
 
 const Section = styled.section`
   padding: 20px 0;
-`
+`;
 
 const Title = styled.h2`
   text-align: center;
@@ -28,7 +28,7 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 20px;
   color: var(--sc-color-title);
-`
+`;
 
 const Home: React.FC = () => {
   return (
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
         </Section>
       </HomeContainer>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import React, { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { UserContext } from '@/context/UserContext'
-import { CartContext, CartItem } from '@/context/CartContext'
-import { useMobileView } from '@/context/MobileViewContext'
-import Point from '@/public/images/icons/notdef.svg'
-import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
-import ShippingInfo from '@/components/Shopping/ShippingInfo'
-import OrderSummary from '@/components/Shopping/OrderSummary'
-import { CartItems } from '@/components/Shopping/CartItems'
-import FavoritesSection from '@/components/Shopping/FavoritesSection'
-import EmptyCartSection from '@/components/Shopping/EmptyCartSection'
-import EmptyFavoritesSection from '@/components/Shopping/EmptyFavoritesSection'
+import React, {useContext, useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {UserContext} from '@/context/UserContext';
+import {CartContext, CartItem} from '@/context/CartContext';
+import {useMobileView} from '@/context/MobileViewContext';
+import Point from '@/public/images/icons/notdef.svg';
+import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter';
+import ShippingInfo from '@/components/Shopping/ShippingInfo';
+import OrderSummary from '@/components/Shopping/OrderSummary';
+import {CartItems} from '@/components/Shopping/CartItems';
+import FavoritesSection from '@/components/Shopping/FavoritesSection';
+import EmptyCartSection from '@/components/Shopping/EmptyCartSection';
+import EmptyFavoritesSection from '@/components/Shopping/EmptyFavoritesSection';
 import {
   PageWrapper,
   MainContent,
@@ -23,44 +23,39 @@ import {
   CartContainer,
   CartWrapper,
   Subtitle,
-} from '@/components/Shopping/CartStyles'
-import OrderSpinner from '@/components/Loaders/OrderSpinner'
-import { FavoriteItem } from '@/types/favorites'
+} from '@/components/Shopping/CartStyles';
+import OrderSpinner from '@/components/Loaders/OrderSpinner';
+import {FavoriteItem} from '@/types/favorites';
 
 const StyledPoint = styled(Point)`
   width: 24px;
   height: 24px;
-`
+`;
 
 interface PreviousTotals {
-  subtotal: string
-  estimatedTaxes: string
-  total: string
-  totalQuantity: number
+  subtotal: string;
+  estimatedTaxes: string;
+  total: string;
+  totalQuantity: number;
 }
 
 const Cart: React.FC = () => {
-  const { userAttributes } = useContext(UserContext)
-  const {
-    cart,
-    setCart,
-    removeFromCart,
-    loadingSummary,
-    handleQuantityChange,
-  } = useContext(CartContext) ?? {}
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [offset, setOffset] = useState(0)
-  const isMobileView = useMobileView()
-  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
-  const { deliveryDate, zipCode } = ShippingInfo()
-  const formatCurrency = useCurrencyFormatter()
+  const {userAttributes} = useContext(UserContext);
+  const {cart, setCart, removeFromCart, loadingSummary, handleQuantityChange} =
+    useContext(CartContext) ?? {};
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [offset, setOffset] = useState(0);
+  const isMobileView = useMobileView();
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const {deliveryDate, zipCode} = ShippingInfo();
+  const formatCurrency = useCurrencyFormatter();
 
   const [previousTotals, setPreviousTotals] = useState<PreviousTotals>({
     subtotal: '0.00',
     estimatedTaxes: '0.00',
     total: '0.00',
     totalQuantity: 0,
-  })
+  });
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -68,47 +63,49 @@ const Cart: React.FC = () => {
         // For guest users, load from localStorage and fetch additional details
         const localCart: CartItem[] = JSON.parse(
           localStorage.getItem('cart') || '[]'
-        ) as CartItem[]
+        ) as CartItem[];
 
         if (localCart.length > 0) {
           // Get unique variantIds from the local cart items
           const uniqueVariantIds = [
             ...new Set(localCart.map((item) => item.variant_id)),
-          ].join(',')
+          ].join(',');
 
           try {
             // Fetch detailed product information using variantIds
             const response = await fetch(
               `/api/cart?variantIds=${uniqueVariantIds}`
-            )
+            );
             const data: FavoriteItem[] =
-              (await response.json()) as FavoriteItem[]
+              (await response.json()) as FavoriteItem[];
 
             // Merge local cart items with fetched product details
             const detailedCart = localCart.map((item) => ({
               ...item,
               ...data.find((product) => product.variant_id === item.variant_id),
-            }))
+            }));
 
-            setCart?.(detailedCart)
+            setCart?.(detailedCart);
           } catch (error) {
             console.error(
               'Error fetching detailed cart items for guest:',
               error
-            )
+            );
           }
         } else {
-          setCart?.(localCart) // Set empty cart if nothing in localStorage
+          setCart?.(localCart); // Set empty cart if nothing in localStorage
         }
 
-        setIsLoading(false)
-        return
+        setIsLoading(false);
+        return;
       }
 
       // For logged-in users, fetch the cart from the server
       try {
-        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
-        const data: FavoriteItem[] = (await response.json()) as FavoriteItem[]
+        const response = await fetch(
+          `/api/cart?id=${userAttributes.user_uuid}`
+        );
+        const data: FavoriteItem[] = (await response.json()) as FavoriteItem[];
 
         setCart?.(
           data.map((item: FavoriteItem) => ({
@@ -116,77 +113,77 @@ const Cart: React.FC = () => {
             quantity: item.quantity || 1,
             variant_id: item.variant_id || 0,
           })) as CartItem[]
-        )
+        );
       } catch (error) {
-        console.error('Error fetching cart:', error)
+        console.error('Error fetching cart:', error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    void fetchCart()
-  }, [userAttributes, setCart])
+    void fetchCart();
+  }, [userAttributes, setCart]);
 
   const fetchFavorites = async (newOffset = 0) => {
     if (!userAttributes || !userAttributes.user_uuid) {
       // For guests, ensure favorites are empty
-      setFavorites([])
-      return
+      setFavorites([]);
+      return;
     }
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await fetch(
         `/api/favorites?id=${userAttributes.user_uuid}&limit=5&offset=${newOffset}`
-      )
-      const data = await response.json()
-      setFavorites((prevFavorites) => [...prevFavorites, ...data])
-      setOffset(newOffset + 5)
+      );
+      const data = await response.json();
+      setFavorites((prevFavorites) => [...prevFavorites, ...data]);
+      setOffset(newOffset + 5);
     } catch (error) {
-      console.error('Error fetching favorites:', error)
+      console.error('Error fetching favorites:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     // Only call fetchFavorites if the user is signed in
     if (userAttributes?.user_uuid) {
-      fetchFavorites()
+      fetchFavorites();
     }
-  }, [userAttributes])
+  }, [userAttributes]);
 
   const calculateTotal = (cart: CartItem[]) => {
     const subtotal = cart.reduce((sum, item) => {
-      const price = Number(item.product_sale_price || item.product_price)
-      const quantity = Number(item.quantity)
-      return sum + price * quantity
-    }, 0)
+      const price = Number(item.product_sale_price || item.product_price);
+      const quantity = Number(item.quantity);
+      return sum + price * quantity;
+    }, 0);
 
-    const estimatedTaxes = subtotal * 0.07
-    const total = subtotal + estimatedTaxes
+    const estimatedTaxes = subtotal * 0.07;
+    const total = subtotal + estimatedTaxes;
 
     const totalQuantity = cart.reduce(
       (sum, item) => sum + Number(item.quantity),
       0
-    )
+    );
 
     return {
       subtotal: formatCurrency(subtotal),
       estimatedTaxes: formatCurrency(estimatedTaxes),
       total: formatCurrency(total),
       totalQuantity,
-    }
-  }
+    };
+  };
 
   useEffect(() => {
     if (!loadingSummary) {
-      const totals = calculateTotal(cart || [])
-      setPreviousTotals(totals)
+      const totals = calculateTotal(cart || []);
+      setPreviousTotals(totals);
     }
-  }, [loadingSummary, cart])
+  }, [loadingSummary, cart]);
 
-  const { subtotal, estimatedTaxes, total, totalQuantity } = previousTotals
+  const {subtotal, estimatedTaxes, total, totalQuantity} = previousTotals;
 
   return (
     <PageWrapper>
@@ -267,7 +264,7 @@ const Cart: React.FC = () => {
         )}
       </MainContent>
     </PageWrapper>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

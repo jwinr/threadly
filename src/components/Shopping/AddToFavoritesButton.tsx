@@ -1,23 +1,23 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
-import styled, { keyframes, css } from 'styled-components'
-import { LiaHeart, LiaHeartSolid } from 'react-icons/lia'
-import { useRouter } from 'next/navigation'
-import { UserContext } from '@/context/UserContext'
-import { useFavorites } from '@/context/FavoritesContext'
-import Popover from '@/components/Elements/Popover'
+import React, {useContext, useState, useEffect, useRef} from 'react';
+import styled, {keyframes, css} from 'styled-components';
+import {LiaHeart, LiaHeartSolid} from 'react-icons/lia';
+import {useRouter} from 'next/navigation';
+import {UserContext} from '@/context/UserContext';
+import {useFavorites} from '@/context/FavoritesContext';
+import Popover from '@/components/Elements/Popover';
 
 interface IconProps {
-  $loading?: boolean
-  $isAdding?: boolean
+  $loading?: boolean;
+  $isAdding?: boolean;
 }
 
 interface FavoriteItem {
-  product_id: string
+  product_id: string;
 }
 
 interface AddToFavoritesButtonProps {
-  productId: string
-  productName: string | undefined
+  productId: string;
+  productName: string | undefined;
 }
 
 const loadingAnimation = keyframes`
@@ -36,12 +36,12 @@ const loadingAnimation = keyframes`
   100% {
     transform: scale(1);
   }
-`
+`;
 
 const Container = styled.div`
   position: relative;
   order: 2;
-`
+`;
 
 const Button = styled.button`
   padding: 10px;
@@ -49,110 +49,110 @@ const Button = styled.button`
   color: var(--sc-color-text);
   display: flex;
   border: 1px solid var(--sc-color-border-gray);
-`
+`;
 
-const IconOutline = styled(LiaHeart) <IconProps>`
-  ${({ $loading, $isAdding }) =>
+const IconOutline = styled(LiaHeart)<IconProps>`
+  ${({$loading, $isAdding}) =>
     $loading &&
     $isAdding &&
     css`
       animation: ${loadingAnimation} 0.5s ease-in-out;
     `}
-`
+`;
 
-const IconFilled = styled(LiaHeartSolid) <IconProps>`
-  ${({ $loading, $isAdding }) =>
+const IconFilled = styled(LiaHeartSolid)<IconProps>`
+  ${({$loading, $isAdding}) =>
     $loading &&
     $isAdding &&
     css`
       animation: ${loadingAnimation} 0.5s ease-in-out;
     `}
-`
+`;
 
 const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
   productId,
   productName,
 }) => {
-  const { userAttributes } = useContext(UserContext)
-  const { favorites, addFavorite, removeFavorite } = useFavorites()
-  const [loading, setLoading] = useState(false)
-  const [added, setAdded] = useState(false)
-  const [isAdding, setIsAdding] = useState(true)
-  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>('')
-  const router = useRouter()
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const {userAttributes} = useContext(UserContext);
+  const {favorites, addFavorite, removeFavorite} = useFavorites();
+  const [loading, setLoading] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [isAdding, setIsAdding] = useState(true);
+  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>('');
+  const router = useRouter();
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     if (userAttributes && userAttributes.sub) {
       const isAdded = favorites.some(
         (item: FavoriteItem) => item.product_id === productId
-      )
-      setAdded(isAdded)
+      );
+      setAdded(isAdded);
       if (!isAdded) {
-        setTooltipContent('Favorite to keep tabs on it')
+        setTooltipContent('Favorite to keep tabs on it');
       }
     } else {
-      setTooltipContent('Sign in to favorite this product')
+      setTooltipContent('Sign in to favorite this product');
     }
-  }, [productId, userAttributes, favorites])
+  }, [productId, userAttributes, favorites]);
 
   const addToFavorites = async () => {
     if (userAttributes && userAttributes.sub) {
-      setLoading(true)
-      setIsAdding(true)
-      setAdded(true)
-      await delay(500)
-      await addFavorite(userAttributes.sub, productId)
-      setLoading(false)
+      setLoading(true);
+      setIsAdding(true);
+      setAdded(true);
+      await delay(500);
+      await addFavorite(userAttributes.sub, productId);
+      setLoading(false);
       setTooltipContent(
         <>
           <span>Favorited! See all of your</span>{' '}
           <a href="/favorites">favorites</a>
         </>
-      )
+      );
     }
-  }
+  };
 
   const removeFromFavorites = async () => {
     if (userAttributes && userAttributes.sub) {
-      setLoading(true)
-      setIsAdding(false)
-      await delay(200) // Slight delay to prevent UI flicker
-      await removeFavorite(userAttributes.sub, productId)
-      setLoading(false)
-      setAdded(false)
-      setTooltipContent('Favorite to keep tabs on it')
+      setLoading(true);
+      setIsAdding(false);
+      await delay(200); // Slight delay to prevent UI flicker
+      await removeFavorite(userAttributes.sub, productId);
+      setLoading(false);
+      setAdded(false);
+      setTooltipContent('Favorite to keep tabs on it');
     }
-  }
+  };
 
   const handleClick = () => {
     if (!userAttributes) {
-      setTooltipContent('Sign in to favorite this product')
-      router.push('/login')
-      return
+      setTooltipContent('Sign in to favorite this product');
+      router.push('/login');
+      return;
     }
 
     if (added) {
-      void removeFromFavorites()
+      void removeFromFavorites();
     } else {
-      void addToFavorites()
+      void addToFavorites();
     }
-  }
+  };
 
   const getAriaLabel = () => {
     if (!userAttributes) {
-      return `Sign in to favorite ${productName} to keep tabs on it`
+      return `Sign in to favorite ${productName} to keep tabs on it`;
     }
 
     if (added) {
-      return `Remove ${productName} from your favorites`
+      return `Remove ${productName} from your favorites`;
     }
 
-    return `Favorite ${productName} to keep tabs on it`
-  }
+    return `Favorite ${productName} to keep tabs on it`;
+  };
 
   return (
     <Container>
@@ -184,7 +184,7 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
         </Button>
       </Popover>
     </Container>
-  )
-}
+  );
+};
 
-export default AddToFavoritesButton
+export default AddToFavoritesButton;

@@ -1,13 +1,13 @@
-import React, { useState, useContext, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import styled from 'styled-components'
-import LoaderSpin from '@/components/Loaders/LoaderSpin'
-import { useToast } from '@/context/ToastContext'
-import { UserContext } from '@/context/UserContext'
+import React, {useState, useContext, useCallback} from 'react';
+import {useRouter} from 'next/navigation';
+import styled from 'styled-components';
+import LoaderSpin from '@/components/Loaders/LoaderSpin';
+import {useToast} from '@/context/ToastContext';
+import {UserContext} from '@/context/UserContext';
 
 interface ButtonProps {
-  $loading?: boolean
-  disabled?: boolean
+  $loading?: boolean;
+  disabled?: boolean;
 }
 
 const Button = styled.button<ButtonProps>`
@@ -31,10 +31,10 @@ const Button = styled.button<ButtonProps>`
     rgba(0, 0, 0, 0) 0px 0px 0px 0px,
     rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   transition: all 240ms;
-  cursor: ${({ $loading, disabled }) =>
+  cursor: ${({$loading, disabled}) =>
     $loading || disabled ? 'not-allowed' : 'pointer'};
-  opacity: ${({ $loading, disabled }) => ($loading || disabled ? 0.6 : 1)};
-  pointer-events: ${({ $loading, disabled }) =>
+  opacity: ${({$loading, disabled}) => ($loading || disabled ? 0.6 : 1)};
+  pointer-events: ${({$loading, disabled}) =>
     $loading || disabled ? 'none' : 'auto'};
 
   &:focus {
@@ -47,48 +47,48 @@ const Button = styled.button<ButtonProps>`
       rgba(0, 0, 0, 0) 0px 0px 0px 0px,
       rgba(60, 66, 87, 0.08) 0px 2px 5px 0px;
   }
-`
+`;
 
 const ButtonText = styled.span<ButtonProps>`
-  opacity: ${({ $loading }) => ($loading ? 0 : 1)};
+  opacity: ${({$loading}) => ($loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
-`
+`;
 
 interface CheckoutButtonProps {
-  disabled?: boolean
+  disabled?: boolean;
 }
 
-const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const { showToast } = useToast()
-  const { userAttributes } = useContext(UserContext)
+const CheckoutButton: React.FC<CheckoutButtonProps> = ({disabled}) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const {showToast} = useToast();
+  const {userAttributes} = useContext(UserContext);
 
   const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleCheckout = useCallback(async () => {
     if (disabled) {
-      return
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     try {
       if (!userAttributes) {
         // If the user is not logged in, redirect to the login page
-        router.push('/login')
-        return
+        router.push('/login');
+        return;
       }
 
-      await delay(1000) // Simulate loading delay
-      router.push('/checkout')
+      await delay(1000); // Simulate loading delay
+      router.push('/checkout');
     } catch (error) {
-      console.error('Failed to proceed to checkout', error)
-      await showToast('Failed to proceed to checkout', { type: 'caution' })
+      console.error('Failed to proceed to checkout', error);
+      await showToast('Failed to proceed to checkout', {type: 'caution'});
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [disabled, router, userAttributes, showToast])
+  }, [disabled, router, userAttributes, showToast]);
 
   return (
     <Button
@@ -105,7 +105,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({ disabled }) => {
       </ButtonText>
       <LoaderSpin isLoading={loading} />
     </Button>
-  )
-}
+  );
+};
 
-export default CheckoutButton
+export default CheckoutButton;

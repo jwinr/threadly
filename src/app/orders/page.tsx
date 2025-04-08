@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState, useContext } from 'react'
-import styled from 'styled-components'
-import { useRouter } from 'next/navigation'
-import { UserContext } from '@/context/UserContext'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
+import React, {useEffect, useState, useContext} from 'react';
+import styled from 'styled-components';
+import {useRouter} from 'next/navigation';
+import {UserContext} from '@/context/UserContext';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter';
 
 interface Order {
-  order_id: string
-  created_at: string
-  amount_total: number
-  shipping_status: string
+  order_id: string;
+  created_at: string;
+  amount_total: number;
+  shipping_status: string;
   line_items: {
-    order_line_item_id: string
-    product_image_url: string
-    product_name: string
-  }[]
+    order_line_item_id: string;
+    product_image_url: string;
+    product_name: string;
+  }[];
 }
 
 const Container = styled.div`
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-`
+`;
 
 const OrderContainer = styled.div`
   margin-bottom: 20px;
@@ -33,22 +33,22 @@ const OrderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const OrderInfo = styled.div`
   flex: 1;
-`
+`;
 
 const OrderDate = styled.p`
   font-size: 14px;
   color: #666;
-`
+`;
 
 const OrderStatus = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-`
+`;
 
 const StatusButton = styled.button`
   background-color: #007bff;
@@ -65,12 +65,12 @@ const StatusButton = styled.button`
     background-color: #ccc;
     cursor: not-allowed;
   }
-`
+`;
 
 const OrderItems = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const ItemImage = styled.img`
   width: 50px;
@@ -78,43 +78,43 @@ const ItemImage = styled.img`
   object-fit: cover;
   border-radius: 4px;
   margin-right: 15px;
-`
+`;
 
 const Orders: React.FC = () => {
-  const { userAttributes } = useContext(UserContext)
-  const [orders, setOrders] = useState<Order[]>([])
-  const [loading, setIsLoading] = useState(true)
-  const formatCurrency = useCurrencyFormatter()
-  const router = useRouter()
+  const {userAttributes} = useContext(UserContext);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setIsLoading] = useState(true);
+  const formatCurrency = useCurrencyFormatter();
+  const router = useRouter();
 
   useEffect(() => {
     if (!userAttributes || !userAttributes.user_uuid) {
       // If the user is not signed in, redirect them to the login page
       // We'll also reset the loading state just in case there's a change to the user state
-      setIsLoading(true)
-      router.replace('/login')
-      return
+      setIsLoading(true);
+      router.replace('/login');
+      return;
     }
 
     const fetchOrders = async () => {
       try {
         const response = await fetch(
           `/api/orders?id=${userAttributes.user_uuid}`
-        )
-        const data: Order[] = (await response.json()) as Order[]
-        setOrders(data)
+        );
+        const data: Order[] = (await response.json()) as Order[];
+        setOrders(data);
       } catch (error) {
-        console.error('Error fetching orders:', error)
+        console.error('Error fetching orders:', error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchOrders()
-  }, [userAttributes, router])
+    fetchOrders();
+  }, [userAttributes, router]);
 
   if (loading) {
-    return <LoaderDots />
+    return <LoaderDots />;
   }
 
   return (
@@ -153,7 +153,7 @@ const Orders: React.FC = () => {
         ))
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default Orders
+export default Orders;

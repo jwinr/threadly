@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
-import Email from '@/public/images/icons/email.svg'
+import styled from 'styled-components';
+import Email from '@/public/images/icons/email.svg';
 
 const ContactPageWrapper = styled.div`
   display: flex;
@@ -10,31 +10,31 @@ const ContactPageWrapper = styled.div`
   @media (max-width: 768px) {
     padding: 20px;
   }
-`
+`;
 
 const HeaderText = styled.h1`
   font-weight: 700;
   font-size: 56px;
   margin-bottom: 10px;
   color: var(--sc-color-title);
-`
+`;
 
 const SubheaderText = styled.h2`
   font-weight: 700;
   font-size: 24px;
   margin-bottom: 5px;
   grid-area: header;
-`
+`;
 
 const EmailText = styled.h2`
   font-weight: 700;
   font-size: 22px;
-`
+`;
 
 const StyledEmail = styled(Email)`
   width: 36px;
   height: 36px;
-`
+`;
 
 const ContactCard = styled.div`
   background-color: var(--sc-color-white);
@@ -47,7 +47,7 @@ const ContactCard = styled.div`
   box-shadow:
     0 30px 60px -12px rgba(50, 50, 93, 0.25),
     0 18px 36px -18px rgba(0, 0, 0, 0.3);
-`
+`;
 
 const CardDetails = styled.div`
   background-color: var(--sc-color-white);
@@ -58,13 +58,13 @@ const CardDetails = styled.div`
   width: 100%;
   padding: 40px;
   display: flex;
-`
+`;
 
 const EmailWrapper = styled.div`
   display: flex;
   gap: 5px;
   align-items: center;
-`
+`;
 
 const ContactUs = () => {
   return (
@@ -86,7 +86,7 @@ const ContactUs = () => {
         </ContactCard>
       </ContactPageWrapper>
     </>
-  )
-}
+  );
+};
 
-export default ContactUs
+export default ContactUs;

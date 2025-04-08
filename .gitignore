@@ -1,48 +1,11 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# TypeScript build output
-dist/
-*.js.map
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+node_modules
+.next/
 .DS_Store
-*.pem
-.hintrc
-.vscode
-
-# debug
+coverage
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# vercel
-.vercel
-
-# serverless
-.serverless
-.serverless_nextjs
+*.pem
 
 # local content / private files
 public/images/products/
@@ -50,6 +13,12 @@ amplify/
 src/app/api/
 src/components/Layout/navbar/Menu/
 src/middleware.ts
+src/services/
+src/lib/constants.ts
+src/lib/db.ts
+src/utils/fetchWithCsrf.ts
+src/utils/LocationProvider.ts
+src/utils/rateLimiter.ts
 
 #amplify-do-not-edit-begin
 amplify/#current-cloud-backend
@@ -72,5 +41,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-certificates

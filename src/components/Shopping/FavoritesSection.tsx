@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import Link from 'next/link'
-import Image from 'next/image'
-import AddToCartButton from './AddToCartButton'
-import AddToFavoritesButton from './AddToFavoritesButton'
-import StarRatings from '../ReviewStars/StarRatings'
-import { useFavorites } from '@/context/FavoritesContext'
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import Link from 'next/link';
+import Image from 'next/image';
+import AddToCartButton from './AddToCartButton';
+import AddToFavoritesButton from './AddToFavoritesButton';
+import StarRatings from '../ReviewStars/StarRatings';
+import {useFavorites} from '@/context/FavoritesContext';
 
 interface FavoriteItem {
-  product_id: string
-  product_slug?: string
-  product_image_url?: string
-  product_name?: string
-  product_price?: number
-  product_sale_price?: number
+  product_id: string;
+  product_slug?: string;
+  product_image_url?: string;
+  product_name?: string;
+  product_price?: number;
+  product_sale_price?: number;
   reviews?: Array<{
-    rating: number
-    review_text: string
-  }>
+    rating: number;
+    review_text: string;
+  }>;
 }
 
 interface FavoritesSectionProps {
-  loadMoreFavorites: () => Promise<void>
-  isMobileView: boolean
-  favorites: unknown
+  loadMoreFavorites: () => Promise<void>;
+  isMobileView: boolean;
+  favorites: unknown;
 }
 
 const FavoritesWrapper = styled.div`
@@ -35,7 +35,7 @@ const FavoritesWrapper = styled.div`
     min-height: 32px;
     order: 2;
   }
-`
+`;
 
 const PriceWrapper = styled.div`
   flex-direction: column;
@@ -56,7 +56,7 @@ const PriceWrapper = styled.div`
       color: var(--sc-color-text-light-gray);
     }
   }
-`
+`;
 
 const OriginalPrice = styled.span`
   display: inline-block;
@@ -66,9 +66,9 @@ const OriginalPrice = styled.span`
   @media (max-width: 768px) {
     font-size: 12px;
   }
-`
+`;
 
-const Price = styled.h1<{ sale: boolean }>`
+const Price = styled.h1<{sale: boolean}>`
   font-size: 19px;
   font-weight: bold;
   color: ${(props) => (props.sale ? 'var(--sc-color-carnation)' : '#353a44;')};
@@ -76,7 +76,7 @@ const Price = styled.h1<{ sale: boolean }>`
   @media (max-width: 768px) {
     font-size: 14px;
   }
-`
+`;
 
 const TitleWrapper = styled.div`
   -webkit-box-align: center;
@@ -85,7 +85,7 @@ const TitleWrapper = styled.div`
   min-height: 100%;
   width: 100%;
   padding-bottom: 8px;
-`
+`;
 
 const TitleSection = styled.div`
   font-size: 16px;
@@ -98,7 +98,7 @@ const TitleSection = styled.div`
     max-width: initial;
     margin-bottom: 8px;
   }
-`
+`;
 
 const Title = styled(Link)`
   font-size: 16px;
@@ -115,7 +115,7 @@ const Title = styled(Link)`
     -webkit-line-clamp: 4;
     margin-left: 0;
   }
-`
+`;
 
 const Header = styled.h1`
   font-size: 29px;
@@ -125,7 +125,7 @@ const Header = styled.h1`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
-`
+`;
 
 const FavoriteDetails = styled.div`
   display: flex;
@@ -135,7 +135,7 @@ const FavoriteDetails = styled.div`
   & div {
     max-width: 100%;
   }
-`
+`;
 
 const ProductCard = styled.li`
   display: flex;
@@ -150,7 +150,7 @@ const ProductCard = styled.li`
     rgba(0, 0, 0, 0.04) 0px 4px 10px 2px,
     rgba(0, 0, 0, 0.06) 0px 2px 8px,
     rgba(0, 0, 0, 0.04) 0px 2px 4px;
-`
+`;
 
 const ImageWrapper = styled(Link)`
   display: flex;
@@ -171,14 +171,14 @@ const ImageWrapper = styled(Link)`
   @media (max-width: 768px) {
     margin-right: 0;
   }
-`
+`;
 
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-left: 15px;
-`
+`;
 
 const FavButtonWrapper = styled.div`
   display: flex;
@@ -186,7 +186,7 @@ const FavButtonWrapper = styled.div`
   gap: 15px;
   align-items: center;
   margin-top: 8px;
-`
+`;
 
 const ShowMoreButton = styled.button`
   background: none;
@@ -199,7 +199,7 @@ const ShowMoreButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
-`
+`;
 
 const ReviewWrapper = styled.div`
   display: flex;
@@ -213,28 +213,28 @@ const ReviewWrapper = styled.div`
   .star-rating {
     gap: 1px;
   }
-`
+`;
 
 const Sale = styled.span`
   display: flex;
   font-weight: 600;
   color: var(--sc-color-carnation);
-`
+`;
 
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({
   loadMoreFavorites,
   isMobileView,
 }) => {
-  const [showAll, setShowAll] = useState(false)
-  const { favorites } = useFavorites()
+  const [showAll, setShowAll] = useState(false);
+  const {favorites} = useFavorites();
 
   const handleShowAll = async () => {
-    await loadMoreFavorites()
-    setShowAll(true)
-  }
+    await loadMoreFavorites();
+    setShowAll(true);
+  };
 
-  const displayedFavorites = showAll ? favorites : favorites.slice(0, 3)
-  const remainingFavoritesCount = favorites.length - 3
+  const displayedFavorites = showAll ? favorites : favorites.slice(0, 3);
+  const remainingFavoritesCount = favorites.length - 3;
 
   return (
     <>
@@ -244,7 +244,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
             <Header>Favorites</Header>
           </TitleWrapper>
           {displayedFavorites.map((item: FavoriteItem) => {
-            const isOnSale = !!item.product_sale_price
+            const isOnSale = !!item.product_sale_price;
             return (
               <ProductCard key={item.product_id}>
                 <ImageWrapper
@@ -360,7 +360,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
                   </>
                 )}
               </ProductCard>
-            )
+            );
           })}
           {!showAll && remainingFavoritesCount > 0 && (
             <ShowMoreButton onClick={() => void handleShowAll}>
@@ -370,7 +370,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
         </FavoritesWrapper>
       )}
     </>
-  )
-}
+  );
+};
 
-export default FavoritesSection
+export default FavoritesSection;

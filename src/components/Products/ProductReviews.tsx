@@ -1,28 +1,28 @@
-import React, { useContext, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import styled from 'styled-components'
-import VoteButton from './VoteButton'
-import StarRating from '../ReviewStars/StarRatings'
-import { UserContext } from '@/context/UserContext'
+import React, {useContext, useState} from 'react';
+import {useRouter} from 'next/navigation';
+import styled from 'styled-components';
+import VoteButton from './VoteButton';
+import StarRating from '../ReviewStars/StarRatings';
+import {UserContext} from '@/context/UserContext';
 
 interface Review {
-  review_id?: number
-  review_title?: string
-  rating: number
-  first_name?: string
-  last_initial?: string
-  review_date?: string
-  review_text?: string
-  upvotes?: number
-  downvotes?: number
-  voteType?: 'upvote' | 'downvote' | null
-  updatedReview?: Partial<Review>
+  review_id?: number;
+  review_title?: string;
+  rating: number;
+  first_name?: string;
+  last_initial?: string;
+  review_date?: string;
+  review_text?: string;
+  upvotes?: number;
+  downvotes?: number;
+  voteType?: 'upvote' | 'downvote' | null;
+  updatedReview?: Partial<Review>;
 }
 
 interface ProductReviewsProps {
-  reviews: Review[]
-  productId: number
-  loading: boolean
+  reviews: Review[];
+  productId: number;
+  loading: boolean;
 }
 
 const Container = styled.div`
@@ -37,13 +37,13 @@ const Container = styled.div`
   p {
     font-size: 14px;
   }
-`
+`;
 
 const ReviewContainer = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`
+`;
 
 const ReviewWrapper = styled.li`
   border: 1px solid var(--sc-color-divider);
@@ -54,13 +54,13 @@ const ReviewWrapper = styled.li`
   justify-content: space-between;
   gap: 10px;
   align-items: flex-end;
-`
+`;
 
 const ReviewContent = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-`
+`;
 
 const ReviewTitle = styled.div`
   text-align: left;
@@ -71,21 +71,21 @@ const ReviewTitle = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-`
+`;
 
 const ReviewUser = styled.div`
   display: flex;
   align-items: center;
   font-size: 12px;
   margin-top: 10px;
-`
+`;
 
 const ReviewText = styled.div`
   font-size: 14px;
   margin: 10px 0;
   text-align: left;
   width: 75%;
-`
+`;
 
 const VoteContainer = styled.div`
   display: flex;
@@ -96,13 +96,13 @@ const VoteContainer = styled.div`
   span {
     font-size: 12px;
   }
-`
+`;
 
 const VoteBtnContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 15px;
-`
+`;
 
 const WriteReviewButton = styled.button`
   margin-top: 20px;
@@ -115,12 +115,12 @@ const WriteReviewButton = styled.button`
   color: var(--sc-color-white);
   border: none;
   cursor: pointer;
-`
+`;
 
 const NoReviews = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 const LoaderReviews = styled.div`
   border-radius: 8px;
@@ -134,7 +134,7 @@ const LoaderReviews = styled.div`
       enter 0.3s 0.1s forwards,
       loadingAnimation 1s ease-in-out infinite;
   }
-`
+`;
 
 const ProductReviews: React.FC<ProductReviewsProps> = ({
   reviews: initialReviews,
@@ -146,13 +146,13 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
       <Container>
         <LoaderReviews />
       </Container>
-    )
+    );
   }
 
-  console.log('ProductReviews received reviews:', initialReviews)
-  const { userAttributes } = useContext(UserContext)
-  const router = useRouter()
-  const [reviews, setReviews] = useState<Review[]>(initialReviews)
+  console.log('ProductReviews received reviews:', initialReviews);
+  const {userAttributes} = useContext(UserContext);
+  const router = useRouter();
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
 
   const handleVote = async (reviewId: number, type: 'upvote' | 'downvote') => {
     try {
@@ -163,13 +163,13 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           voteType: type,
           userId: userAttributes?.user_uuid,
         }),
-      })
+      });
 
-      const data: { updatedReview?: Partial<Review>; error?: string } =
+      const data: {updatedReview?: Partial<Review>; error?: string} =
         (await response.json()) as {
-          updatedReview?: Partial<Review>
-          error?: string
-        }
+          updatedReview?: Partial<Review>;
+          error?: string;
+        };
       // console.log("Response data:", data)
 
       if (response.ok) {
@@ -177,21 +177,21 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
           prevReviews.map(
             (review): Review =>
               review.review_id === Number(reviewId)
-                ? { ...review, ...(data.updatedReview || {}) }
+                ? {...review, ...(data.updatedReview || {})}
                 : review
           )
-        )
+        );
       } else {
-        console.error('Failed to record vote:', data?.error || 'Unknown error')
+        console.error('Failed to record vote:', data?.error || 'Unknown error');
       }
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
     }
-  }
+  };
 
   const handleWriteReviewClick = () => {
-    router.push(`/products/${productId}/add-review`)
-  }
+    router.push(`/products/${productId}/add-review`);
+  };
 
   return (
     <Container>
@@ -246,7 +246,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
         </WriteReviewButton>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default ProductReviews
+export default ProductReviews;

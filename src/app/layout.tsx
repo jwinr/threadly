@@ -1,40 +1,38 @@
-import React from 'react'
-import '../assets/main.css'
-import { Inter } from 'next/font/google'
-import AmplifyConfig from '@/lib/awsConfig'
-import { MobileViewProvider } from '@/context/MobileViewContext'
-import { UserProvider } from '@/context/UserContext'
-import { SignOutProvider } from '@/context/SignOutContext'
-import { CartProvider } from '@/context/CartContext'
-import { ToastProvider } from '@/context/ToastContext'
-import { FavoritesProvider } from '@/context/FavoritesContext'
-import Providers from './providers'
-import Layout from '@/components/Layout/Layout'
-import StyledComponentsRegistry from '@/lib/registry'
-import { cookies, headers } from 'next/headers'
-import { Metadata } from 'next'
-import { Customer } from '@/types/user'
+import React from 'react';
+import '../assets/main.css';
+import {Inter} from 'next/font/google';
+import AmplifyConfig from '@/lib/awsConfig';
+import {MobileViewProvider} from '@/context/MobileViewContext';
+import {UserProvider} from '@/context/UserContext';
+import {SignOutProvider} from '@/context/SignOutContext';
+import {CartProvider} from '@/context/CartContext';
+import {ToastProvider} from '@/context/ToastContext';
+import {FavoritesProvider} from '@/context/FavoritesContext';
+import Providers from './providers';
+import Layout from '@/components/Layout/Layout';
+import StyledComponentsRegistry from '@/lib/registry';
+import {cookies, headers} from 'next/headers';
+import {Metadata} from 'next';
+import {Customer} from '@/types/user';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: 'Threadly',
-}
+};
 
-export default async function RootLayout(
-  {
-    children,
-  }: {
-    children: React.ReactNode
-  }
-): Promise<JSX.Element> {
-  const cookieStore = cookies()
-  const headersList = headers()
-  const nonce = (await headersList).get('x-nonce')
-  const userAttributesCookie = (await cookieStore).get('userAttributes')
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}): Promise<JSX.Element> {
+  const cookieStore = cookies();
+  const headersList = headers();
+  const nonce = (await headersList).get('x-nonce');
+  const userAttributesCookie = (await cookieStore).get('userAttributes');
   const userAttributes: Customer | null = userAttributesCookie
     ? (JSON.parse(userAttributesCookie.value) as Customer)
-    : null
+    : null;
 
   return (
     <html lang="en">
@@ -63,5 +61,5 @@ export default async function RootLayout(
         <div id="portal-root"></div>
       </body>
     </html>
-  )
+  );
 }

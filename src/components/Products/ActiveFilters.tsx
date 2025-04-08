@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import { VscClose } from 'react-icons/vsc'
+import React from 'react';
+import styled from 'styled-components';
+import {VscClose} from 'react-icons/vsc';
 
 const ActiveFiltersContainer = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ const ActiveFiltersContainer = styled.div`
     overflow-y: hidden;
     padding: 8px 0px;
   }
-`
+`;
 
 const ActiveFilter = styled.button`
   font-size: 14px;
@@ -35,16 +35,16 @@ const ActiveFilter = styled.button`
   @media (max-width: 768px) {
     height: 36px;
   }
-`
+`;
 
 const AttributeType = styled.span`
   color: inherit;
-`
+`;
 
 const AttributeValue = styled.span`
   color: var(--sc-color-carnation);
   margin-left: 4px;
-`
+`;
 
 const CloseIcon = styled(VscClose)`
   margin-left: 5px;
@@ -53,7 +53,7 @@ const CloseIcon = styled(VscClose)`
   &:active {
     color: var(--sc-color-red);
   }
-`
+`;
 
 const ResetBtn = styled.button`
   font-size: 15px;
@@ -69,20 +69,20 @@ const ResetBtn = styled.button`
   &:focus-visible {
     text-decoration: none;
   }
-`
+`;
 
 interface ActiveFiltersProps {
-  selectedAttributes: Record<string, string[]>
-  selectedPriceRanges: string[]
-  removeFilter: (type: string, value: string, isPrice: boolean) => void
-  onFilterClick: (filter: Filter) => void
-  clearFilters: () => void
+  selectedAttributes: Record<string, string[]>;
+  selectedPriceRanges: string[];
+  removeFilter: (type: string, value: string, isPrice: boolean) => void;
+  onFilterClick: (filter: Filter) => void;
+  clearFilters: () => void;
 }
 
 interface Filter {
-  type: string
-  value: string
-  isPrice: boolean
+  type: string;
+  value: string;
+  isPrice: boolean;
 }
 
 const ActiveFilters: React.FC<ActiveFiltersProps> = ({
@@ -92,7 +92,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
   onFilterClick,
   clearFilters,
 }) => {
-  const filters: Filter[] = []
+  const filters: Filter[] = [];
 
   for (const attributeType in selectedAttributes) {
     selectedAttributes[attributeType].forEach((value) => {
@@ -100,8 +100,8 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
         type: attributeType,
         value,
         isPrice: false,
-      })
-    })
+      });
+    });
   }
 
   selectedPriceRanges.forEach((priceRange) => {
@@ -109,16 +109,16 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
       type: 'Price',
       value: priceRange,
       isPrice: true,
-    })
-  })
+    });
+  });
 
   const handleRemoveFilter = (
     filter: Filter,
     e: React.MouseEvent<SVGElement>
   ) => {
-    e.stopPropagation()
-    removeFilter(filter.type, filter.value, filter.isPrice)
-  }
+    e.stopPropagation();
+    removeFilter(filter.type, filter.value, filter.isPrice);
+  };
 
   return (
     <ActiveFiltersContainer>
@@ -135,7 +135,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
         </ResetBtn>
       )}
     </ActiveFiltersContainer>
-  )
-}
+  );
+};
 
-export default ActiveFilters
+export default ActiveFilters;

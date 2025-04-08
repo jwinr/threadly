@@ -1,8 +1,8 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 interface BackdropProps extends React.HTMLAttributes<HTMLDivElement> {
-  isOpen: boolean
+  isOpen: boolean;
 }
 
 const StyledBackdrop = styled.div<BackdropProps>`
@@ -14,8 +14,8 @@ const StyledBackdrop = styled.div<BackdropProps>`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: -200;
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({isOpen}) => (isOpen ? 'visible' : 'hidden')};
+  opacity: ${({isOpen}) => (isOpen ? 1 : 0)};
   transition:
     opacity 0.3s ease-in-out,
     visibility 0.3s ease-in-out;
@@ -31,10 +31,10 @@ const StyledBackdrop = styled.div<BackdropProps>`
     visibility: hidden;
     transition: none;
   }
-`
+`;
 
-const Backdrop: React.FC<BackdropProps> = ({ isOpen, ...props }) => {
-  return <StyledBackdrop isOpen={isOpen} {...props} />
-}
+const Backdrop: React.FC<BackdropProps> = ({isOpen, ...props}) => {
+  return <StyledBackdrop isOpen={isOpen} {...props} />;
+};
 
-export default Backdrop
+export default Backdrop;

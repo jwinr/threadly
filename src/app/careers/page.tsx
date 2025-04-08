@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import React from 'react'
-import styled from 'styled-components'
-import Head from 'next/head'
-import Button from '@/components/Elements/Button'
-import { useToast } from '@/context/ToastContext'
-import { RiLinkedinBoxFill, RiGithubFill } from 'react-icons/ri'
+import React from 'react';
+import styled from 'styled-components';
+import Head from 'next/head';
+import Button from '@/components/Elements/Button';
+import {useToast} from '@/context/ToastContext';
+import {RiLinkedinBoxFill, RiGithubFill} from 'react-icons/ri';
 
 const CareersContainer = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const CareersContainer = styled.div`
   @media (max-width: 768px) {
     padding: 30px 10px;
   }
-`
+`;
 
 const Title = styled.h1`
   font-size: 56px;
@@ -30,7 +30,7 @@ const Title = styled.h1`
   @media (max-width: 768px) {
     font-size: 34px;
   }
-`
+`;
 
 const Description = styled.p`
   font-size: 18px;
@@ -40,7 +40,7 @@ const Description = styled.p`
   @media (max-width: 768px) {
     font-size: 16px;
   }
-`
+`;
 
 const Subtitle = styled.h2`
   font-size: 24px;
@@ -50,42 +50,42 @@ const Subtitle = styled.h2`
   @media (max-width: 768px) {
     font-size: 20px;
   }
-`
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 20px;
-`
+`;
 
 const Careers: React.FC = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ''
-  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN || ''
-  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB || ''
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
+  const linkedInString = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN || '';
+  const githubString = process.env.NEXT_PUBLIC_CONTACT_GITHUB || '';
 
-  const { showToast } = useToast()
+  const {showToast} = useToast();
 
   const handleButtonClick: () => Promise<void> = async () => {
     if (!emailString) {
-      await showToast('Email not available', { type: 'caution' })
-      return
+      await showToast('Email not available', {type: 'caution'});
+      return;
     }
 
     try {
-      await navigator.clipboard.writeText(emailString)
+      await navigator.clipboard.writeText(emailString);
       await showToast('Email copied to clipboard', {
         type: 'success',
-      })
+      });
     } catch (err) {
-      console.error('Failed to copy email: ', err)
+      console.error('Failed to copy email: ', err);
       await showToast('Failed to copy email', {
         type: 'caution',
-      })
+      });
     }
-  }
+  };
 
   const handleButtonClickWrapper = (): void => {
-    void handleButtonClick()
-  }
+    void handleButtonClick();
+  };
 
   return (
     <>
@@ -134,7 +134,7 @@ const Careers: React.FC = () => {
         </ButtonContainer>
       </CareersContainer>
     </>
-  )
-}
+  );
+};
 
-export default Careers
+export default Careers;

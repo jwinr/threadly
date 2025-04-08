@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const ellipsisOne = keyframes`
   0% {
@@ -25,7 +25,7 @@ const ellipsisOne = keyframes`
     left: 100px;
     transform: scale(0);
   }
-`
+`;
 
 const LoadingDots = styled.div`
   position: relative;
@@ -72,7 +72,7 @@ const LoadingDots = styled.div`
       background: #ffffff;
     }
   }
-`
+`;
 
 const LoaderButton: React.FC = () => (
   <LoadingDots>
@@ -92,6 +92,6 @@ const LoaderButton: React.FC = () => (
       <div></div>
     </div>
   </LoadingDots>
-)
+);
 
-export default LoaderButton
+export default LoaderButton;

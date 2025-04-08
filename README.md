@@ -29,6 +29,7 @@
 [![TypeScript][TypeScript-img]][TypeScript-url]
 [![GitHubActions][GitHubActions-img]][GitHubActions-url]
 [![Jest][Jest-img]][Jest-url]
+
 </div>
 
 <!-- ABOUT THE PROJECT -->
@@ -65,11 +66,11 @@
 - Enables product favoriting so users can easily revisit and access preferred items.
 - Allows users to view and submit reviews on products, helping them make informed purchasing decisions.
 - Supports guest users by allowing them to add products to their cart without an account, and syncs their cart if they register later.
-<br>
+  <br>
 
 > [!NOTE]
 > The following demonstration was recorded with a development build. It does not showcase every feature and is subject to change.
-<br>
+> <br>
 
 https://github.com/user-attachments/assets/76a820c4-d7f8-4d6b-9af1-e45e2b20ffc0
 

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const PageContainer = styled.div`
   display: flex;
@@ -50,7 +50,7 @@ const PageContainer = styled.div`
     max-width: 100%;
     padding: 30px;
   }
-`
+`;
 
 const HeaderText = styled.h1`
   font-weight: 700;
@@ -60,7 +60,7 @@ const HeaderText = styled.h1`
   @media (max-width: 768px) {
     font-size: 42px;
   }
-`
+`;
 
 const SubheaderText = styled.h2`
   font-weight: 600;
@@ -70,10 +70,10 @@ const SubheaderText = styled.h2`
   @media (max-width: 768px) {
     font-size: 18px;
   }
-`
+`;
 
 const Accessibility = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ''
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
 
   return (
     <>
@@ -142,7 +142,7 @@ const Accessibility = () => {
         </section>
       </PageContainer>
     </>
-  )
-}
+  );
+};
 
-export default Accessibility
+export default Accessibility;

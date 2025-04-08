@@ -4,12 +4,12 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
-    })
-    return config
+    });
+    return config;
   },
   compiler: {
     styledComponents: true,
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

@@ -1,17 +1,17 @@
-import Image from 'next/image'
-import styled from 'styled-components'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/pagination'
-import { Pagination } from 'swiper/modules'
-import { useEffect, useState, useRef, MouseEvent } from 'react'
-import { Product } from '@/types/product'
+import Image from 'next/image';
+import styled from 'styled-components';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import {Pagination} from 'swiper/modules';
+import {useEffect, useState, useRef, MouseEvent} from 'react';
+import {Product} from '@/types/product';
 
 interface ProductImageGalleryProps {
-  product: Product
-  isMobileView: boolean
-  loading: boolean
-  hoveredImage: number
+  product: Product;
+  isMobileView: boolean;
+  loading: boolean;
+  hoveredImage: number;
 }
 
 const CarouselContainer = styled.div`
@@ -20,7 +20,7 @@ const CarouselContainer = styled.div`
   background-color: white;
   height: 290px;
   order: 2; // Make sure main image is below the product details in mobile view
-`
+`;
 
 const LoaderImageContainer = styled.div`
   width: 100%;
@@ -36,31 +36,31 @@ const LoaderImageContainer = styled.div`
       enter 0.3s 0.1s forwards,
       loadingAnimation 1s ease-in-out infinite;
   }
-`
+`;
 
-const MainImageContainer = styled.div<{ $zoomed: boolean }>`
+const MainImageContainer = styled.div<{$zoomed: boolean}>`
   max-width: 50%;
   min-width: 50%;
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
-  border-color: ${({ $zoomed }) => ($zoomed ? '#000' : 'transparent')};
+  border-color: ${({$zoomed}) => ($zoomed ? '#000' : 'transparent')};
   height: 650px;
   background-color: var(--sc-color-white);
   overflow: hidden;
   position: relative;
-  cursor: ${({ $zoomed }) => ($zoomed ? 'zoom-out' : 'zoom-in')};
+  cursor: ${({$zoomed}) => ($zoomed ? 'zoom-out' : 'zoom-in')};
   outline: none;
 
   .zoomed-image {
     position: absolute;
     top: 0;
     left: 0;
-    width: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
-    height: ${({ $zoomed }) => ($zoomed ? '150%' : '100%')};
-    transform-origin: ${({ $zoomed }) =>
-    $zoomed ? 'center center' : 'center center'};
-    transform: ${({ $zoomed }) => ($zoomed ? 'scale(1.5)' : 'scale(1)')};
+    width: ${({$zoomed}) => ($zoomed ? '150%' : '100%')};
+    height: ${({$zoomed}) => ($zoomed ? '150%' : '100%')};
+    transform-origin: ${({$zoomed}) =>
+      $zoomed ? 'center center' : 'center center'};
+    transform: ${({$zoomed}) => ($zoomed ? 'scale(1.5)' : 'scale(1)')};
     transition: transform 0.3s ease;
     pointer-events: none;
     z-index: 10;
@@ -97,7 +97,7 @@ const MainImageContainer = styled.div<{ $zoomed: boolean }>`
       transition: transform 0.3s ease;
     }
   }
-`
+`;
 
 const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   product,
@@ -105,77 +105,77 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   loading,
   hoveredImage,
 }) => {
-  const [zoomed, setZoomed] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(hoveredImage)
-  const mainImageContainerRef = useRef<HTMLDivElement | null>(null)
-  const imageRefs = useRef<(HTMLImageElement | null)[]>([])
-  const zoomedImageRef = useRef<HTMLImageElement | null>(null)
+  const [zoomed, setZoomed] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(hoveredImage);
+  const mainImageContainerRef = useRef<HTMLDivElement | null>(null);
+  const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const zoomedImageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    setCurrentIndex(hoveredImage)
-  }, [hoveredImage])
+    setCurrentIndex(hoveredImage);
+  }, [hoveredImage]);
 
   if (loading) {
     return (
       <>
         <LoaderImageContainer />
       </>
-    )
+    );
   }
 
   const handleImageClick = (e: MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } =
+    const {left, top, width, height} =
       mainImageContainerRef.current?.getBoundingClientRect() || {
         left: 0,
         top: 0,
         width: 0,
         height: 0,
-      }
+      };
 
-    const x = ((e.clientX - left) / width) * 100
-    const y = ((e.clientY - top) / height) * 100
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
 
     if (zoomedImageRef.current) {
       // Set the transform-origin immediately
-      zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`
+      zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`;
 
       // Trigger the zoom effect immediately after setting the transform-origin
       if (!zoomed) {
-        zoomedImageRef.current.style.transform = 'scale(2)'
+        zoomedImageRef.current.style.transform = 'scale(2)';
       } else {
-        zoomedImageRef.current.style.transform = 'scale(1)'
+        zoomedImageRef.current.style.transform = 'scale(1)';
       }
     }
 
-    setZoomed((prevZoomed) => !prevZoomed)
-  }
+    setZoomed((prevZoomed) => !prevZoomed);
+  };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (!zoomed || !mainImageContainerRef.current || !zoomedImageRef.current) {
-      return
+      return;
     }
 
-    const { left, top, width, height } =
-      mainImageContainerRef.current.getBoundingClientRect()
+    const {left, top, width, height} =
+      mainImageContainerRef.current.getBoundingClientRect();
 
-    const x = ((e.clientX - left) / width) * 100
-    const y = ((e.clientY - top) / height) * 100
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
 
-    zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`
-  }
+    zoomedImageRef.current.style.transformOrigin = `${x}% ${y}%`;
+  };
 
   const handleMouseLeave = () => {
     if (zoomed) {
-      setZoomed(false)
+      setZoomed(false);
     }
-  }
+  };
 
   return (
     <>
       {isMobileView ? (
         <CarouselContainer>
           <Swiper
-            pagination={{ dynamicBullets: true }}
+            pagination={{dynamicBullets: true}}
             modules={[Pagination]}
             spaceBetween={10}
           >
@@ -210,7 +210,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
               <div key={index} className="image-container">
                 <Image
                   ref={(el) => {
-                    imageRefs.current[index] = el
+                    imageRefs.current[index] = el;
                   }}
                   src={item.image_url}
                   width={880}
@@ -236,7 +236,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
         </MainImageContainer>
       )}
     </>
-  )
-}
+  );
+};
 
-export default ProductImageGallery
+export default ProductImageGallery;

@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import Image from 'next/image'
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
 
 interface Brand {
-  image: string
-  name: string
+  image: string;
+  name: string;
 }
 
 const ImageContainer = styled.div`
@@ -27,37 +27,37 @@ const ImageContainer = styled.div`
   &:hover {
     opacity: 1;
   }
-`
+`;
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 const Wrapper = styled.div`
   display: flex;
-`
+`;
 
 const BrandGrid: React.FC = () => {
-  const [brandsData, setBrandsData] = useState<Brand[]>([])
+  const [brandsData, setBrandsData] = useState<Brand[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/brands')
+        const response = await fetch('/api/brands');
         if (response.ok) {
-          const data: Brand[] = (await response.json()) as Brand[]
-          setBrandsData(data)
+          const data: Brand[] = (await response.json()) as Brand[];
+          setBrandsData(data);
         } else {
-          throw new Error('Error fetching data')
+          throw new Error('Error fetching data');
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    void fetchData()
-  }, [])
+    void fetchData();
+  }, []);
 
   return (
     <Container>
@@ -74,7 +74,7 @@ const BrandGrid: React.FC = () => {
         </Wrapper>
       ))}
     </Container>
-  )
-}
+  );
+};
 
-export default BrandGrid
+export default BrandGrid;

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {
   ReactNode,
@@ -8,100 +8,102 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from 'react'
-import { UserContext } from '@/context/UserContext'
-import { useToast } from '@/context/ToastContext'
-import { INVALID_JWT_TOKEN_ERROR } from '@/lib/constants'
-import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
+} from 'react';
+import {UserContext} from '@/context/UserContext';
+import {useToast} from '@/context/ToastContext';
+import {INVALID_JWT_TOKEN_ERROR} from '@/lib/constants';
+import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
 
 export interface CartItem {
-  size?: string | undefined
-  product_stripe_sale_price_id?: number
-  product_stripe_price_id?: number
-  variant_id: number
-  quantity: number
-  product_id?: number
-  product_name?: string
-  product_slug?: string
-  sku?: string
-  product_image_url?: string
-  product_price?: number
-  product_sale_price?: number | null
-  color?: string
-  waist?: string
-  length?: string
+  size?: string | undefined;
+  product_stripe_sale_price_id?: number;
+  product_stripe_price_id?: number;
+  variant_id: number;
+  quantity: number;
+  product_id?: number;
+  product_name?: string;
+  product_slug?: string;
+  sku?: string;
+  product_image_url?: string;
+  product_price?: number;
+  product_sale_price?: number | null;
+  color?: string;
+  waist?: string;
+  length?: string;
 }
 
 interface CartContextType {
-  cart: CartItem[]
+  cart: CartItem[];
   addToCart: (
     variantId: number,
     quantity?: number,
     isSyncing?: boolean
-  ) => Promise<void>
-  removeFromCart: (variantId: number) => Promise<void>
-  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>
-  loadingSummary: boolean
-  setLoadingSummary: React.Dispatch<React.SetStateAction<boolean>>
+  ) => Promise<void>;
+  removeFromCart: (variantId: number) => Promise<void>;
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  loadingSummary: boolean;
+  setLoadingSummary: React.Dispatch<React.SetStateAction<boolean>>;
   handleQuantityChange: (
     variantId: number,
     newQuantity: number
-  ) => Promise<void>
-  clearCart: () => Promise<void>
+  ) => Promise<void>;
+  clearCart: () => Promise<void>;
 }
 
-export const CartContext = createContext<CartContextType | undefined>(undefined)
+export const CartContext = createContext<CartContextType | undefined>(
+  undefined
+);
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const { showToast } = useToast()
-  const [cart, setCart] = useState<CartItem[]>([])
-  const { userAttributes, getToken } = useContext(UserContext)
-  const [loadingSummary, setLoadingSummary] = useState<boolean>(false)
-  const [isSyncing, setIsSyncing] = useState<boolean>(false)
-  const hasSyncedCart = useRef<boolean>(false)
+export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
+  const {showToast} = useToast();
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const {userAttributes, getToken} = useContext(UserContext);
+  const [loadingSummary, setLoadingSummary] = useState<boolean>(false);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const hasSyncedCart = useRef<boolean>(false);
 
   const fetchCart = useCallback(async () => {
     if (userAttributes?.user_uuid) {
       // Fetch from server for logged-in users
       try {
-        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`)
-        const data: CartItem[] = (await response.json()) as CartItem[]
-        setCart(data)
+        const response = await fetch(
+          `/api/cart?id=${userAttributes.user_uuid}`
+        );
+        const data: CartItem[] = (await response.json()) as CartItem[];
+        setCart(data);
       } catch (error) {
-        console.error('Error fetching cart:', error)
+        console.error('Error fetching cart:', error);
       }
     } else {
       // Fetch from localStorage for guest users
-      console.log('Fetching cart from local storage')
+      console.log('Fetching cart from local storage');
       const localCart = JSON.parse(
         localStorage.getItem('cart') || '[]'
-      ) as CartItem[]
+      ) as CartItem[];
 
       if (localCart.length > 0) {
-        setCart(localCart)
+        setCart(localCart);
       }
     }
-  }, [userAttributes, setCart])
+  }, [userAttributes, setCart]);
 
   const addToCart = useCallback(
     async (variantId: number, quantity = 1, isSyncing = false) => {
-      console.log('addToCart called with:', { variantId, quantity, isSyncing })
-      setLoadingSummary(true)
+      console.log('addToCart called with:', {variantId, quantity, isSyncing});
+      setLoadingSummary(true);
       try {
         if (userAttributes) {
-          const token = await getToken()
+          const token = await getToken();
           if (!token) {
-            throw new Error(INVALID_JWT_TOKEN_ERROR)
+            throw new Error(INVALID_JWT_TOKEN_ERROR);
           }
 
           const payload = {
             userId: userAttributes.user_uuid,
             variantId,
             quantity,
-          }
-          console.log('Sending payload to server:', payload)
+          };
+          console.log('Sending payload to server:', payload);
 
           const response = await fetchWithCsrf('/api/cart', {
             method: 'POST',
@@ -114,74 +116,74 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
               variantId,
               quantity,
             }),
-          })
+          });
 
-          console.log('Response status:', response.status)
+          console.log('Response status:', response.status);
 
           if (!response.ok) {
-            const errorData: unknown = await response.json()
-            throw new Error(`${(errorData as { message: string }).message}`)
+            const errorData: unknown = await response.json();
+            throw new Error(`${(errorData as {message: string}).message}`);
           }
 
-          await fetchCart()
+          await fetchCart();
 
           if (!isSyncing) {
             void showToast(`Added to cart`, {
               type: 'success',
-            })
+            });
           }
         } else {
           const localCart = JSON.parse(
             localStorage.getItem('cart') || '[]'
-          ) as CartItem[]
-          console.log('Local cart after addition:', localCart)
+          ) as CartItem[];
+          console.log('Local cart after addition:', localCart);
           const existingItem = localCart.find(
             (item) => item.variant_id === variantId
-          )
+          );
 
           if (existingItem) {
-            existingItem.quantity += quantity
+            existingItem.quantity += quantity;
           } else {
             localCart.push({
               variant_id: variantId,
               quantity,
-            })
+            });
           }
 
-          localStorage.setItem('cart', JSON.stringify(localCart))
-          await fetchCart()
+          localStorage.setItem('cart', JSON.stringify(localCart));
+          await fetchCart();
 
           if (!isSyncing) {
             void showToast(`Added to cart`, {
               type: 'success',
-            })
+            });
           }
         }
       } catch (error) {
-        const errorMessage = String(error)
+        const errorMessage = String(error);
         if (errorMessage.includes("You've reached the limit for this item")) {
           void showToast("You've reached the limit for this item", {
             type: 'caution',
-          })
+          });
         } else {
           void showToast('Failed to update product quantity', {
             type: 'caution',
-          })
+          });
         }
       } finally {
-        setLoadingSummary(false)
+        setLoadingSummary(false);
       }
     },
     [userAttributes, fetchCart, getToken, showToast]
-  )
+  );
 
   const removeFromCart = async (variantId: number) => {
-    setLoadingSummary(true)
+    setLoadingSummary(true);
     try {
       if (userAttributes) {
-        const token = await getToken()
+        const token = await getToken();
         if (!token) {
-          throw new Error(INVALID_JWT_TOKEN_ERROR)
+          throw new Error(INVALID_JWT_TOKEN_ERROR);
         }
 
         const response = await fetchWithCsrf('/api/cart', {
@@ -194,54 +196,54 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             userId: userAttributes.user_uuid,
             variantId,
           }),
-        })
+        });
 
         if (!response.ok) {
-          const errorData: unknown = await response.json()
-          console.error('Error removing from cart:', errorData)
-          const errorMessage = (errorData as { message: string }).message
-          throw new Error(`Error removing from cart: ${errorMessage}`)
+          const errorData: unknown = await response.json();
+          console.error('Error removing from cart:', errorData);
+          const errorMessage = (errorData as {message: string}).message;
+          throw new Error(`Error removing from cart: ${errorMessage}`);
         }
 
-        await fetchCart()
+        await fetchCart();
         await showToast('Item removed from cart', {
           type: 'success',
-        })
+        });
       } else {
         const localCart = JSON.parse(
           localStorage.getItem('cart') || '[]'
-        ) as CartItem[]
+        ) as CartItem[];
         const updatedCart = localCart.filter(
           (item) => item.variant_id !== variantId
-        )
+        );
 
-        localStorage.setItem('cart', JSON.stringify(updatedCart))
-        setCart(updatedCart)
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        setCart(updatedCart);
 
         await showToast('Removed from cart.', {
           type: 'success',
-        })
+        });
       }
     } catch (error) {
-      console.error('Error removing product from cart:', error)
+      console.error('Error removing product from cart:', error);
       await showToast('Failed to remove product', {
         type: 'caution',
-      })
+      });
     } finally {
-      setLoadingSummary(false)
+      setLoadingSummary(false);
     }
-  }
+  };
 
   const handleQuantityChange = async (
     variantId: number,
     newQuantity: number
   ) => {
-    setLoadingSummary(true)
+    setLoadingSummary(true);
     try {
       if (userAttributes) {
-        const token = await getToken()
+        const token = await getToken();
         if (!token) {
-          throw new Error(INVALID_JWT_TOKEN_ERROR)
+          throw new Error(INVALID_JWT_TOKEN_ERROR);
         }
 
         const response = await fetchWithCsrf('/api/cart', {
@@ -255,60 +257,60 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             variantId,
             quantity: newQuantity,
           }),
-        })
+        });
 
         if (!response.ok) {
-          const errorData: unknown = await response.json()
-          console.error('Error updating quantity:', errorData)
+          const errorData: unknown = await response.json();
+          console.error('Error updating quantity:', errorData);
           throw new Error(
-            `Error updating quantity: ${(errorData as { message: string }).message}`
-          )
+            `Error updating quantity: ${(errorData as {message: string}).message}`
+          );
         }
 
-        await fetchCart()
+        await fetchCart();
         await showToast(`Item quantity updated to ${newQuantity}`, {
           type: 'success',
-        })
+        });
       } else {
         const localCart = JSON.parse(
           localStorage.getItem('cart') || '[]'
-        ) as CartItem[]
+        ) as CartItem[];
 
         const updatedCart = localCart.map((item) =>
           item.variant_id === variantId
-            ? { ...item, quantity: newQuantity }
+            ? {...item, quantity: newQuantity}
             : item
-        )
+        );
 
-        localStorage.setItem('cart', JSON.stringify(updatedCart))
-        setCart(updatedCart)
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        setCart(updatedCart);
 
         await showToast(`Item quantity updated to ${newQuantity}`, {
           type: 'success',
-        })
+        });
       }
     } catch (error) {
-      console.error('Error updating product quantity:', error)
+      console.error('Error updating product quantity:', error);
       await showToast('Failed to update product quantity', {
         type: 'caution',
-      })
+      });
     } finally {
-      setLoadingSummary(false)
+      setLoadingSummary(false);
     }
-  }
+  };
 
   const syncLocalCartWithServer = useCallback(async () => {
     const localCart = JSON.parse(
       localStorage.getItem('cart') || '[]'
-    ) as CartItem[]
+    ) as CartItem[];
 
     // Only proceed with syncing if the local cart has items
     if (userAttributes && !isSyncing && localCart.length > 0) {
-      setIsSyncing(true)
+      setIsSyncing(true);
       try {
-        const token = await getToken()
+        const token = await getToken();
         if (!token) {
-          throw new Error(INVALID_JWT_TOKEN_ERROR)
+          throw new Error(INVALID_JWT_TOKEN_ERROR);
         }
 
         await fetchWithCsrf('/api/cart', {
@@ -317,42 +319,42 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${JSON.stringify(token)}`,
           },
-          body: JSON.stringify({ cart: localCart }),
-        })
+          body: JSON.stringify({cart: localCart}),
+        });
 
-        localStorage.removeItem('cart')
-        await fetchCart()
+        localStorage.removeItem('cart');
+        await fetchCart();
       } catch (error) {
-        console.error('Error syncing cart with server:', error)
+        console.error('Error syncing cart with server:', error);
       } finally {
-        setIsSyncing(false)
+        setIsSyncing(false);
       }
     }
-  }, [userAttributes, isSyncing, fetchCart, getToken])
+  }, [userAttributes, isSyncing, fetchCart, getToken]);
 
   useEffect(() => {
     if (userAttributes && !hasSyncedCart.current) {
-      fetchCart()
+      fetchCart();
 
       const localCart = JSON.parse(
         localStorage.getItem('cart') || '[]'
-      ) as CartItem[]
+      ) as CartItem[];
 
       if (localCart.length > 0) {
-        syncLocalCartWithServer()
+        syncLocalCartWithServer();
       }
 
-      hasSyncedCart.current = true
+      hasSyncedCart.current = true;
     }
-  }, [userAttributes, fetchCart, syncLocalCartWithServer])
+  }, [userAttributes, fetchCart, syncLocalCartWithServer]);
 
   const clearCart = async () => {
-    setLoadingSummary(true)
+    setLoadingSummary(true);
     try {
       if (userAttributes) {
-        const token = await getToken()
+        const token = await getToken();
         if (!token) {
-          throw new Error(INVALID_JWT_TOKEN_ERROR)
+          throw new Error(INVALID_JWT_TOKEN_ERROR);
         }
 
         const response = await fetchWithCsrf('/api/cart', {
@@ -361,39 +363,39 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${JSON.stringify(token)}`,
           },
-          body: JSON.stringify({ userId: userAttributes.user_uuid }),
-        })
+          body: JSON.stringify({userId: userAttributes.user_uuid}),
+        });
 
         if (!response.ok) {
-          const errorData: unknown = await response.json()
-          console.error('Error clearing cart:', errorData)
+          const errorData: unknown = await response.json();
+          console.error('Error clearing cart:', errorData);
           throw new Error(
-            `Error clearing cart: ${(errorData as { message: string }).message}`
-          )
+            `Error clearing cart: ${(errorData as {message: string}).message}`
+          );
         }
       } else {
-        localStorage.removeItem('cart')
+        localStorage.removeItem('cart');
       }
-      setCart([]) // Clear the cart state
+      setCart([]); // Clear the cart state
       await showToast('Cart cleared', {
         type: 'success',
-      })
+      });
     } catch (error) {
-      console.error('Error clearing cart:', error)
+      console.error('Error clearing cart:', error);
       await showToast('Failed to clear cart', {
         type: 'caution',
-      })
+      });
     } finally {
-      setLoadingSummary(false)
+      setLoadingSummary(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (!hasSyncedCart.current) {
-      void syncLocalCartWithServer()
-      hasSyncedCart.current = true
+      void syncLocalCartWithServer();
+      hasSyncedCart.current = true;
     }
-  }, [userAttributes, syncLocalCartWithServer])
+  }, [userAttributes, syncLocalCartWithServer]);
 
   return (
     <CartContext.Provider
@@ -410,5 +412,5 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     >
       {children}
     </CartContext.Provider>
-  )
-}
+  );
+};

@@ -7,19 +7,19 @@ import React, {
   RefObject,
   MouseEventHandler,
   KeyboardEventHandler,
-} from 'react'
-import { UserContext } from '@/context/UserContext'
-import { CartContext } from '@/context/CartContext'
-import { useSignOut } from '@/context/SignOutContext'
-import styled from 'styled-components'
-import { signOut } from 'aws-amplify/auth'
-import { useRouter } from 'next/navigation'
-import SigningOutOverlay from '@/components/Auth/SigningOutOverlay'
-import Popover from '@/components/Elements/Popover'
-import { User, ShoppingBag, Heart, LogOut } from 'lucide-react'
+} from 'react';
+import {UserContext} from '@/context/UserContext';
+import {CartContext} from '@/context/CartContext';
+import {useSignOut} from '@/context/SignOutContext';
+import styled from 'styled-components';
+import {signOut} from 'aws-amplify/auth';
+import {useRouter} from 'next/navigation';
+import SigningOutOverlay from '@/components/Auth/SigningOutOverlay';
+import Popover from '@/components/Elements/Popover';
+import {User, ShoppingBag, Heart, LogOut} from 'lucide-react';
 
 interface UserButtonProps {
-  $isOpen: boolean
+  $isOpen: boolean;
 }
 
 const UserButton = styled.button<UserButtonProps>`
@@ -88,7 +88,7 @@ const UserButton = styled.button<UserButtonProps>`
       background-color: var(--sc-color-white-highlight);
     }
   }
-`
+`;
 
 export const BtnText = styled.div`
   padding: 0 5px;
@@ -97,7 +97,7 @@ export const BtnText = styled.div`
   @media (max-width: 768px) {
     display: none;
   }
-`
+`;
 
 const Menu = styled.div`
   width: 240px;
@@ -106,7 +106,7 @@ const Menu = styled.div`
     text-decoration: underline;
     outline: none;
   }
-`
+`;
 
 const MenuItem = styled.li`
   display: flex;
@@ -140,106 +140,106 @@ const MenuItem = styled.li`
     margin-right: 6px;
     stroke: var(--sc-color-icon);
   }
-`
+`;
 
 const IconContainer = styled.div`
   justify-content: center;
   display: flex;
-`
+`;
 
 const UserDropdown = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const { userAttributes } = useContext(UserContext)
-  const { setCart } = useContext(CartContext) ?? {}
-  const { isSigningOut, setIsSigningOut } = useSignOut()
-  const router = useRouter()
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const firstMenuItemRef = useRef<HTMLLIElement>(null)
-  const userButtonRef = useRef<HTMLButtonElement>(null)
-  const dropdownMenuRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const {userAttributes} = useContext(UserContext);
+  const {setCart} = useContext(CartContext) ?? {};
+  const {isSigningOut, setIsSigningOut} = useSignOut();
+  const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const firstMenuItemRef = useRef<HTMLLIElement>(null);
+  const userButtonRef = useRef<HTMLButtonElement>(null);
+  const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
-  const given_name = userAttributes ? userAttributes.given_name : null
+  const given_name = userAttributes ? userAttributes.given_name : null;
 
   const signOutHandler = async () => {
-    setIsSigningOut(true) // Show the overlay
+    setIsSigningOut(true); // Show the overlay
 
     try {
-      await signOut() // Sign out via the AWS API
-      await fetch('/api/logout') // Remove the cognito cookie
+      await signOut(); // Sign out via the AWS API
+      await fetch('/api/logout'); // Remove the cognito cookie
       setTimeout(() => {
-        router.push('/')
-        setCart?.([]) // Clear the cart state
-        setIsSigningOut(false)
-      }, 1100)
+        router.push('/');
+        setCart?.([]); // Clear the cart state
+        setIsSigningOut(false);
+      }, 1100);
     } catch (error) {
-      console.error('Error signing out:', error)
-      setIsSigningOut(false)
+      console.error('Error signing out:', error);
+      setIsSigningOut(false);
     }
-  }
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
       !dropdownRef.current.contains(event.target as Node)
     ) {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }
+  };
 
   const handleEscapePress = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }
+  };
 
   const togglePopover = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   const handleMenuItemClick = (
     href?: string,
     onClick?: MouseEventHandler<HTMLLIElement>
   ) => {
     if (onClick) {
-      const event = new MouseEvent('click')
-      onClick(event as unknown as React.MouseEvent<HTMLLIElement>)
+      const event = new MouseEvent('click');
+      onClick(event as unknown as React.MouseEvent<HTMLLIElement>);
     }
 
     if (href) {
-      router.push(href)
+      router.push(href);
     }
 
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
-    const relatedTarget = event.relatedTarget as Node | null
+    const relatedTarget = event.relatedTarget as Node | null;
 
     if (
       !userButtonRef.current?.contains(relatedTarget) &&
       !dropdownMenuRef.current?.contains(relatedTarget)
     ) {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      document.addEventListener('keydown', handleEscapePress)
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapePress);
       setTimeout(() => {
-        firstMenuItemRef.current?.focus()
-      }, 0) // Focus on the first item when opening
+        firstMenuItemRef.current?.focus();
+      }, 0); // Focus on the first item when opening
     } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscapePress)
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapePress);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscapePress)
-    }
-  }, [isOpen])
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapePress);
+    };
+  }, [isOpen]);
 
   const dropdownContent = (
     <DropdownMenu
@@ -250,7 +250,7 @@ const UserDropdown = () => {
       userButtonRef={userButtonRef}
       dropdownMenuRef={dropdownMenuRef}
     />
-  )
+  );
 
   return (
     <>
@@ -280,19 +280,19 @@ const UserDropdown = () => {
         </Popover>
       </div>
     </>
-  )
-}
+  );
+};
 
 interface DropdownMenuProps {
-  handleSignOut: MouseEventHandler<HTMLLIElement>
-  user: string | null | undefined
-  firstMenuItemRef: RefObject<HTMLLIElement>
+  handleSignOut: MouseEventHandler<HTMLLIElement>;
+  user: string | null | undefined;
+  firstMenuItemRef: RefObject<HTMLLIElement>;
   onMenuItemClick: (
     href?: string,
     onClick?: MouseEventHandler<HTMLLIElement>
-  ) => void
-  userButtonRef: RefObject<HTMLButtonElement>
-  dropdownMenuRef: RefObject<HTMLDivElement>
+  ) => void;
+  userButtonRef: RefObject<HTMLButtonElement>;
+  dropdownMenuRef: RefObject<HTMLDivElement>;
 }
 
 function DropdownMenu({
@@ -375,83 +375,83 @@ function DropdownMenu({
         </>
       )}
     </Menu>
-  )
+  );
 }
 
 interface DropdownItemProps {
-  children: React.ReactNode
-  href?: string
-  onClick?: MouseEventHandler<HTMLLIElement>
-  role: string
+  children: React.ReactNode;
+  href?: string;
+  onClick?: MouseEventHandler<HTMLLIElement>;
+  role: string;
   onMenuItemClick: (
     href?: string,
     onClick?: MouseEventHandler<HTMLLIElement>
-  ) => void
-  userButtonRef: RefObject<HTMLButtonElement>
+  ) => void;
+  userButtonRef: RefObject<HTMLButtonElement>;
 }
 
 const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
-  ({ children, href, onClick, role, onMenuItemClick, userButtonRef }, ref) => {
+  ({children, href, onClick, role, onMenuItemClick, userButtonRef}, ref) => {
     const handleClick = () => {
-      onMenuItemClick(href, onClick)
-    }
+      onMenuItemClick(href, onClick);
+    };
 
     const handleKeyDown: KeyboardEventHandler<HTMLLIElement> = (event) => {
       const focusSibling = (
         direction: 'nextSibling' | 'previousSibling',
         fallback: 'firstChild' | 'lastChild'
       ) => {
-        event.preventDefault()
-        const sibling = event.currentTarget[direction]
+        event.preventDefault();
+        const sibling = event.currentTarget[direction];
         if (sibling) {
-          ; (sibling as HTMLElement).focus()
+          (sibling as HTMLElement).focus();
         } else if (event.currentTarget.parentNode) {
-          ; (event.currentTarget.parentNode[fallback] as HTMLElement).focus()
+          (event.currentTarget.parentNode[fallback] as HTMLElement).focus();
         }
-      }
+      };
 
       switch (event.key) {
         case 'ArrowDown': {
-          focusSibling('nextSibling', 'firstChild')
-          break
+          focusSibling('nextSibling', 'firstChild');
+          break;
         }
         case 'ArrowUp': {
-          focusSibling('previousSibling', 'lastChild')
-          break
+          focusSibling('previousSibling', 'lastChild');
+          break;
         }
         case 'Tab': {
-          event.preventDefault()
+          event.preventDefault();
 
           // Focus on either the search button or the cart icon
           const focusableElements = document.querySelectorAll(
             `button:not([disabled])`
-          )
+          );
 
           const userButtonIndex = Array.prototype.indexOf.call(
             focusableElements,
             userButtonRef.current
-          )
+          );
 
           if (event.shiftKey) {
             if (userButtonIndex > 0) {
-              ; (focusableElements[userButtonIndex - 1] as HTMLElement).focus()
+              (focusableElements[userButtonIndex - 1] as HTMLElement).focus();
             }
           } else {
             if (userButtonIndex < focusableElements.length - 1) {
-              ; (focusableElements[userButtonIndex + 1] as HTMLElement).focus()
+              (focusableElements[userButtonIndex + 1] as HTMLElement).focus();
             }
           }
-          break
+          break;
         }
         case 'Enter':
         case ' ': {
-          handleClick()
-          break
+          handleClick();
+          break;
         }
         default:
-          break
+          break;
       }
-    }
+    };
 
     return (
       <MenuItem
@@ -463,8 +463,8 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
       >
         {children}
       </MenuItem>
-    )
+    );
   }
-)
+);
 
-export default UserDropdown
+export default UserDropdown;

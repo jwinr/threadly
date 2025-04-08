@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 // Note: Disabled rule since it does have key events
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
-import styled from 'styled-components'
-import { CSSTransition } from 'react-transition-group'
-import PopArrow from '@/public/images/icons/popoverArrow.svg'
-import PortalWrapper from '@/components/Elements/PortalWrapper'
+import React, {useState, useEffect, useLayoutEffect, useRef} from 'react';
+import styled from 'styled-components';
+import {CSSTransition} from 'react-transition-group';
+import PopArrow from '@/public/images/icons/popoverArrow.svg';
+import PortalWrapper from '@/components/Elements/PortalWrapper';
 
-const PopoverWrapper = styled.div<{ $fixed: boolean }>`
-  position: ${({ $fixed }) => ($fixed ? 'fixed' : 'absolute')};
+const PopoverWrapper = styled.div<{$fixed: boolean}>`
+  position: ${({$fixed}) => ($fixed ? 'fixed' : 'absolute')};
   z-index: 1000;
-`
+`;
 
 const PopoverTransitionContainer = styled.div`
   // Note that we're using the same values for the enter states.
@@ -46,67 +46,72 @@ const PopoverTransitionContainer = styled.div`
       opacity 200ms ease-in,
       transform 200ms ease-in;
   }
-`
+`;
 
-const PopoverContainer = styled.div<{ color: string; $padding: string }>`
-  color: ${({ color }) => (color === 'dark' ? 'white' : 'initial')};
-  background: ${({ color }) =>
+const PopoverContainer = styled.div<{color: string; $padding: string}>`
+  color: ${({color}) => (color === 'dark' ? 'white' : 'initial')};
+  background: ${({color}) =>
     color === 'dark' ? 'var(--sc-color-gray-700)' : 'white'};
   box-shadow:
     0 0 0 1px #8898aa1a,
     0 15px 35px #31315d1a,
     0 5px 15px #00000014;
   border-radius: 6px;
-  padding: ${({ $padding }) => $padding};
+  padding: ${({$padding}) => $padding};
   font-size: 14px;
   max-width: 300px;
-`
+`;
 
-const Arrow = styled(PopArrow) <{ color: string; position: string; offset: number }>`
+const Arrow = styled(PopArrow)<{
+  color: string;
+  position: string;
+  offset: number;
+}>`
   position: absolute;
   width: 21px;
   height: 9px;
-  color: ${({ color }) => (color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff')};
+  color: ${({color}) =>
+    color === 'dark' ? 'var(--sc-color-gray-700)' : '#fff'};
 
-  ${({ position, offset }) =>
+  ${({position, offset}) =>
     position === 'top' &&
     `
     transform: rotate(180deg);
     bottom: -9px;
     left: calc(50% - 10.5px + ${offset}px);
   `}
-  ${({ position, offset }) =>
+  ${({position, offset}) =>
     position === 'bottom' &&
     `
     top: -9px;
     left: calc(50% - 10.5px + ${offset}px);
   `}
-  ${({ position, offset }) =>
+  ${({position, offset}) =>
     position === 'left' &&
     `
     transform: rotate(90deg);
     right: -14px;
     top: calc(50% - 4.5px + ${offset}px);
   `}
-  ${({ position, offset }) =>
+  ${({position, offset}) =>
     position === 'right' &&
     `
     transform: rotate(-90deg);
     left: -14px;
     top: calc(50% - 4.5px + ${offset}px);
   `}
-`
+`;
 
 interface PopoverProps {
-  trigger: 'hover' | 'click' | 'focus'
-  position?: 'top' | 'bottom' | 'left' | 'right'
-  content: React.ReactNode
-  children: React.ReactNode
-  showArrow?: boolean
-  color?: 'light' | 'dark'
-  padding?: string
-  fixed?: boolean
-  visible?: boolean
+  trigger: 'hover' | 'click' | 'focus';
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  content: React.ReactNode;
+  children: React.ReactNode;
+  showArrow?: boolean;
+  color?: 'light' | 'dark';
+  padding?: string;
+  fixed?: boolean;
+  visible?: boolean;
 }
 
 /**
@@ -135,33 +140,33 @@ const Popover: React.FC<PopoverProps> = ({
   fixed = false,
   visible: controlledVisible,
 }) => {
-  const [visible, setVisible] = useState(false)
-  const [coords, setCoords] = useState({ top: 0, left: 0 })
-  const [arrowOffset, setArrowOffset] = useState(0)
-  const triggerRef = useRef<HTMLDivElement>(null)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const nodeRef = React.useRef(null)
+  const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({top: 0, left: 0});
+  const [arrowOffset, setArrowOffset] = useState(0);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const nodeRef = React.useRef(null);
 
   // If a controlled visibility prop is passed, use it
   useEffect(() => {
     if (controlledVisible !== undefined) {
-      setVisible(controlledVisible)
+      setVisible(controlledVisible);
     }
-  }, [controlledVisible])
+  }, [controlledVisible]);
 
   const calculatePosition = () => {
     if (!triggerRef.current || !wrapperRef.current) {
-      return
+      return;
     }
 
-    const triggerRect = triggerRef.current.getBoundingClientRect()
-    const wrapperRect = wrapperRef.current.getBoundingClientRect()
-    const arrowAdjustment = showArrow ? 10 : 5
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const wrapperRect = wrapperRef.current.getBoundingClientRect();
+    const arrowAdjustment = showArrow ? 10 : 5;
 
     const baseTopPosition =
-      triggerRect.top + triggerRect.height / 2 - wrapperRect.height / 2
+      triggerRect.top + triggerRect.height / 2 - wrapperRect.height / 2;
     const baseLeftPosition =
-      triggerRect.left + triggerRect.width / 2 - wrapperRect.width / 2
+      triggerRect.left + triggerRect.width / 2 - wrapperRect.width / 2;
 
     const positions = {
       top: {
@@ -180,14 +185,14 @@ const Popover: React.FC<PopoverProps> = ({
         top: baseTopPosition,
         left: triggerRect.right + arrowAdjustment,
       },
-    }
+    };
 
-    let { top, left } = positions[position]
+    let {top, left} = positions[position];
 
     // Adjust for scrolling if not fixed
     if (!fixed) {
-      top += window.scrollY
-      left += window.scrollX
+      top += window.scrollY;
+      left += window.scrollX;
     }
 
     // Prevent overflow from screen edges
@@ -197,48 +202,48 @@ const Popover: React.FC<PopoverProps> = ({
         top,
         window.innerHeight + window.scrollY - wrapperRect.height - 20
       )
-    )
+    );
     left = Math.max(
       10,
       Math.min(
         left,
         window.innerWidth + window.scrollX - wrapperRect.width - 20
       )
-    )
+    );
 
     // Calculate arrow offset
     const offset =
       position === 'top' || position === 'bottom'
         ? triggerRect.left +
-        triggerRect.width / 2 -
-        left -
-        wrapperRect.width / 2
+          triggerRect.width / 2 -
+          left -
+          wrapperRect.width / 2
         : triggerRect.top +
-        triggerRect.height / 2 -
-        top -
-        wrapperRect.height / 2
+          triggerRect.height / 2 -
+          top -
+          wrapperRect.height / 2;
 
     // Only update state if values have actually changed
     setCoords((prevCoords) => {
       if (prevCoords.top !== top || prevCoords.left !== left) {
-        return { top, left }
+        return {top, left};
       }
-      return prevCoords
-    })
+      return prevCoords;
+    });
 
     setArrowOffset((prevOffset) => {
       if (prevOffset !== offset) {
-        return offset
+        return offset;
       }
-      return prevOffset
-    })
-  }
+      return prevOffset;
+    });
+  };
 
   const isOutOfViewport = (rect: DOMRect) =>
     rect.top < 0 ||
     rect.left < 0 ||
     rect.bottom > window.innerHeight ||
-    rect.right > window.innerWidth
+    rect.right > window.innerWidth;
 
   const isClickOutside = (
     event: MouseEvent,
@@ -246,46 +251,46 @@ const Popover: React.FC<PopoverProps> = ({
   ): boolean => {
     return refs.every(
       (ref) => ref.current && !ref.current.contains(event.target as Node)
-    )
-  }
+    );
+  };
 
   useLayoutEffect(() => {
     const handleScroll = () => {
       if (!fixed && wrapperRef.current) {
-        const wrapperRect = wrapperRef.current.getBoundingClientRect()
+        const wrapperRect = wrapperRef.current.getBoundingClientRect();
         if (isOutOfViewport(wrapperRect)) {
           setTimeout(() => {
-            setVisible(false)
-          }, 250)
+            setVisible(false);
+          }, 250);
         }
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('resize', calculatePosition)
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', calculatePosition);
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', calculatePosition)
-    }
-  }, [fixed])
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', calculatePosition);
+    };
+  }, [fixed]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape' || event.key === 'Tab') {
-        setVisible(false)
+        setVisible(false);
       }
-    }
+    };
 
     if (visible) {
-      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener('keydown', handleKeyDown);
     } else {
-      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keydown', handleKeyDown);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [visible])
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [visible]);
 
   // Hack: Watch for dimension changes and recalculate the position
   useEffect(() => {
@@ -301,42 +306,42 @@ const Popover: React.FC<PopoverProps> = ({
   useLayoutEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isClickOutside(event, [wrapperRef, triggerRef])) {
-        setVisible(false)
+        setVisible(false);
       }
-    }
+    };
 
     if (trigger === 'click' && visible) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [trigger, visible])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [trigger, visible]);
 
   const handleMouseEnter = () => {
     if (trigger === 'hover') {
-      setVisible(true)
+      setVisible(true);
     }
-  }
+  };
 
   const handleMouseLeave = () => {
     if (trigger === 'hover') {
-      setVisible(false)
+      setVisible(false);
     }
-  }
+  };
 
   const handleFocus = () => {
     if (trigger === 'focus' || trigger === 'hover') {
-      setVisible(true)
+      setVisible(true);
     }
-  }
+  };
 
   const handleBlur = () => {
     if (trigger === 'focus' || trigger === 'hover') {
-      setVisible(false)
+      setVisible(false);
     }
-  }
+  };
 
   return (
     <>
@@ -347,7 +352,7 @@ const Popover: React.FC<PopoverProps> = ({
         tabIndex={-1}
         onClick={() => {
           if (trigger === 'click' && controlledVisible === undefined) {
-            setVisible(!visible)
+            setVisible(!visible);
           }
         }}
         onMouseEnter={handleMouseEnter}
@@ -379,7 +384,11 @@ const Popover: React.FC<PopoverProps> = ({
             >
               <PopoverTransitionContainer ref={nodeRef}>
                 {showArrow && (
-                  <Arrow color={color} position={position} offset={arrowOffset} />
+                  <Arrow
+                    color={color}
+                    position={position}
+                    offset={arrowOffset}
+                  />
                 )}
                 <PopoverContainer color={color} $padding={padding}>
                   {content}
@@ -390,7 +399,7 @@ const Popover: React.FC<PopoverProps> = ({
         </PortalWrapper>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Popover
+export default Popover;

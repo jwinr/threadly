@@ -1,13 +1,13 @@
-import styled from 'styled-components'
-import { Product } from '@/types/product'
+import styled from 'styled-components';
+import {Product} from '@/types/product';
 
 interface ProductOverviewProps {
-  product: Product
-  loading: boolean
+  product: Product;
+  loading: boolean;
 }
 
 interface ProductDescriptionProps {
-  description: string
+  description: string;
 }
 
 const ProductSpecifications = styled.div`
@@ -24,7 +24,7 @@ const ProductSpecifications = styled.div`
     justify-content: space-between;
     align-items: flex-start;
   }
-`
+`;
 
 const ProductOverviewSection = styled.div`
   flex: 1;
@@ -39,7 +39,7 @@ const ProductOverviewSection = styled.div`
     font-size: 18px;
     padding-left: 20px;
   }
-`
+`;
 
 const ProductSpecs = styled.div`
   flex: 1;
@@ -59,7 +59,7 @@ const ProductSpecs = styled.div`
   ul {
     padding-left: 20px;
   }
-`
+`;
 
 const Section = styled.div`
   margin-bottom: 20px;
@@ -72,7 +72,7 @@ const Section = styled.div`
   ul {
     font-size: 15px;
   }
-`
+`;
 
 const LoaderDescription = styled.div`
   padding: 64px 0;
@@ -88,7 +88,7 @@ const LoaderDescription = styled.div`
       enter 0.3s 0.1s forwards,
       loadingAnimation 1s ease-in-out infinite;
   }
-`
+`;
 
 const LoaderFeatures = styled.div`
   padding: 64px 0;
@@ -104,7 +104,7 @@ const LoaderFeatures = styled.div`
       enter 0.3s 0.1s forwards,
       loadingAnimation 1s ease-in-out infinite;
   }
-`
+`;
 
 const ProductDescription: React.FC<ProductDescriptionProps> = ({
   description,
@@ -112,7 +112,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({
   <Section>
     <p>{description}</p>
   </Section>
-)
+);
 
 const ProductOverview: React.FC<ProductOverviewProps> = ({
   product,
@@ -124,7 +124,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         <LoaderDescription />
         <LoaderFeatures />
       </ProductSpecifications>
-    )
+    );
   }
 
   return (
@@ -146,7 +146,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         ))}
       </ProductSpecs>
     </ProductSpecifications>
-  )
-}
+  );
+};
 
-export default ProductOverview
+export default ProductOverview;

@@ -1,22 +1,22 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import CheckoutButton from './CheckoutButton'
+import React from 'react';
+import styled, {css} from 'styled-components';
+import CheckoutButton from './CheckoutButton';
 
 interface OrderSummaryContainerProps {
-  $isLoading: boolean
-  $loadingSummary: boolean
+  $isLoading: boolean;
+  $loadingSummary: boolean;
 }
 
 const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
   margin: 30px 16px;
   flex: 1 1 auto;
-  background-color: ${({ $isLoading }) => ($isLoading ? '#ededed' : 'initial')};
-  height: ${({ $isLoading }) => ($isLoading ? '300px' : 'initial')};
-  border-radius: ${({ $isLoading }) => ($isLoading ? '6px' : 'initial')};
-  opacity: ${({ $loadingSummary }) => ($loadingSummary ? '0.5' : '1')};
+  background-color: ${({$isLoading}) => ($isLoading ? '#ededed' : 'initial')};
+  height: ${({$isLoading}) => ($isLoading ? '300px' : 'initial')};
+  border-radius: ${({$isLoading}) => ($isLoading ? '6px' : 'initial')};
+  opacity: ${({$loadingSummary}) => ($loadingSummary ? '0.5' : '1')};
   transition: opacity 0.3s ease-in-out;
 
-  ${({ $isLoading }) =>
+  ${({$isLoading}) =>
     $isLoading &&
     css`
       animation:
@@ -31,7 +31,7 @@ const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
       }
     `}
 
-  ${({ $isLoading, $loadingSummary }) =>
+  ${({$isLoading, $loadingSummary}) =>
     !$isLoading &&
     !$loadingSummary &&
     css`
@@ -46,50 +46,50 @@ const OrderSummaryContainer = styled.div<OrderSummaryContainerProps>`
   @media (max-width: 768px) {
     margin: 30px 0;
   }
-`
+`;
 
 const SummaryItem = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
-`
+`;
 
 const SubWrapper = styled.div`
   flex-direction: row;
   display: flex;
   align-items: center;
-`
+`;
 
 const SubItemCount = styled.span`
   font-size: 14px;
   margin-left: 5px;
-`
+`;
 
 const TotalText = styled.span`
   font-size: 19px;
   font-weight: bold;
-`
+`;
 
 const TaxRate = styled.span`
   font-size: 14px;
   color: var(--sc-color-text-light-gray);
-`
+`;
 
 const EmptyMessage = styled.p`
   font-size: 16px;
   color: var(--sc-color-text-light-gray);
   margin-top: 20px;
   margin-bottom: 24px;
-`
+`;
 
 interface OrderSummaryProps {
-  subtotal: string
-  estimatedTaxes: string
-  total: string
-  totalQuantity: number
-  zipCode: string
-  $isLoading: boolean
-  loadingSummary: boolean
+  subtotal: string;
+  estimatedTaxes: string;
+  total: string;
+  totalQuantity: number;
+  zipCode: string;
+  $isLoading: boolean;
+  loadingSummary: boolean;
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -146,7 +146,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </>
       )}
     </OrderSummaryContainer>
-  )
-}
+  );
+};
 
-export default OrderSummary
+export default OrderSummary;

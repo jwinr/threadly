@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 interface PasswordRevealProps {
-  onClick: () => void
-  clicked: boolean
-  ariaLabel: string
-  className?: string
-  [key: string]: unknown
+  onClick: () => void;
+  clicked: boolean;
+  ariaLabel: string;
+  className?: string;
+  [key: string]: unknown;
 }
 
 const Container = styled.button`
@@ -23,10 +23,10 @@ const Container = styled.button`
   &:focus:not(:focus-visible) {
     --s-focus-ring: 0;
   }
-`
+`;
 
 interface EyeIconProps {
-  'data-clicked': boolean
+  'data-clicked': boolean;
 }
 
 const EyeIcon = styled.svg<EyeIconProps>`
@@ -57,7 +57,7 @@ const EyeIcon = styled.svg<EyeIconProps>`
   &:hover .eye-line2 {
     stroke: var(--sc-color-icon);
   }
-`
+`;
 
 const PasswordReveal: React.FC<PasswordRevealProps> = ({
   onClick,
@@ -103,6 +103,6 @@ const PasswordReveal: React.FC<PasswordRevealProps> = ({
       <line className="eye-line2" x1="4.4" y1="12.5" x2="15.7" y2="3.2" />
     </EyeIcon>
   </Container>
-)
+);
 
-export default PasswordReveal
+export default PasswordReveal;

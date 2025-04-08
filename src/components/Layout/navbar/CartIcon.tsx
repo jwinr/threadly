@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import { ShoppingCart } from 'lucide-react'
-import styled from 'styled-components'
-import { CartContext } from '@/context/CartContext'
+import React, {useContext} from 'react';
+import {ShoppingCart} from 'lucide-react';
+import styled from 'styled-components';
+import {CartContext} from '@/context/CartContext';
 
 const Container = styled.a`
   position: relative;
@@ -21,7 +21,7 @@ const Container = styled.a`
     order: 3; // Top-right element on mobile layouts
     height: auto;
   }
-`
+`;
 
 const Button = styled.button`
   font-size: 15px;
@@ -46,7 +46,7 @@ const Button = styled.button`
     padding: 0;
     justify-content: center;
   }
-`
+`;
 
 const CartCircle = styled.div`
   position: absolute;
@@ -72,23 +72,23 @@ const CartCircle = styled.div`
       background-color: var(--sc-color-white-highlight);
     }
   }
-`
+`;
 
 type CartItem = {
-  quantity: number | string // Allow for both numbers and strings
-}
+  quantity: number | string; // Allow for both numbers and strings
+};
 
 const CartIcon: React.FC = () => {
-  const { cart } = useContext(CartContext) || { cart: [] }
+  const {cart} = useContext(CartContext) || {cart: []};
 
   // Calculate total quantity
   const totalQuantity = cart.reduce(
     (sum: number, item: CartItem) => sum + Number(item.quantity),
     0
-  )
+  );
 
   // Dynamically change the label based on 1 or more items
-  const ariaLabel = `Cart, ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'}`
+  const ariaLabel = `Cart, ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'}`;
 
   return (
     <Container href="/cart" tabIndex={-1} aria-label={ariaLabel}>
@@ -97,7 +97,7 @@ const CartIcon: React.FC = () => {
         <ShoppingCart size={18} />
       </Button>
     </Container>
-  )
-}
+  );
+};
 
-export default CartIcon
+export default CartIcon;

@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 interface FilledStarProps {
-  className?: string
+  className?: string;
 }
 
 const FilledStar: React.FC<FilledStarProps> = () => {
@@ -25,7 +25,7 @@ const FilledStar: React.FC<FilledStarProps> = () => {
         ></use>
       </svg>
     </>
-  )
-}
+  );
+};
 
-export default FilledStar
+export default FilledStar;

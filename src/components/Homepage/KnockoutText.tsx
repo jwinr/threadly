@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import styled, { keyframes } from 'styled-components'
+import React, {useRef} from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const fadeInMask = keyframes`
   0% {
@@ -8,7 +8,7 @@ const fadeInMask = keyframes`
   100% {
     mask-position: 20% center;
   }
-`
+`;
 
 const shineAnimation = keyframes`
   0% {
@@ -17,7 +17,7 @@ const shineAnimation = keyframes`
   100% {
     background-position: 200% center;
   }
-`
+`;
 
 const KnockoutTextWrapper = styled.span`
   position: relative;
@@ -71,21 +71,21 @@ const KnockoutTextWrapper = styled.span`
     animation: ${shineAnimation} 10s infinite linear;
     transition: mask-position 1s ease-out;
   }
-`
+`;
 
 interface KnockoutTextProps {
-  text: string
+  text: string;
 }
 
-const KnockoutText: React.FC<KnockoutTextProps> = ({ text }) => {
-  const textRef = useRef<HTMLSpanElement>(null)
+const KnockoutText: React.FC<KnockoutTextProps> = ({text}) => {
+  const textRef = useRef<HTMLSpanElement>(null);
 
   return (
     <KnockoutTextWrapper ref={textRef}>
       <span className="shadow">{text}</span>
       <span className="foreground">{text}</span>
     </KnockoutTextWrapper>
-  )
-}
+  );
+};
 
-export default KnockoutText
+export default KnockoutText;

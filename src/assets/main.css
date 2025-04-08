@@ -79,8 +79,14 @@ button {
 
 html {
   font-size: 16px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Helvetica Neue', 'Ubuntu';
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Helvetica Neue',
+    'Ubuntu';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--sc-color-text);
@@ -115,8 +121,8 @@ a:hover {
 a:focus:not(.button-wrapper),
 a:focus-visible:not(.button-wrapper) {
   box-shadow:
-    0 0 0 4px rgba(58, 151, 212, .28),
-    0 0 1px 1px rgba(7, 89, 150, .36);
+    0 0 0 4px rgba(58, 151, 212, 0.28),
+    0 0 1px 1px rgba(7, 89, 150, 0.36);
   border-radius: 2px;
 }
 

@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import styled, { css } from 'styled-components'
-import Breadcrumb from '@/components/Elements/Breadcrumb'
-import ProductCard from '@/components/Products/ProductCard'
-import ProductFilters from '@/components/Products/ProductFilters'
-import Pagination from '@/components/Elements/Pagination'
-import useCategoryData from 'src/hooks/useCategoryData'
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
+import {useRouter, usePathname, useSearchParams} from 'next/navigation';
+import styled, {css} from 'styled-components';
+import Breadcrumb from '@/components/Elements/Breadcrumb';
+import ProductCard from '@/components/Products/ProductCard';
+import ProductFilters from '@/components/Products/ProductFilters';
+import Pagination from '@/components/Elements/Pagination';
+import useCategoryData from 'src/hooks/useCategoryData';
 
 const animationStyles = css`
   animation: loadingAnimation 1s infinite;
-`
+`;
 
 const CategoryPageContainer = styled.div`
   display: flex;
@@ -20,7 +20,7 @@ const CategoryPageContainer = styled.div`
   @media (max-width: 768px) {
     margin-top: 12px;
   }
-`
+`;
 
 const CategorizedItemsContainer = styled.div`
   display: grid;
@@ -36,9 +36,9 @@ const CategorizedItemsContainer = styled.div`
     padding: 0px 16px;
     gap: 5px;
   }
-`
+`;
 
-const LoadingCard = styled.div<{ $loading: boolean }>`
+const LoadingCard = styled.div<{$loading: boolean}>`
   display: flex;
   flex-direction: column;
   padding: 15px;
@@ -53,7 +53,7 @@ const LoadingCard = styled.div<{ $loading: boolean }>`
     flex-direction: row;
     flex-wrap: wrap;
   }
-`
+`;
 
 const LoadingFilter = styled.div`
   margin: 8px 16px;
@@ -61,7 +61,7 @@ const LoadingFilter = styled.div`
   background-color: #ededed;
   height: 42px;
   animation: loadingAnimation 1s ease-in-out infinite;
-`
+`;
 
 const LoadingCount = styled.div`
   margin: 8px 16px;
@@ -70,33 +70,33 @@ const LoadingCount = styled.div`
   height: 33px;
   max-width: 120px;
   animation: loadingAnimation 1s ease-in-out infinite;
-`
+`;
 
-const TitleWrapper = styled.div<{ $loading: boolean }>`
+const TitleWrapper = styled.div<{$loading: boolean}>`
   display: flex;
   margin: 12px 12px 0px 12px;
   justify-content: center;
   text-align: center;
   align-self: center;
-  background-color: ${({ $loading }) => ($loading ? '#ededed' : 'initial')};
-  height: ${({ $loading }) => ($loading ? '43.5px' : 'initial')};
-  width: ${({ $loading }) => ($loading ? '400px' : 'initial')};
-  border-radius: ${({ $loading }) => ($loading ? '6px' : 'initial')};
-  ${({ $loading }) => $loading && animationStyles}
-  animation-duration: ${({ $loading }) => ($loading ? '2s' : 'initial')};
+  background-color: ${({$loading}) => ($loading ? '#ededed' : 'initial')};
+  height: ${({$loading}) => ($loading ? '43.5px' : 'initial')};
+  width: ${({$loading}) => ($loading ? '400px' : 'initial')};
+  border-radius: ${({$loading}) => ($loading ? '6px' : 'initial')};
+  ${({$loading}) => $loading && animationStyles}
+  animation-duration: ${({$loading}) => ($loading ? '2s' : 'initial')};
   h1 {
-    display: ${({ $loading }) => ($loading ? 'none' : 'initial')};
+    display: ${({$loading}) => ($loading ? 'none' : 'initial')};
     font-size: 29px;
     font-weight: bold;
     color: var(--sc-color-title);
   }
-`
+`;
 
 const BreadcrumbContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
-`
+`;
 
 const ResultCount = styled.div`
   padding-left: 16px;
@@ -104,7 +104,7 @@ const ResultCount = styled.div`
   font-weight: 700;
   width: max-content;
   color: var(--sc-color-text);
-`
+`;
 
 const FixedFiltersContainer = styled.div`
   visibility: hidden;
@@ -128,122 +128,122 @@ const FixedFiltersContainer = styled.div`
   @media (max-width: 768px) {
     top: 108px;
   }
-`
+`;
 
-const MemoizedProductCard = React.memo(ProductCard)
+const MemoizedProductCard = React.memo(ProductCard);
 
-const MemoizedProductFilters = React.memo(ProductFilters)
+const MemoizedProductFilters = React.memo(ProductFilters);
 
 export default function CategoryPage() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const slug = pathname.split('/').pop() as string
-  const page = parseInt(searchParams.get('page') || '1')
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const slug = pathname.split('/').pop() as string;
+  const page = parseInt(searchParams.get('page') || '1');
 
-  const [currentPage, setCurrentPage] = useState<number>(page)
+  const [currentPage, setCurrentPage] = useState<number>(page);
   const [filterState, setFilterState] = useState<Record<string, string[]>>(
     searchParams.get('filters')
       ? JSON.parse(decodeURIComponent(searchParams.get('filters') || ''))
       : {}
-  )
-  const { categoryData, loading, filteredItems } = useCategoryData(
+  );
+  const {categoryData, loading, filteredItems} = useCategoryData(
     slug,
     currentPage,
     filterState
-  )
-  const [filtersVisible, setFiltersVisible] = useState<boolean>(false)
+  );
+  const [filtersVisible, setFiltersVisible] = useState<boolean>(false);
 
   // Handle filter changes, push new filters to URL, and reset to page 1
   const handleFilterChange = useCallback(
     (selectedAttributes: Record<string, unknown>) => {
-      const filters = { ...selectedAttributes }
-      const encodedFilters = encodeURIComponent(JSON.stringify(filters))
+      const filters = {...selectedAttributes};
+      const encodedFilters = encodeURIComponent(JSON.stringify(filters));
 
       const newQuery = new URLSearchParams(
         searchParams as URLSearchParams | string[][]
-      )
-      newQuery.set('filters', encodedFilters)
-      newQuery.set('page', '1') // Reset to the first page when filters are applied
+      );
+      newQuery.set('filters', encodedFilters);
+      newQuery.set('page', '1'); // Reset to the first page when filters are applied
 
-      router.push(`${pathname}?${newQuery.toString()}`)
-      setCurrentPage(1) // Reset currentPage in state
+      router.push(`${pathname}?${newQuery.toString()}`);
+      setCurrentPage(1); // Reset currentPage in state
     },
     [router, pathname, searchParams, filteredItems]
-  )
+  );
 
   // Handle page change and push new page to URL
   const handlePageChange = useCallback(
     (newPage: number) => {
       const newQuery = new URLSearchParams(
         searchParams as URLSearchParams | string[][]
-      )
-      newQuery.set('page', newPage.toString())
+      );
+      newQuery.set('page', newPage.toString());
 
-      router.push(`${pathname}?${newQuery.toString()}`)
-      setCurrentPage(newPage) // Update currentPage state
+      router.push(`${pathname}?${newQuery.toString()}`);
+      setCurrentPage(newPage); // Update currentPage state
     },
     [router, pathname, searchParams]
-  )
+  );
 
   // Calculate paginated items based on current page and filtered items
   const paginatedItems = useMemo(() => {
     if (!filteredItems.length) {
-      return []
+      return [];
     }
-    const startIndex = (currentPage - 1) * 16
-    return filteredItems.slice(startIndex, startIndex + 16)
-  }, [filteredItems, currentPage])
+    const startIndex = (currentPage - 1) * 16;
+    return filteredItems.slice(startIndex, startIndex + 16);
+  }, [filteredItems, currentPage]);
 
   const totalPages = useMemo(() => {
-    return filteredItems.length ? Math.ceil(filteredItems.length / 16) : 1
-  }, [filteredItems])
+    return filteredItems.length ? Math.ceil(filteredItems.length / 16) : 1;
+  }, [filteredItems]);
 
   // Sync filterState with URL when the URL changes (e.g., on back/forward browser actions)
   useEffect(() => {
-    const filtersFromURL = searchParams.get('filters')
+    const filtersFromURL = searchParams.get('filters');
     if (filtersFromURL) {
-      const decodedFilters = JSON.parse(decodeURIComponent(filtersFromURL))
-      setFilterState(decodedFilters)
+      const decodedFilters = JSON.parse(decodeURIComponent(filtersFromURL));
+      setFilterState(decodedFilters);
     }
-    const currentPageFromURL = parseInt(searchParams.get('page') || '1')
-    setCurrentPage(currentPageFromURL)
-  }, [searchParams])
+    const currentPageFromURL = parseInt(searchParams.get('page') || '1');
+    setCurrentPage(currentPageFromURL);
+  }, [searchParams]);
 
   // console.log('Paginated items', paginatedItems)
 
   const updateURL = useCallback(
     (filters: Record<string, unknown>) => {
-      const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set('filters', encodeURIComponent(JSON.stringify(filters)))
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('filters', encodeURIComponent(JSON.stringify(filters)));
 
-      router.push(`${pathname}?${searchParams.toString()}`)
+      router.push(`${pathname}?${searchParams.toString()}`);
     },
     [router, pathname]
-  )
+  );
 
   //console.log(categoryData)
   const resetFilters = useCallback(() => {
-    setFilterState({ selectedAttributes: [] })
-    updateURL({})
-  }, [updateURL])
+    setFilterState({selectedAttributes: []});
+    updateURL({});
+  }, [updateURL]);
 
   // Get the total count of items based on the filtered items including individual color variants
   const getTotalCount = useCallback(() => {
-    return filteredItems.reduce((acc, item) => acc + item.colors.length, 0)
-  }, [filteredItems])
+    return filteredItems.reduce((acc, item) => acc + item.colors.length, 0);
+  }, [filteredItems]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setFiltersVisible(window.scrollY > 175)
-    }
+      setFiltersVisible(window.scrollY > 175);
+    };
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <>
@@ -294,14 +294,14 @@ export default function CategoryPage() {
         )}
         <CategorizedItemsContainer>
           {loading &&
-            Array.from({ length: 16 }).map((_, index) => (
+            Array.from({length: 16}).map((_, index) => (
               <LoadingCard key={index} $loading={loading} />
             ))}
           {paginatedItems.map((item) => {
             return item.colors.map((color) => {
-              const firstSize = color.sizes[0]
-              const price = firstSize.price
-              const salePrice = firstSize.sale_price
+              const firstSize = color.sizes[0];
+              const price = firstSize.price;
+              const salePrice = firstSize.sale_price;
 
               return (
                 <MemoizedProductCard
@@ -325,8 +325,8 @@ export default function CategoryPage() {
                     images: c.images,
                   }))} // Pass all colors for swatches
                 />
-              )
-            })
+              );
+            });
           })}
         </CategorizedItemsContainer>
         {!loading && (
@@ -338,5 +338,5 @@ export default function CategoryPage() {
         )}
       </CategoryPageContainer>
     </>
-  )
+  );
 }

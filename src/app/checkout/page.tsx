@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {
   useContext,
@@ -6,30 +6,30 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from 'react'
-import Head from 'next/head'
-import { useRouter } from 'next/navigation'
-import getStripe from 'src/utils/get-stripejs'
+} from 'react';
+import Head from 'next/head';
+import {useRouter} from 'next/navigation';
+import getStripe from 'src/utils/get-stripejs';
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
-} from '@stripe/react-stripe-js'
-import { CartContext } from '@/context/CartContext'
-import { UserContext } from '@/context/UserContext'
-import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
+} from '@stripe/react-stripe-js';
+import {CartContext} from '@/context/CartContext';
+import {UserContext} from '@/context/UserContext';
+import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
 
 interface Price {
-  product_id: number | undefined
-  stripe_price_id: number | undefined
-  quantity: number
+  product_id: number | undefined;
+  stripe_price_id: number | undefined;
+  quantity: number;
 }
 
 export default function Checkout() {
-  const { cart } = useContext(CartContext) ?? {}
-  const { userAttributes } = useContext(UserContext)
-  const router = useRouter()
-  const [prices, setPrices] = useState<Price[]>([])
-  const [isCartReady, setIsCartReady] = useState<boolean>(false)
+  const {cart} = useContext(CartContext) ?? {};
+  const {userAttributes} = useContext(UserContext);
+  const router = useRouter();
+  const [prices, setPrices] = useState<Price[]>([]);
+  const [isCartReady, setIsCartReady] = useState<boolean>(false);
 
   useEffect(() => {
     if ((cart ?? []).length > 0) {
@@ -40,43 +40,43 @@ export default function Checkout() {
             ? item.product_stripe_sale_price_id
             : item.product_stripe_price_id,
           quantity: item.quantity,
-        }
-      })
+        };
+      });
 
-      setPrices(fetchedPrices || [])
+      setPrices(fetchedPrices || []);
     } else {
-      setPrices([])
+      setPrices([]);
     }
-  }, [cart])
+  }, [cart]);
 
   useEffect(() => {
     if (prices.length > 0 && userAttributes) {
-      setIsCartReady(true)
+      setIsCartReady(true);
     }
-  }, [prices, userAttributes])
+  }, [prices, userAttributes]);
 
   const fetchClientSecret = useCallback(async () => {
     try {
       if (!isCartReady || prices.length === 0) {
-        console.log('Cart is not ready or prices are empty')
-        return null
+        console.log('Cart is not ready or prices are empty');
+        return null;
       }
 
       // Fetch the Stripe customer ID from the backend
       const customerResponse = await fetch('/api/stripe-id', {
         method: 'GET',
-      })
+      });
 
       if (!customerResponse.ok) {
-        console.log('Failed to fetch Stripe customer ID')
-        return ''
+        console.log('Failed to fetch Stripe customer ID');
+        return '';
       }
 
-      const { stripe_customer_id: customer } = await customerResponse.json()
+      const {stripe_customer_id: customer} = await customerResponse.json();
 
       if (!customer) {
-        console.log('Customer is not defined')
-        return ''
+        console.log('Customer is not defined');
+        return '';
       }
 
       const response = await fetchWithCsrf('/api/checkout_sessions', {
@@ -84,35 +84,35 @@ export default function Checkout() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cart: prices, customer }),
-      })
+        body: JSON.stringify({cart: prices, customer}),
+      });
 
       const data: {
-        error?: string
-        sessionId?: string
-        clientSecret?: string
+        error?: string;
+        sessionId?: string;
+        clientSecret?: string;
       } = (await response.json()) as {
-        error?: string
-        sessionId?: string
-        clientSecret?: string
-      }
+        error?: string;
+        sessionId?: string;
+        clientSecret?: string;
+      };
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session')
+        throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      router.push(`/checkout?session_id=${data.sessionId}`)
-      return data.clientSecret ?? null
+      router.push(`/checkout?session_id=${data.sessionId}`);
+      return data.clientSecret ?? null;
     } catch (error) {
-      console.error('Error fetching client secret:', error)
-      return null
+      console.error('Error fetching client secret:', error);
+      return null;
     }
-  }, [prices, isCartReady, userAttributes, router])
+  }, [prices, isCartReady, userAttributes, router]);
 
   const options = useMemo(
-    () => ({ fetchClientSecret: fetchClientSecret as () => Promise<string> }),
+    () => ({fetchClientSecret: fetchClientSecret as () => Promise<string>}),
     [fetchClientSecret]
-  )
+  );
 
   return (
     <>
@@ -133,5 +133,5 @@ export default function Checkout() {
         )}
       </div>
     </>
-  )
+  );
 }

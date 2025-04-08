@@ -1,19 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
-import StarRating from '@/components/ReviewStars/StarRatings'
-import Truck from '@/public/images/icons/truck.svg'
-import Subscription from '@/public/images/icons/subscription.svg'
-import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton'
-import { useMobileView } from '@/context/MobileViewContext'
-import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
-import { Product } from '@/types/product'
+import React from 'react';
+import styled from 'styled-components';
+import StarRating from '@/components/ReviewStars/StarRatings';
+import Truck from '@/public/images/icons/truck.svg';
+import Subscription from '@/public/images/icons/subscription.svg';
+import AddToFavoritesButton from '@/components/Shopping/AddToFavoritesButton';
+import {useMobileView} from '@/context/MobileViewContext';
+import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter';
+import {Product} from '@/types/product';
 
 interface ProductInfoProps {
-  product: Product
-  deliveryDate: string
-  dayOfWeek: string
-  returnDate: string
-  loading: boolean
+  product: Product;
+  deliveryDate: string;
+  dayOfWeek: string;
+  returnDate: string;
+  loading: boolean;
 }
 
 const LoadingProduct = styled.div`
@@ -31,7 +31,7 @@ const LoadingProduct = styled.div`
       enter 0.3s 0.1s forwards,
       loadingAnimation 1s ease-in-out infinite;
   }
-`
+`;
 
 const ProductNameWrapper = styled.div`
   display: flex;
@@ -39,13 +39,13 @@ const ProductNameWrapper = styled.div`
   position: relative;
   border-bottom: 1px solid var(--sc-color-border-gray);
   order: 0; // Make sure product details are at the top in mobile view
-`
+`;
 
 const ProductName = styled.h1`
   font-size: 23px;
   line-height: 0.9;
   margin-bottom: 8px;
-`
+`;
 
 const ProductContainer = styled.div`
   flex: 1;
@@ -77,14 +77,14 @@ const ProductContainer = styled.div`
       font-size: 14px;
     }
   }
-`
+`;
 
 const OriginalPrice = styled.span`
   font-weight: bold;
   display: inline-block;
   font-size: 19px;
   text-decoration: line-through;
-`
+`;
 
 const Price = styled.h1`
   font-size: 28px;
@@ -94,7 +94,7 @@ const Price = styled.h1`
   @media (max-width: 768px) {
     font-size: 16px;
   }
-`
+`;
 
 const ShipWrapper = styled.div`
   display: flex;
@@ -107,31 +107,31 @@ const ShipWrapper = styled.div`
     width: 20px;
     height: 20px;
   }
-`
+`;
 
 const DateWrapper = styled.div`
   display: flex;
   font-weight: 400;
   font-size: 16px;
-`
+`;
 
 const ShippingOffer = styled.div`
   display: flex;
   font-weight: 400;
   font-size: 16px;
   padding: 15px 0;
-`
+`;
 
 const ExchangeWrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin: 15px 0;
-`
+`;
 
 const ExchangeHeader = styled.p`
   font-weight: 800;
   margin-bottom: 4px;
-`
+`;
 
 const ExchangeBox = styled.div`
   display: flex;
@@ -141,27 +141,27 @@ const ExchangeBox = styled.div`
     width: 20px;
     height: 20px;
   }
-`
+`;
 
 const ExchangeContent = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const ReviewWrapper = styled.div`
   display: flex;
   font-size: 14px;
   margin: 5px 0;
-`
+`;
 
 const AddFavsWrapper = styled.div`
   position: absolute;
   right: 0;
-`
+`;
 
 const StyledTruck = styled(Truck)`
   margin-right: 8px;
-`
+`;
 
 const ProductInfo: React.FC<ProductInfoProps> = ({
   product,
@@ -170,22 +170,22 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   returnDate,
   loading,
 }) => {
-  const isMobileView = useMobileView()
-  const formatCurrency = useCurrencyFormatter()
+  const isMobileView = useMobileView();
+  const formatCurrency = useCurrencyFormatter();
 
   if (loading) {
-    return <LoadingProduct />
+    return <LoadingProduct />;
   }
 
-  console.log(product)
+  console.log(product);
 
   // Access color variants
-  const selectedColorVariant = product.variants?.[0]
+  const selectedColorVariant = product.variants?.[0];
   // Access size variants from the selected color variant
-  const selectedSize = selectedColorVariant?.sizes?.[0]
+  const selectedSize = selectedColorVariant?.sizes?.[0];
 
-  const productPrice = selectedSize?.price || 0
-  const productSalePrice = selectedSize?.sale_price || productPrice
+  const productPrice = selectedSize?.price || 0;
+  const productSalePrice = selectedSize?.sale_price || productPrice;
 
   return (
     <>
@@ -271,7 +271,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </ProductContainer>
       )}
     </>
-  )
-}
+  );
+};
 
-export default ProductInfo
+export default ProductInfo;

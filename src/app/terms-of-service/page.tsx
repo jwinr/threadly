@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
-import Link from 'next/link'
+import styled from 'styled-components';
+import Link from 'next/link';
 
 const TermsPageWrapper = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const TermsPageWrapper = styled.div`
     max-width: 100%;
     padding: 30px;
   }
-`
+`;
 
 const HeaderText = styled.h1`
   font-weight: 700;
@@ -61,7 +61,7 @@ const HeaderText = styled.h1`
   @media (max-width: 768px) {
     font-size: 42px;
   }
-`
+`;
 
 const SubheaderText = styled.h2`
   font-weight: 600;
@@ -71,10 +71,10 @@ const SubheaderText = styled.h2`
   @media (max-width: 768px) {
     font-size: 18px;
   }
-`
+`;
 
 const TermsService = () => {
-  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || ''
+  const emailString = process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
 
   return (
     <>
@@ -398,7 +398,7 @@ const TermsService = () => {
         </section>
       </TermsPageWrapper>
     </>
-  )
-}
+  );
+};
 
-export default TermsService
+export default TermsService;

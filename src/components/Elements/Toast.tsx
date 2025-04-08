@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import Check from '@/public/images/icons/check.svg'
-import Warning from '@/public/images/icons/warning.svg'
+import React, {useState, useEffect} from 'react';
+import styled, {css} from 'styled-components';
+import Check from '@/public/images/icons/check.svg';
+import Warning from '@/public/images/icons/warning.svg';
 
 interface ToastProps {
-  message: string
-  type: 'success' | 'caution' | 'pending' | undefined
-  action?: string
-  onAction?: () => void
-  onDismiss: () => void
-  timeout?: number
-  index: number
-  id: number
+  message: string;
+  type: 'success' | 'caution' | 'pending' | undefined;
+  action?: string;
+  onAction?: () => void;
+  onDismiss: () => void;
+  timeout?: number;
+  index: number;
+  id: number;
 }
 
-const ToastContainer = styled.div<{ $isVisible: boolean }>`
+const ToastContainer = styled.div<{$isVisible: boolean}>`
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -50,11 +50,11 @@ const ToastContainer = styled.div<{ $isVisible: boolean }>`
   @media (max-width: 768px) {
     width: max-content;
   }
-`
+`;
 
 const IconContainer = styled.div`
   margin-right: 10px;
-`
+`;
 
 const ActionButton = styled.button`
   background: none;
@@ -63,19 +63,19 @@ const ActionButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   font-size: 14px;
-`
+`;
 
 const StyledCheck = styled(Check)`
   path {
     fill: var(--sc-color-green-300);
   }
-`
+`;
 
 const StyledWarning = styled(Warning)`
   path {
     fill: var(--sc-color-white);
   }
-`
+`;
 
 /**
  * Toast component to display messages at the bottom of the view.
@@ -97,56 +97,56 @@ const Toast: React.FC<ToastProps> = ({
   timeout,
   index,
 }) => {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const showTimeout = setTimeout(() => {
-      setIsVisible(true)
-    }, 100)
+      setIsVisible(true);
+    }, 100);
 
-    let fadeOutTimeout: NodeJS.Timeout | undefined
+    let fadeOutTimeout: NodeJS.Timeout | undefined;
     if (timeout && !action) {
       fadeOutTimeout = setTimeout(() => {
-        setIsVisible(false)
+        setIsVisible(false);
         setTimeout(() => {
-          onDismiss()
-        }, 200)
-      }, timeout)
+          onDismiss();
+        }, 200);
+      }, timeout);
     }
 
     return () => {
-      clearTimeout(showTimeout)
-      clearTimeout(fadeOutTimeout)
-    }
-  }, [timeout, action, onDismiss])
+      clearTimeout(showTimeout);
+      clearTimeout(fadeOutTimeout);
+    };
+  }, [timeout, action, onDismiss]);
 
   const handleActionClick = () => {
     if (onAction) {
-      onAction()
+      onAction();
     }
-    setIsVisible(false)
+    setIsVisible(false);
     setTimeout(() => {
-      onDismiss()
-    }, 200)
-  }
+      onDismiss();
+    }, 200);
+  };
 
   const renderIcon = () => {
     switch (type) {
       case 'success':
-        return <StyledCheck />
+        return <StyledCheck />;
       case 'caution':
-        return <StyledWarning />
+        return <StyledWarning />;
       case 'pending':
-        return
+        return;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <ToastContainer
       $isVisible={isVisible}
-      style={{ bottom: `${20 + index * 60}px` }}
+      style={{bottom: `${20 + index * 60}px`}}
     >
       <IconContainer>{renderIcon()}</IconContainer>
       {message}
@@ -154,11 +154,11 @@ const Toast: React.FC<ToastProps> = ({
         <ActionButton onClick={handleActionClick}>{action}</ActionButton>
       )}
     </ToastContainer>
-  )
-}
+  );
+};
 
 interface ToastManagerProps {
-  toasts: ToastProps[]
+  toasts: ToastProps[];
 }
 
 /**
@@ -166,14 +166,14 @@ interface ToastManagerProps {
  * @param {Array} toasts - The array of toasts to render.
  * @returns {JSX.Element} The rendered ToastManager component.
  */
-const ToastManager: React.FC<ToastManagerProps> = ({ toasts }) => {
+const ToastManager: React.FC<ToastManagerProps> = ({toasts}) => {
   return (
     <>
       {toasts.map((toast, index) => (
         <Toast key={toast.id} {...toast} index={index} />
       ))}
     </>
-  )
-}
+  );
+};
 
-export default ToastManager
+export default ToastManager;

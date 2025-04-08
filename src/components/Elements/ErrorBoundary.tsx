@@ -1,5 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react'
-import styled from 'styled-components'
+import React, {Component, ErrorInfo, ReactNode} from 'react';
+import styled from 'styled-components';
 
 const ErrorWrapper = styled.div`
   display: flex;
@@ -14,34 +14,34 @@ const ErrorWrapper = styled.div`
     width: auto;
     padding: 50px;
   }
-`
+`;
 
 const ErrorMessage = styled.h1`
   font-size: 42px;
   font-weight: 800;
-`
+`;
 
 interface ErrorBoundaryProps {
-  children: ReactNode
-  errorInfo?: string
+  children: ReactNode;
+  errorInfo?: string;
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean
+  hasError: boolean;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = {hasError: false};
   }
 
   static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true }
+    return {hasError: true};
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Error caught by error boundary:', error, errorInfo)
+    console.error('Error caught by error boundary:', error, errorInfo);
   }
 
   render() {
@@ -55,11 +55,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <ErrorMessage>Please try again.</ErrorMessage>
           )}
         </ErrorWrapper>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }
 
-export default ErrorBoundary
+export default ErrorBoundary;

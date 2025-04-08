@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 interface EmptyStarProps {
-  className?: string
+  className?: string;
 }
 
 const EmptyStar: React.FC<EmptyStarProps> = () => {
@@ -18,7 +18,7 @@ const EmptyStar: React.FC<EmptyStarProps> = () => {
         <use xlinkHref="#star" fill="none" stroke="grey" strokeWidth="2px" />
       </svg>
     </>
-  )
-}
+  );
+};
 
-export default EmptyStar
+export default EmptyStar;

@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useContext } from 'react'
-import { UserContext } from '@/context/UserContext'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import styled from 'styled-components'
-import Image from 'next/image'
-import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
-import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter'
-import { OrderDetail } from '@/types/order'
+import React, {useState, useEffect, useContext} from 'react';
+import {UserContext} from '@/context/UserContext';
+import {useRouter} from 'next/navigation';
+import Link from 'next/link';
+import styled from 'styled-components';
+import Image from 'next/image';
+import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser';
+import useCurrencyFormatter from 'src/hooks/useCurrencyFormatter';
+import {OrderDetail} from '@/types/order';
 import {
   User,
   Heart,
@@ -16,7 +16,7 @@ import {
   CreditCard,
   ShoppingBasket,
   Settings,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const AccountContainer = styled.div`
   margin: 0 auto;
@@ -25,26 +25,26 @@ const AccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 63px);
-`
+`;
 
 const Header = styled.h1`
   font-size: 29px;
   font-weight: bold;
   color: var(--sc-color-title);
   margin-bottom: 8px;
-`
+`;
 
 const CardFlexContainer = styled.div`
   display: flex;
   gap: 20px;
   flex-grow: 1;
   align-items: stretch;
-`
+`;
 
 const BottomFlexContainer = styled.div`
   display: flex;
   gap: 20px;
-`
+`;
 
 const CardLoader = styled.div`
   display: flex;
@@ -57,7 +57,7 @@ const CardLoader = styled.div`
   flex-direction: column;
   gap: 20px;
   animation: loadingAnimation 1s ease-in-out infinite;
-`
+`;
 
 const LargeCardLoader = styled.div`
   display: flex;
@@ -70,7 +70,7 @@ const LargeCardLoader = styled.div`
   flex-direction: column;
   gap: 20px;
   animation: loadingAnimation 1s ease-in-out infinite;
-`
+`;
 
 const ProfileContainer = styled.div`
   flex-basis: 33%;
@@ -89,7 +89,7 @@ const ProfileContainer = styled.div`
     width: 48px;
     height: 48px;
   }
-`
+`;
 
 const LargeContainer = styled.div`
   flex-basis: 66%;
@@ -107,12 +107,12 @@ const LargeContainer = styled.div`
     width: 48px;
     height: 48px;
   }
-`
+`;
 
 const CardWrapper = styled.div`
   display: flex;
   gap: 10px;
-`
+`;
 
 const CardButton = styled.button`
   border: none;
@@ -120,32 +120,32 @@ const CardButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
-`
+`;
 
 const Title = styled.div`
   font-weight: bold;
   font-size: 19px;
   text-align: left;
   color: var(--sc-color-title);
-`
+`;
 
 const ViewOrders = styled.a`
   margin-left: auto;
-`
+`;
 
 const InfoItem = styled.div`
   font-size: 16px;
-`
+`;
 
 const OrderListContainer = styled.div`
   margin-top: 20px;
-`
+`;
 
 const OrderList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`
+`;
 
 const OrderListItem = styled.li`
   display: flex;
@@ -157,7 +157,7 @@ const OrderListItem = styled.li`
   border-radius: 8px;
   border: 1px solid var(--sc-color-gray-100);
   padding: 24px 48px 24px 48px;
-`
+`;
 
 const ImageWrapper = styled(Link)`
   display: flex;
@@ -173,7 +173,7 @@ const ImageWrapper = styled(Link)`
     width: 80px;
     object-fit: scale-down;
   }
-`
+`;
 
 const LoadMoreButton = styled.button`
   display: block;
@@ -181,70 +181,70 @@ const LoadMoreButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-`
+`;
 
 const TextWrapper = styled.div`
   text-align: start;
-`
+`;
 
 const Account: React.FC = () => {
-  const { userAttributes } = useContext(UserContext) as {
+  const {userAttributes} = useContext(UserContext) as {
     userAttributes?: {
-      sub: string
-      given_name: string
-      family_name: string
-      email: string
-      created_at: string
-    }
-  }
-  const checkingUser = useCheckLoggedInUser()
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
-  const [orders, setOrders] = useState<OrderDetail[]>([])
-  const formatCurrency = useCurrencyFormatter()
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [hasMore, setHasMore] = useState(true)
-  const [offset, setOffset] = useState(0)
-  const limit = 2
+      sub: string;
+      given_name: string;
+      family_name: string;
+      email: string;
+      created_at: string;
+    };
+  };
+  const checkingUser = useCheckLoggedInUser();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const [orders, setOrders] = useState<OrderDetail[]>([]);
+  const formatCurrency = useCurrencyFormatter();
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const limit = 2;
 
   const fetchOrders = async (currentOffset = 0) => {
     try {
       const response = await fetch(
         `/api/orders?id=${userAttributes?.sub}&limit=${limit}&offset=${currentOffset}`
-      )
-      const data = (await response.json()) as OrderDetail[]
+      );
+      const data = (await response.json()) as OrderDetail[];
       if (data.length < limit) {
-        setHasMore(false)
+        setHasMore(false);
       }
-      setOrders((prevOrders) => [...prevOrders, ...data])
+      setOrders((prevOrders) => [...prevOrders, ...data]);
     } catch (error) {
-      console.error('Error fetching orders:', error)
+      console.error('Error fetching orders:', error);
     } finally {
-      setIsLoading(false)
-      setLoadingMore(false)
+      setIsLoading(false);
+      setLoadingMore(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (!checkingUser && userAttributes) {
-      fetchOrders()
+      fetchOrders();
     }
-  }, [checkingUser, userAttributes])
+  }, [checkingUser, userAttributes]);
 
   const handleLoadMore = () => {
-    setLoadingMore(true)
-    const newOffset = offset + limit
-    setOffset(newOffset)
-    fetchOrders(newOffset)
-  }
+    setLoadingMore(true);
+    const newOffset = offset + limit;
+    setOffset(newOffset);
+    fetchOrders(newOffset);
+  };
 
   const handleFavorites = () => {
-    router.push('/favorites')
-  }
+    router.push('/favorites');
+  };
 
   const handleAddPaymentMethod = () => {
-    router.push('account/payments')
-  }
+    router.push('account/payments');
+  };
 
   return (
     <AccountContainer>
@@ -410,7 +410,7 @@ const Account: React.FC = () => {
         </>
       )}
     </AccountContainer>
-  )
-}
+  );
+};
 
-export default Account
+export default Account;

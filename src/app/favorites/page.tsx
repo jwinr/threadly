@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useContext } from 'react'
-import { UserContext } from '@/context/UserContext'
-import styled from 'styled-components'
-import Link from 'next/link'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser'
-import { fetchWithCsrf } from '@/utils/fetchWithCsrf'
+import React, {useState, useEffect, useContext} from 'react';
+import {UserContext} from '@/context/UserContext';
+import styled from 'styled-components';
+import Link from 'next/link';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser';
+import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
 
 const FavoritesContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-`
+`;
 
 const Header = styled.h1`
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 20px;
-`
+`;
 
 const ProductItem = styled.div`
   display: flex;
@@ -26,24 +26,24 @@ const ProductItem = styled.div`
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
-`
+`;
 
 const ProductInfo = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const ProductImage = styled.img`
   width: 50px;
   height: 50px;
   object-fit: cover;
   margin-right: 10px;
-`
+`;
 
 const ProductDetails = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const RemoveButton = styled.button`
   background-color: #ff4d4d;
@@ -56,35 +56,35 @@ const RemoveButton = styled.button`
   &:hover {
     background-color: #ff3333;
   }
-`
+`;
 
 interface FavoriteItem {
-  product_id: string
-  product_image_url: string
-  product_name: string
-  product_price: string
+  product_id: string;
+  product_image_url: string;
+  product_name: string;
+  product_price: string;
 }
 
 const Favorites: React.FC = () => {
-  const { userAttributes } = useContext(UserContext)
-  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const checkingUser = useCheckLoggedInUser()
+  const {userAttributes} = useContext(UserContext);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const checkingUser = useCheckLoggedInUser();
 
   useEffect(() => {
     if (!checkingUser) {
       fetch(`/api/favorites?cognitoSub=${userAttributes?.sub}`)
         .then((response) => response.json())
         .then((data: FavoriteItem[]) => {
-          setFavorites(data)
-          setLoading(false)
+          setFavorites(data);
+          setLoading(false);
         })
         .catch((error) => {
-          console.error('Error fetching favorites:', error)
-          setLoading(false)
-        })
+          console.error('Error fetching favorites:', error);
+          setLoading(false);
+        });
     }
-  }, [checkingUser, userAttributes?.sub])
+  }, [checkingUser, userAttributes?.sub]);
 
   const removeFromFavorites = (productId: string) => {
     if (userAttributes) {
@@ -103,13 +103,13 @@ const Favorites: React.FC = () => {
           // Update the favorites state to reflect the item removal
           setFavorites((currentFavorites) =>
             currentFavorites.filter((item) => item.product_id !== productId)
-          )
+          );
         })
         .catch((error) => {
-          console.error('Error removing item from favorites:', error)
-        })
+          console.error('Error removing item from favorites:', error);
+        });
     }
-  }
+  };
 
   return (
     <>
@@ -149,7 +149,7 @@ const Favorites: React.FC = () => {
         )}
       </FavoritesContainer>
     </>
-  )
-}
+  );
+};
 
-export default Favorites
+export default Favorites;

@@ -1,20 +1,20 @@
-import React, { useContext, useState } from 'react'
-import { CartContext } from '@/context/CartContext'
-import styled from 'styled-components'
-import LoaderSpin from '@/components/Loaders/LoaderSpin'
-import Button from '@/components/Elements/Button'
+import React, {useContext, useState} from 'react';
+import {CartContext} from '@/context/CartContext';
+import styled from 'styled-components';
+import LoaderSpin from '@/components/Loaders/LoaderSpin';
+import Button from '@/components/Elements/Button';
 
 interface AddToCartButtonProps {
-  sizeVariantId: number
-  quantity?: number
-  productName: string | undefined
-  loading?: boolean
+  sizeVariantId: number;
+  quantity?: number;
+  productName: string | undefined;
+  loading?: boolean;
 }
 
-const ButtonText = styled.span<{ $loading: boolean }>`
-  opacity: ${({ $loading }) => ($loading ? 0 : 1)};
+const ButtonText = styled.span<{$loading: boolean}>`
+  opacity: ${({$loading}) => ($loading ? 0 : 1)};
   transition: opacity 0.24s ease-in-out;
-`
+`;
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   sizeVariantId,
@@ -22,22 +22,22 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   productName,
   loading,
 }) => {
-  const { addToCart } = useContext(CartContext) ?? {}
-  const [internalLoading, setInternalLoading] = useState<boolean>(false)
+  const {addToCart} = useContext(CartContext) ?? {};
+  const [internalLoading, setInternalLoading] = useState<boolean>(false);
 
   const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleAddToCart = async () => {
-    setInternalLoading(true)
+    setInternalLoading(true);
     try {
-      await Promise.all([addToCart?.(sizeVariantId, quantity), delay(750)])
+      await Promise.all([addToCart?.(sizeVariantId, quantity), delay(750)]);
     } catch (error) {
-      console.error('Failed to add to cart', error)
+      console.error('Failed to add to cart', error);
     } finally {
-      setInternalLoading(false)
+      setInternalLoading(false);
     }
-  }
+  };
 
   return (
     <Button
@@ -50,7 +50,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       <ButtonText $loading={loading || internalLoading}>Add to cart</ButtonText>
       {(loading || internalLoading) && <LoaderSpin isLoading={true} />}
     </Button>
-  )
-}
+  );
+};
 
-export default AddToCartButton
+export default AddToCartButton;

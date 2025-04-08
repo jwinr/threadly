@@ -1,9 +1,9 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
-import Image from 'next/image'
-import HeroImg from '@/public/images/hero_main.jpg'
-import Arrow from '@/public/images/icons/ctaArrow.svg'
-import KnockoutText from './KnockoutText'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
+import Image from 'next/image';
+import HeroImg from '@/public/images/hero_main.jpg';
+import Arrow from '@/public/images/icons/ctaArrow.svg';
+import KnockoutText from './KnockoutText';
 
 const fadeInUp = keyframes`
   from {
@@ -14,7 +14,7 @@ const fadeInUp = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`
+`;
 
 const fadeInUpSub = keyframes`
   from {
@@ -26,7 +26,7 @@ const fadeInUpSub = keyframes`
     opacity: 1;
     transform: translateY(0px);
   }
-`
+`;
 
 const fadeInUpCta = keyframes`
   from {
@@ -38,7 +38,7 @@ const fadeInUpCta = keyframes`
     opacity: 1;
     transform: translateY(0%);
   }
-`
+`;
 
 const HoverArrow = styled.div`
   --arrowSpacing: 5px;
@@ -66,7 +66,7 @@ const HoverArrow = styled.div`
       transform: translateX(0);
     }
   }
-`
+`;
 
 const HeroBannerContainer = styled.div`
   position: relative;
@@ -83,7 +83,7 @@ const HeroBannerContainer = styled.div`
   @media (max-width: 768px) {
     height: 390px;
   }
-`
+`;
 
 const ImageWrapper = styled.div`
   position: absolute;
@@ -94,7 +94,7 @@ const ImageWrapper = styled.div`
     height: 100%;
     border-radius: 12px;
   }
-`
+`;
 
 const TextContainer = styled.div`
   position: relative;
@@ -110,7 +110,7 @@ const TextContainer = styled.div`
     top: 40%;
     left: 5%;
   }
-`
+`;
 
 const Headline = styled.div`
   font-weight: 700;
@@ -130,7 +130,7 @@ const Headline = styled.div`
     font-size: 26px;
     margin-bottom: 10px;
   }
-`
+`;
 
 const Subheadline = styled.h2`
   font-size: 18px;
@@ -150,7 +150,7 @@ const Subheadline = styled.h2`
     font-size: 14px;
     margin-bottom: 20px;
   }
-`
+`;
 
 const CtaButton = styled.button`
   display: flex;
@@ -198,7 +198,7 @@ const CtaButton = styled.button`
     padding: 10px 20px;
     font-size: 16px;
   }
-`
+`;
 
 const HeroBanner: React.FC = () => {
   return (
@@ -231,7 +231,7 @@ const HeroBanner: React.FC = () => {
         </CtaButton>
       </TextContainer>
     </HeroBannerContainer>
-  )
-}
+  );
+};
 
-export default HeroBanner
+export default HeroBanner;

@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import Heart from '@/public/images/icons/heart.svg'
+import React from 'react';
+import styled from 'styled-components';
+import Heart from '@/public/images/icons/heart.svg';
 
 const EmptyFavoritesContainer = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ const EmptyFavoritesContainer = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const EmptyContents = styled.div`
   display: flex;
@@ -32,14 +32,14 @@ const EmptyContents = styled.div`
   button {
     width: 250px;
   }
-`
+`;
 
 const EmptyHeader = styled.h1`
   font-size: 23px;
   font-weight: bold;
   color: var(--sc-color-title);
   margin-bottom: 8px;
-`
+`;
 
 const EmptyWrapper = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const EmptyWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
-`
+`;
 
 const EmptyFavoritesSection = () => {
   return (
@@ -69,7 +69,7 @@ const EmptyFavoritesSection = () => {
         </EmptyContents>
       </EmptyFavoritesContainer>
     </>
-  )
-}
+  );
+};
 
-export default EmptyFavoritesSection
+export default EmptyFavoritesSection;

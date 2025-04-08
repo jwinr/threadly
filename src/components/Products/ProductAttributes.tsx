@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import styled from 'styled-components'
-import { Product } from '@/types/product'
+import {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
+import Image from 'next/image';
+import styled from 'styled-components';
+import {Product} from '@/types/product';
 
 interface SelectedAttributes {
-  color: string
-  color_name: string
-  waist: string
-  length: string
-  size: string
+  color: string;
+  color_name: string;
+  waist: string;
+  length: string;
+  size: string;
 }
 
 interface ProductAttributesProps {
-  product: Product
-  loading: boolean
-  onSizeVariantSelected?: (sizeVariantId: string) => void
+  product: Product;
+  loading: boolean;
+  onSizeVariantSelected?: (sizeVariantId: string) => void;
 }
 
 const AttributeSelection = styled.div`
@@ -38,7 +38,7 @@ const AttributeSelection = styled.div`
     font-weight: normal;
     color: #333;
   }
-`
+`;
 
 const LoaderAttributes = styled.div`
   margin-top: 20px;
@@ -50,20 +50,20 @@ const LoaderAttributes = styled.div`
   background-color: #ededed;
   animation: loadingAnimation 1s ease-in-out infinite;
   animation-fill-mode: forwards;
-`
+`;
 
 const AttributeOptions = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
   flex-wrap: wrap;
-`
+`;
 
-const ColorSwatch = styled.button<{ selected: boolean }>`
+const ColorSwatch = styled.button<{selected: boolean}>`
   width: 28px;
   height: 28px;
   border: 2px solid transparent;
-  outline: 1px solid ${({ selected }) => (selected ? 'black' : 'transparent')};
+  outline: 1px solid ${({selected}) => (selected ? 'black' : 'transparent')};
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
@@ -80,12 +80,12 @@ const ColorSwatch = styled.button<{ selected: boolean }>`
     cursor: not-allowed;
     opacity: 0.5;
   }
-`
+`;
 
-const SizeOption = styled.button<{ selected: boolean }>`
-  border: 2px solid ${({ selected }) => (selected ? 'black' : '#ddd')};
-  color: ${({ selected }) => (selected ? 'black' : '#555')};
-  font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
+const SizeOption = styled.button<{selected: boolean}>`
+  border: 2px solid ${({selected}) => (selected ? 'black' : '#ddd')};
+  color: ${({selected}) => (selected ? 'black' : '#555')};
+  font-weight: ${({selected}) => (selected ? 'bold' : 'normal')};
   font-size: 16px;
   border-radius: 5px;
   width: 45px;
@@ -93,7 +93,11 @@ const SizeOption = styled.button<{ selected: boolean }>`
   cursor: pointer;
 
   &:focus-visible {
-    box-shadow: var(--s-top-shadow), var(--s-keyline) 0 0 0 var(--s-keyline-width), var(--s-focus-ring), var(--s-box-shadow);
+    box-shadow:
+      var(--s-top-shadow),
+      var(--s-keyline) 0 0 0 var(--s-keyline-width),
+      var(--s-focus-ring),
+      var(--s-box-shadow);
   }
 
   &:hover {
@@ -104,14 +108,14 @@ const SizeOption = styled.button<{ selected: boolean }>`
     cursor: not-allowed;
     opacity: 0.5;
   }
-`
+`;
 
 const ProductAttributes: React.FC<ProductAttributesProps> = ({
   product,
   loading,
   onSizeVariantSelected,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [selectedAttributes, setSelectedAttributes] =
     useState<SelectedAttributes>({
       color: '',
@@ -119,7 +123,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
       waist: '',
       length: '',
       size: '',
-    })
+    });
 
   useEffect(() => {
     if (product && product.variants) {
@@ -129,27 +133,27 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
         waist: product.variants[0].waist || '',
         length: product.variants[0].length || '',
         size: product.variants[0].size || '',
-      }
+      };
 
       // Find the default size variant
       const defaultSizeVariant = product.variants?.find(
         (variant) => variant.sku === defaultAttributes.color
-      )?.sizes[0]
+      )?.sizes[0];
 
       if (defaultSizeVariant) {
-        defaultAttributes.waist = defaultSizeVariant.waist || ''
-        defaultAttributes.length = defaultSizeVariant.length || ''
-        defaultAttributes.size = defaultSizeVariant.size || ''
+        defaultAttributes.waist = defaultSizeVariant.waist || '';
+        defaultAttributes.length = defaultSizeVariant.length || '';
+        defaultAttributes.size = defaultSizeVariant.size || '';
       }
 
       // Automatically default to a size variant if there's one available
-      setSelectedAttributes(defaultAttributes)
+      setSelectedAttributes(defaultAttributes);
 
       if (defaultSizeVariant && onSizeVariantSelected) {
-        onSizeVariantSelected(defaultSizeVariant.size_variant_id)
+        onSizeVariantSelected(defaultSizeVariant.size_variant_id);
       }
     }
-  }, [product])
+  }, [product]);
 
   const handleAttributeSelection = (
     attributeType: string,
@@ -159,50 +163,50 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
     setSelectedAttributes((prevState) => ({
       ...prevState,
       [attributeType]: value,
-      ...(attributeType === 'color' ? { color_name: colorName || '' } : {}),
-    }))
+      ...(attributeType === 'color' ? {color_name: colorName || ''} : {}),
+    }));
 
     if (attributeType === 'color') {
-      console.log('Selected color:', value)
+      console.log('Selected color:', value);
       const selectedVariant = product?.variants?.find(
-        (variant: { sku: string }) => variant.sku === value
-      )
+        (variant: {sku: string}) => variant.sku === value
+      );
       if (selectedVariant) {
-        console.log('Selected variant:', selectedVariant)
-        router.push(`/products/${product?.slug}/${selectedVariant.sku}`)
+        console.log('Selected variant:', selectedVariant);
+        router.push(`/products/${product?.slug}/${selectedVariant.sku}`);
       }
     }
 
-    logSizeVariantId({ ...selectedAttributes, [attributeType]: value })
-  }
+    logSizeVariantId({...selectedAttributes, [attributeType]: value});
+  };
 
   const availableSizes =
     product?.variants?.find(
       (variant) => variant.sku === selectedAttributes.color
-    )?.sizes || []
+    )?.sizes || [];
 
   const handleSizeSelection = (attributeType: string, value: string) => {
     setSelectedAttributes((prevState) => ({
       ...prevState,
       [attributeType]: value,
-    }))
+    }));
 
-    logSizeVariantId({ ...selectedAttributes, [attributeType]: value })
-  }
+    logSizeVariantId({...selectedAttributes, [attributeType]: value});
+  };
 
   const logSizeVariantId = (attributes: SelectedAttributes) => {
     if (!attributes.waist && !attributes.size) {
-      console.log('Waist or generic size not selected yet.')
-      return
+      console.log('Waist or generic size not selected yet.');
+      return;
     }
 
     const selectedVariant = product?.variants?.find(
       (variant) => variant.sku === attributes.color
-    )
+    );
 
     if (!selectedVariant) {
-      console.log('No variant found for selected color:', attributes.color)
-      return
+      console.log('No variant found for selected color:', attributes.color);
+      return;
     }
 
     const selectedSizeVariant = selectedVariant?.sizes.find((size) => {
@@ -210,24 +214,24 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
         (size.waist === attributes.waist &&
           size.length === attributes.length) ||
         size.size === attributes.size
-      )
-    })
+      );
+    });
 
     if (!selectedSizeVariant) {
-      console.log('No size variant found for selected attributes.')
-      return
+      console.log('No size variant found for selected attributes.');
+      return;
     }
 
-    const sizeVariantId = selectedSizeVariant.size_variant_id
-    console.log('Selected sizeVariantId:', sizeVariantId)
+    const sizeVariantId = selectedSizeVariant.size_variant_id;
+    console.log('Selected sizeVariantId:', sizeVariantId);
 
     if (onSizeVariantSelected) {
-      onSizeVariantSelected(sizeVariantId)
+      onSizeVariantSelected(sizeVariantId);
     }
-  }
+  };
 
   if (loading) {
-    return <LoaderAttributes data-testid="loader-attributes" />
+    return <LoaderAttributes data-testid="loader-attributes" />;
   }
 
   return (
@@ -235,18 +239,17 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
       <AttributeSelection>
         <h3>
           Color:{' '}
-          <span className="color-name">
-            {selectedAttributes.color_name}
-          </span>
+          <span className="color-name">{selectedAttributes.color_name}</span>
         </h3>
         <AttributeOptions>
           {product?.variants?.map((option, index) => (
             <div key={index}>
               <ColorSwatch
-                aria-label={`${option.color}${selectedAttributes.color === option.sku
-                  ? ' currently selected'
-                  : ''
-                  }`}
+                aria-label={`${option.color}${
+                  selectedAttributes.color === option.sku
+                    ? ' currently selected'
+                    : ''
+                }`}
                 selected={selectedAttributes.color === option.sku}
                 onClick={() =>
                   handleAttributeSelection('color', option.sku, option.color)
@@ -333,7 +336,7 @@ const ProductAttributes: React.FC<ProductAttributesProps> = ({
         </AttributeSelection>
       )}
     </>
-  )
-}
+  );
+};
 
-export default ProductAttributes
+export default ProductAttributes;

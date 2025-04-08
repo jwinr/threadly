@@ -1,66 +1,66 @@
-'use client'
+'use client';
 
-import React, { useState, useContext, FormEvent } from 'react'
-import { signIn } from 'aws-amplify/auth'
-import { useRouter } from 'next/navigation'
-import PasswordReveal from '@/components/Auth/PasswordReveal'
-import LogoSymbol from '@/public/images/logo_solid.svg'
-import { UserContext } from '@/context/UserContext'
-import { CognitoErrorMessages } from '@/lib/constants'
-import * as AuthStyles from '@/components/Auth/AuthStyles'
-import { AuthBtn } from '@/components/Auth/AuthStyles'
-import { getValidationStyle, handleKeyDown } from 'src/utils/authHelpers'
-import LoaderDots from '@/components/Loaders/LoaderDots'
-import useRedirectIfAuthenticated from 'src/hooks/useRedirectIfAuthenticated'
-import LoaderSpin from '@/components/Loaders/LoaderSpin'
-import { TiWarningOutline } from 'react-icons/ti'
-import Banner from '@/components/Elements/Banner'
-import Button from '@/components/Elements/Button'
-import Popover from '@/components/Elements/Popover'
-import { useMobileView } from '@/context/MobileViewContext'
-import { useAuthFormValidation } from 'src/hooks/useAuthFormValidation'
-import { debouncedCheckUsername } from 'src/utils/checkUsername'
+import React, {useState, useContext, FormEvent} from 'react';
+import {signIn} from 'aws-amplify/auth';
+import {useRouter} from 'next/navigation';
+import PasswordReveal from '@/components/Auth/PasswordReveal';
+import LogoSymbol from '@/public/images/logo_solid.svg';
+import {UserContext} from '@/context/UserContext';
+import {CognitoErrorMessages} from '@/lib/constants';
+import * as AuthStyles from '@/components/Auth/AuthStyles';
+import {AuthBtn} from '@/components/Auth/AuthStyles';
+import {getValidationStyle, handleKeyDown} from 'src/utils/authHelpers';
+import LoaderDots from '@/components/Loaders/LoaderDots';
+import useRedirectIfAuthenticated from 'src/hooks/useRedirectIfAuthenticated';
+import LoaderSpin from '@/components/Loaders/LoaderSpin';
+import {TiWarningOutline} from 'react-icons/ti';
+import Banner from '@/components/Elements/Banner';
+import Button from '@/components/Elements/Button';
+import Popover from '@/components/Elements/Popover';
+import {useMobileView} from '@/context/MobileViewContext';
+import {useAuthFormValidation} from 'src/hooks/useAuthFormValidation';
+import {debouncedCheckUsername} from 'src/utils/checkUsername';
 
 const Login: React.FC = () => {
-  const { formState, emailValid, passwordValid, onChange, onBlur } =
+  const {formState, emailValid, passwordValid, onChange, onBlur} =
     useAuthFormValidation({
       email: '',
       password: '',
-    })
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [isLoading, setLoading] = useState<boolean>(false)
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [isComplete, setIsComplete] = useState<boolean>(false)
-  const { fetchUserAttributes } = useContext(UserContext)
-  const [shakeKey, setShakeKey] = useState<number>(0)
-  const { invalidStyle } = AuthStyles
-  const isMobileView = useMobileView()
-  const demoUsername = process.env.NEXT_PUBLIC_USERNAME || ''
-  const demoPassword = process.env.NEXT_PUBLIC_PASSWORD || ''
+    });
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const {fetchUserAttributes} = useContext(UserContext);
+  const [shakeKey, setShakeKey] = useState<number>(0);
+  const {invalidStyle} = AuthStyles;
+  const isMobileView = useMobileView();
+  const demoUsername = process.env.NEXT_PUBLIC_USERNAME || '';
+  const demoPassword = process.env.NEXT_PUBLIC_PASSWORD || '';
 
-  type CognitoErrorName = keyof typeof CognitoErrorMessages
+  type CognitoErrorName = keyof typeof CognitoErrorMessages;
 
   const GENERIC_ERROR_MESSAGE =
-    'An unexpected error occurred. Please try again later.'
+    'An unexpected error occurred. Please try again later.';
 
   // Check if there's already an active sign-in
-  const authChecked = useRedirectIfAuthenticated(fetchUserAttributes)
+  const authChecked = useRedirectIfAuthenticated(fetchUserAttributes);
 
   if (!authChecked) {
-    return <LoaderDots />
+    return <LoaderDots />;
   }
 
   // Debugging
   const toggleIsComplete = () => {
-    setIsComplete((prevState) => !prevState)
-  }
+    setIsComplete((prevState) => !prevState);
+  };
 
   const handleSignIn = async (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
     if (isLoading) {
-      setErrorMessage('')
-      return // Prevent form submission if loading
+      setErrorMessage('');
+      return; // Prevent form submission if loading
     }
 
     if (
@@ -70,9 +70,9 @@ const Login: React.FC = () => {
       !formState.password
     ) {
       // If any field is invalid or empty, prevent submission
-      setErrorMessage('Please fill in all fields with valid information.')
-      setShakeKey((prevKey) => prevKey + 1)
-      return
+      setErrorMessage('Please fill in all fields with valid information.');
+      setShakeKey((prevKey) => prevKey + 1);
+      return;
     }
 
     // Check if the username exists in the database before we send a request to AWS
@@ -81,12 +81,12 @@ const Login: React.FC = () => {
       setErrorMessage,
       setShakeKey,
       setLoading
-    )
+    );
     if (!usernameExists) {
-      return
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     // Call signIn with username and password
     setTimeout(async () => {
@@ -94,47 +94,47 @@ const Login: React.FC = () => {
         const response = await signIn({
           username: formState.email,
           password: formState.password,
-        })
+        });
 
         if (response.nextStep) {
           switch (response.nextStep.signInStep) {
             case 'RESET_PASSWORD':
-              setErrorMessage('Password reset required.')
-              break
+              setErrorMessage('Password reset required.');
+              break;
 
             case 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED':
-              setErrorMessage('New password required.')
-              break
+              setErrorMessage('New password required.');
+              break;
 
             case 'DONE':
-              await fetchUserAttributes()
-              setIsComplete(true)
+              await fetchUserAttributes();
+              setIsComplete(true);
               setTimeout(() => {
-                router.push('/')
-              }, 1500)
-              break
+                router.push('/');
+              }, 1500);
+              break;
 
             default:
-              break
+              break;
           }
         }
       } catch (err) {
-        const error = err as Error
-        console.error(error)
+        const error = err as Error;
+        console.error(error);
 
         // Check if error.name is a key in CognitoErrorMessages
         if (error.name in CognitoErrorMessages) {
-          setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName])
+          setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName]);
         } else {
-          setErrorMessage(GENERIC_ERROR_MESSAGE)
+          setErrorMessage(GENERIC_ERROR_MESSAGE);
         }
 
-        setShakeKey((prevKey) => prevKey + 1)
+        setShakeKey((prevKey) => prevKey + 1);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }, 250)
-  }
+    }, 250);
+  };
 
   // Sign in to the demo account
   const handleDemoSignIn = async () => {
@@ -142,24 +142,24 @@ const Login: React.FC = () => {
       const newResponse = await signIn({
         username: demoUsername,
         password: demoPassword,
-      })
+      });
 
       if (newResponse.isSignedIn) {
-        await fetchUserAttributes()
-        router.push('/')
+        await fetchUserAttributes();
+        router.push('/');
       } else {
-        throw new Error('Demo sign-in failed.')
+        throw new Error('Demo sign-in failed.');
       }
     } catch {
-      setErrorMessage(GENERIC_ERROR_MESSAGE)
-      setShakeKey((prevKey) => prevKey + 1)
+      setErrorMessage(GENERIC_ERROR_MESSAGE);
+      setShakeKey((prevKey) => prevKey + 1);
     }
-  }
+  };
 
   const authCardStyle = {
     transition: 'height 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
-    ...(isComplete && { height: '40%' }),
-  }
+    ...(isComplete && {height: '40%'}),
+  };
 
   return (
     <AuthStyles.AuthPageWrapper>
@@ -179,7 +179,7 @@ const Login: React.FC = () => {
                   <AuthStyles.LogoBox>
                     <LogoSymbol />
                   </AuthStyles.LogoBox>
-                  <AuthStyles.HeaderText style={{ marginBottom: '0' }}>
+                  <AuthStyles.HeaderText style={{marginBottom: '0'}}>
                     Sign in to Threadly
                   </AuthStyles.HeaderText>
                   <Banner
@@ -187,7 +187,7 @@ const Login: React.FC = () => {
                     title="You're viewing demo content"
                     description="Skip registration and explore the full features by signing in to a demo account."
                     actions={
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                      <div style={{display: 'flex', gap: '8px'}}>
                         <Button type="secondary" onPress={handleDemoSignIn}>
                           Sign in to demo account
                         </Button>
@@ -234,7 +234,9 @@ const Login: React.FC = () => {
                     {!emailValid && (
                       <AuthStyles.ValidationMessage>
                         <TiWarningOutline />
-                        <span id="email-error">Please enter a valid email address.</span>
+                        <span id="email-error">
+                          Please enter a valid email address.
+                        </span>
                       </AuthStyles.ValidationMessage>
                     )}
                     <AuthStyles.EntryWrapper>
@@ -287,7 +289,9 @@ const Login: React.FC = () => {
                     {!passwordValid && (
                       <AuthStyles.ValidationMessage>
                         <TiWarningOutline />
-                        <span id="password-error">Please enter a valid password.</span>
+                        <span id="password-error">
+                          Please enter a valid password.
+                        </span>
                       </AuthStyles.ValidationMessage>
                     )}
                     {errorMessage && (
@@ -307,7 +311,7 @@ const Login: React.FC = () => {
                         type="submit"
                         data-form-type="action,login"
                         $isLoading={isLoading}
-                        style={{ marginBottom: '24px' }}
+                        style={{marginBottom: '24px'}}
                       >
                         {isLoading ? (
                           <LoaderSpin isLoading={isLoading} />
@@ -348,7 +352,7 @@ const Login: React.FC = () => {
         Toggle Success Message
       </button>
     </AuthStyles.AuthPageWrapper>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

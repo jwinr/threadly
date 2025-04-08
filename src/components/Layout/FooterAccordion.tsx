@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import Accordion from '@/components/Elements/Accordion'
-import AccordionItem from '@/components/Elements/AccordionItem'
+import React from 'react';
+import styled from 'styled-components';
+import Accordion from '@/components/Elements/Accordion';
+import AccordionItem from '@/components/Elements/AccordionItem';
 
 const AccordionWrapper = styled.div`
   padding: 15px 15px 0px 15px;
@@ -15,7 +15,7 @@ const AccordionWrapper = styled.div`
   svg {
     width: 16px;
   }
-`
+`;
 
 const FooterLink = styled.div`
   font-size: 15px;
@@ -36,7 +36,7 @@ const FooterLink = styled.div`
       opacity: 1;
     }
   }
-`
+`;
 
 const FooterAccordion: React.FC = () => {
   return (
@@ -114,7 +114,7 @@ const FooterAccordion: React.FC = () => {
         </AccordionItem>
       </Accordion>
     </AccordionWrapper>
-  )
-}
+  );
+};
 
-export default FooterAccordion
+export default FooterAccordion;

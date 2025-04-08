@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import React, { useState, ChangeEvent, FormEvent } from 'react'
-import styled, { keyframes } from 'styled-components'
-import Button from '@/components/Elements/Button'
+import React, {useState, ChangeEvent, FormEvent} from 'react';
+import styled, {keyframes} from 'styled-components';
+import Button from '@/components/Elements/Button';
 
 const NewsletterContainer = styled.div`
   text-align: center;
   padding: 20px;
-`
+`;
 
 const NewsletterTitle = styled.h2`
   text-align: center;
@@ -15,15 +15,15 @@ const NewsletterTitle = styled.h2`
   font-weight: 600;
   margin-bottom: 25px;
   color: var(--sc-color-title);
-`
+`;
 
 const NewsletterSubtitle = styled.p`
   font-size: 19px;
   margin-bottom: 25px;
-`
+`;
 
 interface NewsletterFormProps {
-  $isVisible: boolean
+  $isVisible: boolean;
 }
 
 const NewsletterForm = styled.form<NewsletterFormProps>`
@@ -32,7 +32,7 @@ const NewsletterForm = styled.form<NewsletterFormProps>`
   gap: 10px;
   opacity: ${($isVisible) => ($isVisible ? 1 : 0)};
   transition: opacity 0.5s ease;
-`
+`;
 
 const NewsletterInput = styled.input`
   padding: 10px;
@@ -51,7 +51,7 @@ const NewsletterInput = styled.input`
   @media (max-width: 768px) {
     min-width: auto;
   }
-`
+`;
 
 const fadeIn = keyframes`
   from {
@@ -60,41 +60,41 @@ const fadeIn = keyframes`
   to {
     opacity: 1;
   }
-`
+`;
 
 const SuccessMessage = styled.div`
   animation: ${fadeIn} 0.5s ease;
-`
+`;
 
 const NewsletterSignup: React.FC = () => {
-  const [email, setEmail] = useState<string>('')
-  const [emailValid, setEmailValid] = useState<boolean>(true)
-  const [submitted, setSubmitted] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('');
+  const [emailValid, setEmailValid] = useState<boolean>(true);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const validateEmailDomain = (email: string): boolean => {
-    const regex = /.+@\S+\.\S+$/
-    return regex.test(email)
-  }
+    const regex = /.+@\S+\.\S+$/;
+    return regex.test(email);
+  };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value
-    setEmail(email)
-    setEmailValid(true) // Reset the email validation state when the user types
-  }
+    const email = e.target.value;
+    setEmail(email);
+    setEmailValid(true); // Reset the email validation state when the user types
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Validate the email before making the API call
-    const isEmailValid = validateEmailDomain(email)
+    const isEmailValid = validateEmailDomain(email);
     if (!isEmailValid) {
-      setEmailValid(false)
-      return
+      setEmailValid(false);
+      return;
     }
 
     // Make the mock API call with the validated email
-    setSubmitted(true)
-  }
+    setSubmitted(true);
+  };
 
   return (
     <NewsletterContainer>
@@ -123,7 +123,7 @@ const NewsletterSignup: React.FC = () => {
         </NewsletterForm>
       )}
     </NewsletterContainer>
-  )
-}
+  );
+};
 
-export default NewsletterSignup
+export default NewsletterSignup;

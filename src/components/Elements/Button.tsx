@@ -1,11 +1,11 @@
-import React, { MouseEvent } from 'react'
-import styled, { css } from 'styled-components'
+import React, {MouseEvent} from 'react';
+import styled, {css} from 'styled-components';
 
 const sizes = {
   small: '24px',
   medium: '28px',
   large: '40px',
-}
+};
 
 const types = {
   primary: css`
@@ -67,7 +67,7 @@ const types = {
       --s1-top-shadow: 0px -1px 1px 0px rgba(62, 2, 26, 0.32);
     }
   `,
-}
+};
 
 const DisabledOverlay = styled.div`
   top: -1px;
@@ -79,7 +79,7 @@ const DisabledOverlay = styled.div`
   transition: opacity 240ms;
   position: absolute;
   background-color: var(--sc-color-white);
-`
+`;
 
 const ButtonWrapper = styled.button<ButtonProps>`
   display: inline-flex;
@@ -129,16 +129,16 @@ const ButtonWrapper = styled.button<ButtonProps>`
       outline: 1px solid transparent;
     }
   }
-`
+`;
 
 interface ButtonProps {
-  children: React.ReactNode
-  disabled?: boolean
-  href?: string
-  onPress?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void
-  size?: 'small' | 'medium' | 'large'
-  target?: '_self' | '_blank' | '_top' | '_parent'
-  type?: 'primary' | 'secondary' | 'destructive'
+  children: React.ReactNode;
+  disabled?: boolean;
+  href?: string;
+  onPress?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
+  size?: 'small' | 'medium' | 'large';
+  target?: '_self' | '_blank' | '_top' | '_parent';
+  type?: 'primary' | 'secondary' | 'destructive';
 }
 
 /**
@@ -174,16 +174,16 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         onClick={(e) => {
           if (disabled) {
-            e.preventDefault()
+            e.preventDefault();
           } else if (onPress) {
-            onPress(e)
+            onPress(e);
           }
         }}
       >
         {children}
         {disabled && <DisabledOverlay />}
       </ButtonWrapper>
-    )
+    );
   }
 
   return (
@@ -195,14 +195,14 @@ const Button: React.FC<ButtonProps> = ({
       aria-disabled={disabled}
       onClick={(e) => {
         if (!disabled && onPress) {
-          onPress(e)
+          onPress(e);
         }
       }}
     >
       {children}
       {disabled && <DisabledOverlay />}
     </ButtonWrapper>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

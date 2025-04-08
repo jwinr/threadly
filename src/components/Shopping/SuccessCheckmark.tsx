@@ -1,5 +1,5 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const rotate = keyframes`
   0% {
@@ -8,7 +8,7 @@ const rotate = keyframes`
   100% {
     transform: rotate(360deg);
   }
-`
+`;
 
 const grow = keyframes`
   0%, 100% {
@@ -17,7 +17,7 @@ const grow = keyframes`
   50% {
     transform: scale(1);
   }
-`
+`;
 
 const checkmark = keyframes`
   0% {
@@ -28,19 +28,19 @@ const checkmark = keyframes`
     opacity: 1;
     transform: scale(1);
   }
-`
+`;
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const Checkmark = styled.div`
   position: relative;
   padding: 30px;
   animation: ${checkmark} 5.6s cubic-bezier(0.42, 0, 0.275, 1.155) both;
-`
+`;
 
 const CheckmarkSVG = styled.svg`
   position: absolute;
@@ -88,7 +88,7 @@ const CheckmarkSVG = styled.svg`
     top: 16px;
     animation-delay: 4.2s;
   }
-`
+`;
 
 const CheckmarkCheck = styled.svg`
   position: absolute;
@@ -97,17 +97,17 @@ const CheckmarkCheck = styled.svg`
   z-index: 10;
   transform: translate3d(-50%, -50%, 0);
   fill: #fff;
-`
+`;
 
 const CheckmarkBack = styled.svg`
   animation: ${rotate} 35s linear both infinite;
-`
+`;
 
 interface CheckmarkIconProps {
-  className?: string
+  className?: string;
 }
 
-const CheckmarkIcon: React.FC<CheckmarkIconProps> = ({ className }) => (
+const CheckmarkIcon: React.FC<CheckmarkIconProps> = ({className}) => (
   <CheckmarkSVG
     className={className}
     height="19"
@@ -120,7 +120,7 @@ const CheckmarkIcon: React.FC<CheckmarkIconProps> = ({ className }) => (
       fill="#24b47e"
     />
   </CheckmarkSVG>
-)
+);
 
 const SuccessCheckmark: React.FC = () => (
   <Container>
@@ -152,6 +152,6 @@ const SuccessCheckmark: React.FC = () => (
       </CheckmarkBack>
     </Checkmark>
   </Container>
-)
+);
 
-export default SuccessCheckmark
+export default SuccessCheckmark;

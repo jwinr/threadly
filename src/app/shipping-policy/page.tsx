@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const ShipPolicyPageWrapper = styled.div`
   display: flex;
@@ -12,22 +12,22 @@ const ShipPolicyPageWrapper = styled.div`
     display: flex;
     flex-direction: column;
   }
-`
+`;
 
 const HeaderText = styled.h1`
   font-weight: 800;
   font-size: 29px;
-`
+`;
 
 const SubheaderText = styled.h2`
   font-weight: 700;
   font-size: 25px;
-`
+`;
 
 const ListWrapper = styled.ol`
   padding-left: 40px;
   list-style: disc;
-`
+`;
 
 const ShippingPolicy = () => {
   return (
@@ -138,7 +138,7 @@ const ShippingPolicy = () => {
         <p>We only ship within the United States.</p>
       </ShipPolicyPageWrapper>
     </>
-  )
-}
+  );
+};
 
-export default ShippingPolicy
+export default ShippingPolicy;

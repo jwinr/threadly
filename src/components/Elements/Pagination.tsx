@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+import React, {useEffect} from 'react';
+import styled, {css} from 'styled-components';
+import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -14,10 +14,10 @@ const PaginationWrapper = styled.div`
     margin-top: 8px;
     padding: 16px;
   }
-`
+`;
 
 interface PaginationButtonProps {
-  $isActive: boolean
+  $isActive: boolean;
 }
 
 const PaginationButton = styled.button<PaginationButtonProps>`
@@ -68,26 +68,26 @@ const PaginationButton = styled.button<PaginationButtonProps>`
         opacity: 1;
       }
     `}
-`
+`;
 
 interface ArrowIconProps {
-  direction: 'back' | 'forward'
+  direction: 'back' | 'forward';
 }
 
 const arrowAnimation = css`
   transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   transform: translateX(0);
-`
+`;
 
 const ArrowIcon = styled.div<ArrowIconProps>`
   font-size: 20px;
   ${(props) => props.direction === 'back' && 'margin-left: 5px;'}
   ${(props) => props.direction === 'forward' && 'margin-right: 5px;'}
   ${arrowAnimation}
-`
+`;
 
 interface PrevNextButtonProps {
-  disabled: boolean
+  disabled: boolean;
 }
 
 const PrevButton = styled.button<PrevNextButtonProps>`
@@ -112,7 +112,7 @@ const PrevButton = styled.button<PrevNextButtonProps>`
     color: gray;
     text-decoration: none;
   }
-`
+`;
 
 const NextButton = styled.button<PrevNextButtonProps>`
   border: 1px solid transparent;
@@ -136,18 +136,18 @@ const NextButton = styled.button<PrevNextButtonProps>`
     color: gray;
     text-decoration: none;
   }
-`
+`;
 
 const ArrowContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-`
+`;
 
 interface PaginationProps {
-  currentPage: number
-  totalPages: number
-  handlePageChange: (page: number) => void
+  currentPage: number;
+  totalPages: number;
+  handlePageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -157,11 +157,11 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   useEffect(() => {
     // Scroll to the top when currentPage changes
-    window.scrollTo({ top: 0 })
-  }, [currentPage])
+    window.scrollTo({top: 0});
+  }, [currentPage]);
 
   const renderPagination = () => {
-    const paginationItems = []
+    const paginationItems = [];
     for (let i = 1; i <= totalPages; i++) {
       paginationItems.push(
         <PaginationButton
@@ -171,22 +171,22 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           {i}
         </PaginationButton>
-      )
+      );
     }
-    return paginationItems
-  }
+    return paginationItems;
+  };
 
   const handlePrevPageChange = () => {
     if (currentPage > 1) {
-      handlePageChange(currentPage - 1)
+      handlePageChange(currentPage - 1);
     }
-  }
+  };
 
   const handleNextPageChange = () => {
     if (currentPage < totalPages) {
-      handlePageChange(currentPage + 1)
+      handlePageChange(currentPage + 1);
     }
-  }
+  };
 
   return (
     <PaginationWrapper>
@@ -211,7 +211,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </ArrowContainer>
       </NextButton>
     </PaginationWrapper>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

@@ -5,10 +5,10 @@ import React, {
   ReactNode,
   useRef,
   KeyboardEvent,
-} from 'react'
-import styled from 'styled-components'
-import { AccordionContext } from './Accordion'
-import Chevron from '@/public/images/icons/chevron-down.svg'
+} from 'react';
+import styled from 'styled-components';
+import {AccordionContext} from './Accordion';
+import Chevron from '@/public/images/icons/chevron-down.svg';
 
 const AccordionHeader = styled.div`
   display: flex;
@@ -25,84 +25,84 @@ const AccordionHeader = styled.div`
   &:focus:not(:focus-visible) {
     box-shadow: none;
   }
-`
+`;
 
 const MediaContainer = styled.div`
   margin-right: 16px;
-`
+`;
 
 const TitleContainer = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
-`
+`;
 
 const Title = styled.div`
   color: #353a44;
   font-size: 16px;
   font-weight: 700;
-`
+`;
 
 const Subtitle = styled.div`
   color: #666;
-`
+`;
 
 const ActionsContainer = styled.div`
   margin-left: 16px;
-`
+`;
 
-const ClippingDiv = styled.div<{ $isOpen: boolean; height: number }>`
+const ClippingDiv = styled.div<{$isOpen: boolean; height: number}>`
   transition:
     height 300ms ease,
     overflow 300ms ease,
     opacity 300ms ease;
-  overflow: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
-  height: ${({ height }) => height}px;
-  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-`
+  overflow: ${({$isOpen}) => ($isOpen ? 'visible' : 'hidden')};
+  height: ${({height}) => height}px;
+  opacity: ${({$isOpen}) => ($isOpen ? 1 : 0)};
+`;
 
-const ContentDiv = styled.div<{ $isOpen: boolean }>`
+const ContentDiv = styled.div<{$isOpen: boolean}>`
   transition-property: transform;
   transition-duration: 300ms;
   transition-timing-function: ease;
-  transform: ${({ $isOpen }) =>
+  transform: ${({$isOpen}) =>
     $isOpen ? 'translateY(0px)' : 'translateY(-15px)'};
-`
+`;
 
-const Content = styled.div<{ $isOpen: boolean }>`
+const Content = styled.div<{$isOpen: boolean}>`
   padding: 12px;
   transition: visibility 300ms ease;
-  visibility: ${({ $isOpen }) =>
+  visibility: ${({$isOpen}) =>
     $isOpen
       ? 'visible'
       : 'hidden'}; // Don't allow us to tab into contents that shouldn't be visible
-`
+`;
 
-const ChevronDiv = styled.div<{ $isOpen: boolean }>`
+const ChevronDiv = styled.div<{$isOpen: boolean}>`
   margin-right: 12px;
   transition: transform 0.3s ease;
-  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
+  transform: ${({$isOpen}) => ($isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
 
   svg {
     width: 12px;
     height: 12px;
     fill: #474e5a;
   }
-`
+`;
 
 const Separator = styled.span`
   background-color: #d8dee4;
   flex: 0 0 1px;
-`
+`;
 
 interface AccordionItemProps {
-  title: ReactNode
-  children: ReactNode
-  subtitle?: ReactNode
-  actions?: ReactNode
-  defaultOpen?: boolean
-  media?: ReactNode
-  onChange?: (isOpen: boolean) => void
+  title: ReactNode;
+  children: ReactNode;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
+  defaultOpen?: boolean;
+  media?: ReactNode;
+  onChange?: (isOpen: boolean) => void;
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
@@ -121,71 +121,71 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     getItemIndex,
     focusNextItem,
     focusPrevItem,
-  } = useContext(AccordionContext)
-  const [isOpen, setIsOpen] = useState(defaultOpen)
-  const [height, setHeight] = useState(0)
-  const itemRef = useRef<number>(Math.random())
-  const contentRef = useRef<HTMLDivElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
+  } = useContext(AccordionContext);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [height, setHeight] = useState(0);
+  const itemRef = useRef<number>(Math.random());
+  const contentRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
   // Register the item when it is mounted
   useEffect(() => {
-    registerItem(itemRef.current, headerRef)
-  }, [registerItem])
+    registerItem(itemRef.current, headerRef);
+  }, [registerItem]);
 
   // Handle the defaultOpen prop on the first render
   useEffect(() => {
     if (defaultOpen) {
-      setIsOpen(true)
-      const index = getItemIndex(itemRef.current)
-      setOpenIndex(index)
+      setIsOpen(true);
+      const index = getItemIndex(itemRef.current);
+      setOpenIndex(index);
     }
-  }, [defaultOpen, getItemIndex, setOpenIndex])
+  }, [defaultOpen, getItemIndex, setOpenIndex]);
 
   // Update isOpen based on changes in openIndices
   useEffect(() => {
-    const index = getItemIndex(itemRef.current)
-    setIsOpen(openIndices.includes(index))
-  }, [openIndices, getItemIndex])
+    const index = getItemIndex(itemRef.current);
+    setIsOpen(openIndices.includes(index));
+  }, [openIndices, getItemIndex]);
 
   // Set the height of the content based on whether it is open or closed
   useEffect(() => {
     if (contentRef.current) {
-      setHeight(isOpen ? contentRef.current.scrollHeight : 0)
+      setHeight(isOpen ? contentRef.current.scrollHeight : 0);
     }
-  }, [isOpen, children])
+  }, [isOpen, children]);
 
   const toggleOpen = () => {
-    const index = getItemIndex(itemRef.current)
-    setOpenIndex(index)
-  }
+    const index = getItemIndex(itemRef.current);
+    setOpenIndex(index);
+  };
 
   // Notify parent of change in state
   useEffect(() => {
     if (onChange) {
-      onChange(isOpen)
+      onChange(isOpen);
     }
-  }, [isOpen, onChange])
+  }, [isOpen, onChange]);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case ' ':
       case 'Enter':
-        event.preventDefault()
-        toggleOpen()
-        break
+        event.preventDefault();
+        toggleOpen();
+        break;
       case 'ArrowDown':
-        event.preventDefault()
-        focusNextItem(headerRef)
-        break
+        event.preventDefault();
+        focusNextItem(headerRef);
+        break;
       case 'ArrowUp':
-        event.preventDefault()
-        focusPrevItem(headerRef)
-        break
+        event.preventDefault();
+        focusPrevItem(headerRef);
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   return (
     <>
@@ -229,7 +229,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
       </div>
       <Separator />
     </>
-  )
-}
+  );
+};
 
-export default AccordionItem
+export default AccordionItem;

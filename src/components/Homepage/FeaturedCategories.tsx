@@ -1,7 +1,7 @@
-import React from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import styled from 'styled-components'
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import styled from 'styled-components';
 
 const Title = styled.h2`
   text-align: center;
@@ -9,21 +9,21 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 20px;
   color: var(--sc-color-title);
-`
+`;
 
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-`
+`;
 
 const StackedCards = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   gap: 20px;
-`
+`;
 
 const CardImage = styled.div`
   width: 100%;
@@ -36,7 +36,7 @@ const CardImage = styled.div`
   img {
     object-fit: cover;
   }
-`
+`;
 
 const CardOverlay = styled.div`
   position: absolute;
@@ -49,13 +49,13 @@ const CardOverlay = styled.div`
   transform-origin: 50% 0;
   transition: transform 0.6s cubic-bezier(0.7, 0, 0, 1);
   z-index: 5;
-`
+`;
 
-const Card = styled(Link)<{ $isStacked?: boolean }>`
+const Card = styled(Link)<{$isStacked?: boolean}>`
   border-radius: 16px;
   overflow: hidden;
-  width: ${({ $isStacked }) => ($isStacked ? '100%' : '425px')};
-  height: ${({ $isStacked }) => ($isStacked ? '255px' : '530px')};
+  width: ${({$isStacked}) => ($isStacked ? '100%' : '425px')};
+  height: ${({$isStacked}) => ($isStacked ? '255px' : '530px')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,7 +79,7 @@ const Card = styled(Link)<{ $isStacked?: boolean }>`
       1
     ); // Move the overlay when the card is hovered or focused
   }
-`
+`;
 
 const CardText = styled.div`
   font-size: 22px;
@@ -87,7 +87,7 @@ const CardText = styled.div`
   padding: 20px;
   color: white;
   z-index: 10;
-`
+`;
 
 const FeaturedCategories: React.FC = () => {
   return (
@@ -168,7 +168,7 @@ const FeaturedCategories: React.FC = () => {
         </Card>
       </CardContainer>
     </div>
-  )
-}
+  );
+};
 
-export default FeaturedCategories
+export default FeaturedCategories;

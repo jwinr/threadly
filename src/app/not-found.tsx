@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import styled from 'styled-components'
-import Link from 'next/link'
-import Spool from '@/public/images/spool.svg'
+import styled from 'styled-components';
+import Link from 'next/link';
+import Spool from '@/public/images/spool.svg';
 
 const Container = styled.main`
   display: flex;
@@ -43,28 +43,28 @@ const Container = styled.main`
     max-width: 100%;
     padding: 30px;
   }
-`
+`;
 
 const Title = styled.h2`
   font-size: 3rem;
   font-weight: 600;
   color: var(--sc-color-title);
   margin-bottom: 16px;
-`
+`;
 
 const Message = styled.p`
   font-size: 1.5rem;
   margin-bottom: 24px;
   font-weight: 500;
-`
+`;
 
 const SubMessage = styled.p`
   font-size: 1.2rem;
-`
+`;
 
 const HomeLink = styled(Link)`
   font-size: 1.2rem;
-`
+`;
 
 const Icon = styled(Spool)`
   position: absolute;
@@ -82,7 +82,7 @@ const Icon = styled(Spool)`
     height: 35%;
     bottom: 10%;
   }
-`
+`;
 
 export default function NotFound() {
   return (
@@ -99,5 +99,5 @@ export default function NotFound() {
       </section>
       <Icon />
     </Container>
-  )
+  );
 }

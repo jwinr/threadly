@@ -1,14 +1,14 @@
-import React from 'react'
-import { usePathname } from 'next/navigation'
-import styled from 'styled-components'
-import Facebook from '@/public/images/icons/facebook.svg'
-import TwitterX from '@/public/images/icons/twitter.svg'
-import Instagram from '@/public/images/icons/instagram.svg'
-import YouTube from '@/public/images/icons/youtube.svg'
-import LogoSymbol from '@/public/images/logo_dark.svg'
-import { ReceiptText, ShieldCheck } from 'lucide-react'
-import { useMobileView } from '@/context/MobileViewContext'
-import FooterAccordion from './FooterAccordion'
+import React from 'react';
+import {usePathname} from 'next/navigation';
+import styled from 'styled-components';
+import Facebook from '@/public/images/icons/facebook.svg';
+import TwitterX from '@/public/images/icons/twitter.svg';
+import Instagram from '@/public/images/icons/instagram.svg';
+import YouTube from '@/public/images/icons/youtube.svg';
+import LogoSymbol from '@/public/images/logo_dark.svg';
+import {ReceiptText, ShieldCheck} from 'lucide-react';
+import {useMobileView} from '@/context/MobileViewContext';
+import FooterAccordion from './FooterAccordion';
 
 const FooterContainer = styled.footer`
   display: flex;
@@ -44,7 +44,7 @@ const FooterContainer = styled.footer`
       display: none;
     }
   }
-`
+`;
 
 const SlimFooter = styled.div`
   background-color: var(--sc-color-footer-black);
@@ -54,7 +54,7 @@ const SlimFooter = styled.div`
   align-items: center;
   position: relative;
   padding: 25px 0px;
-`
+`;
 
 const FooterColumnContainer = styled.div`
   display: grid;
@@ -67,7 +67,7 @@ const FooterColumnContainer = styled.div`
     padding-top: 25px; /* Match the padding of the FooterContainer */
     border-top: 1px solid rgba(243, 245, 248, 0.5);
   }
-`
+`;
 
 const FooterColumn = styled.div`
   display: flex;
@@ -78,7 +78,7 @@ const FooterColumn = styled.div`
   @media (max-width: 768px) {
     width: 100%;
   }
-`
+`;
 
 const FooterTitle = styled.div`
   font-weight: bold;
@@ -89,7 +89,7 @@ const FooterTitle = styled.div`
   @media (max-width: 768px) {
     font-size: 14px;
   }
-`
+`;
 
 const FooterLink = styled.div`
   text-decoration: none;
@@ -100,7 +100,7 @@ const FooterLink = styled.div`
   @media (max-width: 768px) {
     font-size: 11px;
   }
-`
+`;
 
 const BottomLinksWrapper = styled.div`
   display: flex;
@@ -110,7 +110,7 @@ const BottomLinksWrapper = styled.div`
   @media (max-width: 768px) {
     margin-top: 10px;
   }
-`
+`;
 
 const FooterLinkBottom = styled.div`
   font-size: 14px;
@@ -130,7 +130,7 @@ const FooterLinkBottom = styled.div`
   @media (max-width: 768px) {
     margin-right: 8px;
   }
-`
+`;
 
 const SocialMedia = styled.div`
   display: flex;
@@ -145,7 +145,7 @@ const SocialMedia = styled.div`
     font-size: 20px;
     gap: 10px;
   }
-`
+`;
 
 const LogoBox = styled.div`
   display: flex;
@@ -162,27 +162,27 @@ const LogoBox = styled.div`
       width: 100px;
     }
   }
-`
+`;
 
 const CopyrightText = styled.p`
   font-size: 14px;
   opacity: 0.6;
   margin-bottom: 15px;
-`
+`;
 
 const Footer = () => {
-  const pathname = usePathname()
-  const isMobileView = useMobileView()
+  const pathname = usePathname();
+  const isMobileView = useMobileView();
 
   // Check if the current route is /login, /signup, /forgot-password or /404
-  const isLoginPage = pathname === '/login'
-  const isSignupPage = pathname === '/signup'
-  const isForgotPassPage = pathname === '/forgot-password'
-  const is404Page = pathname === '/404'
+  const isLoginPage = pathname === '/login';
+  const isSignupPage = pathname === '/signup';
+  const isForgotPassPage = pathname === '/forgot-password';
+  const is404Page = pathname === '/404';
 
   // Render the Footer only if the route is not /login, /signup, /forgot-password or /404
   const renderFooter =
-    !isLoginPage && !isSignupPage && !isForgotPassPage && !is404Page
+    !isLoginPage && !isSignupPage && !isForgotPassPage && !is404Page;
 
   return (
     <>
@@ -288,7 +288,7 @@ const Footer = () => {
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -1,11 +1,11 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 const waveAnimation = keyframes`
   50% {
     transform: scale(0.9);
   }
-`
+`;
 
 const CheckboxWrapper = styled.label`
   display: flex;
@@ -104,13 +104,13 @@ const CheckboxWrapper = styled.label`
       width: 100%;
     }
   }
-`
+`;
 
 interface CheckboxProps {
-  id: string
-  label: string
-  checked?: boolean
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  id: string;
+  label: string;
+  checked?: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -138,7 +138,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
         <span>{label}</span>
       </div>
     </CheckboxWrapper>
-  )
-}
+  );
+};
 
-export default Checkbox
+export default Checkbox;

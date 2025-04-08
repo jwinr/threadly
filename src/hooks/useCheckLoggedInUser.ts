@@ -1,6 +1,6 @@
-import { useEffect, useState, useContext } from 'react'
-import { useRouter } from 'next/navigation'
-import { UserContext } from '@/context/UserContext'
+import {useEffect, useState, useContext} from 'react';
+import {useRouter} from 'next/navigation';
+import {UserContext} from '@/context/UserContext';
 
 /**
  * Hook to check if there is a logged-in user and redirect to the login page if not.
@@ -10,53 +10,53 @@ import { UserContext } from '@/context/UserContext'
  * @returns {boolean} - Whether the user check is still ongoing
  */
 const useCheckLoggedInUser = (timeout = 5000, shouldCheck = true): boolean => {
-  const { userAttributes } = useContext(UserContext)
-  const [checkingUser, setCheckingUser] = useState<boolean>(true)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [redirectHandled, setRedirectHandled] = useState<boolean>(false)
-  const router = useRouter()
+  const {userAttributes} = useContext(UserContext);
+  const [checkingUser, setCheckingUser] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [redirectHandled, setRedirectHandled] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!shouldCheck || redirectHandled) {
-      return
+      return;
     }
 
-    console.log('Checking userAttributes in hook:', userAttributes)
+    console.log('Checking userAttributes in hook:', userAttributes);
 
     const timer = setTimeout(() => {
       if (loading && !redirectHandled) {
-        console.log('Pushing login from hook timer...')
-        router.push('/login')
-        setRedirectHandled(true)
+        console.log('Pushing login from hook timer...');
+        router.push('/login');
+        setRedirectHandled(true);
       }
-    }, timeout)
+    }, timeout);
 
     if (userAttributes) {
-      setLoading(false)
-      setCheckingUser(false)
-      clearTimeout(timer)
-      setRedirectHandled(true)
+      setLoading(false);
+      setCheckingUser(false);
+      clearTimeout(timer);
+      setRedirectHandled(true);
     } else {
-      setLoading(true)
-      setCheckingUser(true)
+      setLoading(true);
+      setCheckingUser(true);
     }
 
-    return () => clearTimeout(timer)
-  }, [userAttributes, loading, router, timeout, redirectHandled, shouldCheck])
+    return () => clearTimeout(timer);
+  }, [userAttributes, loading, router, timeout, redirectHandled, shouldCheck]);
 
   useEffect(() => {
     if (!shouldCheck || redirectHandled) {
-      return
+      return;
     }
 
     if (!userAttributes && !loading) {
-      console.log('Pushing login from hook redirectHandled...')
-      router.push('/login')
-      setRedirectHandled(true)
+      console.log('Pushing login from hook redirectHandled...');
+      router.push('/login');
+      setRedirectHandled(true);
     }
-  }, [userAttributes, loading, router, redirectHandled, shouldCheck])
+  }, [userAttributes, loading, router, redirectHandled, shouldCheck]);
 
-  return checkingUser
-}
+  return checkingUser;
+};
 
-export default useCheckLoggedInUser
+export default useCheckLoggedInUser;

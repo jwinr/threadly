@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type {Metadata} from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-}
+};
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+export default function Layout({children}: {children: React.ReactNode}) {
+  return <>{children}</>;
 }

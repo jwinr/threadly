@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router';
 
-import LogoSymbol from '@/public/images/logo_solid.svg'
-import * as AuthStyles from './AuthStyles'
-import Button from '@/components/Elements/Button'
+import LogoSymbol from '@/public/images/logo_solid.svg';
+import * as AuthStyles from './AuthStyles';
+import Button from '@/components/Elements/Button';
 
 const ErrorContainer = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const ErrorContainer = styled.div`
     width: auto;
     padding: 50px;
   }
-`
+`;
 
 const ErrorMessage = styled.div`
   font-size: 26px;
@@ -32,18 +32,18 @@ const ErrorMessage = styled.div`
   @media (max-width: 768px) {
     font-size: 22px;
   }
-`
+`;
 
 interface ErrorRedirectProps {
-  message: string
+  message: string;
 }
 
-const ErrorRedirect: React.FC<ErrorRedirectProps> = ({ message }) => {
-  const router = useRouter()
+const ErrorRedirect: React.FC<ErrorRedirectProps> = ({message}) => {
+  const router = useRouter();
 
   const handleRedirect = () => {
-    void router.push('/')
-  }
+    void router.push('/');
+  };
 
   return (
     <ErrorContainer>
@@ -57,7 +57,7 @@ const ErrorRedirect: React.FC<ErrorRedirectProps> = ({ message }) => {
         Return to home
       </Button>
     </ErrorContainer>
-  )
-}
+  );
+};
 
-export default ErrorRedirect
+export default ErrorRedirect;

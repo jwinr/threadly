@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {
   ReactNode,
@@ -6,49 +6,49 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from 'react'
+} from 'react';
 
 interface MobileViewContextType {
-  isMobileView: boolean
+  isMobileView: boolean;
 }
 
 const MobileViewContext = createContext<MobileViewContextType | undefined>(
   undefined
-)
+);
 
-export const MobileViewProvider: React.FC<{ children: ReactNode }> = ({
+export const MobileViewProvider: React.FC<{children: ReactNode}> = ({
   children,
 }) => {
-  const [isMobileView, setIsMobileView] = useState(false)
+  const [isMobileView, setIsMobileView] = useState(false);
 
   useEffect(() => {
-    const mobileBreakpoint = 768
-    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`)
+    const mobileBreakpoint = 768;
+    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
 
     const handleMediaQueryChange = (e: MediaQueryListEvent) => {
-      setIsMobileView(e.matches)
-    }
+      setIsMobileView(e.matches);
+    };
 
-    setIsMobileView(mediaQuery.matches)
+    setIsMobileView(mediaQuery.matches);
 
-    mediaQuery.addEventListener('change', handleMediaQueryChange)
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
 
     return () => {
-      mediaQuery.removeEventListener('change', handleMediaQueryChange)
-    }
-  }, [])
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);
 
   return (
-    <MobileViewContext.Provider value={{ isMobileView }}>
+    <MobileViewContext.Provider value={{isMobileView}}>
       {children}
     </MobileViewContext.Provider>
-  )
-}
+  );
+};
 
 export const useMobileView = () => {
-  const context = useContext(MobileViewContext)
+  const context = useContext(MobileViewContext);
   if (!context) {
-    throw new Error('useMobileView must be used within a MobileViewProvider')
+    throw new Error('useMobileView must be used within a MobileViewProvider');
   }
-  return context.isMobileView
-}
+  return context.isMobileView;
+};
