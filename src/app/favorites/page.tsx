@@ -6,7 +6,10 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import LoaderDots from '@/components/Loaders/LoaderDots';
 import useCheckLoggedInUser from 'src/hooks/useCheckLoggedInUser';
-import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
+import {
+  listFavorites,
+  removeFavorite as removeFavoriteRequest,
+} from '@/utils/favoritesClient';
 
 const FavoritesContainer = styled.div`
   max-width: 800px;
@@ -60,6 +63,7 @@ const RemoveButton = styled.button`
 
 interface FavoriteItem {
   product_id: string;
+  color_variant_id?: number;
   product_image_url: string;
   product_name: string;
   product_price: string;
@@ -72,42 +76,44 @@ const Favorites: React.FC = () => {
   const checkingUser = useCheckLoggedInUser();
 
   useEffect(() => {
-    if (!checkingUser) {
-      fetch(`/api/favorites?cognitoSub=${userAttributes?.sub}`)
-        .then((response) => response.json())
-        .then((data: FavoriteItem[]) => {
-          setFavorites(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error('Error fetching favorites:', error);
-          setLoading(false);
-        });
-    }
-  }, [checkingUser, userAttributes?.sub]);
+    const loadFavorites = async () => {
+      if (!checkingUser && !userAttributes?.user_uuid) {
+        setLoading(false);
+        return;
+      }
 
-  const removeFromFavorites = (productId: string) => {
-    if (userAttributes) {
-      fetchWithCsrf(`/api/favorites`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cognitoSub: userAttributes.sub,
-          productId,
-        }),
-      })
-        .then((response) => response.json())
-        .then(() => {
-          // Update the favorites state to reflect the item removal
-          setFavorites((currentFavorites) =>
-            currentFavorites.filter((item) => item.product_id !== productId)
-          );
-        })
-        .catch((error) => {
-          console.error('Error removing item from favorites:', error);
+      if (!checkingUser && userAttributes?.user_uuid) {
+        try {
+          const data = await listFavorites<FavoriteItem>({
+            userId: userAttributes.user_uuid,
+          });
+          setFavorites(data);
+        } catch (error) {
+          console.error('Error fetching favorites:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadFavorites();
+  }, [checkingUser, userAttributes?.user_uuid]);
+
+  const removeFromFavorites = async (product: FavoriteItem) => {
+    if (userAttributes?.user_uuid && product.color_variant_id) {
+      try {
+        await removeFavoriteRequest({
+          userId: userAttributes.user_uuid,
+          colorVariantId: product.color_variant_id,
         });
+        setFavorites((currentFavorites) =>
+          currentFavorites.filter(
+            (item) => item.color_variant_id !== product.color_variant_id
+          )
+        );
+      } catch (error) {
+        console.error('Error removing item from favorites:', error);
+      }
     }
   };
 
@@ -138,7 +144,7 @@ const Favorites: React.FC = () => {
                     </ProductDetails>
                   </ProductInfo>
                   <RemoveButton
-                    onClick={() => removeFromFavorites(product.product_id)}
+                    onClick={() => removeFromFavorites(product)}
                   >
                     Remove
                   </RemoveButton>

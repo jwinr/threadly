@@ -9,9 +9,15 @@ import React, {
   useState,
 } from 'react';
 import {UserContext} from '@/context/UserContext';
+import {
+  addFavorite as addFavoriteRequest,
+  listFavorites,
+  removeFavorite as removeFavoriteRequest,
+} from '@/utils/favoritesClient';
 
 interface Favorite {
   product_id: string;
+  color_variant_id?: number;
   product_slug?: string;
   product_image_url?: string;
   product_name?: string;
@@ -64,10 +70,9 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
       ) {
         try {
           previousUserUuid.current = userAttributes.user_uuid;
-          const response = await fetch(
-            `/api/favorites?id=${userAttributes.user_uuid}`
-          );
-          const data = (await response.json()) as Favorite[];
+          const data = await listFavorites<Favorite>({
+            userId: userAttributes.user_uuid,
+          });
           setFavorites(Array.isArray(data) ? data : []);
           hasFetchedFavorites.current = true;
         } catch (error) {
@@ -79,38 +84,39 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({
     void fetchFavorites();
   }, [userAttributes]);
 
-  const addFavorite = async (userId: string, productId: string) => {
+  const addFavorite = async (_userId: string, productId: string) => {
     if (!userAttributes?.user_uuid) {
       return;
     }
     try {
-      await fetch('/api/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({id: userAttributes.user_uuid, productId}),
+      await addFavoriteRequest({
+        userId: userAttributes.user_uuid,
+        colorVariantId: Number(productId),
       });
       setFavorites((prevFavorites) => [
         ...prevFavorites,
-        {product_id: productId},
+        {product_id: productId, color_variant_id: Number(productId)},
       ]);
     } catch (error) {
       console.error('Error adding to favorites:', error);
     }
   };
 
-  const removeFavorite = async (userId: string, productId: string) => {
+  const removeFavorite = async (_userId: string, productId: string) => {
     if (!userAttributes?.user_uuid) {
       return;
     }
     try {
-      await fetch('/api/favorites', {
-        method: 'DELETE',
-        body: JSON.stringify({id: userAttributes.user_uuid, productId}),
+      await removeFavoriteRequest({
+        userId: userAttributes.user_uuid,
+        colorVariantId: Number(productId),
       });
       setFavorites((prevFavorites) =>
-        prevFavorites.filter((fav) => fav.product_id !== productId)
+        prevFavorites.filter(
+          (fav) =>
+            fav.product_id !== productId &&
+            String(fav.color_variant_id ?? '') !== productId
+        )
       );
     } catch (error) {
       console.error('Error removing from favorites:', error);

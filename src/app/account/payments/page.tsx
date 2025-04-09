@@ -10,6 +10,7 @@ import {Elements} from '@stripe/react-stripe-js';
 import LoaderDots from '@/components/Loaders/LoaderDots';
 import Breadcrumb from '@/components/Elements/Breadcrumb';
 import Button from '@/components/Elements/Button';
+import {fetchStripeCustomerId} from '@/utils/fetchStripeCustomerId';
 
 const PaymentPageContainer = styled.div`
   margin: 0 auto;
@@ -101,18 +102,7 @@ const Payments: React.FC = () => {
     setLoading(true);
 
     try {
-      // Fetch the Stripe customer ID from the backend
-      const customerResponse = await fetch('/api/stripe-id', {
-        method: 'GET',
-      });
-
-      if (!customerResponse.ok) {
-        console.error('Failed to fetch Stripe customer ID');
-        setLoading(false);
-        return;
-      }
-
-      const {stripe_customer_id: customer} = await customerResponse.json();
+      const customer = await fetchStripeCustomerId();
 
       if (customer) {
         const methods = await fetchPaymentMethods(customer);

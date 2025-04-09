@@ -13,6 +13,7 @@ interface IconProps {
 
 interface FavoriteItem {
   product_id: string;
+  color_variant_id?: number;
 }
 
 interface AddToFavoritesButtonProps {
@@ -88,7 +89,9 @@ const AddToFavoritesButton: React.FC<AddToFavoritesButtonProps> = ({
   useEffect(() => {
     if (userAttributes && userAttributes.sub) {
       const isAdded = favorites.some(
-        (item: FavoriteItem) => item.product_id === productId
+        (item: FavoriteItem) =>
+          item.product_id === productId ||
+          String(item.color_variant_id ?? '') === productId
       );
       setAdded(isAdded);
       if (!isAdded) {

@@ -14,6 +14,7 @@ import {
 } from '@stripe/react-stripe-js';
 import {UserContext} from '@/context/UserContext';
 import getStripe from 'src/utils/get-stripejs';
+import {fetchStripeCustomerId} from '@/utils/fetchStripeCustomerId';
 
 const CheckoutWrapper = styled.div`
   position: relative;
@@ -37,17 +38,7 @@ export default function NewPayment() {
         return '';
       }
 
-      // Fetch the Stripe customer ID from the backend
-      const customerResponse = await fetch('/api/stripe-id', {
-        method: 'GET',
-      });
-
-      if (!customerResponse.ok) {
-        console.log('Failed to fetch Stripe customer ID');
-        return '';
-      }
-
-      const {stripe_customer_id: customer} = await customerResponse.json();
+      const customer = await fetchStripeCustomerId();
 
       if (!customer) {
         console.log('Customer is not defined');

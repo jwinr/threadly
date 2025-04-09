@@ -12,6 +12,7 @@ import {fetchAuthSession} from 'aws-amplify/auth';
 import {Hub} from 'aws-amplify/utils';
 import debounce from 'lodash.debounce';
 import {INVALID_JWT_TOKEN_ERROR} from '@/lib/constants';
+import {fetchStripeCustomerId} from '@/utils/fetchStripeCustomerId';
 
 interface UserAttributes {
   sub?: string;
@@ -204,27 +205,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
 
     try {
-      // Fetch the Stripe customer ID directly from /api/stripe-id
-      const response = await fetch('/api/stripe-id', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${JSON.stringify(token)}`,
-          'Content-Type': 'application/json',
-        },
+      const stripeCustomerId = await fetchStripeCustomerId({
+        Authorization: `Bearer ${JSON.stringify(token)}`,
+        'Content-Type': 'application/json',
       });
-
-      const data: {stripe_customer_id?: string; error?: string} =
-        (await response.json()) as {
-          stripe_customer_id?: string;
-          error?: string;
-        };
-
-      if (!response.ok || !data.stripe_customer_id) {
-        console.error('Failed to fetch Stripe customer ID:', data.error);
+      if (!stripeCustomerId) {
         return [];
       }
-
-      const stripeCustomerId = data.stripe_customer_id;
 
       // Now fetch the payment methods using the Stripe customer ID
       const paymentResponse = await fetch(

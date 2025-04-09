@@ -17,6 +17,7 @@ import {
 import {CartContext} from '@/context/CartContext';
 import {UserContext} from '@/context/UserContext';
 import {fetchWithCsrf} from '@/utils/fetchWithCsrf';
+import {fetchStripeCustomerId} from '@/utils/fetchStripeCustomerId';
 
 interface Price {
   product_id: number | undefined;
@@ -62,18 +63,7 @@ export default function Checkout() {
         return null;
       }
 
-      // Fetch the Stripe customer ID from the backend
-      const customerResponse = await fetch('/api/stripe-id', {
-        method: 'GET',
-      });
-
-      if (!customerResponse.ok) {
-        console.log('Failed to fetch Stripe customer ID');
-        return '';
-      }
-
-      const {stripe_customer_id: customer} = await customerResponse.json();
-
+      const customer = await fetchStripeCustomerId();
       if (!customer) {
         console.log('Customer is not defined');
         return '';

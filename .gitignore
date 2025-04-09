@@ -16,7 +16,6 @@ src/middleware.ts
 src/services/
 src/lib/constants.ts
 src/lib/db.ts
-src/utils/fetchWithCsrf.ts
 src/utils/LocationProvider.ts
 src/utils/rateLimiter.ts
 

@@ -48,6 +48,7 @@ interface CartContextType {
     newQuantity: number
   ) => Promise<void>;
   clearCart: () => Promise<void>;
+  cartLoading: boolean;
 }
 
 export const CartContext = createContext<CartContextType | undefined>(
@@ -59,33 +60,51 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const {userAttributes, getToken} = useContext(UserContext);
   const [loadingSummary, setLoadingSummary] = useState<boolean>(false);
+  const [cartLoading, setCartLoading] = useState<boolean>(true);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const hasSyncedCart = useRef<boolean>(false);
 
-  const fetchCart = useCallback(async () => {
-    if (userAttributes?.user_uuid) {
-      // Fetch from server for logged-in users
-      try {
-        const response = await fetch(
-          `/api/cart?id=${userAttributes.user_uuid}`
-        );
+  const hydrateCart = useCallback(async () => {
+    setCartLoading(true);
+    try {
+      if (userAttributes?.user_uuid) {
+        const response = await fetch(`/api/cart?id=${userAttributes.user_uuid}`);
         const data: CartItem[] = (await response.json()) as CartItem[];
-        setCart(data);
-      } catch (error) {
-        console.error('Error fetching cart:', error);
+        setCart(
+          data.map((item) => ({
+            ...item,
+            quantity: item.quantity || 1,
+            variant_id: item.variant_id || 0,
+          }))
+        );
+        return;
       }
-    } else {
-      // Fetch from localStorage for guest users
-      console.log('Fetching cart from local storage');
+
       const localCart = JSON.parse(
         localStorage.getItem('cart') || '[]'
       ) as CartItem[];
-
-      if (localCart.length > 0) {
-        setCart(localCart);
+      if (localCart.length === 0) {
+        setCart([]);
+        return;
       }
+
+      const uniqueVariantIds = [
+        ...new Set(localCart.map((item) => item.variant_id)),
+      ].join(',');
+      const response = await fetch(`/api/cart?variantIds=${uniqueVariantIds}`);
+      const productData: CartItem[] = (await response.json()) as CartItem[];
+
+      const detailedCart = localCart.map((item) => ({
+        ...item,
+        ...productData.find((product) => product.variant_id === item.variant_id),
+      }));
+      setCart(detailedCart);
+    } catch (error) {
+      console.error('Error hydrating cart:', error);
+    } finally {
+      setCartLoading(false);
     }
-  }, [userAttributes, setCart]);
+  }, [userAttributes?.user_uuid]);
 
   const addToCart = useCallback(
     async (variantId: number, quantity = 1, isSyncing = false) => {
@@ -125,7 +144,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
             throw new Error(`${(errorData as {message: string}).message}`);
           }
 
-          await fetchCart();
+          await hydrateCart();
 
           if (!isSyncing) {
             void showToast(`Added to cart`, {
@@ -151,7 +170,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
           }
 
           localStorage.setItem('cart', JSON.stringify(localCart));
-          await fetchCart();
+          await hydrateCart();
 
           if (!isSyncing) {
             void showToast(`Added to cart`, {
@@ -174,7 +193,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
         setLoadingSummary(false);
       }
     },
-    [userAttributes, fetchCart, getToken, showToast]
+    [userAttributes, hydrateCart, getToken, showToast]
   );
 
   const removeFromCart = async (variantId: number) => {
@@ -205,7 +224,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
           throw new Error(`Error removing from cart: ${errorMessage}`);
         }
 
-        await fetchCart();
+        await hydrateCart();
         await showToast('Item removed from cart', {
           type: 'success',
         });
@@ -267,7 +286,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
           );
         }
 
-        await fetchCart();
+        await hydrateCart();
         await showToast(`Item quantity updated to ${newQuantity}`, {
           type: 'success',
         });
@@ -323,30 +342,30 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
         });
 
         localStorage.removeItem('cart');
-        await fetchCart();
+        await hydrateCart();
       } catch (error) {
         console.error('Error syncing cart with server:', error);
       } finally {
         setIsSyncing(false);
       }
     }
-  }, [userAttributes, isSyncing, fetchCart, getToken]);
+  }, [userAttributes, isSyncing, hydrateCart, getToken]);
 
   useEffect(() => {
-    if (userAttributes && !hasSyncedCart.current) {
-      fetchCart();
+    void hydrateCart();
+  }, [hydrateCart]);
 
-      const localCart = JSON.parse(
-        localStorage.getItem('cart') || '[]'
-      ) as CartItem[];
+  useEffect(() => {
+    if (!userAttributes?.user_uuid) {
+      hasSyncedCart.current = false;
+      return;
+    }
 
-      if (localCart.length > 0) {
-        syncLocalCartWithServer();
-      }
-
+    if (!hasSyncedCart.current) {
+      void syncLocalCartWithServer();
       hasSyncedCart.current = true;
     }
-  }, [userAttributes, fetchCart, syncLocalCartWithServer]);
+  }, [userAttributes?.user_uuid, syncLocalCartWithServer]);
 
   const clearCart = async () => {
     setLoadingSummary(true);
@@ -390,13 +409,6 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  useEffect(() => {
-    if (!hasSyncedCart.current) {
-      void syncLocalCartWithServer();
-      hasSyncedCart.current = true;
-    }
-  }, [userAttributes, syncLocalCartWithServer]);
-
   return (
     <CartContext.Provider
       value={{
@@ -408,6 +420,7 @@ export const CartProvider: React.FC<{children: ReactNode}> = ({children}) => {
         setLoadingSummary,
         handleQuantityChange,
         clearCart,
+        cartLoading,
       }}
     >
       {children}
