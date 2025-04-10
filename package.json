@@ -23,7 +23,6 @@
     "aws-amplify": "^6.10.0",
     "aws-jwt-verify": "^4.0.1",
     "aws-sdk": "^2.1692.0",
-    "axios": "^1.8.4",
     "cookie": "^1.0.2",
     "dompurify": "^3.2.5",
     "dotenv": "^16.4.5",

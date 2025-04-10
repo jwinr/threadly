@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 
 function LocationEstimator() {
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -12,15 +11,13 @@ function LocationEstimator() {
     longitude: number
   ): Promise<string | null> {
     try {
-      const response: {
-        status: number;
-        data: {address: {postcode: string}};
-      } = await axios.get(
+      const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
       );
 
-      if (response.status === 200) {
-        const address: {postcode: string} = response.data.address;
+      if (response.ok) {
+        const data = (await response.json()) as {address: {postcode: string}};
+        const address: {postcode: string} = data.address;
         return address.postcode;
       }
     } catch (error) {
