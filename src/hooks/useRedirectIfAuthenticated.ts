@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-import {fetchAuthSession} from 'aws-amplify/auth';
 import {useRouter} from 'next/navigation';
 
 /**
@@ -17,9 +16,12 @@ const useRedirectIfAuthenticated = (
   useEffect(() => {
     const checkUserAuthentication = async () => {
       try {
-        const session = await fetchAuthSession();
-        const hasSession = session && session.tokens && session.tokens.idToken;
-        if (hasSession) {
+        const response = await fetch('/api/auth/session', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
           router.push('/');
         } else {
           setAuthChecked(true); // No authenticated user found

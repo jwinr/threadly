@@ -8,9 +8,6 @@ import React, {
   ReactNode,
   useMemo,
 } from 'react';
-import {fetchAuthSession} from 'aws-amplify/auth';
-import {Hub} from 'aws-amplify/utils';
-import debounce from 'lodash.debounce';
 import {INVALID_JWT_TOKEN_ERROR} from '@/lib/constants';
 import {fetchStripeCustomerId} from '@/utils/fetchStripeCustomerId';
 
@@ -22,13 +19,6 @@ interface UserAttributes {
   user_uuid?: string;
   stripe_customer_id?: string;
   created_at?: string;
-}
-
-interface CognitoIdTokenPayload {
-  sub?: string;
-  email?: string;
-  family_name?: string;
-  given_name?: string;
 }
 
 interface UserContextType {
@@ -66,54 +56,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   const [authChecked, setAuthChecked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const debouncedFetchUserAttributes = useCallback(
-    debounce(async (attributes: UserAttributes) => {
-      try {
-        const response = await fetch('/api/user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-user-attributes': JSON.stringify(attributes),
-          },
-          body: JSON.stringify(attributes),
-        });
-
-        const data: unknown = await response.json();
-
-        const userData = data as {userUuid?: string};
-        if (userData.userUuid) {
-          const updatedAttributes = {
-            ...attributes,
-            user_uuid: userData.userUuid,
-          };
-          setUserAttributes(updatedAttributes);
-        }
-      } catch (error) {
-        console.error('Error updating user attributes:', error);
-      }
-    }, 300),
-    []
-  );
-
   const fetchUserAttributes = useCallback(async () => {
     try {
-      const session = await fetchAuthSession();
-      if (session?.tokens?.idToken) {
-        const payload = session.tokens.idToken.payload as CognitoIdTokenPayload;
+      const response = await fetch('/api/auth/session', {
+        method: 'GET',
+        credentials: 'include',
+      });
 
-        const selectedAttributes: UserAttributes = {
-          sub: payload.sub,
-          email: payload.email,
-          family_name: payload.family_name,
-          given_name: payload.given_name,
-          created_at: userAttributes?.created_at,
+      if (response.ok) {
+        const data = (await response.json()) as {
+          userAttributes: UserAttributes | null;
         };
-
-        setUserAttributes(selectedAttributes);
-
-        await debouncedFetchUserAttributes(selectedAttributes);
+        setUserAttributes(data.userAttributes);
       } else {
-        // No valid session; ensure userAttributes are cleared
         setUserAttributes(null);
       }
     } catch (error) {
@@ -123,16 +78,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({
       setAuthChecked(true);
       setLoading(false);
     }
-  }, [debouncedFetchUserAttributes]);
+  }, []);
 
   const getToken = async (): Promise<object | null> => {
     try {
-      const session = await fetchAuthSession();
-      if (session?.tokens?.accessToken) {
-        return session.tokens.accessToken;
-      } else {
+      const response = await fetch('/api/auth/session', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
         throw new Error(INVALID_JWT_TOKEN_ERROR);
       }
+
+      return {authenticated: true};
     } catch (error) {
       console.error('Error fetching auth session:', error);
       return null;
@@ -155,48 +114,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({
       }
     }
   }, [authChecked, fetchUserAttributes, initialUserAttributes]);
-
-  const signOut = async () => {
-    try {
-      // Call the signout API route to clear cookies
-      await fetch('/api/user/signout', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      setUserAttributes(null);
-      setAuthChecked(true);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
-  useEffect(() => {
-    const hubListener = ({payload}: {payload: {event: string}}) => {
-      switch (payload.event) {
-        case 'signedIn':
-          fetchUserAttributes();
-          break;
-        case 'signedOut':
-          signOut();
-          break;
-        case 'tokenRefresh':
-          fetchUserAttributes();
-          break;
-        default:
-          break;
-      }
-    };
-
-    const listener = Hub.listen('auth', hubListener);
-
-    return () => {
-      listener();
-    };
-  }, [fetchUserAttributes]);
 
   const fetchPaymentMethods = useCallback(async () => {
     const token = await getToken();

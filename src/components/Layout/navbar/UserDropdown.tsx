@@ -12,7 +12,6 @@ import {UserContext} from '@/context/UserContext';
 import {CartContext} from '@/context/CartContext';
 import {useSignOut} from '@/context/SignOutContext';
 import styled from 'styled-components';
-import {signOut} from 'aws-amplify/auth';
 import {useRouter} from 'next/navigation';
 import SigningOutOverlay from '@/components/Auth/SigningOutOverlay';
 import Popover from '@/components/Elements/Popover';
@@ -164,8 +163,7 @@ const UserDropdown = () => {
     setIsSigningOut(true); // Show the overlay
 
     try {
-      await signOut(); // Sign out via the AWS API
-      await fetch('/api/logout'); // Remove the cognito cookie
+      await fetch('/api/user/signout', {method: 'DELETE'});
       setTimeout(() => {
         router.push('/');
         setCart?.([]); // Clear the cart state

@@ -1,7 +1,6 @@
 'use client';
 
 import React, {useState, useContext, FormEvent} from 'react';
-import {signIn} from 'aws-amplify/auth';
 import {useRouter} from 'next/navigation';
 import PasswordReveal from '@/components/Auth/PasswordReveal';
 import LogoSymbol from '@/public/images/logo_solid.svg';
@@ -19,7 +18,6 @@ import Button from '@/components/Elements/Button';
 import Popover from '@/components/Elements/Popover';
 import {useMobileView} from '@/context/MobileViewContext';
 import {useAuthFormValidation} from 'src/hooks/useAuthFormValidation';
-import {debouncedCheckUsername} from 'src/utils/checkUsername';
 
 const Login: React.FC = () => {
   const {formState, emailValid, passwordValid, onChange, onBlur} =
@@ -75,55 +73,38 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Check if the username exists in the database before we send a request to AWS
-    const usernameExists = await debouncedCheckUsername(
-      formState.email,
-      setErrorMessage,
-      setShakeKey,
-      setLoading
-    );
-    if (!usernameExists) {
-      return;
-    }
-
     setLoading(true);
 
-    // Call signIn with username and password
     setTimeout(async () => {
       try {
-        const response = await signIn({
-          username: formState.email,
-          password: formState.password,
+        const response = await fetch('/api/auth/sign-in', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formState.email,
+            password: formState.password,
+          }),
         });
 
-        if (response.nextStep) {
-          switch (response.nextStep.signInStep) {
-            case 'RESET_PASSWORD':
-              setErrorMessage('Password reset required.');
-              break;
-
-            case 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED':
-              setErrorMessage('New password required.');
-              break;
-
-            case 'DONE':
-              await fetchUserAttributes();
-              setIsComplete(true);
-              setTimeout(() => {
-                router.push('/');
-              }, 1500);
-              break;
-
-            default:
-              break;
-          }
+        if (!response.ok) {
+          const data = (await response.json()) as {message?: string};
+          throw new Error(data.message || GENERIC_ERROR_MESSAGE);
         }
+
+        await fetchUserAttributes();
+        setIsComplete(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 1500);
       } catch (err) {
         const error = err as Error;
         console.error(error);
 
-        // Check if error.name is a key in CognitoErrorMessages
-        if (error.name in CognitoErrorMessages) {
+        if (error.message) {
+          setErrorMessage(error.message);
+        } else if (error.name in CognitoErrorMessages) {
           setErrorMessage(CognitoErrorMessages[error.name as CognitoErrorName]);
         } else {
           setErrorMessage(GENERIC_ERROR_MESSAGE);
@@ -139,17 +120,23 @@ const Login: React.FC = () => {
   // Sign in to the demo account
   const handleDemoSignIn = async () => {
     try {
-      const newResponse = await signIn({
-        username: demoUsername,
-        password: demoPassword,
+      const response = await fetch('/api/auth/sign-in', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: demoUsername,
+          password: demoPassword,
+        }),
       });
 
-      if (newResponse.isSignedIn) {
-        await fetchUserAttributes();
-        router.push('/');
-      } else {
+      if (!response.ok) {
         throw new Error('Demo sign-in failed.');
       }
+
+      await fetchUserAttributes();
+      router.push('/');
     } catch {
       setErrorMessage(GENERIC_ERROR_MESSAGE);
       setShakeKey((prevKey) => prevKey + 1);

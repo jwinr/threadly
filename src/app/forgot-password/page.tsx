@@ -2,12 +2,10 @@
 
 import React, {useState, useContext, FormEvent} from 'react';
 import styled from 'styled-components';
-import {resetPassword, confirmResetPassword, signIn} from 'aws-amplify/auth';
 import {useRouter} from 'next/navigation';
 import LogoSymbol from '@/public/images/logo_solid.svg';
 import PasswordReveal from '@/components/Auth/PasswordReveal';
 import LoaderDots from '@/components/Loaders/LoaderDots';
-import {CognitoErrorMessages} from '@/lib/constants';
 import ErrorRedirect from '@/components/Auth/ErrorRedirect';
 import * as AuthStyles from '@/components/Auth/AuthStyles';
 import {getValidationStyle} from 'src/utils/authHelpers';
@@ -18,7 +16,6 @@ import {TiWarningOutline} from 'react-icons/ti';
 import Popover from '@/components/Elements/Popover';
 import {useMobileView} from '@/context/MobileViewContext';
 import {useAuthFormValidation} from 'src/hooks/useAuthFormValidation';
-import {debouncedCheckUsername} from 'src/utils/checkUsername';
 
 const ContinueBtn = styled(AuthStyles.AuthBtn)`
   margin-top: 15px;
@@ -57,8 +54,6 @@ const ForgotPassword: React.FC = () => {
   const isMobileView = useMobileView();
   const router = useRouter();
 
-  type CognitoErrorName = keyof typeof CognitoErrorMessages;
-
   const GENERIC_ERROR_MESSAGE =
     'An unexpected error occurred. Please try again later.';
 
@@ -92,33 +87,30 @@ const ForgotPassword: React.FC = () => {
       return;
     }
 
-    // Check if the username exists in the database before we send a request to AWS
-    const usernameExists = await debouncedCheckUsername(
-      formState.email,
-      setErrorMessage,
-      setShakeKey,
-      setLoading
-    );
-    if (!usernameExists) {
-      return;
-    }
-
     setLoading(true);
 
     setTimeout(async () => {
       try {
-        const output = await resetPassword({username: formState.email});
-        const {nextStep} = output;
+        const response = await fetch('/api/auth/password-reset/start', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email: formState.email}),
+        });
 
-        if (nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
-          setCurrentStep('resetPassword');
+        const data = (await response.json()) as {message?: string};
+
+        if (!response.ok) {
+          throw new Error(data.message || GENERIC_ERROR_MESSAGE);
         }
+
+        setErrorMessage('');
+        setCurrentStep('resetPassword');
       } catch (err) {
         const error = err as Error;
 
-        const errorMessage =
-          CognitoErrorMessages[error.name as CognitoErrorName] ||
-          GENERIC_ERROR_MESSAGE;
+        const errorMessage = error.message || GENERIC_ERROR_MESSAGE;
         const showError = errorMessage === GENERIC_ERROR_MESSAGE;
 
         setErrorMessage(errorMessage);
@@ -146,40 +138,31 @@ const ForgotPassword: React.FC = () => {
     setLoading(true);
     setTimeout(async () => {
       try {
-        await confirmResetPassword({
-          username: formState.email,
-          confirmationCode: formState.code ?? '',
-          newPassword: formState.newPassword ?? '',
+        const response = await fetch('/api/auth/password-reset/confirm', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formState.email,
+            code: formState.code ?? '',
+            newPassword: formState.newPassword ?? '',
+          }),
         });
 
-        // Sign the user in after a successful reset
-        await signIn({
-          username: formState.email,
-          password: formState.newPassword,
-        });
+        const data = (await response.json()) as {message?: string};
 
+        if (!response.ok) {
+          throw new Error(data.message || GENERIC_ERROR_MESSAGE);
+        }
+
+        await fetchUserAttributes();
         setPasswordChanged(true);
         setErrorMessage('');
       } catch (error) {
         if (error instanceof Error) {
-          if (error.name === 'CodeMismatchException') {
-            setErrorMessage(
-              CognitoErrorMessages[error.name as CognitoErrorName]
-            );
-            setShakeKey((prevKey) => prevKey + 1);
-            setCurrentStep('verifyCode');
-          } else if (error.name === 'LimitExceededException') {
-            setShakeKey((prevKey) => prevKey + 1);
-            setErrorMessage(
-              CognitoErrorMessages[error.name as CognitoErrorName]
-            );
-          } else {
-            setErrorMessage(
-              CognitoErrorMessages[error.name as CognitoErrorName] ||
-                GENERIC_ERROR_MESSAGE
-            );
-            setShakeKey((prevKey) => prevKey + 1);
-          }
+          setErrorMessage(error.message || GENERIC_ERROR_MESSAGE);
+          setShakeKey((prevKey) => prevKey + 1);
         } else {
           setErrorMessage(GENERIC_ERROR_MESSAGE);
           setShakeKey((prevKey) => prevKey + 1);
